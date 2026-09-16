@@ -1,0 +1,233 @@
+:root {
+  --bg: #0a0e17;
+  --panel: #131a28;
+  --ink: #f2f5fa;
+  --muted: #8892b0;
+  --green: #2e9e63;
+  --purple: #7c3aed;
+  --line: #24304a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#stage {
+  position: relative;
+  width: min(100vw, 1067px);
+  aspect-ratio: 16 / 9;
+}
+
+#game-container {
+  width: 100%;
+  height: 100%;
+  line-height: 0;
+}
+
+canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* HUD */
+
+#hud {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: none;
+}
+
+#hud-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.hud-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  letter-spacing: 0.02em;
+}
+
+.hud-label {
+  width: 128px;
+  color: var(--ink);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.hud-track {
+  width: 112px;
+  height: 11px;
+  background: #0d1422;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.hud-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  box-shadow: 0 0 8px currentColor;
+  transition: width 420ms cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+#hud-progress {
+  font-size: 11px;
+  color: var(--muted);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+/* Overlays */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(6, 9, 16, 0.86);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  backdrop-filter: blur(2px);
+}
+
+.overlay[hidden] {
+  display: none !important;
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 28px 32px;
+  max-width: 620px;
+  width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+}
+
+.panel h1 {
+  margin: 0 0 10px;
+  font-size: 30px;
+  letter-spacing: -0.02em;
+}
+
+.panel h2 {
+  margin: 0 0 16px;
+  font-size: 19px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.tagline {
+  margin: 0 0 24px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.dimension-tag {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.choice {
+  appearance: none;
+  text-align: left;
+  font: inherit;
+  font-size: 14px;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 13px 16px;
+  cursor: pointer;
+  transition: background 120ms, border-color 120ms, transform 120ms;
+}
+
+.choice:hover {
+  background: rgba(124, 58, 237, 0.16);
+  border-color: var(--purple);
+  transform: translateX(2px);
+}
+
+.choice .role-blurb {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+/* Lead form */
+
+#lead-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#lead-form input {
+  font: inherit;
+  font-size: 14px;
+  padding: 12px 14px;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--ink);
+}
+
+#lead-form input::placeholder {
+  color: var(--muted);
+}
+
+#lead-form button {
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 13px 16px;
+  border-radius: 7px;
+  border: none;
+  background: var(--purple);
+  color: #fff;
+  cursor: pointer;
+  margin-top: 6px;
+}
+
+#lead-form button:hover {
+  background: #6d28d9;
+}
+
+.status {
+  margin: 16px 0 0;
+  font-size: 14px;
+  color: var(--green);
+}

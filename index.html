@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Superintelligent Game</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="stage">
+      <div id="game-container"></div>
+
+      <div id="hud" hidden>
+        <div id="hud-bars"></div>
+        <div id="hud-progress"></div>
+      </div>
+
+      <div id="overlay-role" class="overlay">
+        <div class="panel">
+          <h1>The Superintelligent Game</h1>
+          <p class="tagline">
+            Spring, hoppa och slå upp frågetecken. Du upptäcker hur redo din organisation är
+            att bli ett superintelligent företag — utan ett enda formulär.
+          </p>
+          <h2>Vem är du i spelet?</h2>
+          <div id="role-buttons" class="choices"></div>
+        </div>
+      </div>
+
+      <div id="overlay-question" class="overlay" hidden>
+        <div class="panel">
+          <div id="question-dimension" class="dimension-tag"></div>
+          <h2 id="question-text"></h2>
+          <div id="question-options" class="choices"></div>
+        </div>
+      </div>
+
+      <div id="overlay-end" class="overlay" hidden>
+        <div class="panel">
+          <h1>Bana klar!</h1>
+          <p class="tagline">
+            Din profil analyseras nu av vår AI. En rådgivare från Superintelligent går igenom
+            vad den faktiskt betyder för er — det är där det intressanta finns.
+          </p>
+          <form id="lead-form">
+            <input type="text" name="namn" placeholder="Namn" required autocomplete="name" />
+            <input type="email" name="epost" placeholder="E-post" required autocomplete="email" />
+            <input type="text" name="foretag" placeholder="Företag" required autocomplete="organization" />
+            <button type="submit">Skicka in och boka genomgång</button>
+          </form>
+          <p id="lead-status" class="status" hidden></p>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

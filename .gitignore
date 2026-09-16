@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.DS_Store
+*.log
+
+# Lokala Claude Code-inställningar
+.claude/settings.local.json
+
+# Tidigare projekt, eget git-repo — ska inte med här
+superintelligent-ai-os_OLD_DO_NOT_USE/
