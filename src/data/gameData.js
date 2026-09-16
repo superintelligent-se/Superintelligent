@@ -5,13 +5,59 @@ export const ROLES = [
   { id: 'entreprenor', label: 'Entreprenör', blurb: 'Du är hela organisationen — och dess AI-lead.' },
 ];
 
+// Varje dimension är också en zon på banan: egen färgton, egen skylt och
+// tre frågetecken. tint är zonens bakgrund, gear den utrustning du vinner.
 export const DIMENSIONS = [
-  { id: 'policy', label: 'Regler & policy', color: '#4f7fd6' },
-  { id: 'data', label: 'Data & kunskapsgrund', color: '#4f7fd6' },
-  { id: 'formaga', label: 'AI-förmåga', color: '#2e9e63' },
-  { id: 'agarskap', label: 'AI-ägarskap', color: '#7c3aed' },
-  { id: 'mojlighet', label: 'Möjlighets-AI', color: '#7c3aed' },
+  {
+    id: 'policy',
+    label: 'Regler & policy',
+    color: '#4f7fd6',
+    tint: 0x101a2e,
+    tagline: 'Vad får ni göra?',
+    gear: 'shield',
+    gearLabel: 'Sköld: ni vet vad som gäller',
+  },
+  {
+    id: 'data',
+    label: 'Data & kunskapsgrund',
+    color: '#4f7fd6',
+    tint: 0x0e1c2b,
+    tagline: 'Vad har ni att jobba med?',
+    gear: 'datacube',
+    gearLabel: 'Datakub: ni hittar er egen data',
+  },
+  {
+    id: 'formaga',
+    label: 'AI-förmåga',
+    color: '#2e9e63',
+    tint: 0x0d1f18,
+    tagline: 'Vad kan ni redan idag?',
+    gear: 'trail',
+    gearLabel: 'Fart: hela organisationen är med',
+  },
+  {
+    id: 'agarskap',
+    label: 'AI-ägarskap',
+    color: '#7c3aed',
+    tint: 0x170f2b,
+    tagline: 'Vem håller i rodret?',
+    gear: 'companion',
+    gearLabel: 'AI-lead: någon går bredvid dig',
+  },
+  {
+    id: 'mojlighet',
+    label: 'Möjlighets-AI',
+    color: '#7c3aed',
+    tint: 0x1c0f2e,
+    tagline: 'Vad skulle ni kunna göra?',
+    gear: 'jetpack',
+    gearLabel: 'Jetpack: ni når dit ni inte nådde förr',
+  },
 ];
+
+// Utrustningen delas ut först vid tre mynt av fem — svarar ni att allt
+// saknas springer ni oskyddade uppför berget. Det är hela poängen.
+export const GEAR_THRESHOLD = 3;
 
 export const QUESTIONS = [
   {
@@ -182,3 +228,8 @@ export const QUESTIONS = [
 ];
 
 export const MAX_DIMENSION_SCORE = 15;
+export const COINS_PER_DIMENSION = 5;
+
+export function questionsFor(dimensionId) {
+  return QUESTIONS.filter((question) => question.dimension === dimensionId);
+}

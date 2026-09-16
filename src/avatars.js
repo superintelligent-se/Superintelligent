@@ -7,6 +7,8 @@
 // . transparent  H hår/keps  S hud  E ögon  C kläder  A accent
 // P byxor  B skor  K krona  D headset/sockel  M kaffemugg  L lampa
 
+import { renderPixelCanvas } from './pixelart.js';
+
 const SPRITES = {
   vd: [
     '..K.KK.K..',
@@ -97,22 +99,9 @@ const PALETTES = {
 export const BODY_BOUNDS = { x: 1, y: 2, width: 8, height: 12 };
 
 export function renderAvatarCanvas(roleId, pixelSize) {
-  const sprite = SPRITES[roleId] ?? SPRITES.medarbetare;
-  const palette = PALETTES[roleId] ?? PALETTES.medarbetare;
-
-  const canvas = document.createElement('canvas');
-  canvas.width = sprite[0].length * pixelSize;
-  canvas.height = sprite.length * pixelSize;
-
-  const ctx = canvas.getContext('2d');
-  sprite.forEach((row, y) => {
-    [...row].forEach((key, x) => {
-      const color = palette[key];
-      if (!color) return;
-      ctx.fillStyle = color;
-      ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
-    });
-  });
-
-  return canvas;
+  return renderPixelCanvas(
+    SPRITES[roleId] ?? SPRITES.medarbetare,
+    PALETTES[roleId] ?? PALETTES.medarbetare,
+    pixelSize,
+  );
 }

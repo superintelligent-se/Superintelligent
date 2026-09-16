@@ -16,6 +16,8 @@ En gamifierad AI-mognadsassessment. Istället för ett frågeformulär springer 
 
 ROI-mätning samlas medvetet in efteråt, i rådgivningssamtalet — inte i spelet.
 
+Banan är indelad i fem zoner, en per dimension, med tre frågetecken i varje. Svaren ger mynt i HUD:en, och tre mynt av fem i en dimension ger utrustning på figuren: sköld, datakub, fart, en AI-lead som springer bredvid dig, och en jetpack som ger ett tredje hopp. Svarar ni att allt saknas får ni ingen utrustning — det är metaforen, inte en bugg.
+
 ## Stack
 
 Phaser 3 (spelmotor) + Vite (bygge). Helt client-side, ingen backend krävs.

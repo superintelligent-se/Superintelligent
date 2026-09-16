@@ -1,4 +1,9 @@
-import { DIMENSIONS, QUESTIONS, MAX_DIMENSION_SCORE } from './data/gameData.js';
+import {
+  COINS_PER_DIMENSION,
+  DIMENSIONS,
+  MAX_DIMENSION_SCORE,
+  QUESTIONS,
+} from './data/gameData.js';
 
 export const state = {
   role: null,
@@ -26,6 +31,14 @@ export function dimensionScores() {
 
 export function dimensionFill(dimensionId) {
   return dimensionScores()[dimensionId] / MAX_DIMENSION_SCORE;
+}
+
+// Mynt är hur mognaden visas för spelaren: 0-5 per dimension, aldrig en siffra.
+export function coinsEarned(dimensionId) {
+  return Math.min(
+    COINS_PER_DIMENSION,
+    Math.round(dimensionFill(dimensionId) * COINS_PER_DIMENSION),
+  );
 }
 
 export function answeredCount() {
