@@ -45,16 +45,30 @@ function showHowTo(onDone) {
   );
 }
 
+const HUD_SEGMENTS = 5;
+
 export function buildHud() {
   const bars = el('hud-bars');
   bars.innerHTML = '';
   for (const dimension of DIMENSIONS) {
     const row = document.createElement('div');
     row.className = 'hud-row';
-    row.innerHTML = `
-      <span class="hud-label">${dimension.label}</span>
-      <span class="hud-track"><span class="hud-fill" id="fill-${dimension.id}" style="background:${dimension.color};color:${dimension.color}"></span></span>
-    `;
+
+    const label = document.createElement('span');
+    label.className = 'hud-label';
+    label.textContent = dimension.label;
+
+    const track = document.createElement('span');
+    track.className = 'hud-track';
+    for (let i = 0; i < HUD_SEGMENTS; i += 1) {
+      const segment = document.createElement('span');
+      segment.className = 'hud-segment';
+      segment.id = `seg-${dimension.id}-${i}`;
+      segment.style.setProperty('--dim', dimension.color);
+      track.appendChild(segment);
+    }
+
+    row.append(label, track);
     bars.appendChild(row);
   }
   updateHud();
@@ -62,9 +76,16 @@ export function buildHud() {
 
 export function updateHud() {
   for (const dimension of DIMENSIONS) {
-    el(`fill-${dimension.id}`).style.width = `${dimensionFill(dimension.id) * 100}%`;
+    const lit = Math.min(
+      HUD_SEGMENTS,
+      Math.round(dimensionFill(dimension.id) * HUD_SEGMENTS),
+    );
+    for (let i = 0; i < HUD_SEGMENTS; i += 1) {
+      el(`seg-${dimension.id}-${i}`).classList.toggle('lit', i < lit);
+    }
   }
-  el('hud-progress').textContent = `${answeredCount()} / ${QUESTIONS.length} frågetecken öppnade`;
+  el('hud-progress').textContent =
+    `${answeredCount()} / ${QUESTIONS.length} frågetecken`;
 }
 
 export function showQuestion(question, onAnswer) {
@@ -76,18 +97,43 @@ export function showQuestion(question, onAnswer) {
 
   const options = el('question-options');
   options.innerHTML = '';
-  question.options.forEach((option, index) => {
+
+  let selected = 0;
+  const buttons = question.options.map((option, index) => {
     const button = document.createElement('button');
     button.className = 'choice';
     button.type = 'button';
-    button.textContent = option.label;
-    button.addEventListener('click', () => {
-      el('overlay-question').hidden = true;
-      onAnswer(index);
-    });
+    button.innerHTML = `<span class="choice-marker">▸</span>${option.label}`;
+    button.addEventListener('mouseenter', () => select(index));
+    button.addEventListener('click', () => answer(index));
     options.appendChild(button);
+    return button;
   });
 
+  function select(index) {
+    selected = index;
+    buttons.forEach((button, i) => button.classList.toggle('selected', i === index));
+  }
+
+  function answer(index) {
+    document.removeEventListener('keydown', onKeyDown);
+    el('overlay-question').hidden = true;
+    onAnswer(index);
+  }
+
+  function onKeyDown(event) {
+    const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[event.key];
+    if (step) {
+      event.preventDefault();
+      select((selected + step + buttons.length) % buttons.length);
+    } else if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      answer(selected);
+    }
+  }
+
+  select(0);
+  document.addEventListener('keydown', onKeyDown);
   el('overlay-question').hidden = false;
 }
 

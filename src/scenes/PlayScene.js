@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-import { renderAvatarCanvas } from '../avatars.js';
+import { BODY_BOUNDS, renderAvatarCanvas } from '../avatars.js';
 import { DIMENSIONS, QUESTIONS } from '../data/gameData.js';
 import { isComplete, recordAnswer, state } from '../state.js';
 import { showEnd, showQuestion, updateHud } from '../ui.js';
@@ -123,6 +123,10 @@ export default class PlayScene extends Phaser.Scene {
 
     this.player = this.add.image(80, GROUND_Y - 60, textureKey);
     this.physics.add.existing(this.player);
+
+    // Kollisionen följer kroppen, inte kronan eller kaffemuggen.
+    this.player.body.setSize(BODY_BOUNDS.width * PIXEL_SIZE, BODY_BOUNDS.height * PIXEL_SIZE, false);
+    this.player.body.setOffset(BODY_BOUNDS.x * PIXEL_SIZE, BODY_BOUNDS.y * PIXEL_SIZE);
     this.player.body.setCollideWorldBounds(true);
     this.player.body.setMaxVelocity(300, 900);
     this.jumpsUsed = 0;
@@ -144,6 +148,8 @@ export default class PlayScene extends Phaser.Scene {
     this.paused = true;
     this.physics.pause();
     this.player.body.setVelocity(0, 0);
+    // Pilarna styr svarsalternativen medan frågan är uppe, inte figuren.
+    this.input.keyboard.enabled = false;
 
     showQuestion(question, (optionIndex) => {
       recordAnswer(question, optionIndex);
@@ -151,6 +157,8 @@ export default class PlayScene extends Phaser.Scene {
       this.celebrate(block, question.dimension);
       this.paused = false;
       this.physics.resume();
+      this.input.keyboard.resetKeys();
+      this.input.keyboard.enabled = true;
     });
   }
 

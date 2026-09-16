@@ -47,55 +47,63 @@ body {
 
 #hud {
   position: absolute;
-  top: 16px;
-  left: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  top: 14px;
+  left: 14px;
+  padding: 11px 13px 9px;
+  background: rgba(10, 14, 23, 0.82);
+  border: 2px solid #24304a;
+  box-shadow: 0 0 0 2px rgba(10, 14, 23, 0.82);
   pointer-events: none;
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }
 
 #hud-bars {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 6px;
 }
 
 .hud-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 11px;
-  letter-spacing: 0.02em;
+  gap: 10px;
 }
 
 .hud-label {
-  width: 128px;
-  color: var(--ink);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  width: 142px;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #aab6cd;
 }
 
 .hud-track {
-  width: 112px;
-  height: 11px;
-  background: #0d1422;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 2px;
-  overflow: hidden;
+  display: flex;
+  gap: 3px;
 }
 
-.hud-fill {
-  display: block;
-  height: 100%;
-  width: 0;
-  box-shadow: 0 0 8px currentColor;
-  transition: width 420ms cubic-bezier(0.2, 0.9, 0.3, 1);
+.hud-segment {
+  width: 15px;
+  height: 11px;
+  background: #151d2e;
+  box-shadow: inset 0 0 0 1px #24304a;
+}
+
+.hud-segment.lit {
+  background: var(--dim);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.25),
+    0 0 7px var(--dim);
 }
 
 #hud-progress {
-  font-size: 11px;
+  margin-top: 9px;
+  padding-top: 8px;
+  border-top: 2px solid #1c2538;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--muted);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
 /* Overlays */
@@ -174,10 +182,39 @@ body {
   transition: background 120ms, border-color 120ms, transform 120ms;
 }
 
-.choice:hover {
-  background: rgba(124, 58, 237, 0.16);
+.choice:hover,
+.choice.selected {
+  background: rgba(124, 58, 237, 0.18);
   border-color: var(--purple);
   transform: translateX(2px);
+}
+
+.choice-marker {
+  display: inline-block;
+  width: 16px;
+  color: var(--purple);
+  opacity: 0;
+}
+
+.choice.selected .choice-marker {
+  opacity: 1;
+}
+
+.hint {
+  margin: 18px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.hint kbd {
+  font-size: 11px;
+  padding: 3px 7px;
+  min-width: 0;
+  border-bottom-width: 2px;
 }
 
 .choice .role-blurb {
