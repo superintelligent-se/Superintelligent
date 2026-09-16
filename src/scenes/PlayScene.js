@@ -1,7 +1,12 @@
 import Phaser from 'phaser';
+import { renderAvatarCanvas } from '../avatars.js';
 import { DIMENSIONS, QUESTIONS } from '../data/gameData.js';
-import { isComplete, recordAnswer } from '../state.js';
+import { isComplete, recordAnswer, state } from '../state.js';
 import { showEnd, showQuestion, updateHud } from '../ui.js';
+
+const PIXEL_SIZE = 4;
+const JUMP_VELOCITY = -440;
+const MAX_JUMPS = 2;
 
 const LEVEL_WIDTH = 5200;
 const GROUND_Y = 500;
@@ -110,10 +115,17 @@ export default class PlayScene extends Phaser.Scene {
   }
 
   createPlayer() {
-    this.player = this.add.rectangle(80, GROUND_Y - 60, 28, 40, 0x2e9e63);
+    const roleId = state.role?.id ?? 'medarbetare';
+    const textureKey = `avatar-${roleId}`;
+    if (!this.textures.exists(textureKey)) {
+      this.textures.addCanvas(textureKey, renderAvatarCanvas(roleId, PIXEL_SIZE));
+    }
+
+    this.player = this.add.image(80, GROUND_Y - 60, textureKey);
     this.physics.add.existing(this.player);
     this.player.body.setCollideWorldBounds(true);
     this.player.body.setMaxVelocity(300, 900);
+    this.jumpsUsed = 0;
   }
 
   onBlockCollide(player, block) {
@@ -168,14 +180,22 @@ export default class PlayScene extends Phaser.Scene {
     const body = this.player.body;
     const left = this.cursors.left.isDown || this.keys.A.isDown;
     const right = this.cursors.right.isDown || this.keys.D.isDown;
-    const jump =
-      this.cursors.up.isDown || this.keys.W.isDown || this.keys.SPACE.isDown;
+    const jumpPressed =
+      Phaser.Input.Keyboard.JustDown(this.cursors.up) ||
+      Phaser.Input.Keyboard.JustDown(this.keys.W) ||
+      Phaser.Input.Keyboard.JustDown(this.keys.SPACE);
 
     if (left) body.setVelocityX(-260);
     else if (right) body.setVelocityX(260);
     else body.setVelocityX(0);
 
-    if (jump && body.blocked.down) body.setVelocityY(-440);
+    if (body.blocked.down) this.jumpsUsed = 0;
+
+    // Andra hoppet ger full höjd igen från där man är i luften.
+    if (jumpPressed && this.jumpsUsed < MAX_JUMPS) {
+      body.setVelocityY(JUMP_VELOCITY);
+      this.jumpsUsed += 1;
+    }
 
     if (this.player.x >= GOAL_X - 20 || isComplete()) this.finish();
   }

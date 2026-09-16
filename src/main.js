@@ -5,7 +5,7 @@ import { buildHud, showRoleSelect } from './ui.js';
 showRoleSelect(() => {
   buildHud();
 
-  new Phaser.Game({
+  const game = new Phaser.Game({
     type: Phaser.AUTO,
     parent: 'game-container',
     width: 960,
@@ -21,4 +21,6 @@ showRoleSelect(() => {
     },
     scene: [PlayScene],
   });
+
+  if (import.meta.env.DEV) window.__game = game;
 });

@@ -1,3 +1,4 @@
+import { renderAvatarCanvas } from './avatars.js';
 import { DIMENSIONS, QUESTIONS, ROLES } from './data/gameData.js';
 import { answeredCount, dimensionFill, state, submissionPayload } from './state.js';
 
@@ -11,17 +12,37 @@ export function showRoleSelect(onPick) {
   container.innerHTML = '';
   for (const role of ROLES) {
     const button = document.createElement('button');
-    button.className = 'choice';
+    button.className = 'choice role';
     button.type = 'button';
-    button.innerHTML = `${role.label}<span class="role-blurb">${role.blurb}</span>`;
+
+    button.appendChild(renderAvatarCanvas(role.id, 4));
+
+    const text = document.createElement('span');
+    text.innerHTML = `${role.label}<span class="role-blurb">${role.blurb}</span>`;
+    button.appendChild(text);
+
     button.addEventListener('click', () => {
       state.role = role;
       el('overlay-role').hidden = true;
-      el('hud').hidden = false;
-      onPick(role);
+      showHowTo(onPick);
     });
     container.appendChild(button);
   }
+}
+
+function showHowTo(onDone) {
+  const overlay = el('overlay-howto');
+  overlay.hidden = false;
+
+  el('howto-start').addEventListener(
+    'click',
+    () => {
+      overlay.hidden = true;
+      el('hud').hidden = false;
+      onDone();
+    },
+    { once: true },
+  );
 }
 
 export function buildHud() {

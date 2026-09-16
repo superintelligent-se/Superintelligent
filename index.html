@@ -27,6 +27,39 @@
         </div>
       </div>
 
+      <div id="overlay-howto" class="overlay" hidden>
+        <div class="panel">
+          <h2>Så spelar du</h2>
+          <div class="howto">
+            <div class="howto-row">
+              <span class="keys"><kbd>←</kbd><kbd>→</kbd></span>
+              <span class="howto-text">Spring åt vänster och höger</span>
+            </div>
+            <div class="howto-row">
+              <span class="keys"><kbd class="wide">mellanslag</kbd></span>
+              <span class="howto-text">Hoppa</span>
+            </div>
+            <div class="howto-row">
+              <span class="keys"><kbd class="wide">mellanslag</kbd><kbd class="wide">mellanslag</kbd></span>
+              <span class="howto-text">Tryck igen i luften för ett extra hopp — så når du de höga avsatserna</span>
+            </div>
+          </div>
+
+          <div class="howto-figure">
+            <svg viewBox="0 0 220 120" role="img" aria-label="Hoppa upp i frågetecknet underifrån">
+              <rect x="86" y="8" width="44" height="44" rx="3" fill="#e0b23c" stroke="#b8860b" stroke-width="2" />
+              <text x="108" y="40" text-anchor="middle" font-size="26" font-weight="bold" fill="#3a2a00">?</text>
+              <path d="M108 96 L108 62" stroke="#2e9e63" stroke-width="4" stroke-linecap="round" />
+              <path d="M98 72 L108 60 L118 72" fill="none" stroke="#2e9e63" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+              <rect x="96" y="98" width="24" height="18" fill="#2e9e63" />
+            </svg>
+            <p class="howto-text">Träffa frågetecknet <strong>underifrån</strong> för att öppna en fråga.</p>
+          </div>
+
+          <button id="howto-start" type="button">Kör!</button>
+        </div>
+      </div>
+
       <div id="overlay-question" class="overlay" hidden>
         <div class="panel">
           <div id="question-dimension" class="dimension-tag"></div>
