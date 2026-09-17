@@ -1,10 +1,11 @@
 import Phaser from 'phaser';
 import PlayScene from './scenes/PlayScene.js';
-import { buildHud, initSoundToggle, showRoleSelect } from './ui.js';
+import { buildHud, initMobile, initSoundToggle, showRoleSelect } from './ui.js';
 
 showRoleSelect(() => {
   buildHud();
   initSoundToggle();
+  initMobile();
 
   const game = new Phaser.Game({
     type: Phaser.AUTO,

@@ -28,6 +28,12 @@ Banan slutar vid en mast: ju högre du träffar den, desto större hoppbonus, pr
 
 Phaser 3 (spelmotor) + Vite (bygge). Helt client-side, ingen backend krävs.
 
+## Mobil
+
+Spelet fungerar i mobilens webbläsare. Touch matas in i samma ställen som tangentbordet — spellogiken vet inte vilket som användes, så frågor, poäng och flöden finns bara på ett ställe. Det som är mobilspecifikt är [src/touch.js](src/touch.js) och några media queries i [src/style.css](src/style.css).
+
+Knapparna visas bara på pekskärm (`pointer: coarse`), ner-knappen tänds när man står på röret, och dialogerna tar över hela skärmen i stället för att ligga inuti spelytan. Liggande läge rekommenderas — i stående visas en uppmaning om att vrida, men spelet går att spela ändå.
+
 ## Utveckling
 
 ```bash

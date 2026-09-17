@@ -3,6 +3,13 @@ import { sfx } from '../audio.js';
 import { BODY_BOUNDS, renderAvatarCanvas } from '../avatars.js';
 import { renderCoinCanvas, renderGearCanvas } from '../pixelart.js';
 import {
+  clearTouchInput,
+  consumeDown,
+  consumeJump,
+  setDownButtonVisible,
+  touchState,
+} from '../touch.js';
+import {
   COINS_PER_DIMENSION,
   DIMENSIONS,
   GEAR_THRESHOLD,
@@ -317,7 +324,8 @@ export default class PlayScene extends Phaser.Scene {
         fontSize: '12px',
         align: 'center',
         color: '#c7d2e5',
-        wordWrap: { width: 920 },
+        // Smalare än skärmen: touch-knapparna sitter i hörnen.
+        wordWrap: { width: 620 },
       })
       .setOrigin(0.5, 0)
       .setScrollFactor(0)
@@ -514,9 +522,14 @@ export default class PlayScene extends Phaser.Scene {
     if (this.paused) return;
 
     const body = this.player.body;
-    const left = this.cursors.left.isDown || this.keys.A.isDown;
-    const right = this.cursors.right.isDown || this.keys.D.isDown;
+    // Touch läses först: consume* måste köras varje bildruta, annars ligger
+    // ett tryck kvar och utlöses när || kortsluter.
+    const touchJump = consumeJump();
+    const touchDown = consumeDown();
+    const left = this.cursors.left.isDown || this.keys.A.isDown || touchState.left;
+    const right = this.cursors.right.isDown || this.keys.D.isDown || touchState.right;
     const jumpPressed =
+      touchJump ||
       Phaser.Input.Keyboard.JustDown(this.cursors.up) ||
       Phaser.Input.Keyboard.JustDown(this.keys.W) ||
       Phaser.Input.Keyboard.JustDown(this.keys.SPACE);
@@ -552,7 +565,7 @@ export default class PlayScene extends Phaser.Scene {
       this.enterZone(zone);
     }
 
-    this.checkPipe(body);
+    this.checkPipe(body, touchDown);
 
     if (!this.mastHinted && this.player.x > MAST_X - 560) {
       this.mastHinted = true;
@@ -570,6 +583,7 @@ export default class PlayScene extends Phaser.Scene {
   }
 
   holdForDialog() {
+    clearTouchInput();
     this.paused = true;
     this.physics.pause();
     this.player.body.setVelocity(0, 0);
@@ -583,15 +597,17 @@ export default class PlayScene extends Phaser.Scene {
     this.input.keyboard.enabled = true;
   }
 
-  checkPipe(body) {
+  checkPipe(body, touchDown) {
     const standingOnPipe =
       body.blocked.down &&
       Math.abs(this.player.x - PIPE_IN_X) < 42 &&
       body.bottom <= PIPE_TOP + 16;
 
     this.pipeHint.setVisible(standingOnPipe);
+    setDownButtonVisible(standingOnPipe);
 
     const downPressed =
+      touchDown ||
       Phaser.Input.Keyboard.JustDown(this.cursors.down) ||
       Phaser.Input.Keyboard.JustDown(this.keys.S);
 

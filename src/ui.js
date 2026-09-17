@@ -1,6 +1,7 @@
 import { isMuted, setMuted, sfx } from './audio.js';
 import { renderAvatarCanvas } from './avatars.js';
 import { renderCoinCanvas, renderGearCanvas } from './pixelart.js';
+import { initTouchControls, isTouchDevice } from './touch.js';
 import { COINS_PER_DIMENSION, DIMENSIONS, QUESTIONS, ROLES } from './data/gameData.js';
 import { answeredCount, coinsEarned, state, submissionPayload } from './state.js';
 
@@ -252,6 +253,7 @@ window.addEventListener('beforeunload', (event) => {
 
 function showHowTo(onDone, onBack) {
   const overlay = el('overlay-howto');
+  if (isTouchDevice()) applyTouchInstructions();
   overlay.hidden = false;
 
   const start = el('howto-start');
@@ -275,6 +277,61 @@ function showHowTo(onDone, onBack) {
       onBack();
     },
   });
+}
+
+
+// På telefon säger tangentbordsraderna ingenting. Byt ut dem mot knapparna
+// spelaren faktiskt har framför sig.
+function applyTouchInstructions() {
+  const rows = document.querySelectorAll('#overlay-howto .howto-row');
+  const replacements = [
+    ['◀ ▶', 'Spring åt vänster och höger'],
+    ['▲', 'Hoppa'],
+    ['▲ ▲', 'Tryck igen i luften för ett extra hopp — så når du de höga avsatserna'],
+  ];
+
+  rows.forEach((row, index) => {
+    const replacement = replacements[index];
+    if (!replacement) {
+      row.hidden = true;
+      return;
+    }
+    row.querySelector('.keys').innerHTML = replacement[0]
+      .split(' ')
+      .map((glyph) => `<kbd>${glyph}</kbd>`)
+      .join('');
+    row.querySelector('.howto-text').textContent = replacement[1];
+  });
+
+  el('howto-start').textContent = 'Kör!';
+}
+
+// Spelytan är 16:9. I stående läge blir den liten men fullt spelbar, så vi
+// föreslår att vrida i stället för att blockera.
+function initRotateHint() {
+  if (!isTouchDevice()) return;
+  const hint = el('rotate-hint');
+  const portrait = window.matchMedia('(orientation: portrait)');
+  const update = () => {
+    hint.hidden = !portrait.matches;
+  };
+  portrait.addEventListener('change', update);
+  update();
+}
+
+// HUD:en och ljudknappen ritas i px men hör till spelbilden. Skalan här
+// håller dem i samma proportion som canvasen, oavsett skärm.
+function syncStageScale() {
+  const stage = el('stage');
+  stage.style.setProperty('--stage-scale', stage.clientWidth / 960);
+}
+
+export function initMobile() {
+  initTouchControls();
+  initRotateHint();
+  syncStageScale();
+  window.addEventListener('resize', syncStageScale);
+  window.addEventListener('orientationchange', () => setTimeout(syncStageScale, 200));
 }
 
 export function initSoundToggle() {

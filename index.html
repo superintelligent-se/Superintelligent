@@ -2,7 +2,7 @@
 <html lang="sv">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>The Superintelligent Game</title>
     <link rel="stylesheet" href="/src/style.css" />
   </head>
@@ -17,7 +17,21 @@
 
       <button id="sound-toggle" type="button" hidden>LJUD PÅ</button>
 
-      <div id="overlay-role" class="overlay">
+      <div id="rotate-hint" hidden>Vrid telefonen för större bild</div>
+    </div>
+
+    <div id="touch-controls" hidden>
+      <div class="touch-cluster">
+        <button id="touch-left" type="button" aria-label="Spring vänster">◀</button>
+        <button id="touch-right" type="button" aria-label="Spring höger">▶</button>
+      </div>
+      <div class="touch-cluster">
+        <button id="touch-down" type="button" aria-label="Ner i röret">▼</button>
+        <button id="touch-jump" type="button" aria-label="Hoppa">▲</button>
+      </div>
+    </div>
+
+    <div id="overlay-role" class="overlay">
         <div class="panel">
           <h1>The Superintelligent Game</h1>
           <p class="tagline">
@@ -120,8 +134,8 @@
           </div>
         </div>
       </div>
-    </div>
 
     <script type="module" src="/src/main.js"></script>
+
   </body>
 </html>
