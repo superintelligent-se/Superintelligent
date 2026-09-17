@@ -1,6 +1,6 @@
 import { isMuted, setMuted, sfx } from './audio.js';
 import { renderAvatarCanvas } from './avatars.js';
-import { renderCoinCanvas } from './pixelart.js';
+import { renderCoinCanvas, renderGearCanvas } from './pixelart.js';
 import { COINS_PER_DIMENSION, DIMENSIONS, QUESTIONS, ROLES } from './data/gameData.js';
 import { answeredCount, coinsEarned, state, submissionPayload } from './state.js';
 
@@ -64,31 +64,71 @@ export function initSoundToggle() {
   render();
 }
 
+// Dimension 1-2 är grunden alla måste ha, 3-5 är där ni kan dra ifrån.
+const GROUPS = [
+  { heading: 'Basnivå', ids: ['policy', 'data'] },
+  { heading: 'Förmåga & riktning', ids: ['formaga', 'agarskap', 'mojlighet'] },
+];
+
 export function buildHud() {
   const bars = el('hud-bars');
   bars.innerHTML = '';
-  for (const dimension of DIMENSIONS) {
-    const row = document.createElement('div');
-    row.className = 'hud-row';
 
-    const label = document.createElement('span');
-    label.className = 'hud-label';
-    label.textContent = dimension.label;
+  for (const group of GROUPS) {
+    const heading = document.createElement('div');
+    heading.className = 'hud-heading';
+    heading.textContent = group.heading;
+    bars.appendChild(heading);
 
-    const track = document.createElement('span');
-    track.className = 'hud-track';
-    for (let i = 0; i < COINS_PER_DIMENSION; i += 1) {
-      const slot = document.createElement('span');
-      slot.className = 'coin-slot';
-      slot.id = `coin-${dimension.id}-${i}`;
-      slot.appendChild(renderCoinCanvas(dimension.color, 2));
-      track.appendChild(slot);
+    for (const id of group.ids) {
+      const dimension = DIMENSIONS.find((d) => d.id === id);
+      const row = document.createElement('div');
+      row.className = 'hud-row';
+
+      const label = document.createElement('span');
+      label.className = 'hud-label';
+      label.textContent = dimension.label;
+
+      const track = document.createElement('span');
+      track.className = 'hud-track';
+      for (let i = 0; i < COINS_PER_DIMENSION; i += 1) {
+        const slot = document.createElement('span');
+        slot.className = 'coin-slot';
+        slot.id = `coin-${dimension.id}-${i}`;
+        slot.appendChild(renderCoinCanvas(dimension.color, 2));
+        track.appendChild(slot);
+      }
+
+      const gear = document.createElement('span');
+      gear.className = 'hud-gear';
+      gear.id = `gear-${dimension.id}`;
+      gear.style.setProperty('--dim', dimension.color);
+      gear.appendChild(renderGearCanvas(GEAR_ICONS[dimension.gear], 2));
+
+      row.append(label, track, gear);
+      bars.appendChild(row);
     }
-
-    row.append(label, track);
-    bars.appendChild(row);
   }
   updateHud();
+}
+
+const GEAR_ICONS = {
+  shield: 'shield',
+  datacube: 'datacube',
+  trail: 'thrust',
+  companion: 'companion',
+  jetpack: 'jetpack',
+};
+
+// Utrustningen syns bredvid dimensionen som gav den.
+export function markGear(dimensionId, on) {
+  const badge = el(`gear-${dimensionId}`);
+  if (!badge) return;
+  badge.classList.toggle('active', on);
+  if (on) {
+    badge.classList.add('pop');
+    setTimeout(() => badge.classList.remove('pop'), 700);
+  }
 }
 
 export function updateHud() {
@@ -133,17 +173,17 @@ export function flyCoinToHud(dimensionId, coinIndex, canvas, from) {
   }, 620);
 }
 
-export function showQuestion(question, onAnswer) {
+export function showQuestion(question, previousIndex, onAnswer) {
   const dimension = DIMENSIONS.find((d) => d.id === question.dimension);
   const tag = el('question-dimension');
-  tag.textContent = dimension.label;
+  tag.textContent = previousIndex === null ? dimension.label : `${dimension.label} · ändra svar`;
   tag.style.color = dimension.color;
   el('question-text').textContent = question.text;
 
   const options = el('question-options');
   options.innerHTML = '';
 
-  let selected = 0;
+  let selected = previousIndex ?? 0;
   const buttons = question.options.map((option, index) => {
     const button = document.createElement('button');
     button.className = 'choice';
@@ -167,28 +207,37 @@ export function showQuestion(question, onAnswer) {
   }
 
   function onKeyDown(event) {
-    const step = { ArrowDown: 1, ArrowRight: 1, ArrowUp: -1, ArrowLeft: -1 }[event.key];
-    if (step) {
+    // Upp och ner väljer, höger och Enter svarar — höger eftersom tummen
+    // redan ligger på pilarna när man springer.
+    if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
       event.preventDefault();
+      const step = event.key === 'ArrowDown' ? 1 : -1;
       select((selected + step + buttons.length) % buttons.length);
-    } else if (event.key === 'Enter' || event.key === ' ') {
+    } else if (event.key === 'ArrowRight' || event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       answer(selected);
     }
   }
 
-  select(0);
+  select(selected);
   document.addEventListener('keydown', onKeyDown);
   el('overlay-question').hidden = false;
 }
 
 let endShown = false;
 
-export function showEnd() {
+export function showEnd(bonus) {
   // Slutskärmen är där leadet fångas — den får aldrig visas två gånger,
   // och aldrig utebli för att en animation frös när någon bytte flik.
   if (endShown) return;
   endShown = true;
+
+  if (bonus) {
+    // Hoppbonusen är skoj och stannar på skärmen — den följer aldrig med
+    // i leadet, eftersom den inte säger något om AI-mognad.
+    el('end-bonus').textContent = `Hoppbonus +${bonus}`;
+    el('end-bonus').hidden = false;
+  }
 
   el('overlay-end').hidden = false;
 

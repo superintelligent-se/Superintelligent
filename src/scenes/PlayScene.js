@@ -8,8 +8,8 @@ import {
   GEAR_THRESHOLD,
   questionsFor,
 } from '../data/gameData.js';
-import { coinsEarned, isComplete, recordAnswer, state } from '../state.js';
-import { flyCoinToHud, showEnd, showQuestion, updateHud } from '../ui.js';
+import { answerFor, coinsEarned, recordAnswer, state } from '../state.js';
+import { flyCoinToHud, markGear, showEnd, showQuestion, updateHud } from '../ui.js';
 
 const PIXEL_SIZE = 4;
 const JUMP_VELOCITY = -440;
@@ -17,16 +17,44 @@ const RUN_SPEED = 260;
 const GROUND_Y = 500;
 const ZONE_WIDTH = 1000;
 const ZONE_START = 200;
-const LEVEL_WIDTH = ZONE_START + ZONE_WIDTH * DIMENSIONS.length + 500;
-const ROCKET_X = LEVEL_WIDTH - 300;
+const LEVEL_WIDTH = ZONE_START + ZONE_WIDTH * DIMENSIONS.length + 600;
+const MAST_X = LEVEL_WIDTH - 420;
+const MAST_TOP = 120;
+const MAST_BOTTOM = 470;
+const ROCKET_X = LEVEL_WIDTH - 240;
 
-// Tre frågetecken per zon, på varierande höjd. Offset räknas från zonens start.
+// Zon 1-2 är flacka. Från zon 3 klättrar banan: du tar en avsats för att nå
+// ett frågetecken, och nästa ligger högre upp. Marken är alltid framkomlig,
+// så ingen kan fastna och missa slutet.
 const ZONE_LAYOUT = [
-  { platforms: [{ dx: 480, y: 395, w: 200 }], blocks: [{ dx: 160, y: 395 }, { dx: 480, y: 290 }, { dx: 800, y: 395 }] },
-  { platforms: [{ dx: 300, y: 380, w: 180 }, { dx: 700, y: 330, w: 160 }], blocks: [{ dx: 120, y: 395 }, { dx: 300, y: 275 }, { dx: 700, y: 225 }] },
-  { platforms: [{ dx: 420, y: 360, w: 220 }], blocks: [{ dx: 180, y: 395 }, { dx: 420, y: 255 }, { dx: 780, y: 395 }] },
-  { platforms: [{ dx: 260, y: 390, w: 170 }, { dx: 620, y: 340, w: 190 }], blocks: [{ dx: 260, y: 285 }, { dx: 620, y: 235 }, { dx: 860, y: 395 }] },
-  { platforms: [{ dx: 340, y: 370, w: 200 }, { dx: 700, y: 310, w: 180 }], blocks: [{ dx: 140, y: 395 }, { dx: 340, y: 265 }, { dx: 700, y: 205 }] },
+  {
+    platforms: [{ dx: 480, y: 395, w: 200 }],
+    blocks: [{ dx: 160, y: 395 }, { dx: 480, y: 290 }, { dx: 800, y: 395 }],
+  },
+  {
+    platforms: [{ dx: 300, y: 385, w: 180 }, { dx: 700, y: 330, w: 160 }],
+    blocks: [{ dx: 120, y: 395 }, { dx: 300, y: 280 }, { dx: 700, y: 225 }],
+  },
+  {
+    platforms: [{ dx: 480, y: 390, w: 170 }, { dx: 800, y: 300, w: 160 }],
+    blocks: [{ dx: 180, y: 395 }, { dx: 480, y: 285 }, { dx: 800, y: 195 }],
+  },
+  {
+    platforms: [
+      { dx: 260, y: 395, w: 150 },
+      { dx: 540, y: 310, w: 150 },
+      { dx: 820, y: 255, w: 140 },
+    ],
+    blocks: [{ dx: 260, y: 290 }, { dx: 540, y: 205 }, { dx: 820, y: 150 }],
+  },
+  {
+    platforms: [
+      { dx: 220, y: 400, w: 120 },
+      { dx: 500, y: 315, w: 120 },
+      { dx: 780, y: 235, w: 120 },
+    ],
+    blocks: [{ dx: 220, y: 295 }, { dx: 500, y: 210 }, { dx: 780, y: 130 }],
+  },
 ];
 
 export default class PlayScene extends Phaser.Scene {
@@ -39,6 +67,7 @@ export default class PlayScene extends Phaser.Scene {
     this.paused = false;
     this.gear = {};
     this.currentZone = -1;
+    this.messageQueue = [];
 
     this.physics.world.setBounds(0, 0, LEVEL_WIDTH, 540);
     this.cameras.main.setBounds(0, 0, LEVEL_WIDTH, 540);
@@ -49,37 +78,17 @@ export default class PlayScene extends Phaser.Scene {
     this.solids = this.physics.add.staticGroup();
     this.solids.add(this.add.rectangle(LEVEL_WIDTH / 2, GROUND_Y + 40, LEVEL_WIDTH, 80, 0x1b2436));
     this.createLevel();
-    this.createRocket();
+    this.createFinish();
     this.createPlayer();
+    this.createMessagePanel();
 
     this.physics.add.collider(this.player, this.solids, this.onLand, undefined, this);
     this.physics.add.collider(this.player, this.blocks, this.onBlockCollide, undefined, this);
+    this.physics.add.overlap(this.player, this.mastZone, this.grabMast, undefined, this);
 
     this.cursors = this.input.keyboard.createCursorKeys();
     this.keys = this.input.keyboard.addKeys('W,A,D,SPACE');
-    this.cameras.main.startFollow(this.player, true, 0.12, 0.12, 0, 110);
-
-    this.zoneBanner = this.add
-      .text(480, 150, '', {
-        fontFamily: 'ui-monospace, Menlo, monospace',
-        fontSize: '20px',
-        fontStyle: 'bold',
-        align: 'center',
-        color: '#ffffff',
-      })
-      .setOrigin(0.5)
-      .setScrollFactor(0)
-      .setAlpha(0);
-
-    this.gearBanner = this.add
-      .text(480, 470, '', {
-        fontFamily: 'ui-monospace, Menlo, monospace',
-        fontSize: '13px',
-        color: '#ffffff',
-      })
-      .setOrigin(0.5)
-      .setScrollFactor(0)
-      .setAlpha(0);
+    this.cameras.main.startFollow(this.player, true, 0.12, 0.12, 0, 90);
   }
 
   buildTextures() {
@@ -141,15 +150,42 @@ export default class PlayScene extends Phaser.Scene {
           })
           .setOrigin(0.5);
 
+        // Ditt svar ligger kvar som en etikett vid blocket — rent dekorativ,
+        // den kolliderar aldrig med figuren. Sitter blocket högt hamnar
+        // etiketten under det i stället, så den inte krockar med HUD:en.
+        const tagY = block.y < 220 ? block.y + 40 : block.y - 38;
+        const answerTag = this.add
+          .text(block.x, tagY, '', {
+            fontFamily: 'ui-monospace, Menlo, monospace',
+            fontSize: '11px',
+            color: '#dfe6f2',
+            backgroundColor: '#0d1422cc',
+            padding: { x: 6, y: 4 },
+            align: 'center',
+            wordWrap: { width: 190 },
+          })
+          .setOrigin(0.5)
+          .setVisible(false);
+
         block.setData('question', questions[i]);
         block.setData('label', label);
-        block.setData('used', false);
+        block.setData('tag', answerTag);
         this.blocks.add(block);
       });
     });
   }
 
-  createRocket() {
+  createFinish() {
+    // Masten: hoppa så högt du kan innan du når raketen.
+    this.add.rectangle(MAST_X, (MAST_TOP + MAST_BOTTOM) / 2, 8, MAST_BOTTOM - MAST_TOP, 0x8b95a8);
+    this.add.circle(MAST_X, MAST_TOP - 8, 9, 0xfde047);
+    for (let y = MAST_TOP + 20; y < MAST_BOTTOM; y += 40) {
+      this.add.rectangle(MAST_X, y, 26, 4, 0x5b6478);
+    }
+
+    this.mastZone = this.add.zone(MAST_X, (MAST_TOP + MAST_BOTTOM) / 2, 34, MAST_BOTTOM - MAST_TOP);
+    this.physics.add.existing(this.mastZone, true);
+
     this.add.rectangle(ROCKET_X, GROUND_Y - 6, 70, 12, 0x2a3550);
     this.rocket = this.add.container(ROCKET_X, GROUND_Y - 60, [
       this.add.rectangle(0, 0, 34, 96, 0xd6dae6),
@@ -179,6 +215,63 @@ export default class PlayScene extends Phaser.Scene {
     this.wasAirborne = false;
   }
 
+  createMessagePanel() {
+    this.messageTitle = this.add
+      .text(480, 62, '', {
+        fontFamily: 'ui-monospace, Menlo, monospace',
+        fontSize: '26px',
+        fontStyle: 'bold',
+        align: 'center',
+        color: '#ffffff',
+      })
+      .setOrigin(0.5)
+      .setScrollFactor(0)
+      .setDepth(20);
+
+    this.messageBody = this.add
+      .text(480, 100, '', {
+        fontFamily: 'system-ui, sans-serif',
+        fontSize: '15px',
+        align: 'center',
+        color: '#dfe6f2',
+        wordWrap: { width: 520 },
+      })
+      .setOrigin(0.5, 0)
+      .setScrollFactor(0)
+      .setDepth(20);
+
+    this.messageGroup = [this.messageTitle, this.messageBody];
+    this.messageGroup.forEach((item) => item.setAlpha(0));
+  }
+
+  showMessage({ title, body, color = '#ffffff', duration = 3200, size = 26 }) {
+    this.messageQueue.push({ title, body, color, duration, size });
+    if (!this.messageActive) this.playNextMessage();
+  }
+
+  playNextMessage() {
+    const next = this.messageQueue.shift();
+    if (!next) {
+      this.messageActive = false;
+      return;
+    }
+    this.messageActive = true;
+
+    this.messageTitle.setText(next.title).setColor(next.color).setFontSize(next.size);
+    this.messageBody.setText(next.body ?? '');
+    this.messageTitle.setScale(0.6);
+
+    this.tweens.add({ targets: this.messageTitle, scale: 1, duration: 260, ease: 'Back.easeOut' });
+    this.tweens.add({
+      targets: this.messageGroup,
+      alpha: 1,
+      duration: 200,
+      yoyo: true,
+      hold: next.duration,
+      onComplete: () => this.playNextMessage(),
+    });
+  }
+
   onLand() {
     if (this.wasAirborne && this.player.body.blocked.down) {
       this.wasAirborne = false;
@@ -188,18 +281,13 @@ export default class PlayScene extends Phaser.Scene {
   }
 
   onBlockCollide(player, block) {
-    if (block.getData('used') || this.paused) return;
+    if (this.paused || this.finished) return;
     if (!player.body.blocked.up) return;
     this.openQuestion(block);
   }
 
   openQuestion(block) {
     const question = block.getData('question');
-    block.setData('used', true);
-    block.fillColor = 0x3d4763;
-    block.setStrokeStyle(2, 0x24304a);
-    block.getData('label').setText('✓').setColor('#8892b0');
-
     this.tweens.add({ targets: block, y: block.y - 8, yoyo: true, duration: 90 });
 
     this.paused = true;
@@ -208,10 +296,14 @@ export default class PlayScene extends Phaser.Scene {
     // Pilarna styr svarsalternativen medan frågan är uppe, inte figuren.
     this.input.keyboard.enabled = false;
 
-    showQuestion(question, (optionIndex) => {
+    const previous = answerFor(question.id);
+    showQuestion(question, previous, (optionIndex) => {
       const coinsBefore = coinsEarned(question.dimension);
+      const gearBefore = coinsBefore >= GEAR_THRESHOLD;
       recordAnswer(question, optionIndex);
-      this.rewardCoin(block, question.dimension, coinsBefore);
+      this.markAnswered(block, question, optionIndex);
+      this.rewardCoin(block, question.dimension, coinsBefore, gearBefore);
+
       this.paused = false;
       this.physics.resume();
       this.input.keyboard.resetKeys();
@@ -219,7 +311,23 @@ export default class PlayScene extends Phaser.Scene {
     });
   }
 
-  rewardCoin(block, dimensionId, before) {
+  markAnswered(block, question, optionIndex) {
+    const option = question.options[optionIndex];
+    block.fillColor = 0x2e9e63;
+    block.setStrokeStyle(2, 0x1c7a49);
+    block.getData('label').setText('✓').setColor('#04240f');
+    block.getData('tag').setText(option.label).setVisible(true);
+
+    this.showMessage({
+      title: option.label,
+      body: option.comment,
+      color: '#2e9e63',
+      duration: 2600,
+      size: 17,
+    });
+  }
+
+  rewardCoin(block, dimensionId, before, gearBefore) {
     updateHud();
     const after = coinsEarned(dimensionId);
 
@@ -231,9 +339,11 @@ export default class PlayScene extends Phaser.Scene {
       }
     }
 
-    if (before < GEAR_THRESHOLD && after >= GEAR_THRESHOLD) {
-      this.grantGear(dimensionId);
-    }
+    // Utrustningen speglar alltid de svar som står nu — ändrar du ner
+    // ett svar försvinner den igen.
+    const hasGear = after >= GEAR_THRESHOLD;
+    if (hasGear && !gearBefore) this.grantGear(dimensionId);
+    if (!hasGear && gearBefore) this.revokeGear(dimensionId);
   }
 
   spawnCoin(block, dimensionId, coinIndex) {
@@ -261,6 +371,7 @@ export default class PlayScene extends Phaser.Scene {
     const dimension = DIMENSIONS.find((d) => d.id === dimensionId);
     this.gear[dimension.gear] = true;
     sfx.gear();
+    markGear(dimensionId, true);
 
     if (dimension.gear === 'shield') {
       this.shield = this.add.image(0, 0, 'gear-shield');
@@ -273,35 +384,53 @@ export default class PlayScene extends Phaser.Scene {
       this.thrust = this.add.image(0, 0, 'gear-thrust').setVisible(false);
     }
 
-    this.showBanner(this.gearBanner, dimension.gearLabel, dimension.color);
+    this.showMessage({
+      title: dimension.gearLabel.split(':')[0].toUpperCase(),
+      body: dimension.gearWhy,
+      color: dimension.color,
+      duration: 4200,
+      size: 30,
+    });
   }
 
-  showBanner(banner, text, color) {
-    banner.setText(text).setColor(color).setAlpha(0);
-    this.tweens.add({
-      targets: banner,
-      alpha: 1,
-      duration: 220,
-      yoyo: true,
-      hold: 1500,
-    });
+  revokeGear(dimensionId) {
+    const dimension = DIMENSIONS.find((d) => d.id === dimensionId);
+    this.gear[dimension.gear] = false;
+    markGear(dimensionId, false);
+
+    const sprites = {
+      shield: 'shield',
+      datacube: 'datacube',
+      companion: 'companion',
+      jetpack: 'jetpack',
+    };
+    const key = sprites[dimension.gear];
+    if (key && this[key]) {
+      this[key].destroy();
+      this[key] = null;
+    }
+    if (dimension.gear === 'jetpack' && this.thrust) {
+      this.thrust.destroy();
+      this.thrust = null;
+    }
   }
 
   enterZone(index) {
     this.currentZone = index;
     const dimension = DIMENSIONS[index];
     sfx.zone();
-    this.showBanner(
-      this.zoneBanner,
-      `ZON ${index + 1} / ${DIMENSIONS.length}\n${dimension.label.toUpperCase()}\n${dimension.tagline}`,
-      dimension.color,
-    );
+    this.showMessage({
+      title: `ZON ${index + 1} / ${DIMENSIONS.length} · ${dimension.label.toUpperCase()}`,
+      body: dimension.tagline,
+      color: dimension.color,
+      duration: 3000,
+      size: 20,
+    });
   }
 
   update() {
     if (this.finished) return;
     this.updateGear();
-
     if (this.paused) return;
 
     const body = this.player.body;
@@ -337,8 +466,6 @@ export default class PlayScene extends Phaser.Scene {
     if (zone !== this.currentZone && zone >= 0 && zone < DIMENSIONS.length) {
       this.enterZone(zone);
     }
-
-    if (this.player.x >= ROCKET_X - 30 || isComplete()) this.launchRocket();
   }
 
   updateGear() {
@@ -377,47 +504,74 @@ export default class PlayScene extends Phaser.Scene {
     });
   }
 
-  launchRocket() {
+  // Ju högre upp på masten du träffar, desto större hoppbonus — precis som
+  // flaggstången. Bonusen är bara skoj och rapporteras inte vidare.
+  grabMast() {
+    if (this.finished || this.paused) return;
     this.finished = true;
-    this.paused = true;
+
+    const hit = Phaser.Math.Clamp(this.player.y, MAST_TOP, MAST_BOTTOM);
+    const height = 1 - (hit - MAST_TOP) / (MAST_BOTTOM - MAST_TOP);
+    const bonus = Math.round((500 + height * 4500) / 100) * 100;
+
     this.physics.pause();
     this.player.body.setVelocity(0, 0);
-    sfx.rocket();
+    sfx.gear();
 
-    // Webbläsarens egen timer, inte spelklockan: byter någon flik mitt i
-    // lyftet fryser tweenarna, men slutskärmen måste fram ändå — det är
-    // där leadet fångas. showEnd() kan bara köras en gång.
-    setTimeout(showEnd, 2600);
+    const popup = this.add
+      .text(MAST_X + 40, hit, `+${bonus}`, {
+        fontFamily: 'ui-monospace, Menlo, monospace',
+        fontSize: '26px',
+        fontStyle: 'bold',
+        color: '#fde047',
+      })
+      .setOrigin(0, 0.5)
+      .setDepth(20);
 
-    this.cameras.main.stopFollow();
+    this.tweens.add({ targets: popup, y: hit - 60, alpha: 0, duration: 1400 });
+    this.showMessage({
+      title: `HOPPBONUS +${bonus}`,
+      body: 'Bara för skojs skull — den säger inget om er AI-mognad.',
+      color: '#fde047',
+      duration: 3000,
+      size: 28,
+    });
+
     this.tweens.add({
       targets: this.player,
       x: this.rocket.x,
       y: this.rocket.y + 10,
-      duration: 420,
+      duration: 900,
+      delay: 700,
       ease: 'Quad.easeInOut',
-      onComplete: () => this.liftOff(),
+      onComplete: () => this.liftOff(bonus),
     });
+
+    // Webbläsarens egen timer, inte spelklockan: byter någon flik mitt i
+    // lyftet fryser tweenarna, men slutskärmen måste fram ändå — det är
+    // där leadet fångas. showEnd() kan bara köras en gång.
+    setTimeout(() => showEnd(bonus), 7000);
   }
 
-  liftOff() {
+  liftOff(bonus) {
     this.player.setDepth(1);
-    this.cameras.main.shake(1400, 0.006);
+    this.cameras.main.shake(2600, 0.004);
+    sfx.rocket();
 
     const flame = this.add.image(this.rocket.x, this.rocket.y + 60, 'gear-thrust').setScale(1.6);
     this.tweens.add({
       targets: [this.rocket, this.player, flame],
-      y: '-=700',
-      duration: 1500,
+      y: '-=760',
+      duration: 3600,
       ease: 'Quad.easeIn',
-      onComplete: () => showEnd(),
+      onComplete: () => showEnd(bonus),
     });
     this.tweens.add({
       targets: flame,
       scaleX: 2.2,
       scaleY: 2.6,
       yoyo: true,
-      repeat: 8,
+      repeat: 18,
       duration: 90,
     });
   }

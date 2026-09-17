@@ -16,7 +16,13 @@ En gamifierad AI-mognadsassessment. Istället för ett frågeformulär springer 
 
 ROI-mätning samlas medvetet in efteråt, i rådgivningssamtalet — inte i spelet.
 
-Banan är indelad i fem zoner, en per dimension, med tre frågetecken i varje. Svaren ger mynt i HUD:en, och tre mynt av fem i en dimension ger utrustning på figuren: sköld, datakub, fart, en AI-lead som springer bredvid dig, och en jetpack som ger ett tredje hopp. Svarar ni att allt saknas får ni ingen utrustning — det är metaforen, inte en bugg.
+Banan är indelad i fem zoner, en per dimension, med tre frågetecken i varje. Svaren ger mynt i HUD:en, och tre mynt av fem i en dimension ger utrustning på figuren: sköld, datakub, fart, en AI-lead som springer bredvid dig, och en jetpack som ger ett tredje hopp. Svarar ni att allt saknas får ni ingen utrustning — det är metaforen, inte en bugg. Ändrar man ner ett svar försvinner utrustningen igen.
+
+Zon 1–2 är flacka. Från zon 3 klättrar banan i trappsteg, men marken är alltid framkomlig så ingen kan fastna och missa slutskärmen.
+
+Besvarade frågetecken blir gröna och behåller svaret som en etikett. Hoppa upp i dem igen för att ändra dig. Varje svar ger en kort kommentar som konstaterar vad svaret innebär — de ligger i `comment` på varje svarsalternativ i [src/data/gameData.js](src/data/gameData.js).
+
+Banan slutar vid en mast: ju högre du träffar den, desto större hoppbonus, precis som flaggstången i Mario. Bonusen är rent kosmetisk och skickas aldrig med i leadet — den säger inget om AI-mognad.
 
 ## Stack
 

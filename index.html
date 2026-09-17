@@ -46,8 +46,14 @@
               <span class="howto-text">Tryck igen i luften för ett extra hopp — så når du de höga avsatserna</span>
             </div>
             <div class="howto-row">
-              <span class="keys"><kbd>↑</kbd><kbd>↓</kbd><kbd>Enter</kbd></span>
-              <span class="howto-text">Välj svar med pilarna och bekräfta med Enter</span>
+              <span class="keys"><kbd>↑</kbd><kbd>↓</kbd></span>
+              <span class="howto-text">Välj svar när en fråga är uppe</span>
+            </div>
+            <div class="howto-row">
+              <span class="keys"><kbd>→</kbd><kbd>Enter</kbd></span>
+              <span class="howto-text">
+                Svara. Besvarade frågetecken blir gröna — hoppa upp i dem igen för att ändra dig
+              </span>
             </div>
           </div>
 
@@ -72,7 +78,7 @@
           <h2 id="question-text"></h2>
           <div id="question-options" class="choices"></div>
           <p class="hint">
-            <kbd>↑</kbd><kbd>↓</kbd> välj svar <span>·</span> <kbd>Enter</kbd> bekräfta
+            <kbd>↑</kbd><kbd>↓</kbd> välj <span>·</span> <kbd>→</kbd> eller <kbd>Enter</kbd> svara
           </p>
         </div>
       </div>
@@ -80,6 +86,7 @@
       <div id="overlay-end" class="overlay" hidden>
         <div class="panel">
           <h1>Bana klar!</h1>
+          <p id="end-bonus" class="bonus" hidden></p>
           <p class="tagline">
             Din profil analyseras nu av vår AI. En rådgivare från Superintelligent går igenom
             vad den faktiskt betyder för er — det är där det intressanta finns.

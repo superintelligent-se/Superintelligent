@@ -18,7 +18,14 @@ export function recordAnswer(question, optionIndex) {
     question: question.text,
     answer: option.label,
     score: option.score,
+    optionIndex,
+    andrad: state.answers[question.id] ? true : undefined,
   };
+}
+
+// Svar går att ändra: blocket kommer ihåg vad du valde förra gången.
+export function answerFor(questionId) {
+  return state.answers[questionId]?.optionIndex ?? null;
 }
 
 export function dimensionScores() {
