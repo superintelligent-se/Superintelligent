@@ -23,6 +23,12 @@ export function recordAnswer(question, optionIndex) {
   };
 }
 
+// Tog spelaren röret finns inga svar att tolka — rådgivaren ska se direkt
+// att det var ett aktivt val, inte ett tekniskt fel.
+export function markShortcut() {
+  state.shortcut = true;
+}
+
 // Svar går att ändra: blocket kommer ihåg vad du valde förra gången.
 export function answerFor(questionId) {
   return state.answers[questionId]?.optionIndex ?? null;
@@ -60,6 +66,9 @@ export function isComplete() {
 export function submissionPayload(contact) {
   return {
     ...contact,
+    genvag: state.shortcut
+      ? 'JA — tog röret, hoppade över frågorna. Vet redan att hjälp behövs.'
+      : 'nej',
     roll: state.role?.label ?? 'okänd',
     speltid_sekunder: Math.round((Date.now() - state.startedAt) / 1000),
     svar: Object.entries(state.answers).map(([id, a]) => ({

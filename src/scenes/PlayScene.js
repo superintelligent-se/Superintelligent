@@ -8,10 +8,17 @@ import {
   GEAR_THRESHOLD,
   questionsFor,
 } from '../data/gameData.js';
-import { answerFor, coinsEarned, recordAnswer, state } from '../state.js';
-import { flyCoinToHud, markGear, showEnd, showQuestion, updateHud } from '../ui.js';
+import { answerFor, coinsEarned, markShortcut, recordAnswer, state } from '../state.js';
+import {
+  flyCoinToHud,
+  markGear,
+  showEnd,
+  showQuestion,
+  showShortcutPrompt,
+  updateHud,
+} from '../ui.js';
 
-const CAPTURED_KEYS = 'UP,DOWN,LEFT,RIGHT,SPACE,W,A,D';
+const CAPTURED_KEYS = 'UP,DOWN,LEFT,RIGHT,SPACE,W,A,S,D';
 const PIXEL_SIZE = 4;
 const JUMP_VELOCITY = -440;
 const RUN_SPEED = 260;
@@ -23,6 +30,10 @@ const MAST_X = LEVEL_WIDTH - 420;
 const MAST_TOP = 120;
 const MAST_BOTTOM = 470;
 const ROCKET_X = LEVEL_WIDTH - 240;
+const PIPE_IN_X = ZONE_START + 300;
+const PIPE_OUT_X = MAST_X + 130;
+const PIPE_TOP = GROUND_Y - 44;
+const SHORTCUT_BONUS = 100;
 
 // Zon 1-2 är flacka. Från zon 3 klättrar banan: du tar en avsats för att nå
 // ett frågetecken, och nästa ligger högre upp. Marken är alltid framkomlig,
@@ -80,6 +91,7 @@ export default class PlayScene extends Phaser.Scene {
     this.solids.add(this.add.rectangle(LEVEL_WIDTH / 2, GROUND_Y + 40, LEVEL_WIDTH, 80, 0x1b2436));
     this.createLevel();
     this.createFinish();
+    this.createPipes();
     this.createPlayer();
     this.createMessagePanel();
 
@@ -88,7 +100,7 @@ export default class PlayScene extends Phaser.Scene {
     this.physics.add.overlap(this.player, this.mastZone, this.grabMast, undefined, this);
 
     this.cursors = this.input.keyboard.createCursorKeys();
-    this.keys = this.input.keyboard.addKeys('W,A,D,SPACE');
+    this.keys = this.input.keyboard.addKeys('W,A,S,D,SPACE');
     this.cameras.main.startFollow(this.player, true, 0.12, 0.12, 0, 90);
 
     // Phaser fångar W, A, D och mellanslag på window och kallar
@@ -210,6 +222,33 @@ export default class PlayScene extends Phaser.Scene {
     ]);
   }
 
+  // Klassiskt grönt rör precis efter första frågetecknet. Ner i det och du
+  // hoppar över hela banan — för den som redan vet att hjälpen behövs.
+  createPipes() {
+    this.drawPipe(PIPE_IN_X);
+    this.drawPipe(PIPE_OUT_X);
+
+    this.pipeHint = this.add
+      .text(PIPE_IN_X, PIPE_TOP - 34, 'Tryck ↓', {
+        fontFamily: 'ui-monospace, Menlo, monospace',
+        fontSize: '12px',
+        color: '#8ef0ad',
+        backgroundColor: '#0d1422e6',
+        padding: { x: 7, y: 4 },
+      })
+      .setOrigin(0.5)
+      .setVisible(false);
+  }
+
+  drawPipe(x) {
+    const shaft = this.add.rectangle(x, PIPE_TOP + 42, 58, 64, 0x1f8b3d);
+    shaft.setStrokeStyle(2, 0x0d4f21);
+    const rim = this.add.rectangle(x, PIPE_TOP + 2, 78, 22, 0x2fbf57);
+    rim.setStrokeStyle(2, 0x0d4f21);
+    this.solids.add(rim);
+    return rim;
+  }
+
   createPlayer() {
     const roleId = state.role?.id ?? 'medarbetare';
     const textureKey = `avatar-${roleId}`;
@@ -229,25 +268,25 @@ export default class PlayScene extends Phaser.Scene {
     this.wasAirborne = false;
   }
 
-  // Meddelandena ligger längst ner som undertexter: mot den mörka marken
-  // syns de alltid, och de hamnar aldrig bakom HUD:en.
+  // Meddelandena ligger i markbandet längst ner. Där är de aldrig i vägen
+  // för vare sig HUD:en eller det man spelar på.
   createMessagePanel() {
     this.messagePanel = this.add
-      .rectangle(0, 430, 960, 110, 0x05070c, 0.88)
+      .rectangle(0, GROUND_Y, 960, 40, 0x05070c, 0.92)
       .setOrigin(0, 0)
       .setScrollFactor(0)
       .setDepth(19);
 
     this.messageRule = this.add
-      .rectangle(0, 430, 960, 2, 0xffffff, 0.14)
+      .rectangle(0, GROUND_Y, 960, 2, 0xffffff, 0.16)
       .setOrigin(0, 0)
       .setScrollFactor(0)
       .setDepth(19);
 
     this.messageTitle = this.add
-      .text(480, 452, '', {
+      .text(480, GROUND_Y + 5, '', {
         fontFamily: 'ui-monospace, Menlo, monospace',
-        fontSize: '22px',
+        fontSize: '13px',
         fontStyle: 'bold',
         align: 'center',
         color: '#ffffff',
@@ -257,12 +296,12 @@ export default class PlayScene extends Phaser.Scene {
       .setDepth(20);
 
     this.messageBody = this.add
-      .text(480, 486, '', {
+      .text(480, GROUND_Y + 22, '', {
         fontFamily: 'system-ui, sans-serif',
-        fontSize: '15px',
+        fontSize: '12px',
         align: 'center',
-        color: '#dfe6f2',
-        wordWrap: { width: 780 },
+        color: '#c7d2e5',
+        wordWrap: { width: 920 },
       })
       .setOrigin(0.5, 0)
       .setScrollFactor(0)
@@ -277,8 +316,8 @@ export default class PlayScene extends Phaser.Scene {
     this.messageGroup.forEach((item) => item.setAlpha(0));
   }
 
-  showMessage({ title, body, color = '#ffffff', duration = 3200, size = 26 }) {
-    this.messageQueue.push({ title, body, color, duration, size });
+  showMessage({ title, body, color = '#ffffff', duration = 3600 }) {
+    this.messageQueue.push({ title, body, color, duration });
     if (!this.messageActive) this.playNextMessage();
   }
 
@@ -290,9 +329,9 @@ export default class PlayScene extends Phaser.Scene {
     }
     this.messageActive = true;
 
-    this.messageTitle.setText(next.title).setColor(next.color).setFontSize(next.size);
+    this.messageTitle.setText(next.title).setColor(next.color);
     this.messageBody.setText(next.body ?? '');
-    this.messageTitle.setScale(0.7);
+    this.messageTitle.setScale(0.8);
 
     this.tweens.add({ targets: this.messageTitle, scale: 1, duration: 260, ease: 'Back.easeOut' });
     this.tweens.add({
@@ -357,7 +396,6 @@ export default class PlayScene extends Phaser.Scene {
       body: option.comment,
       color: '#2e9e63',
       duration: 2600,
-      size: 17,
     });
   }
 
@@ -423,7 +461,6 @@ export default class PlayScene extends Phaser.Scene {
       body: dimension.gearWhy,
       color: dimension.color,
       duration: 4200,
-      size: 30,
     });
   }
 
@@ -458,7 +495,6 @@ export default class PlayScene extends Phaser.Scene {
       body: dimension.tagline,
       color: dimension.color,
       duration: 3000,
-      size: 20,
     });
   }
 
@@ -481,12 +517,17 @@ export default class PlayScene extends Phaser.Scene {
     else if (right) body.setVelocityX(speed);
     else body.setVelocityX(0);
 
-    if (body.blocked.down) this.jumpsUsed = 0;
-    else this.wasAirborne = true;
+    if (body.blocked.down) {
+      this.noteLanding(body);
+      this.jumpsUsed = 0;
+    } else {
+      this.wasAirborne = true;
+    }
 
     // Jetpacken ger ett tredje hopp: möjlighets-AI tar er dit ni inte nådde förr.
     const maxJumps = this.gear.jetpack ? 3 : 2;
     if (jumpPressed && this.jumpsUsed < maxJumps) {
+      if (this.jumpsUsed === 0) this.jumpedFrom = body.bottom;
       body.setVelocityY(JUMP_VELOCITY);
       this.jumpsUsed += 1;
       if (this.jumpsUsed > 1) sfx.doubleJump();
@@ -501,6 +542,8 @@ export default class PlayScene extends Phaser.Scene {
       this.enterZone(zone);
     }
 
+    this.checkPipe(body);
+
     if (!this.mastHinted && this.player.x > MAST_X - 560) {
       this.mastHinted = true;
       this.showMessage({
@@ -508,13 +551,124 @@ export default class PlayScene extends Phaser.Scene {
         body: 'Hoppa så högt du kan på den — ju högre träff, desto större bonus. Klarar du att hoppa över hela masten händer något annat.',
         color: '#fde047',
         duration: 4200,
-        size: 22,
       });
     }
 
     // Hoppade du över hela masten missar du bonusen på den — men det är
     // en svårare bragd, så den belönas bättre.
     if (this.player.x > MAST_X + 26) this.clearedMast();
+  }
+
+  checkPipe(body) {
+    const standingOnPipe =
+      body.blocked.down &&
+      Math.abs(this.player.x - PIPE_IN_X) < 42 &&
+      body.bottom <= PIPE_TOP + 16;
+
+    this.pipeHint.setVisible(standingOnPipe);
+
+    const downPressed =
+      Phaser.Input.Keyboard.JustDown(this.cursors.down) ||
+      Phaser.Input.Keyboard.JustDown(this.keys.S);
+
+    if (standingOnPipe && downPressed) this.offerShortcut();
+  }
+
+  offerShortcut() {
+    this.paused = true;
+    this.physics.pause();
+    this.player.body.setVelocity(0, 0);
+    this.input.keyboard.enabled = false;
+    sfx.zone();
+
+    showShortcutPrompt((takeIt) => {
+      this.input.keyboard.resetKeys();
+      this.input.keyboard.enabled = true;
+      if (takeIt) {
+        this.takeShortcut();
+      } else {
+        this.paused = false;
+        this.physics.resume();
+      }
+    });
+  }
+
+  takeShortcut() {
+    this.finished = true;
+    markShortcut();
+    this.pipeHint.setVisible(false);
+
+    // Ner i röret, upp på andra sidan flaggstången.
+    this.tweens.add({
+      targets: this.player,
+      y: PIPE_TOP + 70,
+      alpha: 0,
+      duration: 700,
+      ease: 'Quad.easeIn',
+      onComplete: () => {
+        this.player.setPosition(PIPE_OUT_X, PIPE_TOP + 70);
+        this.cameras.main.stopFollow();
+        this.cameras.main.pan(PIPE_OUT_X, 270, 500, 'Quad.easeInOut');
+        this.tweens.add({
+          targets: this.player,
+          y: PIPE_TOP - 30,
+          alpha: 1,
+          duration: 700,
+          delay: 400,
+          ease: 'Quad.easeOut',
+          onComplete: () => this.afterShortcut(),
+        });
+      },
+    });
+
+    setTimeout(() => showEnd(SHORTCUT_BONUS), 9000);
+  }
+
+  afterShortcut() {
+    sfx.gear();
+    this.starfield();
+    this.showMessage({
+      title: 'GENVÄGEN TAGEN',
+      body: 'Du hoppade över hela banan och kom upp bakom flaggstången. Ingen såg något. Raketen väntar.',
+      color: '#8ef0ad',
+      duration: 4200,
+    });
+
+    this.tweens.add({
+      targets: this.player,
+      x: this.rocket.x,
+      y: this.rocket.y + 10,
+      duration: 1000,
+      delay: 1200,
+      ease: 'Quad.easeInOut',
+      onComplete: () => this.liftOff(SHORTCUT_BONUS),
+    });
+  }
+
+  // Landar du där du startade, efter ett enkelhopp, försökte du troligen nå
+  // något och missade. Tre sådana i rad och spelet berättar om dubbelhoppet.
+  noteLanding(body) {
+    if (this.jumpedFrom === null || this.jumpedFrom === undefined) return;
+    const sameLevel = Math.abs(body.bottom - this.jumpedFrom) < 14;
+    if (sameLevel && this.jumpsUsed === 1) {
+      this.shortJumps = (this.shortJumps ?? 0) + 1;
+      this.maybeHintDoubleJump();
+    } else {
+      this.shortJumps = 0;
+    }
+    this.jumpedFrom = null;
+  }
+
+  maybeHintDoubleJump() {
+    if (this.shortJumps < 3 || (this.doubleJumpHints ?? 0) >= 2) return;
+    this.shortJumps = 0;
+    this.doubleJumpHints = (this.doubleJumpHints ?? 0) + 1;
+    this.showMessage({
+      title: 'KOMMER DU INTE UPP?',
+      body: 'Tryck hoppknappen en gång till medan du är i luften — då hoppar du nästan dubbelt så högt.',
+      color: '#fde047',
+      duration: 4600,
+    });
   }
 
   updateGear() {
@@ -583,7 +737,6 @@ export default class PlayScene extends Phaser.Scene {
       body: 'Bara för skojs skull — den säger inget om er AI-mognad.',
       color: '#fde047',
       duration: 3000,
-      size: 28,
     });
 
     this.tweens.add({
@@ -617,7 +770,6 @@ export default class PlayScene extends Phaser.Scene {
       body: `Det där gör nästan ingen. Hoppbonus +${bonus} — och du slipper klättra.`,
       color: '#fde047',
       duration: 4000,
-      size: 26,
     });
 
     this.tweens.add({

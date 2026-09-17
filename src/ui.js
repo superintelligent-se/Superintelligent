@@ -51,6 +51,53 @@ export function showRoleSelect(onPick) {
   }
 }
 
+// Röret är ett erbjudande med glimten i ögat: hoppa över allt arbete, precis
+// som man gör när man tar in hjälp utifrån.
+export function showShortcutPrompt(onChoice) {
+  const tag = el('question-dimension');
+  tag.textContent = 'Genvägen';
+  tag.style.color = '#2fbf57';
+  el('question-text').textContent = 'Vill du fuska till slutet av banan?';
+
+  const options = el('question-options');
+  options.innerHTML = '';
+
+  const choices = [
+    {
+      label: 'Ja. Vi vet redan att vi behöver hjälp — låt oss prata i stället.',
+      take: true,
+    },
+    { label: 'Nej, jag spelar klart banan själv.', take: false },
+  ];
+
+  for (const choice of choices) {
+    const button = document.createElement('button');
+    button.className = 'choice';
+    button.type = 'button';
+    button.innerHTML = `<span class="choice-marker">▸</span>${choice.label}`;
+    button.addEventListener('click', () => {
+      el('overlay-question').hidden = true;
+      el('shortcut-note').hidden = true;
+      el('question-hint').hidden = false;
+      onChoice(choice.take);
+    });
+    options.appendChild(button);
+  }
+
+  const note = el('shortcut-note');
+  note.innerHTML = `
+    Du landar bakom flaggstången, raketen står och väntar och ingen ser något.
+    Ungefär som att ta in oss: rådgivning i toppen och AI-träning i hela
+    organisationen samtidigt, i stället för att famla er fram i två år.
+    <br /><br />
+    Väljer du röret säger du samtidigt: <em>vi vet redan att vi behöver hjälp,
+    och tiden läggs hellre på hur snabbt vi kommer igång.</em> Frågorna finns
+    kvar — vi tar dem när vi ses.`;
+  note.hidden = false;
+  el('question-hint').hidden = true;
+  el('overlay-question').hidden = false;
+}
+
 function showHowTo(onDone) {
   const overlay = el('overlay-howto');
   overlay.hidden = false;
@@ -254,8 +301,19 @@ export function showEnd(bonus) {
   if (bonus) {
     // Hoppbonusen är skoj och stannar på skärmen — den följer aldrig med
     // i leadet, eftersom den inte säger något om AI-mognad.
-    el('end-bonus').textContent = `Hoppbonus +${bonus}`;
+    el('end-bonus').textContent = state.shortcut
+      ? `Hoppbonus +${bonus} — fusk ger inte så mycket poäng, men desto mer tid`
+      : `Hoppbonus +${bonus}`;
     el('end-bonus').hidden = false;
+  }
+
+  if (state.shortcut) {
+    // Den som tog röret har inga svar att analysera. Säg det rakt ut i
+    // stället för att låtsas om en profil som inte finns.
+    el('overlay-end').querySelector('h1').textContent = 'Du tog röret!';
+    el('end-intro').textContent =
+      'Inga svar den här gången — du hoppade rakt till slutet. Det säger egentligen allt vi behöver veta för ett första samtal: ni vill komma igång, inte kartlägga. Lämna dina uppgifter så tar vi frågorna när vi ses.';
+    el('lead-submit').textContent = 'Skicka och boka samtal';
   }
 
   el('overlay-end').hidden = false;
