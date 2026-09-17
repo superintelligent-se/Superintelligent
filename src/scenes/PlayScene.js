@@ -256,7 +256,8 @@ export default class PlayScene extends Phaser.Scene {
   drawPipe(x) {
     // Röret ritas framför figuren, så den glider ner bakom det i stället för
     // att tona bort — man ska se den försvinna ner i hålet.
-    const shaft = this.add.rectangle(x, PIPE_TOP + 42, 58, 64, 0x1f8b3d).setDepth(6);
+    // Skaftet går förbi skärmkanten, annars skymtar figuren under röret.
+    const shaft = this.add.rectangle(x, PIPE_TOP + 90, 58, 180, 0x1f8b3d).setDepth(6);
     shaft.setStrokeStyle(2, 0x0d4f21);
     const rim = this.add.rectangle(x, PIPE_TOP + 2, 78, 22, 0x2fbf57).setDepth(6);
     rim.setStrokeStyle(2, 0x0d4f21);
@@ -622,11 +623,11 @@ export default class PlayScene extends Phaser.Scene {
     this.player.setDepth(0);
     this.tweens.add({
       targets: this.player,
-      y: PIPE_TOP + 78,
+      y: PIPE_TOP + 120,
       duration: 900,
       ease: 'Quad.easeIn',
       onComplete: () => {
-        this.player.setPosition(PIPE_OUT_X, PIPE_TOP + 78);
+        this.player.setPosition(PIPE_OUT_X, PIPE_TOP + 120);
         this.cameras.main.stopFollow();
         this.cameras.main.pan(PIPE_OUT_X, 270, 500, 'Quad.easeInOut');
         this.tweens.add({

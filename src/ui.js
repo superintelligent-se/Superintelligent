@@ -28,10 +28,50 @@ document.addEventListener('focusout', (event) => {
   if (event.target.matches('input, textarea')) setGameInput(true);
 });
 
+// En och samma tangentbordsnavigering för varje lista i spelet: startsidan,
+// instruktionerna, frågorna och röret. Upp/ner väljer, höger eller Enter
+// bekräftar, Escape backar ett steg.
+function attachListNavigation(buttons, { onPick, onCancel = null }) {
+  let selected = 0;
+
+  const select = (index) => {
+    selected = index;
+    buttons.forEach((button, i) => button.classList.toggle('selected', i === index));
+  };
+
+  const detach = () => document.removeEventListener('keydown', onKeyDown);
+
+  function onKeyDown(event) {
+    if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+      event.preventDefault();
+      const step = event.key === 'ArrowDown' ? 1 : -1;
+      select((selected + step + buttons.length) % buttons.length);
+    } else if (event.key === 'ArrowRight' || event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      detach();
+      onPick(selected);
+    } else if (event.key === 'Escape') {
+      event.preventDefault();
+      // Utan detta bubblar samma tryck vidare till spelets Escape-lyssnare,
+      // som då öppnar omstartsfrågan i samma ögonblick som den här stängs.
+      event.stopPropagation();
+      if (!onCancel) return;
+      detach();
+      onCancel();
+    }
+  }
+
+  buttons.forEach((button, index) => button.addEventListener('mouseenter', () => select(index)));
+  select(0);
+  document.addEventListener('keydown', onKeyDown);
+  return { detach };
+}
+
 export function showRoleSelect(onPick) {
   const container = el('role-buttons');
   container.innerHTML = '';
-  for (const role of ROLES) {
+
+  const buttons = ROLES.map((role) => {
     const button = document.createElement('button');
     button.className = 'choice role';
     button.type = 'button';
@@ -41,14 +81,20 @@ export function showRoleSelect(onPick) {
     const text = document.createElement('span');
     text.innerHTML = `${role.label}<span class="role-blurb">${role.blurb}</span>`;
     button.appendChild(text);
-
-    button.addEventListener('click', () => {
-      state.role = role;
-      el('overlay-role').hidden = true;
-      showHowTo(onPick);
-    });
     container.appendChild(button);
-  }
+    return button;
+  });
+
+  const choose = (index) => {
+    nav.detach();
+    state.role = ROLES[index];
+    el('overlay-role').hidden = true;
+    showHowTo(onPick, () => showRoleSelect(onPick));
+  };
+
+  buttons.forEach((button, index) => button.addEventListener('click', () => choose(index)));
+  const nav = attachListNavigation(buttons, { onPick: choose });
+  el('overlay-role').hidden = false;
 }
 
 // Röret är ett erbjudande med glimten i ögat: hoppa över allt arbete, precis
@@ -62,8 +108,11 @@ export function showShortcutPrompt(onChoice) {
   const note = el('shortcut-note');
   note.innerHTML = `
     Du landar bakom flaggstången, raketen står och väntar och ingen ser något.
-    Ungefär som att ta in oss: rådgivning i toppen och AI-träning i hela
-    organisationen samtidigt, i stället för att famla er fram i två år.
+    Ungefär som att ta in oss: rådgivning uppifrån och AI-träning underifrån,
+    samtidigt, i stället för att famla er fram i två år.
+    <br /><br />
+    Men du missar överraskningarna på vägen — och framför allt eftertanken.
+    Av erfarenhet är det just frågorna som får saker att lossna.
     <br /><br />
     Väljer du röret säger du samtidigt: <em>vi vet redan att vi behöver hjälp,
     och tiden läggs hellre på hur snabbt vi kommer igång.</em> Frågorna finns
@@ -201,21 +250,31 @@ window.addEventListener('beforeunload', (event) => {
   }
 });
 
-function showHowTo(onDone) {
+function showHowTo(onDone, onBack) {
   const overlay = el('overlay-howto');
   overlay.hidden = false;
 
-  el('howto-start').addEventListener(
-    'click',
-    () => {
+  const start = el('howto-start');
+  const clone = start.cloneNode(true);
+  start.replaceWith(clone);
+
+  const begin = () => {
+    nav.detach();
+    overlay.hidden = true;
+    el('hud').hidden = false;
+    el('sound-toggle').hidden = false;
+    sfx.zone();
+    onDone();
+  };
+
+  clone.addEventListener('click', begin);
+  const nav = attachListNavigation([clone], {
+    onPick: begin,
+    onCancel: () => {
       overlay.hidden = true;
-      el('hud').hidden = false;
-      el('sound-toggle').hidden = false;
-      sfx.zone();
-      onDone();
+      onBack();
     },
-    { once: true },
-  );
+  });
 }
 
 export function initSoundToggle() {
