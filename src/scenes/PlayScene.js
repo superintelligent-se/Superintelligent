@@ -11,9 +11,11 @@ import {
 import { answerFor, coinsEarned, markShortcut, recordAnswer, state } from '../state.js';
 import {
   flyCoinToHud,
+  isDialogOpen,
   markGear,
   showEnd,
   showQuestion,
+  showRestartPrompt,
   showShortcutPrompt,
   updateHud,
 } from '../ui.js';
@@ -107,6 +109,17 @@ export default class PlayScene extends Phaser.Scene {
     // preventDefault, så de aldrig når ett textfält. Att stänga av
     // keyboard-pluginen räcker inte — fångsten sitter i managern och måste
     // rensas. Gränssnittet säger till när det behöver tangenterna själv.
+    // Escape mitt i spelet: erbjud omstart. Escape inne i en dialog hanteras
+    // av dialogen själv.
+    window.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape' || this.finished || this.paused || isDialogOpen()) return;
+      this.holdForDialog();
+      showRestartPrompt((restart) => {
+        if (restart) window.location.reload();
+        else this.releaseFromDialog();
+      });
+    });
+
     window.addEventListener('game-input', (event) => {
       const enabled = event.detail.enabled;
       this.input.keyboard.enabled = enabled;
@@ -241,9 +254,11 @@ export default class PlayScene extends Phaser.Scene {
   }
 
   drawPipe(x) {
-    const shaft = this.add.rectangle(x, PIPE_TOP + 42, 58, 64, 0x1f8b3d);
+    // Röret ritas framför figuren, så den glider ner bakom det i stället för
+    // att tona bort — man ska se den försvinna ner i hålet.
+    const shaft = this.add.rectangle(x, PIPE_TOP + 42, 58, 64, 0x1f8b3d).setDepth(6);
     shaft.setStrokeStyle(2, 0x0d4f21);
-    const rim = this.add.rectangle(x, PIPE_TOP + 2, 78, 22, 0x2fbf57);
+    const rim = this.add.rectangle(x, PIPE_TOP + 2, 78, 22, 0x2fbf57).setDepth(6);
     rim.setStrokeStyle(2, 0x0d4f21);
     this.solids.add(rim);
     return rim;
@@ -362,11 +377,8 @@ export default class PlayScene extends Phaser.Scene {
     const question = block.getData('question');
     this.tweens.add({ targets: block, y: block.y - 8, yoyo: true, duration: 90 });
 
-    this.paused = true;
-    this.physics.pause();
-    this.player.body.setVelocity(0, 0);
     // Pilarna styr svarsalternativen medan frågan är uppe, inte figuren.
-    this.input.keyboard.enabled = false;
+    this.holdForDialog();
 
     const previous = answerFor(question.id);
     showQuestion(question, previous, (optionIndex) => {
@@ -376,11 +388,8 @@ export default class PlayScene extends Phaser.Scene {
       this.markAnswered(block, question, optionIndex);
       this.rewardCoin(block, question.dimension, coinsBefore, gearBefore);
 
-      this.paused = false;
-      this.physics.resume();
-      this.input.keyboard.resetKeys();
-      this.input.keyboard.enabled = true;
-    });
+      this.releaseFromDialog();
+    }, () => this.releaseFromDialog());
   }
 
   markAnswered(block, question, optionIndex) {
@@ -559,6 +568,20 @@ export default class PlayScene extends Phaser.Scene {
     if (this.player.x > MAST_X + 26) this.clearedMast();
   }
 
+  holdForDialog() {
+    this.paused = true;
+    this.physics.pause();
+    this.player.body.setVelocity(0, 0);
+    this.input.keyboard.enabled = false;
+  }
+
+  releaseFromDialog() {
+    this.paused = false;
+    this.physics.resume();
+    this.input.keyboard.resetKeys();
+    this.input.keyboard.enabled = true;
+  }
+
   checkPipe(body) {
     const standingOnPipe =
       body.blocked.down &&
@@ -575,20 +598,16 @@ export default class PlayScene extends Phaser.Scene {
   }
 
   offerShortcut() {
-    this.paused = true;
-    this.physics.pause();
-    this.player.body.setVelocity(0, 0);
-    this.input.keyboard.enabled = false;
+    this.holdForDialog();
     sfx.zone();
 
     showShortcutPrompt((takeIt) => {
-      this.input.keyboard.resetKeys();
-      this.input.keyboard.enabled = true;
       if (takeIt) {
+        this.input.keyboard.resetKeys();
+        this.input.keyboard.enabled = true;
         this.takeShortcut();
       } else {
-        this.paused = false;
-        this.physics.resume();
+        this.releaseFromDialog();
       }
     });
   }
@@ -598,23 +617,23 @@ export default class PlayScene extends Phaser.Scene {
     markShortcut();
     this.pipeHint.setVisible(false);
 
-    // Ner i röret, upp på andra sidan flaggstången.
+    // Ner i röret och upp på andra sidan flaggstången. Figuren ligger bakom
+    // rörgrafiken hela vägen, så den glider ur synhåll och tillbaka fram.
+    this.player.setDepth(0);
     this.tweens.add({
       targets: this.player,
-      y: PIPE_TOP + 70,
-      alpha: 0,
-      duration: 700,
+      y: PIPE_TOP + 78,
+      duration: 900,
       ease: 'Quad.easeIn',
       onComplete: () => {
-        this.player.setPosition(PIPE_OUT_X, PIPE_TOP + 70);
+        this.player.setPosition(PIPE_OUT_X, PIPE_TOP + 78);
         this.cameras.main.stopFollow();
         this.cameras.main.pan(PIPE_OUT_X, 270, 500, 'Quad.easeInOut');
         this.tweens.add({
           targets: this.player,
-          y: PIPE_TOP - 30,
-          alpha: 1,
-          duration: 700,
-          delay: 400,
+          y: PIPE_TOP - 32,
+          duration: 900,
+          delay: 500,
           ease: 'Quad.easeOut',
           onComplete: () => this.afterShortcut(),
         });

@@ -80,13 +80,17 @@ export function showShortcutPrompt(onChoice) {
       note.hidden = true;
       onChoice(index === 0);
     },
+    onCancel: () => {
+      note.hidden = true;
+      onChoice(false);
+    },
   });
 }
 
 // Samma lista, samma tangenter, oavsett om det är en fråga eller röret.
 // Översta alternativet är alltid förvalt: vill du längre ner i listan — mot
 // högre mognad — ska det vara ett aktivt val, inte något man råkar trycka på.
-function renderChoices({ items, onPick, markedIndex = null }) {
+function renderChoices({ items, onPick, onCancel = null, markedIndex = null }) {
   const options = el('question-options');
   options.innerHTML = '';
 
@@ -108,10 +112,27 @@ function renderChoices({ items, onPick, markedIndex = null }) {
     buttons.forEach((button, i) => button.classList.toggle('selected', i === index));
   }
 
-  function pick(index) {
+  function close() {
     document.removeEventListener('keydown', onKeyDown);
+    el('overlay-question').removeEventListener('mousedown', onBackdrop);
     el('overlay-question').hidden = true;
+  }
+
+  function pick(index) {
+    close();
     onPick(index);
+  }
+
+  // Escape och klick vid sidan stänger alltid. Varje anrop skickar med en
+  // onCancel som återupptar spelet — utan den skulle figuren bli stående.
+  function cancel() {
+    close();
+    if (onCancel) onCancel();
+  }
+
+  // Klick vid sidan om panelen räknas som att backa ut.
+  function onBackdrop(event) {
+    if (event.target === el('overlay-question')) cancel();
   }
 
   function onKeyDown(event) {
@@ -124,14 +145,61 @@ function renderChoices({ items, onPick, markedIndex = null }) {
     } else if (event.key === 'ArrowRight' || event.key === 'Enter' || event.key === ' ') {
       event.preventDefault();
       pick(selected);
+    } else if (event.key === 'Escape') {
+      event.preventDefault();
+      // Utan detta bubblar samma tryck vidare till spelets Escape-lyssnare,
+      // som då öppnar omstartsfrågan i samma ögonblick som den här stängs.
+      event.stopPropagation();
+      cancel();
     }
   }
 
   select(0);
   document.addEventListener('keydown', onKeyDown);
+  el('overlay-question').addEventListener('mousedown', onBackdrop);
   el('overlay-question').hidden = false;
 }
 
+
+
+// Escape backar ur en fråga. Trycker du Escape mitt i spelet frågar vi i
+// stället om allt ska börjas om — med svaren du gett som insats.
+export function showRestartPrompt(onChoice) {
+  const tag = el('question-dimension');
+  tag.textContent = 'Paus';
+  tag.style.color = '#fde047';
+  el('question-text').textContent = 'Börja om från början?';
+
+  const note = el('shortcut-note');
+  note.textContent =
+    'Alla svar du har gett hittills försvinner och du börjar på ruta ett igen.';
+  note.hidden = false;
+  el('question-hint').hidden = false;
+
+  const done = (restart) => {
+    note.hidden = true;
+    onChoice(restart);
+  };
+
+  renderChoices({
+    items: ['Nej, fortsätt spela', 'Ja, börja om — radera mina svar'],
+    onPick: (index) => done(index === 1),
+    onCancel: () => done(false),
+  });
+}
+
+export function isDialogOpen() {
+  return !el('overlay-question').hidden;
+}
+
+// Webbläsaren visar sin egen varningstext här — den går inte att styra —
+// men frågan kommer upp, och det är poängen: svaren finns bara i minnet.
+window.addEventListener('beforeunload', (event) => {
+  if (answeredCount() > 0 && !endShown) {
+    event.preventDefault();
+    event.returnValue = '';
+  }
+});
 
 function showHowTo(onDone) {
   const overlay = el('overlay-howto');
@@ -274,7 +342,7 @@ export function flyCoinToHud(dimensionId, coinIndex, canvas, from) {
   }, 620);
 }
 
-export function showQuestion(question, previousIndex, onAnswer) {
+export function showQuestion(question, previousIndex, onAnswer, onCancel) {
   const dimension = DIMENSIONS.find((d) => d.id === question.dimension);
   const tag = el('question-dimension');
   tag.textContent = previousIndex === null ? dimension.label : `${dimension.label} · ändra svar`;
@@ -286,7 +354,8 @@ export function showQuestion(question, previousIndex, onAnswer) {
   renderChoices({
     items: question.options.map((option) => option.label),
     markedIndex: previousIndex,
-    onPick: onAnswer,
+    onPick: (index) => onAnswer(index),
+    onCancel,
   });
 }
 
