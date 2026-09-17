@@ -23,7 +23,7 @@ Utrustning vid 3 mynt: **Sköld: ni vet vad som gäller** — Ni har ordning på
 |---|---|---|---|
 | 1 | Nej, ingen alls | Ingen policy | Då står ni utan skyddsnät. Varje medarbetare gör sin egen tolkning av vad som är okej. |
 | 2 | Vi pratar om det, inget är skrivet | Bara prat | Samtalet är igång men styr ingenting. Det som inte är skrivet går inte att hålla någon ansvarig för. |
-| 4 | Ett utkast finns, få känner till det | Utkast, okänt | Ett utkast ingen läst skyddar ungefär lika mycket som inget utkast. Men grunden finns. |
+| 4 | Ja, men få känner till den | Okänd | En okänd policy skyddar ungefär lika mycket som ingen policy. Men grunden finns. |
 | 5 | Ja, tydlig och känd av alla | Tydlig & känd | Glasklart för alla är ovanligt. Ingen behöver gissa när ett nytt verktyg dyker upp. |
 
 ### GDPR & AI-förordningen
@@ -57,7 +57,7 @@ Utrustning vid 3 mynt: **Datakub: ni hittar er egen data** — Er data går att 
 
 ### Samlad data
 
-**Fråga:** Hur mycket av er affärsdata ligger samlat och sökbart — jämfört med utspritt i mejl, chattar och huvuden?
+**Fråga:** Hur mycket av er affärsdata ligger samlat och sökbart — jämfört med utspritt i mejl och huvuden?
 
 | Poäng | Svarsalternativ | Kortform | Kommentar efter svaret |
 |---|---|---|---|
@@ -97,7 +97,7 @@ Utrustning vid 3 mynt: **Fart: hela organisationen är med** — Tillräckligt m
 
 ### Daglig användning
 
-**Fråga:** Hur många av era medarbetare använder AI-verktyg i sitt dagliga arbete?
+**Fråga:** Hur många av era medarbetare använder AI-verktyg i sina yrkesroller?
 
 | Poäng | Svarsalternativ | Kortform | Kommentar efter svaret |
 |---|---|---|---|
@@ -144,11 +144,11 @@ Utrustning vid 3 mynt: **AI-lead: någon går bredvid dig** — Någon äger AI-
 | 1 | Nej, ingen alls | Ingen ansvarig | Utan ägare blir AI allas ansvar, alltså ingens. Det är därför initiativ rinner ut i sanden. |
 | 2 | Nej, men vi pratar om att det behövs | Diskuteras | Insikten finns. Den blir värd något först när någon får mandatet. |
 | 4 | Ja, men som bisyssla till annat | Bisyssla | En bisyssla får den tid som blir över. Det blir sällan någon. |
-| 5 | Ja, tydligt utsedd med mandat | Utsedd med mandat | Någon äger frågan på riktigt. Det är största skillnaden mellan bolag som rör sig och bolag som pratar. |
+| 5 | Ja, tydligt utsedd och på heltid | Ja på heltid | Någon äger frågan på riktigt. Det är största skillnaden mellan bolag som rör sig och bolag som pratar. |
 
 ### Omvärldsbevakning
 
-**Fråga:** Om ett nytt kraftfullt AI-verktyg lanseras imorgon — vem skulle märka det först och agera?
+**Fråga:** Om ett nytt sätt att använda AI lanseras imorgon — vem skulle märka det först och agera?
 
 | Poäng | Svarsalternativ | Kortform | Kommentar efter svaret |
 |---|---|---|---|
@@ -195,7 +195,7 @@ Utrustning vid 3 mynt: **Jetpack: ni når dit ni inte nådde förr** — Ni titt
 | 1 | Bara snabbare, inget nytt | Bara snabbare | Effektivisering är rätt start men har ett tak. Konkurrenterna når samma tak. |
 | 2 | Mest snabbare | Mest snabbare | Tyngdpunkten ligger på sparad tid. Frågan är vad tiden går till sen. |
 | 4 | Både och, i viss mån | Både och | Ni rör er åt rätt håll. Det nya brukar behöva mer skydd än det befintliga. |
-| 5 | Vi har lanserat något helt nytt tack vare AI | Lanserat nytt | Något nytt i marknaden är ett annat spel än intern effektivisering. Det kopieras inte lika snabbt. |
+| 5 | Vi har lanserat flera helt nya saker tack vare AI | Lanserat nytt | Något nytt i marknaden är ett annat spel än intern effektivisering. Det kopieras inte lika snabbt. |
 
 ### Försprång
 

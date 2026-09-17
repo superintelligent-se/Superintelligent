@@ -92,11 +92,11 @@ export const QUESTIONS = [
           'Samtalet är igång men styr ingenting. Det som inte är skrivet går inte att hålla någon ansvarig för.',
       },
       {
-        label: 'Ett utkast finns, få känner till det',
+        label: 'Ja, men få känner till den',
         score: 4,
-        short: 'Utkast, okänt',
+        short: 'Okänd',
         comment:
-          'Ett utkast ingen läst skyddar ungefär lika mycket som inget utkast. Men grunden finns.',
+          'En okänd policy skyddar ungefär lika mycket som ingen policy. Men grunden finns.',
       },
       {
         label: 'Ja, tydlig och känd av alla',
@@ -186,7 +186,7 @@ export const QUESTIONS = [
     short: 'Samlad data',
     dimension: 'data',
     text:
-      'Hur mycket av er affärsdata ligger samlat och sökbart — jämfört med utspritt i mejl, chattar och huvuden?',
+      'Hur mycket av er affärsdata ligger samlat och sökbart — jämfört med utspritt i mejl och huvuden?',
     options: [
       {
         label: 'Mest i huvudet på enskilda personer',
@@ -297,7 +297,7 @@ export const QUESTIONS = [
     short: 'Daglig användning',
     dimension: 'formaga',
     text:
-      'Hur många av era medarbetare använder AI-verktyg i sitt dagliga arbete?',
+      'Hur många av era medarbetare använder AI-verktyg i sina yrkesroller?',
     options: [
       {
         label: 'Nästan ingen',
@@ -432,9 +432,9 @@ export const QUESTIONS = [
           'En bisyssla får den tid som blir över. Det blir sällan någon.',
       },
       {
-        label: 'Ja, tydligt utsedd med mandat',
+        label: 'Ja, tydligt utsedd och på heltid',
         score: 5,
-        short: 'Utsedd med mandat',
+        short: 'Ja på heltid',
         comment:
           'Någon äger frågan på riktigt. Det är största skillnaden mellan bolag som rör sig och bolag som pratar.',
       },
@@ -445,7 +445,7 @@ export const QUESTIONS = [
     short: 'Omvärldsbevakning',
     dimension: 'agarskap',
     text:
-      'Om ett nytt kraftfullt AI-verktyg lanseras imorgon — vem skulle märka det först och agera?',
+      'Om ett nytt sätt att använda AI lanseras imorgon — vem skulle märka det först och agera?',
     options: [
       {
         label: 'Ingen särskild',
@@ -580,7 +580,7 @@ export const QUESTIONS = [
           'Ni rör er åt rätt håll. Det nya brukar behöva mer skydd än det befintliga.',
       },
       {
-        label: 'Vi har lanserat något helt nytt tack vare AI',
+        label: 'Vi har lanserat flera helt nya saker tack vare AI',
         score: 5,
         short: 'Lanserat nytt',
         comment:
