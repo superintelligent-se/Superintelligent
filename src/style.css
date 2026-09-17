@@ -123,6 +123,58 @@ body {
   display: none !important;
 }
 
+/* Nästa steg efter inskickade svar */
+
+#next-steps[hidden] {
+  display: none !important;
+}
+
+#next-steps h2 {
+  margin: 24px 0 14px;
+  font-size: 15px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.cta-primary {
+  display: block;
+  padding: 18px 20px;
+  border-radius: 8px;
+  background: var(--purple);
+  color: #fff;
+  font-size: 17px;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+}
+
+.cta-primary span {
+  display: block;
+  margin-top: 5px;
+  font-size: 13px;
+  font-weight: 400;
+  opacity: 0.85;
+}
+
+.cta-primary:hover {
+  background: #6d28d9;
+}
+
+.cta-secondary {
+  display: block;
+  margin-top: 14px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.cta-secondary:hover {
+  color: var(--ink);
+  text-decoration: underline;
+}
+
 .hud-label {
   width: 142px;
   font-size: 9px;

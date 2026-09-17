@@ -4,10 +4,29 @@ import { renderCoinCanvas, renderGearCanvas } from './pixelart.js';
 import { COINS_PER_DIMENSION, DIMENSIONS, QUESTIONS, ROLES } from './data/gameData.js';
 import { answeredCount, coinsEarned, state, submissionPayload } from './state.js';
 
-// Paste the Formspree (or equivalent) endpoint here to start collecting leads for real.
+// Klistra in endpointen från formtjänsten här för att börja samla leads på riktigt.
 const FORM_ENDPOINT = '';
 
+// Vart prospektet skickas efter att svaren lämnats. Mötet är huvudvägen,
+// träningen ett mindre alternativ för den som hellre börjar själv.
+const BOOKING_URL = 'https://superintelligent.se/boka';
+const TRAINING_URL = 'https://superintelligent.se/traning';
+
 const el = (id) => document.getElementById(id);
+
+function setGameInput(enabled) {
+  window.dispatchEvent(new CustomEvent('game-input', { detail: { enabled } }));
+}
+
+// Phaser fångar W, A, D och mellanslag globalt på window med preventDefault.
+// Ligger fokus i ett textfält måste tangenterna nå fältet i stället, annars
+// går det inte att skriva "Wallin" eller "Anna" i formuläret.
+document.addEventListener('focusin', (event) => {
+  if (event.target.matches('input, textarea')) setGameInput(false);
+});
+document.addEventListener('focusout', (event) => {
+  if (event.target.matches('input, textarea')) setGameInput(true);
+});
 
 export function showRoleSelect(onPick) {
   const container = el('role-buttons');
@@ -240,6 +259,10 @@ export function showEnd(bonus) {
   }
 
   el('overlay-end').hidden = false;
+  // Spelet ska sluta äta W, A, D och mellanslag så fälten går att fylla i.
+  setGameInput(false);
+  el('book-link').href = BOOKING_URL;
+  el('training-link').href = TRAINING_URL;
 
   el('lead-form').addEventListener('submit', async (event) => {
     event.preventDefault();
@@ -252,6 +275,7 @@ export function showEnd(bonus) {
       console.info('Lead payload (ingen endpoint konfigurerad ännu):', payload);
       status.textContent = 'Tack! (Testläge — svaren loggades i webbläsarkonsolen.)';
       status.hidden = false;
+      showNextSteps(form);
       return;
     }
 
@@ -261,11 +285,18 @@ export function showEnd(bonus) {
         headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify(payload),
       });
-      form.hidden = true;
-      status.textContent = 'Tack! Vi hör av oss för din genomgång.';
+      status.textContent = 'Tack! Dina svar är skickade.';
+      showNextSteps(form);
     } catch {
       status.textContent = 'Något gick fel — försök igen eller mejla oss direkt.';
     }
     status.hidden = false;
   });
+}
+
+// Nästa steg visas först när svaren är inne, så leadet aldrig går förlorat
+// för att någon klickar vidare direkt.
+function showNextSteps(form) {
+  form.hidden = true;
+  el('next-steps').hidden = false;
 }

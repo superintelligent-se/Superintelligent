@@ -11,6 +11,7 @@ import {
 import { answerFor, coinsEarned, recordAnswer, state } from '../state.js';
 import { flyCoinToHud, markGear, showEnd, showQuestion, updateHud } from '../ui.js';
 
+const CAPTURED_KEYS = 'UP,DOWN,LEFT,RIGHT,SPACE,W,A,D';
 const PIXEL_SIZE = 4;
 const JUMP_VELOCITY = -440;
 const RUN_SPEED = 260;
@@ -89,6 +90,21 @@ export default class PlayScene extends Phaser.Scene {
     this.cursors = this.input.keyboard.createCursorKeys();
     this.keys = this.input.keyboard.addKeys('W,A,D,SPACE');
     this.cameras.main.startFollow(this.player, true, 0.12, 0.12, 0, 90);
+
+    // Phaser fångar W, A, D och mellanslag på window och kallar
+    // preventDefault, så de aldrig når ett textfält. Att stänga av
+    // keyboard-pluginen räcker inte — fångsten sitter i managern och måste
+    // rensas. Gränssnittet säger till när det behöver tangenterna själv.
+    window.addEventListener('game-input', (event) => {
+      const enabled = event.detail.enabled;
+      this.input.keyboard.enabled = enabled;
+      if (enabled) {
+        this.input.keyboard.addCapture(CAPTURED_KEYS);
+      } else {
+        this.input.keyboard.clearCaptures();
+        this.input.keyboard.resetKeys();
+      }
+    });
   }
 
   buildTextures() {
@@ -150,21 +166,19 @@ export default class PlayScene extends Phaser.Scene {
           })
           .setOrigin(0.5);
 
-        // Ditt svar ligger kvar som en etikett vid blocket — rent dekorativ,
-        // den kolliderar aldrig med figuren. Sitter blocket högt hamnar
-        // etiketten under det i stället, så den inte krockar med HUD:en.
-        const tagY = block.y < 220 ? block.y + 40 : block.y - 38;
+        // Ditt svar ligger kvar som en etikett ovanför blocket — alltid
+        // ovanför, och rent dekorativ: den kolliderar aldrig med figuren.
         const answerTag = this.add
-          .text(block.x, tagY, '', {
+          .text(block.x, block.y - 30, '', {
             fontFamily: 'ui-monospace, Menlo, monospace',
             fontSize: '11px',
             color: '#dfe6f2',
-            backgroundColor: '#0d1422cc',
-            padding: { x: 6, y: 4 },
+            backgroundColor: '#0d1422e6',
+            padding: { x: 7, y: 5 },
             align: 'center',
-            wordWrap: { width: 190 },
+            lineSpacing: 3,
           })
-          .setOrigin(0.5)
+          .setOrigin(0.5, 1)
           .setVisible(false);
 
         block.setData('question', questions[i]);
@@ -215,32 +229,51 @@ export default class PlayScene extends Phaser.Scene {
     this.wasAirborne = false;
   }
 
+  // Meddelandena ligger längst ner som undertexter: mot den mörka marken
+  // syns de alltid, och de hamnar aldrig bakom HUD:en.
   createMessagePanel() {
+    this.messagePanel = this.add
+      .rectangle(0, 430, 960, 110, 0x05070c, 0.88)
+      .setOrigin(0, 0)
+      .setScrollFactor(0)
+      .setDepth(19);
+
+    this.messageRule = this.add
+      .rectangle(0, 430, 960, 2, 0xffffff, 0.14)
+      .setOrigin(0, 0)
+      .setScrollFactor(0)
+      .setDepth(19);
+
     this.messageTitle = this.add
-      .text(480, 62, '', {
+      .text(480, 452, '', {
         fontFamily: 'ui-monospace, Menlo, monospace',
-        fontSize: '26px',
+        fontSize: '22px',
         fontStyle: 'bold',
         align: 'center',
         color: '#ffffff',
-      })
-      .setOrigin(0.5)
-      .setScrollFactor(0)
-      .setDepth(20);
-
-    this.messageBody = this.add
-      .text(480, 100, '', {
-        fontFamily: 'system-ui, sans-serif',
-        fontSize: '15px',
-        align: 'center',
-        color: '#dfe6f2',
-        wordWrap: { width: 520 },
       })
       .setOrigin(0.5, 0)
       .setScrollFactor(0)
       .setDepth(20);
 
-    this.messageGroup = [this.messageTitle, this.messageBody];
+    this.messageBody = this.add
+      .text(480, 486, '', {
+        fontFamily: 'system-ui, sans-serif',
+        fontSize: '15px',
+        align: 'center',
+        color: '#dfe6f2',
+        wordWrap: { width: 780 },
+      })
+      .setOrigin(0.5, 0)
+      .setScrollFactor(0)
+      .setDepth(20);
+
+    this.messageGroup = [
+      this.messagePanel,
+      this.messageRule,
+      this.messageTitle,
+      this.messageBody,
+    ];
     this.messageGroup.forEach((item) => item.setAlpha(0));
   }
 
@@ -259,7 +292,7 @@ export default class PlayScene extends Phaser.Scene {
 
     this.messageTitle.setText(next.title).setColor(next.color).setFontSize(next.size);
     this.messageBody.setText(next.body ?? '');
-    this.messageTitle.setScale(0.6);
+    this.messageTitle.setScale(0.7);
 
     this.tweens.add({ targets: this.messageTitle, scale: 1, duration: 260, ease: 'Back.easeOut' });
     this.tweens.add({
@@ -316,7 +349,8 @@ export default class PlayScene extends Phaser.Scene {
     block.fillColor = 0x2e9e63;
     block.setStrokeStyle(2, 0x1c7a49);
     block.getData('label').setText('✓').setColor('#04240f');
-    block.getData('tag').setText(option.label).setVisible(true);
+    // Kort rubrik plus kort svar: vad frågan gällde och vad du svarade.
+    block.getData('tag').setText([question.short.toUpperCase(), option.short]).setVisible(true);
 
     this.showMessage({
       title: option.label,
@@ -466,6 +500,21 @@ export default class PlayScene extends Phaser.Scene {
     if (zone !== this.currentZone && zone >= 0 && zone < DIMENSIONS.length) {
       this.enterZone(zone);
     }
+
+    if (!this.mastHinted && this.player.x > MAST_X - 560) {
+      this.mastHinted = true;
+      this.showMessage({
+        title: 'MASTEN VÄNTAR',
+        body: 'Hoppa så högt du kan på den — ju högre träff, desto större bonus. Klarar du att hoppa över hela masten händer något annat.',
+        color: '#fde047',
+        duration: 4200,
+        size: 22,
+      });
+    }
+
+    // Hoppade du över hela masten missar du bonusen på den — men det är
+    // en svårare bragd, så den belönas bättre.
+    if (this.player.x > MAST_X + 26) this.clearedMast();
   }
 
   updateGear() {
@@ -551,6 +600,57 @@ export default class PlayScene extends Phaser.Scene {
     // lyftet fryser tweenarna, men slutskärmen måste fram ändå — det är
     // där leadet fångas. showEnd() kan bara köras en gång.
     setTimeout(() => showEnd(bonus), 7000);
+  }
+
+  clearedMast() {
+    if (this.finished) return;
+    this.finished = true;
+    const bonus = 6000;
+
+    this.physics.pause();
+    this.player.body.setVelocity(0, 0);
+    sfx.gear();
+    this.starfield();
+
+    this.showMessage({
+      title: 'ÖVER HELA MASTEN!',
+      body: `Det där gör nästan ingen. Hoppbonus +${bonus} — och du slipper klättra.`,
+      color: '#fde047',
+      duration: 4000,
+      size: 26,
+    });
+
+    this.tweens.add({
+      targets: this.player,
+      x: this.rocket.x,
+      y: this.rocket.y + 10,
+      duration: 900,
+      delay: 900,
+      ease: 'Quad.easeInOut',
+      onComplete: () => this.liftOff(bonus),
+    });
+    setTimeout(() => showEnd(bonus), 7200);
+  }
+
+  // Blinkande stjärnhimmel som belöning.
+  starfield() {
+    for (let i = 0; i < 70; i += 1) {
+      const star = this.add
+        .rectangle(Math.random() * 960, Math.random() * 430, 3, 3, 0xffffff)
+        .setScrollFactor(0)
+        .setDepth(18)
+        .setAlpha(0);
+
+      this.tweens.add({
+        targets: star,
+        alpha: 1,
+        scale: 1.8,
+        duration: 260 + Math.random() * 500,
+        delay: Math.random() * 900,
+        yoyo: true,
+        repeat: 6,
+      });
+    }
   }
 
   liftOff(bonus) {
