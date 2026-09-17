@@ -350,6 +350,23 @@ body {
   opacity: 1;
 }
 
+/* Vad du svarade förra gången — synligt, men inte förvalt. */
+.choice-previous {
+  margin-left: auto;
+  padding-left: 12px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--green);
+  white-space: nowrap;
+}
+
+.choice {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
 .hint {
   margin: 18px 0 0;
   font-size: 12px;

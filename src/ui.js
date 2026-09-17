@@ -59,31 +59,6 @@ export function showShortcutPrompt(onChoice) {
   tag.style.color = '#2fbf57';
   el('question-text').textContent = 'Vill du fuska till slutet av banan?';
 
-  const options = el('question-options');
-  options.innerHTML = '';
-
-  const choices = [
-    {
-      label: 'Ja. Vi vet redan att vi behöver hjälp — låt oss prata i stället.',
-      take: true,
-    },
-    { label: 'Nej, jag spelar klart banan själv.', take: false },
-  ];
-
-  for (const choice of choices) {
-    const button = document.createElement('button');
-    button.className = 'choice';
-    button.type = 'button';
-    button.innerHTML = `<span class="choice-marker">▸</span>${choice.label}`;
-    button.addEventListener('click', () => {
-      el('overlay-question').hidden = true;
-      el('shortcut-note').hidden = true;
-      el('question-hint').hidden = false;
-      onChoice(choice.take);
-    });
-    options.appendChild(button);
-  }
-
   const note = el('shortcut-note');
   note.innerHTML = `
     Du landar bakom flaggstången, raketen står och väntar och ingen ser något.
@@ -94,9 +69,69 @@ export function showShortcutPrompt(onChoice) {
     och tiden läggs hellre på hur snabbt vi kommer igång.</em> Frågorna finns
     kvar — vi tar dem när vi ses.`;
   note.hidden = false;
-  el('question-hint').hidden = true;
+  el('question-hint').hidden = false;
+
+  renderChoices({
+    items: [
+      'Ja. Vi vet redan att vi behöver hjälp — låt oss prata i stället.',
+      'Nej, jag spelar klart banan själv.',
+    ],
+    onPick: (index) => {
+      note.hidden = true;
+      onChoice(index === 0);
+    },
+  });
+}
+
+// Samma lista, samma tangenter, oavsett om det är en fråga eller röret.
+// Översta alternativet är alltid förvalt: vill du längre ner i listan — mot
+// högre mognad — ska det vara ett aktivt val, inte något man råkar trycka på.
+function renderChoices({ items, onPick, markedIndex = null }) {
+  const options = el('question-options');
+  options.innerHTML = '';
+
+  let selected = 0;
+  const buttons = items.map((label, index) => {
+    const button = document.createElement('button');
+    button.className = 'choice';
+    button.type = 'button';
+    const marked = index === markedIndex ? '<span class="choice-previous">ditt svar</span>' : '';
+    button.innerHTML = `<span class="choice-marker">▸</span><span>${label}</span>${marked}`;
+    button.addEventListener('mouseenter', () => select(index));
+    button.addEventListener('click', () => pick(index));
+    options.appendChild(button);
+    return button;
+  });
+
+  function select(index) {
+    selected = index;
+    buttons.forEach((button, i) => button.classList.toggle('selected', i === index));
+  }
+
+  function pick(index) {
+    document.removeEventListener('keydown', onKeyDown);
+    el('overlay-question').hidden = true;
+    onPick(index);
+  }
+
+  function onKeyDown(event) {
+    // Upp och ner väljer, höger och Enter svarar — höger eftersom tummen
+    // redan ligger på pilarna när man springer.
+    if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+      event.preventDefault();
+      const step = event.key === 'ArrowDown' ? 1 : -1;
+      select((selected + step + buttons.length) % buttons.length);
+    } else if (event.key === 'ArrowRight' || event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      pick(selected);
+    }
+  }
+
+  select(0);
+  document.addEventListener('keydown', onKeyDown);
   el('overlay-question').hidden = false;
 }
+
 
 function showHowTo(onDone) {
   const overlay = el('overlay-howto');
@@ -245,50 +280,16 @@ export function showQuestion(question, previousIndex, onAnswer) {
   tag.textContent = previousIndex === null ? dimension.label : `${dimension.label} · ändra svar`;
   tag.style.color = dimension.color;
   el('question-text').textContent = question.text;
+  el('shortcut-note').hidden = true;
+  el('question-hint').hidden = false;
 
-  const options = el('question-options');
-  options.innerHTML = '';
-
-  let selected = previousIndex ?? 0;
-  const buttons = question.options.map((option, index) => {
-    const button = document.createElement('button');
-    button.className = 'choice';
-    button.type = 'button';
-    button.innerHTML = `<span class="choice-marker">▸</span>${option.label}`;
-    button.addEventListener('mouseenter', () => select(index));
-    button.addEventListener('click', () => answer(index));
-    options.appendChild(button);
-    return button;
+  renderChoices({
+    items: question.options.map((option) => option.label),
+    markedIndex: previousIndex,
+    onPick: onAnswer,
   });
-
-  function select(index) {
-    selected = index;
-    buttons.forEach((button, i) => button.classList.toggle('selected', i === index));
-  }
-
-  function answer(index) {
-    document.removeEventListener('keydown', onKeyDown);
-    el('overlay-question').hidden = true;
-    onAnswer(index);
-  }
-
-  function onKeyDown(event) {
-    // Upp och ner väljer, höger och Enter svarar — höger eftersom tummen
-    // redan ligger på pilarna när man springer.
-    if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-      event.preventDefault();
-      const step = event.key === 'ArrowDown' ? 1 : -1;
-      select((selected + step + buttons.length) % buttons.length);
-    } else if (event.key === 'ArrowRight' || event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      answer(selected);
-    }
-  }
-
-  select(selected);
-  document.addEventListener('keydown', onKeyDown);
-  el('overlay-question').hidden = false;
 }
+
 
 let endShown = false;
 
