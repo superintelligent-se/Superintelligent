@@ -17,7 +17,27 @@
 
       <button id="sound-toggle" type="button" hidden>LJUD PÅ</button>
 
-      <div id="rotate-hint" hidden>Vrid telefonen för större bild</div>
+      <div id="rotate-hint">Vrid enheten för större bild</div>
+    </div>
+
+    <div id="rotate-overlay">
+      <div class="rotate-inner">
+        <svg class="rotate-icon" viewBox="0 0 120 120" role="img" aria-label="Vrid enheten">
+          <rect class="rotate-phone" x="44" y="18" width="32" height="58" rx="5"
+                fill="none" stroke="currentColor" stroke-width="3" />
+          <circle class="rotate-phone" cx="60" cy="69" r="2.5" fill="currentColor" />
+          <path d="M26 96a38 38 0 0 1 68 0" fill="none" stroke="currentColor"
+                stroke-width="3" stroke-linecap="round" stroke-dasharray="4 6" />
+          <path d="M20 90 L26 98 L34 93" fill="none" stroke="currentColor"
+                stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <h2>Vrid enheten</h2>
+        <p>
+          Spelet är byggt för liggande läge. Du ser mer av banan, och frågetecknen
+          blir mycket lättare att träffa.
+        </p>
+        <button id="rotate-dismiss" type="button">Spela i stående läge ändå</button>
+      </div>
     </div>
 
     <div id="touch-controls" hidden>

@@ -68,6 +68,9 @@ function attachListNavigation(buttons, { onPick, onCancel = null }) {
   return { detach };
 }
 
+// Vrid-uppmaningen ska möta besökaren direkt, före startskärmen.
+initRotateHint();
+
 export function showRoleSelect(onPick) {
   const container = el('role-buttons');
   container.innerHTML = '';
@@ -307,16 +310,13 @@ function applyTouchInstructions() {
 }
 
 // Spelytan är 16:9. I stående läge blir den liten men fullt spelbar, så vi
-// föreslår att vrida i stället för att blockera.
+// uppmanar till att vrida i stället för att blockera — rotationslås är
+// vanligt, och då vore en låst skärm värre än en liten spelyta.
+// Vem som ser uppmaningen avgörs i CSS; här hanteras bara bortklickningen.
 function initRotateHint() {
-  if (!isTouchDevice()) return;
-  const hint = el('rotate-hint');
-  const portrait = window.matchMedia('(orientation: portrait)');
-  const update = () => {
-    hint.hidden = !portrait.matches;
-  };
-  portrait.addEventListener('change', update);
-  update();
+  el('rotate-dismiss').addEventListener('click', () => {
+    document.body.classList.add('rotate-dismissed');
+  });
 }
 
 // HUD:en och ljudknappen ritas i px men hör till spelbilden. Skalan här
@@ -328,7 +328,6 @@ function syncStageScale() {
 
 export function initMobile() {
   initTouchControls();
-  initRotateHint();
   syncStageScale();
   window.addEventListener('resize', syncStageScale);
   window.addEventListener('orientationchange', () => setTimeout(syncStageScale, 200));

@@ -213,9 +213,98 @@ body:has(.overlay:not([hidden])) #touch-controls {
   white-space: nowrap;
 }
 
-#rotate-hint[hidden] {
-  display: none !important;
+/* Vrid-uppmaningen. Den blockerar inte — en del har rotationslås på och
+   måste kunna spela stående ändå. */
+#rotate-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  background: rgba(6, 9, 16, 0.96);
+  backdrop-filter: blur(4px);
 }
+
+.rotate-inner {
+  max-width: 340px;
+  text-align: center;
+}
+
+.rotate-icon {
+  width: 118px;
+  height: 118px;
+  color: var(--purple);
+  margin-bottom: 8px;
+}
+
+/* Telefonen vippar ett kvarts varv och tillbaka. */
+.rotate-phone {
+  transform-origin: 60px 50px;
+  animation: rotate-tip 2.6s ease-in-out infinite;
+}
+
+@keyframes rotate-tip {
+  0%, 30% { transform: rotate(0deg); }
+  55%, 80% { transform: rotate(-90deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rotate-phone {
+    animation: none;
+  }
+}
+
+.rotate-inner h2 {
+  margin: 0 0 10px;
+  font-size: 24px;
+}
+
+.rotate-inner p {
+  margin: 0 0 26px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+#rotate-dismiss {
+  font: inherit;
+  font-size: 14px;
+  padding: 13px 18px;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+#rotate-dismiss:hover {
+  color: var(--ink);
+}
+
+/* Synligheten styrs av CSS, inte av JS-händelser: orientationchange och
+   resize är opålitliga på flera enheter, medan media queries alltid
+   stämmer. JS ansvarar bara för om uppmaningen klickats bort. */
+#rotate-hint,
+#rotate-overlay {
+  display: none;
+}
+
+@media (pointer: coarse) and (orientation: portrait) {
+  #rotate-overlay {
+    display: flex;
+  }
+
+  body.rotate-dismissed #rotate-overlay {
+    display: none;
+  }
+
+  body.rotate-dismissed #rotate-hint {
+    display: block;
+  }
+}
+
 
 /* Telefon och pekskärm */
 
