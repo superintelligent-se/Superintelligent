@@ -104,7 +104,16 @@ export const GEAR = {
   },
 };
 
-export function renderGearCanvas(name, pixelSize) {
+export function renderGearCanvas(name, pixelSize, tintColor = null) {
   const gear = GEAR[name];
-  return renderPixelCanvas(gear.rows, gear.palette, pixelSize);
+  if (!tintColor) return renderPixelCanvas(gear.rows, gear.palette, pixelSize);
+
+  // I HUD:en ska utrustningen bära dimensionens färg, så raden hänger ihop.
+  const palette = Object.fromEntries(
+    Object.keys(gear.palette).map((key, index) => [
+      key,
+      index === 0 ? tintColor : shade(tintColor, index === 1 ? 1.5 : 0.6),
+    ]),
+  );
+  return renderPixelCanvas(gear.rows, palette, pixelSize);
 }

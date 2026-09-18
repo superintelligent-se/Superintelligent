@@ -1,23 +1,61 @@
+// prop förklarar figurens attribut med ett ögonkast — det sitter på rollen,
+// aldrig på personen.
 export const ROLES = [
-  { id: 'vd', label: 'VD / Ledning', blurb: 'Du sätter riktningen för hela bolaget.' },
-  { id: 'chef', label: 'Chef', blurb: 'Du leder ett team eller en avdelning.' },
-  { id: 'medarbetare', label: 'Medarbetare', blurb: 'Du gör jobbet där AI möter vardagen.' },
-  { id: 'entreprenor', label: 'Entreprenör', blurb: 'Du är hela organisationen — och dess AI-lead.' },
+  {
+    id: 'vd',
+    label: 'VD / Ledning',
+    blurb: 'Du sätter riktningen för hela bolaget.',
+    prop: 'Krona — du bestämmer vart vi ska',
+  },
+  {
+    id: 'chef',
+    label: 'Chef',
+    blurb: 'Du leder ett team eller en avdelning.',
+    prop: 'Headset — i möten hela dagen',
+  },
+  {
+    id: 'medarbetare',
+    label: 'Medarbetare',
+    blurb: 'Du gör jobbet där AI möter vardagen.',
+    prop: 'Kaffemugg — du får saker gjorda',
+  },
+  {
+    id: 'entreprenor',
+    label: 'Entreprenör',
+    blurb: 'Du är hela organisationen — och dess AI-lead.',
+    prop: 'Keps — du bär alla hattar själv',
+  },
 ];
 
 // Varje dimension är också en zon på banan: egen färgton, egen skylt och
 // tre frågetecken. tint är zonens bakgrund, gear den utrustning du vinner.
+// Ordningen här är ordningen på banan. Ägarskapet först: har ni ingen som
+// äger AI-frågan spelar resten mindre roll — och den frågan möter spelaren
+// innan röret, så genvägen aldrig tas utan att den är ställd.
+// Varje dimension har en egen färg: mynten i HUD:en, zonens ton och
+// utrustningen hör ihop visuellt.
 export const DIMENSIONS = [
   {
-    id: 'policy',
-    label: 'Regler & policy',
-    color: '#4f7fd6',
-    tint: 0x121d33,
-    tagline: 'Vad får ni göra?',
-    gear: 'shield',
-    gearLabel: 'Sköld: ni vet vad som gäller',
+    id: 'agarskap',
+    label: 'AI-ägarskap',
+    color: '#2e9e63',
+    tint: 0x0e2a1b,
+    tagline: 'Vem håller i rodret?',
+    gear: 'companion',
+    gearLabel: 'AI-lead: någon går bredvid dig',
     gearWhy:
-      'Ni har ordning på vad som gäller. Ingen behöver stanna upp och fråga om lov.',
+      'Någon äger AI-frågan hos er. Den personen är skillnaden mellan riktning och drift.',
+  },
+  {
+    id: 'formaga',
+    label: 'AI-förmåga',
+    color: '#fbbf24',
+    tint: 0x2a2109,
+    tagline: 'Vad kan ni redan idag?',
+    gear: 'trail',
+    gearLabel: 'Fart: hela organisationen är med',
+    gearWhy:
+      'Tillräckligt många använder AI dagligen. Då sprider sig nya arbetssätt av sig själva.',
   },
   {
     id: 'data',
@@ -31,26 +69,15 @@ export const DIMENSIONS = [
       'Er data går att hitta och använda. Det är där de flesta AI-projekt fastnar.',
   },
   {
-    id: 'formaga',
-    label: 'AI-förmåga',
-    color: '#2e9e63',
-    tint: 0x0e2a1b,
-    tagline: 'Vad kan ni redan idag?',
-    gear: 'trail',
-    gearLabel: 'Fart: hela organisationen är med',
+    id: 'policy',
+    label: 'Regler & policy',
+    color: '#f97316',
+    tint: 0x2e1608,
+    tagline: 'Vad får ni göra?',
+    gear: 'shield',
+    gearLabel: 'Sköld: ni vet vad som gäller',
     gearWhy:
-      'Tillräckligt många använder AI dagligen. Då sprider sig nya arbetssätt av sig själva.',
-  },
-  {
-    id: 'agarskap',
-    label: 'AI-ägarskap',
-    color: '#7c3aed',
-    tint: 0x1e1145,
-    tagline: 'Vem håller i rodret?',
-    gear: 'companion',
-    gearLabel: 'AI-lead: någon går bredvid dig',
-    gearWhy:
-      'Någon äger AI-frågan hos er. Den personen är skillnaden mellan riktning och drift.',
+      'Ni har ordning på vad som gäller. Ingen behöver stanna upp och fråga om lov.',
   },
   {
     id: 'mojlighet',

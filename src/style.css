@@ -292,15 +292,15 @@ body:has(.overlay:not([hidden])) #touch-controls {
 }
 
 @media (pointer: coarse) and (orientation: portrait) {
-  #rotate-overlay {
+  body.playing #rotate-overlay {
     display: flex;
   }
 
-  body.rotate-dismissed #rotate-overlay {
+  body.playing.rotate-dismissed #rotate-overlay {
     display: none;
   }
 
-  body.rotate-dismissed #rotate-hint {
+  body.playing.rotate-dismissed #rotate-hint {
     display: block;
   }
 }
@@ -666,6 +666,15 @@ body:has(.overlay:not([hidden])) #touch-controls {
   color: var(--muted);
   font-size: 12px;
   margin-top: 3px;
+}
+
+/* Varför figuren ser ut som den gör — attributet hör till rollen. */
+.choice .role-prop {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  color: #5b6478;
+  font-style: italic;
 }
 
 /* Rollval med avatar */

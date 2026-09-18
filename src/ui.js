@@ -83,7 +83,9 @@ export function showRoleSelect(onPick) {
     button.appendChild(renderAvatarCanvas(role.id, 4));
 
     const text = document.createElement('span');
-    text.innerHTML = `${role.label}<span class="role-blurb">${role.blurb}</span>`;
+    text.innerHTML =
+      `${role.label}<span class="role-blurb">${role.blurb}</span>` +
+      `<span class="role-prop">${role.prop}</span>`;
     button.appendChild(text);
     container.appendChild(button);
     return button;
@@ -268,6 +270,9 @@ function showHowTo(onDone, onBack) {
     overlay.hidden = true;
     el('hud').hidden = false;
     el('sound-toggle').hidden = false;
+    // Först nu blir liggande läge värt att be om — avatarval och
+    // instruktioner läser sig bättre stående.
+    document.body.classList.add('playing');
     sfx.zone();
     onDone();
   };
@@ -312,7 +317,8 @@ function applyTouchInstructions() {
 // Spelytan är 16:9. I stående läge blir den liten men fullt spelbar, så vi
 // uppmanar till att vrida i stället för att blockera — rotationslås är
 // vanligt, och då vore en låst skärm värre än en liten spelyta.
-// Vem som ser uppmaningen avgörs i CSS; här hanteras bara bortklickningen.
+// Uppmaningen kommer först när banan börjar: avatarval och instruktioner
+// läser sig bättre stående. Vem som ser den avgörs i CSS.
 function initRotateHint() {
   el('rotate-dismiss').addEventListener('click', () => {
     document.body.classList.add('rotate-dismissed');
@@ -348,50 +354,39 @@ export function initSoundToggle() {
   render();
 }
 
-// Dimension 1-2 är grunden alla måste ha, 3-5 är där ni kan dra ifrån.
-const GROUPS = [
-  { heading: 'Basnivå', ids: ['policy', 'data'] },
-  { heading: 'Förmåga & riktning', ids: ['formaga', 'agarskap', 'mojlighet'] },
-];
-
 export function buildHud() {
   const bars = el('hud-bars');
   bars.innerHTML = '';
 
-  for (const group of GROUPS) {
-    const heading = document.createElement('div');
-    heading.className = 'hud-heading';
-    heading.textContent = group.heading;
-    bars.appendChild(heading);
+  // Ingen gruppering: ordningen på banan är ordningen i HUD:en, och varje
+  // dimension bär sin egen färg i stället.
+  for (const dimension of DIMENSIONS) {
+    const row = document.createElement('div');
+    row.className = 'hud-row';
 
-    for (const id of group.ids) {
-      const dimension = DIMENSIONS.find((d) => d.id === id);
-      const row = document.createElement('div');
-      row.className = 'hud-row';
+    const label = document.createElement('span');
+    label.className = 'hud-label';
+    label.textContent = dimension.label;
+    label.style.color = dimension.color;
 
-      const label = document.createElement('span');
-      label.className = 'hud-label';
-      label.textContent = dimension.label;
-
-      const track = document.createElement('span');
-      track.className = 'hud-track';
-      for (let i = 0; i < COINS_PER_DIMENSION; i += 1) {
-        const slot = document.createElement('span');
-        slot.className = 'coin-slot';
-        slot.id = `coin-${dimension.id}-${i}`;
-        slot.appendChild(renderCoinCanvas(dimension.color, 2));
-        track.appendChild(slot);
-      }
-
-      const gear = document.createElement('span');
-      gear.className = 'hud-gear';
-      gear.id = `gear-${dimension.id}`;
-      gear.style.setProperty('--dim', dimension.color);
-      gear.appendChild(renderGearCanvas(GEAR_ICONS[dimension.gear], 2));
-
-      row.append(label, track, gear);
-      bars.appendChild(row);
+    const track = document.createElement('span');
+    track.className = 'hud-track';
+    for (let i = 0; i < COINS_PER_DIMENSION; i += 1) {
+      const slot = document.createElement('span');
+      slot.className = 'coin-slot';
+      slot.id = `coin-${dimension.id}-${i}`;
+      slot.appendChild(renderCoinCanvas(dimension.color, 2));
+      track.appendChild(slot);
     }
+
+    const gear = document.createElement('span');
+    gear.className = 'hud-gear';
+    gear.id = `gear-${dimension.id}`;
+    gear.style.setProperty('--dim', dimension.color);
+    gear.appendChild(renderGearCanvas(GEAR_ICONS[dimension.gear], 2, dimension.color));
+
+    row.append(label, track, gear);
+    bars.appendChild(row);
   }
   updateHud();
 }

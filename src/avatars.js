@@ -27,12 +27,12 @@ const SPRITES = {
     '..BB..BB..',
   ],
   chef: [
-    '..........',
+    '...DDDD...',
     '..DDDDDD..',
-    '.DHHHHHHD.',
-    '.DSSSSSSD.',
-    '..SEESEE..',
-    '..SSSSSSD.',
+    '.DDHHHHDD.',
+    'DDDSSSSDDD',
+    'DDSEESEEDD',
+    '.DSSSSSSDD',
     '.CCCCCCCC.',
     'SCCCAACCCS',
     'SCCCCCCCCS',
@@ -59,8 +59,8 @@ const SPRITES = {
     '..BB..BB..',
   ],
   entreprenor: [
-    '...LLLL...',
-    '....DD....',
+    '..........',
+    '..........',
     '..HHHHHH..',
     'HHHHHHHH..',
     '..SEESEE..',
@@ -90,7 +90,7 @@ const PALETTES = {
     C: '#2e9e63', A: '#86efac', P: '#374151', B: '#1f2937',
   },
   entreprenor: {
-    L: '#fde047', D: '#a16207', H: '#ea7317', S: '#8d5a3b', E: '#141821',
+    H: '#ea7317', S: '#8d5a3b', E: '#141821',
     C: '#7c3aed', A: '#fbbf24', P: '#312e81', B: '#1f2937',
   },
 };

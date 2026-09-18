@@ -248,15 +248,39 @@ export default class PlayScene extends Phaser.Scene {
     this.drawPipe(PIPE_IN_X);
     this.drawPipe(PIPE_OUT_X);
 
-    this.pipeHint = this.add
-      .text(PIPE_IN_X, PIPE_TOP - 34, 'Tryck ↓', {
+    // Skylt ovanför röret, synlig på håll, så genvägen inte missas.
+    this.add
+      .text(PIPE_IN_X, PIPE_TOP - 96, 'GENVÄG TILL SLUTET', {
         fontFamily: 'ui-monospace, Menlo, monospace',
-        fontSize: '12px',
+        fontSize: '13px',
+        fontStyle: 'bold',
         color: '#8ef0ad',
         backgroundColor: '#0d1422e6',
-        padding: { x: 7, y: 4 },
+        padding: { x: 9, y: 6 },
       })
-      .setOrigin(0.5)
+      .setOrigin(0.5);
+
+    this.add
+      .text(PIPE_IN_X, PIPE_TOP - 70, '▼', {
+        fontFamily: 'ui-monospace, Menlo, monospace',
+        fontSize: '18px',
+        color: '#2fbf57',
+      })
+      .setOrigin(0.5);
+
+    // Uppmaningen står bredvid röret: på röret döljs den av figuren som
+    // står där, och mot den gröna kroppen syns den knappt.
+    this.pipeHint = this.add
+      .text(PIPE_IN_X + 60, PIPE_TOP + 8, 'TRYCK ↓', {
+        fontFamily: 'ui-monospace, Menlo, monospace',
+        fontSize: '12px',
+        fontStyle: 'bold',
+        color: '#04240f',
+        backgroundColor: '#8ef0ad',
+        padding: { x: 8, y: 5 },
+      })
+      .setOrigin(0, 0.5)
+      .setDepth(7)
       .setVisible(false);
   }
 
