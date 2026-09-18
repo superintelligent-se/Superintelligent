@@ -9,7 +9,15 @@ export const state = {
   role: null,
   answers: {},
   startedAt: Date.now(),
+  // Ett id per spelomgång. Skickas med i leadet så att ett omtag efter en
+  // trasig uppkoppling blir samma rad i listan, inte en andra.
+  leadId: newLeadId(),
 };
+
+function newLeadId() {
+  if (globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID();
+  return `lead-${Date.now()}-${Math.random().toString(16).slice(2, 10)}`;
+}
 
 export function recordAnswer(question, optionIndex) {
   const option = question.options[optionIndex];
@@ -65,6 +73,9 @@ export function isComplete() {
 // Raw answers only — the interpretation belongs to the human advisor, not the player.
 export function submissionPayload(contact) {
   return {
+    lead_id: state.leadId,
+    skickat: new Date().toISOString(),
+    kalla: globalThis.location?.href ?? 'okänd',
     ...contact,
     genvag: state.shortcut
       ? 'JA — tog röret, hoppade över frågorna. Vet redan att hjälp behövs.'

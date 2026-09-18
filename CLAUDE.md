@@ -6,13 +6,15 @@ Live: https://superintelligent-se.github.io/Superintelligent/
 
 ## Principer som inte får brytas
 
-**Spelaren får aldrig analysen.** Mynten och utrustningen visar att något händer, men aldrig vad svaren betyder, vilken nivå man ligger på eller vad man borde göra. Tolkningen tillhör rådgivaren och är hela affärsmodellen. Ett förslag som visar spelaren dess "AI-mognadspoäng" är fel svar.
+**Spelaren får aldrig analysen.** Under spelet visar mynten och utrustningen att något händer, men aldrig vad svaren betyder, vilken nivå man ligger på eller vad man borde göra. Tolkningen tillhör rådgivaren och är hela affärsmodellen. Ett förslag som visar spelaren dess "AI-mognadspoäng" är fel svar.
+
+Efteråt mejlas en medvetet grund sammanfattning: mynten som de stod i HUD:en, och **en övergripande kommentar per dimension** ur `summaryBands` i `src/data/gameData.js`. Gränsen går där och får inte flyttas — ingen enskild fråga, inget enskilt svar, ingen poäng, inget råd om vad de ska göra. Mejlet ska ge tillräckligt för att kännas värt e-postadressen och för lite för att ersätta mötet. Allt råmaterial finns i leadet, men bara rådgivaren ser det.
 
 **Hoppbonusen är kosmetisk.** Den står på slutskärmen och skickas aldrig med i leadet, just för att den inte ska förväxlas med ett resultat.
 
 **Ingen får fastna.** Marken löper obruten hela banan och alla frågetecken går att hoppa över. Fastnar någon når de aldrig slutskärmen, och då är leadet borta. Ändras banan måste varje plattform och block räknas mot hopphöjden (enkelhopp 104 px, dubbelhopp 184 px, med jetpack ett tredje hopp).
 
-**Frågorna bor i koden.** `src/data/gameData.js` är sanningskällan. `docs/fragor-och-svar.md` genereras ur den — redigera aldrig dokumentet och förvänta dig att spelet följer med.
+**Frågorna bor i koden.** `src/data/gameData.js` är sanningskällan — frågor, svar, kommentarer och sammanfattningstexterna till mejlet. `docs/fragor-och-svar.md` genereras ur den — redigera aldrig dokumentet och förvänta dig att spelet följer med. Flödet i Power Automate skriver ingen text själv; det sätter ihop den som redan står i koden.
 
 ## Affärskontexten
 
@@ -46,6 +48,8 @@ ROI-mätning är medvetet utelämnad ur spelet — den har inget bra snabbsvar o
 
 **Banan scrollar inte vertikalt.** Världen är 540 px hög precis som kameran, så inget spelinnehåll får hamna ovanför y ≈ 150 — där ligger HUD och ljudknapp.
 
+**Inskicket skickas som `text/plain` fast kroppen är JSON.** Det är enda sättet att slippa CORS-preflighten, som varken Power Automate eller Logic Apps svarar rätt på. Byter någon tillbaka till `application/json` slutar alla leads komma fram, och felet syns bara i webbläsarkonsolen — aldrig i flödets körhistorik.
+
 **Dialoger ligger utanför `#stage`** och är `position: fixed`. Låg de inuti spelrutan blev de 211 px höga på en telefon i stående läge.
 
 **HUD:en är DOM men hör till spelbilden** och skalas med `--stage-scale`, satt i JS mot spelytans bredd.
@@ -55,6 +59,7 @@ ROI-mätning är medvetet utelämnad ur spelet — den har inget bra snabbsvar o
 ```
 src/data/gameData.js   Dimensioner, roller, 15 frågor med 60 svar och kommentarer
 src/state.js           Svar, poäng, mynt, lead-payload
+src/summary.js         Spelarvyerna: HUD som den var, en kommentar per dimension
 src/scenes/PlayScene.js Banan, zoner, utrustning, röret, masten, raketen
 src/ui.js              Alla DOM-dialoger, HUD, lead-formulär, mobilinit
 src/touch.js           Touch matas in i samma ställen som tangentbordet
@@ -79,7 +84,8 @@ Mobil testas med `resize_window` (mobile-preset ger `pointer: coarse`). Liggande
 
 ## Öppet, kräver beslut eller uppgifter från Thomas
 
-- `FORM_ENDPOINT` i `src/ui.js` är tom — leads loggas bara i webbläsarkonsolen. Ska gå till support@superintelligent.se, förslagsvis via Power Automate så datan stannar i deras Microsoft-miljö.
+- `FORM_ENDPOINT` i `src/ui.js` är tom — leads loggas bara i webbläsarkonsolen. Lösningen är utredd och beskriven steg för steg i `docs/lead-till-microsoft.md`: Power Automate-flöde med HTTP-trigger → Microsoft List som flik i säljkanalen → mejl från support@superintelligent.se → kort i Teams. Kvar att göra är att bygga flödet, klistra in URL:en och pusha. Kräver en Power Automate Premium-licens (15 USD/mån) på det konto som äger flödet.
+- Ändras `FORM_ENDPOINT` måste `Access-Control-Allow-Origin` i flödets svar peka på samma origin som spelet ligger på.
 - `BOOKING_URL` och `TRAINING_URL` i `src/ui.js` är platshållare.
 - Egen subdomän är beslutad men uppskjuten. Vid byte: `base` i `vite.config.js` ska bli `/`, plus CNAME-fil och DNS-post.
 

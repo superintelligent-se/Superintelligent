@@ -34,6 +34,11 @@ export const ROLES = [
 // innan röret, så genvägen aldrig tas utan att den är ställd.
 // Varje dimension har en egen färg: mynten i HUD:en, zonens ton och
 // utrustningen hör ihop visuellt.
+//
+// summaryBands är det enda spelaren får läsa om sitt eget resultat. En text
+// per dimension, vald på antal mynt — aldrig per fråga, aldrig en siffra och
+// aldrig ett råd. Den detaljerade tolkningen är rådgivarens och ges i mötet.
+// tillMynt är övre gränsen: första bandet vars tillMynt >= myntet vinner.
 export const DIMENSIONS = [
   {
     id: 'agarskap',
@@ -45,6 +50,16 @@ export const DIMENSIONS = [
     gearLabel: 'AI-lead: någon går bredvid dig',
     gearWhy:
       'Någon äger AI-frågan hos er. Den personen är skillnaden mellan riktning och drift.',
+    summaryBands: [
+      { tillMynt: 1, text:
+        'Ingen äger AI-frågan hos er ännu. Det är därför initiativ startar och sedan rinner ut — inte för att viljan saknas.' },
+      { tillMynt: 2, text:
+        'Frågan är väckt men ingen bär den. Det som är allas ansvar blir sällan någons.' },
+      { tillMynt: 3, text:
+        'Någon har tagit på sig AI-frågan, men mandatet eller tiden räcker inte hela vägen. Det syns i hur snabbt beslut faktiskt fattas.' },
+      { tillMynt: 5, text:
+        'Ägarskapet finns och det märks. Det är den enskilt största skillnaden mellan bolag som rör sig och bolag som pratar.' },
+    ],
   },
   {
     id: 'formaga',
@@ -56,6 +71,16 @@ export const DIMENSIONS = [
     gearLabel: 'Fart: hela organisationen är med',
     gearWhy:
       'Tillräckligt många använder AI dagligen. Då sprider sig nya arbetssätt av sig själva.',
+    summaryBands: [
+      { tillMynt: 1, text:
+        'AI är fortfarande teori hos er. Avståndet till dem som använder det dagligen växer varje månad.' },
+      { tillMynt: 2, text:
+        'Förmågan sitter hos några eldsjälar. Den är deras, inte organisationens — och den går hem klockan fem.' },
+      { tillMynt: 3, text:
+        'En bra bit av organisationen har hittat sitt sätt. Resten ser det men har inte börjat.' },
+      { tillMynt: 5, text:
+        'Bred daglig användning. Det är där nya arbetssätt börjar sprida sig utan att någon driver dem.' },
+    ],
   },
   {
     id: 'data',
@@ -67,6 +92,16 @@ export const DIMENSIONS = [
     gearLabel: 'Datakub: ni hittar er egen data',
     gearWhy:
       'Er data går att hitta och använda. Det är där de flesta AI-projekt fastnar.',
+    summaryBands: [
+      { tillMynt: 1, text:
+        'Datan finns men går inte att nå. Det är här de flesta AI-projekt tar slut, inte i valet av verktyg.' },
+      { tillMynt: 2, text:
+        'Utspritt och utan kopplingar. Varje ny fråga blir ett detektivarbete innan den blir ett svar.' },
+      { tillMynt: 3, text:
+        'Delar av huset är i ordning. Det räcker för att komma igång på riktigt, men inte överallt.' },
+      { tillMynt: 5, text:
+        'Ni har en grund att bygga på. Det är ovanligare än det låter, och det är vad som gör AI till svar i stället för demo.' },
+    ],
   },
   {
     id: 'policy',
@@ -78,6 +113,16 @@ export const DIMENSIONS = [
     gearLabel: 'Sköld: ni vet vad som gäller',
     gearWhy:
       'Ni har ordning på vad som gäller. Ingen behöver stanna upp och fråga om lov.',
+    summaryBands: [
+      { tillMynt: 1, text:
+        'Inget ramverk på plats. Varje medarbetare gör sin egen tolkning, och ni får veta hur den gick i efterhand.' },
+      { tillMynt: 2, text:
+        'Samtalet är igång men styr ingenting. Det som inte är skrivet går inte att hålla någon ansvarig för.' },
+      { tillMynt: 3, text:
+        'Grunden finns men är ojämnt känd. Det märks först när något går snett.' },
+      { tillMynt: 5, text:
+        'Tydligt och känt. Ingen behöver stanna upp och fråga om lov, och det syns i tempot.' },
+    ],
   },
   {
     id: 'mojlighet',
@@ -89,6 +134,16 @@ export const DIMENSIONS = [
     gearLabel: 'Jetpack: ni når dit ni inte nådde förr',
     gearWhy:
       'Ni tittar bortom effektivisering. Det är där AI slutar spara tid och börjar skapa nytt.',
+    summaryBands: [
+      { tillMynt: 1, text:
+        'Blicken ligger på idag, inte på vad som skulle kunna gå. Det är normalläget — ingen bär runt på en lista över saker de aldrig gjort.' },
+      { tillMynt: 2, text:
+        'Idéerna finns men är inte formulerade. Därför konkurrerar de aldrig om budget.' },
+      { tillMynt: 3, text:
+        'Ni har börjat titta bortom effektiviseringen. Nästa fråga är vilken av idéerna som är värd pengar.' },
+      { tillMynt: 5, text:
+        'Ni bygger nytt, inte bara snabbare. Det är där avståndet till konkurrenterna skapas — och det kopieras inte lika fort.' },
+    ],
   },
 ];
 
@@ -656,6 +711,36 @@ export const QUESTIONS = [
 
 export const MAX_DIMENSION_SCORE = 15;
 export const COINS_PER_DIMENSION = 5;
+
+// Öppningen i mejlet, vald på summan av alla mynt (0-25). Den sätter tonen
+// och säger var i mängden de ligger — utan att ge dem en nivå eller ett tal.
+export const SUMMARY_OPENERS = [
+  { tillMynt: 6, text:
+    'Ni står i början. Det är ett ärligt läge, och det enda som faktiskt går att göra något åt — de flesta bolag vi möter känner igen sig.' },
+  { tillMynt: 13, text:
+    'Ni har börjat på flera håll, men ingenting bär ännu av sig självt. Det är det vanligaste läget vi ser.' },
+  { tillMynt: 19, text:
+    'Mycket är på plats hos er. Det som återstår handlar oftast om ordning och ägarskap, inte om teknik.' },
+  { tillMynt: 25, text:
+    'Ni ligger före de flesta. Då handlar samtalet mindre om att komma igång och mer om att försvara försprånget.' },
+];
+
+// Avslutningen är densamma för alla: den säger rakt ut att tolkningen görs
+// i mötet, inte i mejlet. Det är hela skälet till att mejlet är övergripande.
+export const SUMMARY_CLOSER =
+  'Vad det här betyder för just er — var ni tjänar mest på att lägga kraften först, och i vilken ordning — går vi igenom tillsammans. Den genomgången gör vi inte i ett mejl.';
+
+function pickBand(bands, coins) {
+  return (bands.find((band) => coins <= band.tillMynt) ?? bands[bands.length - 1]).text;
+}
+
+export function summaryForDimension(dimension, coins) {
+  return pickBand(dimension.summaryBands, coins);
+}
+
+export function summaryOpener(totalCoins) {
+  return pickBand(SUMMARY_OPENERS, totalCoins);
+}
 
 export function questionsFor(dimensionId) {
   return QUESTIONS.filter((question) => question.dimension === dimensionId);

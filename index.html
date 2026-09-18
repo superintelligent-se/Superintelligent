@@ -130,15 +130,35 @@
           <h1>Bana klar!</h1>
           <p id="end-bonus" class="bonus" hidden></p>
           <p class="tagline" id="end-intro">
-            Dina svar är en ögonblicksbild av hur redo ni är. Vad de faktiskt betyder —
-            var ni står, vad som ger mest effekt först — går vi igenom tillsammans.
+            Dina svar är en ögonblicksbild av hur redo ni är. Lämna dina uppgifter så
+            mejlar vi dig en sammanfattning — dina mynt, och en övergripande kommentar
+            per dimension.
+          </p>
+          <p class="end-note" id="end-note">
+            Fråga för fråga tar vi inte i mejlet. Vad svaren betyder för just er, och
+            i vilken ordning ni tjänar mest på att ta dem, går vi igenom tillsammans.
           </p>
           <form id="lead-form">
             <input type="text" name="namn" placeholder="Namn" required autocomplete="name" />
             <input type="text" name="foretag" placeholder="Företag" required autocomplete="organization" />
             <input type="email" name="epost" placeholder="E-post" required autocomplete="email" />
             <input type="tel" name="mobil" placeholder="Mobilnummer (frivilligt)" autocomplete="tel" />
-            <button type="submit" id="lead-submit">Skicka in mina svar</button>
+
+            <!-- Honungsfälla: dold i CSS, osynlig för skärmläsare, ifylld av
+                 formulärbottar. Är den ifylld skickas ingenting vidare. -->
+            <input type="text" name="webbplats" class="honeypot" tabindex="-1"
+                   autocomplete="off" aria-hidden="true" />
+
+            <label class="consent">
+              <input type="checkbox" name="samtycke" required />
+              <span>
+                Ja, mejla mig sammanfattningen och kontakta mig om ett första samtal.
+                Vi sparar dina uppgifter och svar för det ändamålet och delar dem inte
+                med någon annan.
+              </span>
+            </label>
+
+            <button type="submit" id="lead-submit">Skicka och mejla mig sammanfattningen</button>
           </form>
           <p id="lead-status" class="status" hidden></p>
 

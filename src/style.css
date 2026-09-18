@@ -812,8 +812,61 @@ kbd.wide {
   background: #6d28d9;
 }
 
+#lead-form button:disabled {
+  background: var(--line);
+  color: var(--muted);
+  cursor: default;
+}
+
+/* Fältet finns bara för bottar. display: none skulle få vissa av dem att
+   hoppa över det, så det göms utanför bild i stället. */
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.end-note {
+  margin: -6px 0 16px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.consent {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+  cursor: pointer;
+  /* Panelen är centrerad, men en löptext bredvid en kryssruta ska vara
+     vänsterställd — annars ser raderna ut att sväva. */
+  text-align: left;
+}
+
+/* Måste vara mer specifik än #lead-form input, annars får kryssrutan
+   textfältens padding och ram. */
+#lead-form .consent input {
+  flex: none;
+  padding: 0;
+  width: 16px;
+  height: 16px;
+  margin-top: 1px;
+  accent-color: var(--purple);
+}
+
 .status {
   margin: 16px 0 0;
   font-size: 14px;
   color: var(--green);
+}
+
+.status a {
+  color: inherit;
 }

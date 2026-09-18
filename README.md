@@ -45,9 +45,13 @@ Styrning: piltangenter/WASD för att springa, mellanslag/uppåt för att hoppa. 
 
 ## Koppla på lead capture
 
-Leads samlas via extern formtjänst. Klistra in endpointen i `FORM_ENDPOINT` överst i [src/ui.js](src/ui.js). Utan endpoint körs spelet i testläge och loggar svaren i webbläsarkonsolen.
+Leadet går till ett Power Automate-flöde som skriver till en Microsoft List i säljkanalen, mejlar spelaren en sammanfattning och lägger ett kort i Teams. Hela uppsättningen — listans kolumner, flödets steg, mejlmallen, säkerhet och kostnad — står i [docs/lead-till-microsoft.md](docs/lead-till-microsoft.md).
 
-Payloaden innehåller kontaktuppgifter, vald roll, speltid, alla råsvar och dimensionspoäng.
+Klistra in flödets URL i `FORM_ENDPOINT` överst i [src/ui.js](src/ui.js). Utan endpoint körs spelet i testläge och loggar leadet i webbläsarkonsolen.
+
+Payloaden innehåller kontaktuppgifter, samtycke, vald roll, speltid, alla råsvar och dimensionspoäng — plus två spelarvyer: `hud` (mynten som de stod på skärmen) och `sammanfattning` (en övergripande kommentar per dimension). Ett färdigt exempel finns i [docs/flode/exempel-lead.json](docs/flode/exempel-lead.json).
+
+Spelaren får bara `hud` och `sammanfattning` i sitt mejl. Enskilda frågor, svar och poäng stannar hos rådgivaren.
 
 ## Bygg & publicera
 

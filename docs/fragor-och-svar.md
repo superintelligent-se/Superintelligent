@@ -213,3 +213,79 @@ Utrustning vid 3 mynt: **Jetpack: ni når dit ni inte nådde förr** — Ni titt
 ## Samlas in efteråt, inte i spelet
 
 ROI-mätning — kvantifierad avkastning på AI-satsningar. Medvetet utelämnad: den har inget bra snabbsvar och hör hemma i rådgivningssamtalet.
+
+---
+
+## Vad spelaren får per mejl
+
+Spelaren får sina mynt precis som de stod i HUD:en, plus **en övergripande
+kommentar per dimension** — vald på antalet mynt. Aldrig kommentarerna ovan,
+aldrig poängen, aldrig något råd. Den genomgången är rådgivningsmötet, och det
+är hela skälet till att spelet finns.
+
+Redigera fritt här också — säg till så för jag in ändringarna i `summaryBands`
+i `src/data/gameData.js`, som är sanningskällan.
+
+### Inledningen
+
+Väljs på summan av alla mynt, 0–25.
+
+| Mynt totalt | Text |
+|---|---|
+| 0–6 | Ni står i början. Det är ett ärligt läge, och det enda som faktiskt går att göra något åt — de flesta bolag vi möter känner igen sig. |
+| 7–13 | Ni har börjat på flera håll, men ingenting bär ännu av sig självt. Det är det vanligaste läget vi ser. |
+| 14–19 | Mycket är på plats hos er. Det som återstår handlar oftast om ordning och ägarskap, inte om teknik. |
+| 20–25 | Ni ligger före de flesta. Då handlar samtalet mindre om att komma igång och mer om att försvara försprånget. |
+
+### En kommentar per dimension
+
+**Regler & policy**
+
+| Mynt | Text |
+|---|---|
+| 0–1 | Inget ramverk på plats. Varje medarbetare gör sin egen tolkning, och ni får veta hur den gick i efterhand. |
+| 2 | Samtalet är igång men styr ingenting. Det som inte är skrivet går inte att hålla någon ansvarig för. |
+| 3 | Grunden finns men är ojämnt känd. Det märks först när något går snett. |
+| 4–5 | Tydligt och känt. Ingen behöver stanna upp och fråga om lov, och det syns i tempot. |
+
+**Data & kunskapsgrund**
+
+| Mynt | Text |
+|---|---|
+| 0–1 | Datan finns men går inte att nå. Det är här de flesta AI-projekt tar slut, inte i valet av verktyg. |
+| 2 | Utspritt och utan kopplingar. Varje ny fråga blir ett detektivarbete innan den blir ett svar. |
+| 3 | Delar av huset är i ordning. Det räcker för att komma igång på riktigt, men inte överallt. |
+| 4–5 | Ni har en grund att bygga på. Det är ovanligare än det låter, och det är vad som gör AI till svar i stället för demo. |
+
+**AI-förmåga**
+
+| Mynt | Text |
+|---|---|
+| 0–1 | AI är fortfarande teori hos er. Avståndet till dem som använder det dagligen växer varje månad. |
+| 2 | Förmågan sitter hos några eldsjälar. Den är deras, inte organisationens — och den går hem klockan fem. |
+| 3 | En bra bit av organisationen har hittat sitt sätt. Resten ser det men har inte börjat. |
+| 4–5 | Bred daglig användning. Det är där nya arbetssätt börjar sprida sig utan att någon driver dem. |
+
+**AI-ägarskap**
+
+| Mynt | Text |
+|---|---|
+| 0–1 | Ingen äger AI-frågan hos er ännu. Det är därför initiativ startar och sedan rinner ut — inte för att viljan saknas. |
+| 2 | Frågan är väckt men ingen bär den. Det som är allas ansvar blir sällan någons. |
+| 3 | Någon har tagit på sig AI-frågan, men mandatet eller tiden räcker inte hela vägen. Det syns i hur snabbt beslut faktiskt fattas. |
+| 4–5 | Ägarskapet finns och det märks. Det är den enskilt största skillnaden mellan bolag som rör sig och bolag som pratar. |
+
+**Möjlighets-AI**
+
+| Mynt | Text |
+|---|---|
+| 0–1 | Blicken ligger på idag, inte på vad som skulle kunna gå. Det är normalläget — ingen bär runt på en lista över saker de aldrig gjort. |
+| 2 | Idéerna finns men är inte formulerade. Därför konkurrerar de aldrig om budget. |
+| 3 | Ni har börjat titta bortom effektiviseringen. Nästa fråga är vilken av idéerna som är värd pengar. |
+| 4–5 | Ni bygger nytt, inte bara snabbare. Det är där avståndet till konkurrenterna skapas — och det kopieras inte lika fort. |
+
+### Avslutningen
+
+Samma för alla, oavsett resultat:
+
+> Vad det här betyder för just er — var ni tjänar mest på att lägga kraften först, och i vilken ordning — går vi igenom tillsammans. Den genomgången gör vi inte i ett mejl.

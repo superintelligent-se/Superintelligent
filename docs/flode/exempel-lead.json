@@ -1,0 +1,230 @@
+{
+  "lead_id": "7f3c1b5e-9a24-4d81-b0f2-6e5c8a1d4f90",
+  "skickat": "2026-09-18T09:14:22.184Z",
+  "kalla": "https://superintelligent-se.github.io/Superintelligent/",
+  "namn": "Anna Wallin",
+  "foretag": "Acme AB",
+  "epost": "anna@acme.se",
+  "mobil": "070-123 45 67",
+  "genvag": "nej",
+  "roll": "VD / Ledning",
+  "speltid_sekunder": 412,
+  "svar": [
+    {
+      "id": "policy-1",
+      "dimension": "policy",
+      "fraga": "Har ni en intern AI-policy för hur medarbetare får använda AI-verktyg?",
+      "svar": "Nej, ingen alls",
+      "poang": 1
+    },
+    {
+      "id": "policy-2",
+      "dimension": "policy",
+      "fraga": "Vet ni hur GDPR och EU:s AI-förordning påverkar de AI-verktyg ni använder idag?",
+      "svar": "Nej, vi har inte tittat på det",
+      "poang": 1
+    },
+    {
+      "id": "policy-3",
+      "dimension": "policy",
+      "fraga": "Vad händer om en anställd matar in känslig kunddata i ett AI-verktyg idag?",
+      "svar": "Inget stoppar dem",
+      "poang": 1
+    },
+    {
+      "id": "data-1",
+      "dimension": "data",
+      "fraga": "Hur mycket av er affärsdata ligger samlat och sökbart — jämfört med utspritt i mejl och huvuden?",
+      "svar": "Delvis samlat, men inte AI-tillgängligt",
+      "poang": 4
+    },
+    {
+      "id": "data-2",
+      "dimension": "data",
+      "fraga": "Om ni byggde en AI-agent imorgon — skulle den ha tillgång till rätt data för att vara användbar?",
+      "svar": "Ja, för vissa delar av verksamheten",
+      "poang": 4
+    },
+    {
+      "id": "data-3",
+      "dimension": "data",
+      "fraga": "Har ni koll på vilken data ni skulle vilja använda AI på, men inte kan idag?",
+      "svar": "Ja, vi har en lista men ingen plan",
+      "poang": 4
+    },
+    {
+      "id": "formaga-1",
+      "dimension": "formaga",
+      "fraga": "Hur många av era medarbetare använder AI-verktyg i sina yrkesroller?",
+      "svar": "Några entusiaster på eget initiativ",
+      "poang": 2
+    },
+    {
+      "id": "formaga-2",
+      "dimension": "formaga",
+      "fraga": "Om du bad tio slumpmässiga medarbetare visa ett konkret sätt de använder AI på i jobbet — hur många skulle kunna det?",
+      "svar": "En eller två",
+      "poang": 2
+    },
+    {
+      "id": "formaga-3",
+      "dimension": "formaga",
+      "fraga": "Har någon hos er byggt eller konfigurerat en egen AI-agent — inte bara chattat med en chatbot?",
+      "svar": "Nej, men vi har hört talas om det",
+      "poang": 2
+    },
+    {
+      "id": "agarskap-1",
+      "dimension": "agarskap",
+      "fraga": "Har ni en person som är utsedd och ansvarig för AI-agendan i företaget?",
+      "svar": "Ja, men som bisyssla till annat",
+      "poang": 4
+    },
+    {
+      "id": "agarskap-2",
+      "dimension": "agarskap",
+      "fraga": "Om ett nytt sätt att använda AI lanseras imorgon — vem skulle märka det först och agera?",
+      "svar": "Någon har koll men saknar mandat",
+      "poang": 4
+    },
+    {
+      "id": "agarskap-3",
+      "dimension": "agarskap",
+      "fraga": "Vet medarbetarna vem de ska fråga om vilka AI-verktyg som är okej att använda?",
+      "svar": "De flesta vet, ungefär",
+      "poang": 4
+    },
+    {
+      "id": "mojlighet-1",
+      "dimension": "mojlighet",
+      "fraga": "Om du fick frågan \"vad skulle ni kunna göra med AI som ni inte gör idag\" — hur snabbt har du ett svar?",
+      "svar": "Skulle ta ett tag att komma på något",
+      "poang": 2
+    },
+    {
+      "id": "mojlighet-2",
+      "dimension": "mojlighet",
+      "fraga": "Använder ni AI för att göra befintligt arbete snabbare — eller även för saker ni inte kunde göra förut?",
+      "svar": "Mest snabbare",
+      "poang": 2
+    },
+    {
+      "id": "mojlighet-3",
+      "dimension": "mojlighet",
+      "fraga": "Skulle era konkurrenter bli oroliga om de såg vad ni gör med AI just nu?",
+      "svar": "Osäkert",
+      "poang": 2
+    }
+  ],
+  "dimensionspoang": {
+    "agarskap": 12,
+    "formaga": 6,
+    "data": 12,
+    "policy": 3,
+    "mojlighet": 6
+  },
+  "hud": {
+    "besvarade": 15,
+    "av": 15,
+    "dimensioner": [
+      {
+        "id": "agarskap",
+        "namn": "AI-ägarskap",
+        "farg": "#2e9e63",
+        "mynt": 4,
+        "av": 5,
+        "utrustning": "AI-lead: någon går bredvid dig",
+        "utrustning_vunnen": true
+      },
+      {
+        "id": "formaga",
+        "namn": "AI-förmåga",
+        "farg": "#fbbf24",
+        "mynt": 2,
+        "av": 5,
+        "utrustning": "Fart: hela organisationen är med",
+        "utrustning_vunnen": false
+      },
+      {
+        "id": "data",
+        "namn": "Data & kunskapsgrund",
+        "farg": "#4f7fd6",
+        "mynt": 4,
+        "av": 5,
+        "utrustning": "Datakub: ni hittar er egen data",
+        "utrustning_vunnen": true
+      },
+      {
+        "id": "policy",
+        "namn": "Regler & policy",
+        "farg": "#f97316",
+        "mynt": 1,
+        "av": 5,
+        "utrustning": "Sköld: ni vet vad som gäller",
+        "utrustning_vunnen": false
+      },
+      {
+        "id": "mojlighet",
+        "namn": "Möjlighets-AI",
+        "farg": "#7c3aed",
+        "mynt": 2,
+        "av": 5,
+        "utrustning": "Jetpack: ni når dit ni inte nådde förr",
+        "utrustning_vunnen": false
+      }
+    ]
+  },
+  "sammanfattning": {
+    "inledning": "Ni har börjat på flera håll, men ingenting bär ännu av sig självt. Det är det vanligaste läget vi ser.",
+    "dimensioner": [
+      {
+        "id": "agarskap",
+        "namn": "AI-ägarskap",
+        "farg": "#2e9e63",
+        "mynt": 4,
+        "av": 5,
+        "utrustning": "AI-lead: någon går bredvid dig",
+        "kommentar": "Ägarskapet finns och det märks. Det är den enskilt största skillnaden mellan bolag som rör sig och bolag som pratar."
+      },
+      {
+        "id": "formaga",
+        "namn": "AI-förmåga",
+        "farg": "#fbbf24",
+        "mynt": 2,
+        "av": 5,
+        "utrustning": null,
+        "kommentar": "Förmågan sitter hos några eldsjälar. Den är deras, inte organisationens — och den går hem klockan fem."
+      },
+      {
+        "id": "data",
+        "namn": "Data & kunskapsgrund",
+        "farg": "#4f7fd6",
+        "mynt": 4,
+        "av": 5,
+        "utrustning": "Datakub: ni hittar er egen data",
+        "kommentar": "Ni har en grund att bygga på. Det är ovanligare än det låter, och det är vad som gör AI till svar i stället för demo."
+      },
+      {
+        "id": "policy",
+        "namn": "Regler & policy",
+        "farg": "#f97316",
+        "mynt": 1,
+        "av": 5,
+        "utrustning": null,
+        "kommentar": "Inget ramverk på plats. Varje medarbetare gör sin egen tolkning, och ni får veta hur den gick i efterhand."
+      },
+      {
+        "id": "mojlighet",
+        "namn": "Möjlighets-AI",
+        "farg": "#7c3aed",
+        "mynt": 2,
+        "av": 5,
+        "utrustning": null,
+        "kommentar": "Idéerna finns men är inte formulerade. Därför konkurrerar de aldrig om budget."
+      }
+    ],
+    "avslutning": "Vad det här betyder för just er — var ni tjänar mest på att lägga kraften först, och i vilken ordning — går vi igenom tillsammans. Den genomgången gör vi inte i ett mejl."
+  },
+  "nyckel": "superintelligent-game",
+  "samtycke": true
+}

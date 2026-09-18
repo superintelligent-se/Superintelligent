@@ -3,17 +3,32 @@ import { renderAvatarCanvas } from './avatars.js';
 import { renderCoinCanvas, renderGearCanvas } from './pixelart.js';
 import { initTouchControls, isTouchDevice } from './touch.js';
 import { COINS_PER_DIMENSION, DIMENSIONS, QUESTIONS, ROLES } from './data/gameData.js';
-import { answeredCount, coinsEarned, state, submissionPayload } from './state.js';
+import { answeredCount, coinsEarned, state } from './state.js';
+import { leadPayload } from './summary.js';
 
-// Klistra in endpointen från formtjänsten här för att börja samla leads på riktigt.
+// URL:en till flödet som tar emot leadet. Tom sträng = testläge: inget skickas,
+// allt loggas i webbläsarkonsolen. Hela uppsättningen — Microsoft List,
+// Power Automate-flödet och mejlet till spelaren — står i
+// docs/lead-till-microsoft.md.
 const FORM_ENDPOINT = '';
+
+// Endpointen ligger i den byggda JS-filen och är därmed offentlig. Nyckeln
+// hindrar ingen som läser koden, men sorterar bort bottar som skjuter blint
+// mot allt de hittar. Flödet kastar allt som inte bär rätt nyckel.
+const FORM_KEY = 'superintelligent-game';
 
 // Vart prospektet skickas efter att svaren lämnats. Mötet är huvudvägen,
 // träningen ett mindre alternativ för den som hellre börjar själv.
 const BOOKING_URL = 'https://superintelligent.se/boka';
 const TRAINING_URL = 'https://superintelligent.se/traning';
 
+// Sista utvägen om inskicket inte går fram. Ett lead som mejlas in är
+// fortfarande ett lead.
+const CONTACT_EMAIL = 'support@superintelligent.se';
+
 const el = (id) => document.getElementById(id);
+
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function setGameInput(enabled) {
   window.dispatchEvent(new CustomEvent('game-input', { detail: { enabled } }));
@@ -488,11 +503,16 @@ export function showEnd(bonus) {
   }
 
   if (state.shortcut) {
-    // Den som tog röret har inga svar att analysera. Säg det rakt ut i
-    // stället för att låtsas om en profil som inte finns.
+    // Den som tog röret har inga svar att analysera. Då finns heller ingen
+    // sammanfattning att mejla. Säg det rakt ut i stället för att lova en
+    // profil som inte finns.
     el('overlay-end').querySelector('h1').textContent = 'Du tog röret!';
     el('end-intro').textContent =
       'Inga svar den här gången — du hoppade rakt till slutet. Det säger egentligen allt vi behöver veta för ett första samtal: ni vill komma igång, inte kartlägga. Lämna dina uppgifter så tar vi frågorna när vi ses.';
+    el('end-note').textContent =
+      'Någon sammanfattning per mejl blir det alltså inte — det finns inga svar att sammanfatta. Du får en bekräftelse, resten tar vi i samtalet.';
+    el('lead-form').querySelector('.consent span').textContent =
+      'Ja, kontakta mig om ett första samtal. Vi sparar dina uppgifter för det ändamålet och delar dem inte med någon annan.';
     el('lead-submit').textContent = 'Skicka och boka samtal';
   }
 
@@ -502,34 +522,103 @@ export function showEnd(bonus) {
   el('book-link').href = BOOKING_URL;
   el('training-link').href = TRAINING_URL;
 
-  el('lead-form').addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const form = event.target;
-    const contact = Object.fromEntries(new FormData(form).entries());
-    const payload = submissionPayload(contact);
-    const status = el('lead-status');
+  el('lead-form').addEventListener('submit', onLeadSubmit);
+}
 
-    if (!FORM_ENDPOINT) {
-      console.info('Lead payload (ingen endpoint konfigurerad ännu):', payload);
-      status.textContent = 'Tack! (Testläge — svaren loggades i webbläsarkonsolen.)';
-      status.hidden = false;
-      showNextSteps(form);
-      return;
-    }
+async function onLeadSubmit(event) {
+  event.preventDefault();
+  const form = event.target;
+  const status = el('lead-status');
+  const submit = el('lead-submit');
+  const fields = Object.fromEntries(new FormData(form).entries());
 
-    try {
-      await fetch(FORM_ENDPOINT, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      status.textContent = 'Tack! Dina svar är skickade.';
-      showNextSteps(form);
-    } catch {
-      status.textContent = 'Något gick fel — försök igen eller mejla oss direkt.';
-    }
+  // Honungsfällan är dold för människor men fylls i av formulärbottar.
+  // Är den ifylld låtsas vi att allt gick bra och skickar ingenting.
+  if (fields.webbplats) {
+    showNextSteps(form);
+    return;
+  }
+
+  const payload = {
+    ...leadPayload({
+      namn: fields.namn,
+      foretag: fields.foretag,
+      epost: fields.epost,
+      mobil: fields.mobil || '',
+    }),
+    nyckel: FORM_KEY,
+    samtycke: Boolean(fields.samtycke),
+  };
+
+  if (!FORM_ENDPOINT) {
+    console.info('Lead payload (ingen endpoint konfigurerad ännu):', payload);
+    status.textContent = 'Tack! (Testläge — leadet loggades i webbläsarkonsolen.)';
     status.hidden = false;
-  });
+    showNextSteps(form);
+    return;
+  }
+
+  const label = submit.textContent;
+  submit.disabled = true;
+  submit.textContent = 'Skickar …';
+  status.textContent = '';
+  status.hidden = true;
+
+  try {
+    await postLead(payload);
+    status.textContent = state.shortcut
+      ? 'Tack! Vi hör av oss — en bekräftelse ligger i din inkorg.'
+      : 'Tack! Sammanfattningen är på väg till din inkorg. Kolla skräpposten om den dröjer.';
+    status.hidden = false;
+    showNextSteps(form);
+  } catch (error) {
+    console.warn('Leadet gick inte att skicka:', error);
+    status.innerHTML =
+      'Något gick fel på vägen. Försök igen, eller mejla oss på ' +
+      `<a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a> så tar vi det därifrån.`;
+    status.hidden = false;
+    submit.disabled = false;
+    submit.textContent = label;
+  }
+}
+
+// Två saker styr hur det här anropet ser ut, och båda är avsiktliga.
+//
+// text/plain gör inskicket till en "simple request". Då hoppar webbläsaren
+// över OPTIONS-preflighten, som varken Power Automate eller Logic Apps svarar
+// korrekt på — kroppen är fortfarande JSON och flödet läser den med
+// json(triggerBody()). Skickar man application/json faller allt på CORS.
+//
+// Omtagen kan skicka samma lead två gånger: landar anropet men svaret inte
+// kommer tillbaka ser det likadant ut som ett rent fel. Därför bär varje lead
+// ett lead_id, och flödet skriver aldrig samma id till listan två gånger.
+// Ett dubblettförsök är billigare än ett tappat lead.
+async function postLead(payload) {
+  const body = JSON.stringify(payload);
+  let lastError = null;
+
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    if (attempt > 0) await wait(800 * attempt);
+    try {
+      const response = await fetch(FORM_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=UTF-8' },
+        body,
+        keepalive: true,
+      });
+      if (response.ok) return;
+      // 4xx betyder att flödet sa nej — fler försök ger samma svar.
+      if (response.status >= 400 && response.status < 500) {
+        throw new Error(`Flödet avvisade leadet (HTTP ${response.status})`);
+      }
+      lastError = new Error(`HTTP ${response.status}`);
+    } catch (error) {
+      if (error.message?.startsWith('Flödet avvisade')) throw error;
+      lastError = error;
+    }
+  }
+
+  throw lastError ?? new Error('Okänt fel');
 }
 
 // Nästa steg visas först när svaren är inne, så leadet aldrig går förlorat
