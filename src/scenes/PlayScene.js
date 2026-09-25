@@ -268,8 +268,8 @@ export default class PlayScene extends Phaser.Scene {
       mobil: '070-000 00 00',
     };
     this.time.delayedCall(700, () => {
-      this.player.setPosition(MAST_X - 520, GROUND_Y - 60);
-      this.player.body.reset(MAST_X - 520, GROUND_Y - 60);
+      this.player.body.reset(MAST_X, GROUND_Y - 60);
+      this.grabMast();
     });
   }
 
