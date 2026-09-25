@@ -4,9 +4,12 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "predev": "node scripts/build-mail-data.mjs",
     "dev": "vite",
+    "prebuild": "node scripts/build-mail-data.mjs",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "policies": "scripts/build-policies.sh"
   },
   "dependencies": {
     "phaser": "^3.90.0"

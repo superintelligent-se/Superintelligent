@@ -77,7 +77,15 @@ export function submissionPayload(contact) {
       fraga: a.question,
       svar: a.answer,
       poang: a.score,
+      kommentar: QUESTIONS.find((q) => q.id === id)?.options[a.optionIndex]?.comment,
     })),
     dimensionspoang: dimensionScores(),
+    // Det flödet bygger besökarens mejl av: mynt per dimension och index för
+    // varje svar. Texterna ovan är bara till oss — mejlet hämtar sina egna
+    // ur lead-mail.json, så inget fritt innehåll kan skickas vidare.
+    mynt: Object.fromEntries(DIMENSIONS.map((d) => [d.id, coinsEarned(d.id)])),
+    svarsindex: Object.fromEntries(
+      Object.entries(state.answers).map(([id, a]) => [id, a.optionIndex]),
+    ),
   };
 }

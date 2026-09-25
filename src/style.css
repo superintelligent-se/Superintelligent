@@ -812,6 +812,32 @@ kbd.wide {
   background: #6d28d9;
 }
 
+#lead-form button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+/* Honungsfällan ska inte synas, men display:none hoppar vissa botar över. */
+#lead-form .hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+#lead-form .consent {
+  margin: 2px 0 0;
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+#lead-form .consent a {
+  color: inherit;
+  text-decoration: underline;
+}
+
 .status {
   margin: 16px 0 0;
   font-size: 14px;

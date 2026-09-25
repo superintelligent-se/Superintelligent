@@ -4,14 +4,14 @@ import { renderCoinCanvas, renderGearCanvas } from './pixelart.js';
 import { initTouchControls, isTouchDevice } from './touch.js';
 import { COINS_PER_DIMENSION, DIMENSIONS, QUESTIONS, ROLES } from './data/gameData.js';
 import { answeredCount, coinsEarned, state, submissionPayload } from './state.js';
-
-// Klistra in endpointen från formtjänsten här för att börja samla leads på riktigt.
-const FORM_ENDPOINT = '';
-
 // Vart prospektet skickas efter att svaren lämnats. Mötet är huvudvägen,
 // träningen ett mindre alternativ för den som hellre börjar själv.
-const BOOKING_URL = 'https://superintelligent.se/boka';
-const TRAINING_URL = 'https://superintelligent.se/traning';
+import { BOOKING_URL, TRAINING_URL } from './config.js';
+
+// Power Automate-flödet "Spelet: nytt lead" (trigger: När en HTTP-begäran tas
+// emot). Adressen är offentlig i källkoden — flödet litar därför aldrig på
+// fritext i det som skickas; se scripts/build-mail-data.mjs.
+const FORM_ENDPOINT = '';
 
 const el = (id) => document.getElementById(id);
 
@@ -505,9 +505,19 @@ export function showEnd(bonus) {
   el('lead-form').addEventListener('submit', async (event) => {
     event.preventDefault();
     const form = event.target;
-    const contact = Object.fromEntries(new FormData(form).entries());
-    const payload = submissionPayload(contact);
+    const { webbplats, ...contact } = Object.fromEntries(new FormData(form).entries());
     const status = el('lead-status');
+
+    // Honungsfällan: fältet är osynligt för människor, så den som fyllt i det
+    // är en bot. Den får samma tack som alla andra och märker ingenting.
+    if (webbplats) {
+      status.textContent = 'Tack! Dina svar är skickade.';
+      status.hidden = false;
+      showNextSteps(form);
+      return;
+    }
+
+    const payload = submissionPayload(contact);
 
     if (!FORM_ENDPOINT) {
       console.info('Lead payload (ingen endpoint konfigurerad ännu):', payload);
@@ -517,16 +527,24 @@ export function showEnd(bonus) {
       return;
     }
 
+    const button = el('lead-submit');
+    button.disabled = true;
     try {
-      await fetch(FORM_ENDPOINT, {
+      const response = await fetch(FORM_ENDPOINT, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
-      status.textContent = 'Tack! Dina svar är skickade.';
+      // fetch kastar bara vid nätverksfel. Ett 4xx/5xx från flödet betyder
+      // att leadet inte kom fram — då får ingen tro att det gjorde det.
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      status.textContent = 'Tack! Dina svar är skickade — kolla din inkorg.';
       showNextSteps(form);
-    } catch {
-      status.textContent = 'Något gick fel — försök igen eller mejla oss direkt.';
+    } catch (error) {
+      console.error('Leadet kunde inte skickas:', error);
+      status.textContent =
+        'Något gick fel — försök igen, eller mejla oss på team@superintelligent.se.';
+      button.disabled = false;
     }
     status.hidden = false;
   });

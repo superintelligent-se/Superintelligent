@@ -138,7 +138,15 @@
             <input type="text" name="foretag" placeholder="Företag" required autocomplete="organization" />
             <input type="email" name="epost" placeholder="E-post" required autocomplete="email" />
             <input type="tel" name="mobil" placeholder="Mobilnummer (frivilligt)" autocomplete="tel" />
+            <input type="text" name="webbplats" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
             <button type="submit" id="lead-submit">Skicka in mina svar</button>
+            <p class="consent">
+              Genom att skicka godkänner du att vi mejlar dig en sammanfattning och kontaktar dig om ett
+              uppföljande samtal. Läs vår
+              <a href="policy/integritetspolicy.pdf" target="_blank" rel="noopener">integritetspolicy</a>,
+              <a href="policy/cookiepolicy.pdf" target="_blank" rel="noopener">cookiepolicy</a> och
+              <a href="policy/anvandarvillkor.pdf" target="_blank" rel="noopener">användarvillkor</a>.
+            </p>
           </form>
           <p id="lead-status" class="status" hidden></p>
 

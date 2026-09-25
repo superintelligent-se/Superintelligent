@@ -8,11 +8,15 @@ Live: https://superintelligent-se.github.io/Superintelligent/
 
 **Spelaren får aldrig analysen.** Mynten och utrustningen visar att något händer, men aldrig vad svaren betyder, vilken nivå man ligger på eller vad man borde göra. Tolkningen tillhör rådgivaren och är hela affärsmodellen. Ett förslag som visar spelaren dess "AI-mognadspoäng" är fel svar.
 
+Bekräftelsemejlet till besökaren är en återblick, inte en analys: mynten, utrustningen och kommentaren efter varje svar — exakt det spelaren redan sett på banan — plus en uppmaning att boka. Ingen nivå, ingen totalpoäng, inga slutsatser eller råd. Kommentarerna i `gameData.js` ska därför fortsatt bara konstatera, aldrig tipsa.
+
 **Hoppbonusen är kosmetisk.** Den står på slutskärmen och skickas aldrig med i leadet, just för att den inte ska förväxlas med ett resultat.
 
 **Ingen får fastna.** Marken löper obruten hela banan och alla frågetecken går att hoppa över. Fastnar någon når de aldrig slutskärmen, och då är leadet borta. Ändras banan måste varje plattform och block räknas mot hopphöjden (enkelhopp 104 px, dubbelhopp 184 px, med jetpack ett tredje hopp).
 
 **Frågorna bor i koden.** `src/data/gameData.js` är sanningskällan. `docs/fragor-och-svar.md` genereras ur den — redigera aldrig dokumentet och förvänta dig att spelet följer med.
+
+**Formuläret litar aldrig på fritext.** Flödets adress står öppet i källkoden. Besökarens mejl byggs därför av färdiga bitar i `lead-mail.json` (genereras ur `gameData.js` av `scripts/build-mail-data.mjs` vid dev/build) som väljs med index — spelet skickar aldrig mejltext. Annars kan vem som helst få team@ att mejla valfritt innehåll till valfri adress.
 
 ## Affärskontexten
 
@@ -57,6 +61,8 @@ src/data/gameData.js   Dimensioner, roller, 15 frågor med 60 svar och kommentar
 src/state.js           Svar, poäng, mynt, lead-payload
 src/scenes/PlayScene.js Banan, zoner, utrustning, röret, masten, raketen
 src/ui.js              Alla DOM-dialoger, HUD, lead-formulär, mobilinit
+src/config.js          Boknings- och träningslänkar, delas med mejlet
+scripts/               lead-mail.json och policy-PDF:er
 src/touch.js           Touch matas in i samma ställen som tangentbordet
 src/avatars.js         Fyra pixelfigurer, 10x14 rutnät
 src/pixelart.js        Delad pixelritare, mynt och utrustning
@@ -77,11 +83,19 @@ Push till `main` bygger och publicerar till GitHub Pages via Actions. Verifiera 
 
 Mobil testas med `resize_window` (mobile-preset ger `pointer: coarse`). Liggande telefon är ofta 844–932 px bred, så brytpunkter måste utgå från `pointer: coarse`, inte bredd.
 
+## Leadflödet
+
+Formuläret postar till Power Automate-flödet **Spelet: nytt lead** (miljön HUMANOR AB (default), körs med Thomas anslutningar). Flödet hämtar `lead-mail.json` från den publicerade sajten, svarar spelet med 200 och skapar sedan ett kort i Planner-tavlan i Teams-kanalen Sälj (det är CRM:et), postar i Sälj, mejlar alla svar till team@ och skickar återblicken till besökaren från team@ (delad gruppbrevlåda).
+
+Ändras frågorna måste sajten deployas innan mejlen följer med — flödet läser alltid den publicerade filen.
+
+Policydokumenten skrivs i `docs/policy/*.html` och renderas till `public/policy/*.pdf` med `npm run policies` (kräver Chrome lokalt). PDF:erna committas.
+
 ## Öppet, kräver beslut eller uppgifter från Thomas
 
-- `FORM_ENDPOINT` i `src/ui.js` är tom — leads loggas bara i webbläsarkonsolen. Ska gå till support@superintelligent.se, förslagsvis via Power Automate så datan stannar i deras Microsoft-miljö.
-- `BOOKING_URL` och `TRAINING_URL` i `src/ui.js` är platshållare.
-- Egen subdomän är beslutad men uppskjuten. Vid byte: `base` i `vite.config.js` ska bli `/`, plus CNAME-fil och DNS-post.
+- `BOOKING_URL` och `TRAINING_URL` i `src/config.js` är platshållare. De används både i spelet och i mejlet.
+- Policyerna är standardmallar — låt någon med juridisk koll läsa dem.
+- Egen subdomän är beslutad men uppskjuten. Vid byte: `base` i `vite.config.js` ska bli `/`, plus CNAME-fil och DNS-post. Glöm inte URL:en till `lead-mail.json` i flödet.
 
 ## Arbetssätt
 
