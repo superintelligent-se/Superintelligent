@@ -236,7 +236,7 @@ export default class PlayScene extends Phaser.Scene {
         color: '#ffffff',
       })
       .setOrigin(0.5)
-      .setAlpha(0.07);
+      .setAlpha(0.2);
     this.spare.add(block);
   }
 
