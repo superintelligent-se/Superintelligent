@@ -43,6 +43,8 @@ const PIPE_IN_X = ZONE_START + 300;
 const PIPE_OUT_X = MAST_X + 130;
 const PIPE_TOP = GROUND_Y - 44;
 const SHORTCUT_BONUS = 100;
+const SPARE_X = 110;
+const SPARE_Y = 195;
 
 // Zon 1-2 är flacka. Från zon 3 klättrar banan: du tar en avsats för att nå
 // ett frågetecken, och nästa ligger högre upp. Marken är alltid framkomlig,
@@ -99,6 +101,7 @@ export default class PlayScene extends Phaser.Scene {
     this.solids = this.physics.add.staticGroup();
     this.solids.add(this.add.rectangle(LEVEL_WIDTH / 2, GROUND_Y + 40, LEVEL_WIDTH, 80, 0x1b2436));
     this.createLevel();
+    this.createSpare();
     this.createFinish();
     this.createPipes();
     this.createPlayer();
@@ -106,6 +109,7 @@ export default class PlayScene extends Phaser.Scene {
 
     this.physics.add.collider(this.player, this.solids, this.onLand, undefined, this);
     this.physics.add.collider(this.player, this.blocks, this.onBlockCollide, undefined, this);
+    this.physics.add.collider(this.player, this.spare, this.onSpareCollide, undefined, this);
     this.physics.add.overlap(this.player, this.mastZone, this.grabMast, undefined, this);
 
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -218,6 +222,54 @@ export default class PlayScene extends Phaser.Scene {
         block.setData('tag', answerTag);
         this.blocks.add(block);
       });
+    });
+  }
+
+  createSpare() {
+    this.spare = this.physics.add.staticGroup();
+    const block = this.add.rectangle(SPARE_X, SPARE_Y, 40, 40, 0xffffff, 0);
+    this.spareLabel = this.add
+      .text(SPARE_X, SPARE_Y, '?', {
+        fontFamily: 'system-ui, sans-serif',
+        fontSize: '22px',
+        fontStyle: 'bold',
+        color: '#ffffff',
+      })
+      .setOrigin(0.5)
+      .setAlpha(0.07);
+    this.spare.add(block);
+  }
+
+  onSpareCollide(player, block) {
+    if (this.paused || this.finished || !player.body.blocked.up) return;
+    block.destroy();
+    this.spareLabel.setAlpha(0.9).setColor('#fde047');
+    this.tweens.add({ targets: this.spareLabel, y: SPARE_Y - 40, alpha: 0, duration: 700 });
+    sfx.gear();
+    this.fillAllBlocks();
+  }
+
+  fillAllBlocks() {
+    for (const block of this.blocks.getChildren()) {
+      const question = block.getData('question');
+      const optionIndex = Phaser.Math.Between(0, question.options.length - 1);
+      recordAnswer(question, optionIndex);
+      this.markAnswered(block, question, optionIndex, true);
+    }
+    updateHud();
+    for (const dimension of DIMENSIONS) {
+      const hasGear = coinsEarned(dimension.id) >= GEAR_THRESHOLD;
+      if (hasGear && !this.gear[dimension.gear]) this.grantGear(dimension.id, true);
+    }
+    state.prefill = {
+      namn: 'Test Testsson',
+      foretag: 'Testbolaget AB',
+      epost: 'team@superintelligent.se',
+      mobil: '070-000 00 00',
+    };
+    this.time.delayedCall(700, () => {
+      this.player.setPosition(MAST_X - 520, GROUND_Y - 60);
+      this.player.body.reset(MAST_X - 520, GROUND_Y - 60);
     });
   }
 
@@ -425,7 +477,7 @@ export default class PlayScene extends Phaser.Scene {
     }, () => this.releaseFromDialog());
   }
 
-  markAnswered(block, question, optionIndex) {
+  markAnswered(block, question, optionIndex, quiet = false) {
     const option = question.options[optionIndex];
     block.fillColor = 0x2e9e63;
     block.setStrokeStyle(2, 0x1c7a49);
@@ -433,6 +485,7 @@ export default class PlayScene extends Phaser.Scene {
     // Kort rubrik plus kort svar: vad frågan gällde och vad du svarade.
     block.getData('tag').setText([question.short.toUpperCase(), option.short]).setVisible(true);
 
+    if (quiet) return;
     this.showMessage({
       title: option.label,
       body: option.comment,
@@ -481,7 +534,7 @@ export default class PlayScene extends Phaser.Scene {
     });
   }
 
-  grantGear(dimensionId) {
+  grantGear(dimensionId, quiet = false) {
     const dimension = DIMENSIONS.find((d) => d.id === dimensionId);
     this.gear[dimension.gear] = true;
     sfx.gear();
@@ -498,6 +551,7 @@ export default class PlayScene extends Phaser.Scene {
       this.thrust = this.add.image(0, 0, 'gear-thrust').setVisible(false);
     }
 
+    if (quiet) return;
     this.showMessage({
       title: dimension.gearLabel.split(':')[0].toUpperCase(),
       body: dimension.gearWhy,
@@ -572,7 +626,9 @@ export default class PlayScene extends Phaser.Scene {
     }
 
     // Jetpacken ger ett tredje hopp: möjlighets-AI tar er dit ni inte nådde förr.
-    const maxJumps = this.gear.jetpack ? 3 : 2;
+    // På startplattan, innan första zonen, får alla prova ett trippelhopp.
+    const onStart = this.player.x < ZONE_START;
+    const maxJumps = this.gear.jetpack || onStart ? 3 : 2;
     if (jumpPressed && this.jumpsUsed < maxJumps) {
       if (this.jumpsUsed === 0) this.jumpedFrom = body.bottom;
       body.setVelocityY(JUMP_VELOCITY);

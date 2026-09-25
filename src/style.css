@@ -345,7 +345,7 @@ body:has(.overlay:not([hidden])) #touch-controls {
 
   /* Tangentbordsraderna hjälper ingen som spelar med fingrarna. */
   .hint,
-  .howto-row:nth-child(n + 4) {
+  .howto-row:nth-child(n + 5) {
     display: none;
   }
 

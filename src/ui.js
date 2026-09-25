@@ -296,6 +296,7 @@ function applyTouchInstructions() {
     ['◀ ▶', 'Spring åt vänster och höger'],
     ['▲', 'Hoppa'],
     ['▲ ▲', 'Tryck igen i luften för ett extra hopp — så når du de höga avsatserna'],
+    ['▲ ▲ ▲', 'Trippelhopp — tre tryck tar dig högst av allt, men bara på startplattan'],
   ];
 
   rows.forEach((row, index) => {
@@ -497,6 +498,10 @@ export function showEnd(bonus) {
   }
 
   el('overlay-end').hidden = false;
+  if (state.prefill) {
+    const form = el('lead-form');
+    for (const [name, value] of Object.entries(state.prefill)) form.elements[name].value = value;
+  }
   // Spelet ska sluta äta W, A, D och mellanslag så fälten går att fylla i.
   setGameInput(false);
   el('book-link').href = BOOKING_URL;
