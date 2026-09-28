@@ -80,6 +80,7 @@ export function submissionPayload(contact) {
       kommentar: QUESTIONS.find((q) => q.id === id)?.options[a.optionIndex]?.comment,
     })),
     dimensionspoang: dimensionScores(),
+    poangrad: DIMENSIONS.map((d) => `${d.label} ${dimensionScores()[d.id]}/${MAX_DIMENSION_SCORE}`).join(' · '),
     // Det flödet bygger besökarens mejl av: mynt per dimension och index för
     // varje svar. Texterna ovan är bara till oss — mejlet hämtar sina egna
     // ur lead-mail.json, så inget fritt innehåll kan skickas vidare.

@@ -264,7 +264,7 @@ export default class PlayScene extends Phaser.Scene {
     state.prefill = {
       namn: 'Test Testsson',
       foretag: 'Testbolaget AB',
-      epost: 'team@superintelligent.se',
+      epost: 'hello@superintelligent.se',
       mobil: '070-000 00 00',
     };
     this.time.delayedCall(700, () => {

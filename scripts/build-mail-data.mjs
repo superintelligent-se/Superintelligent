@@ -61,7 +61,7 @@ const shell = (inner) =>
   `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#fff;border-radius:8px;"><tr><td style="padding:28px 28px 24px;">` +
   inner +
   `<p style="${FONT}font-size:12px;color:#999;margin-top:28px;">Superintelligent Group AB · ` +
-  `<a href="mailto:team@superintelligent.se" style="color:#999;">team@superintelligent.se</a><br>` +
+  `<a href="mailto:hello@superintelligent.se" style="color:#999;">hello@superintelligent.se</a><br>` +
   `Du får det här mejlet för att du skickade in dina svar i The Superintelligent Game.</p>` +
   `</td></tr></table></td></tr></table></body></html>`;
 

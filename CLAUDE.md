@@ -16,7 +16,7 @@ Bekräftelsemejlet till besökaren är en återblick, inte en analys: mynten, ut
 
 **Frågorna bor i koden.** `src/data/gameData.js` är sanningskällan. `docs/fragor-och-svar.md` genereras ur den — redigera aldrig dokumentet och förvänta dig att spelet följer med.
 
-**Formuläret litar aldrig på fritext.** Flödets adress står öppet i källkoden. Besökarens mejl byggs därför av färdiga bitar i `lead-mail.json` (genereras ur `gameData.js` av `scripts/build-mail-data.mjs` vid dev/build) som väljs med index — spelet skickar aldrig mejltext. Annars kan vem som helst få team@ att mejla valfritt innehåll till valfri adress.
+**Formuläret litar aldrig på fritext.** Flödets adress står öppet i källkoden. Besökarens mejl byggs därför av färdiga bitar i `lead-mail.json` (genereras ur `gameData.js` av `scripts/build-mail-data.mjs` vid dev/build) som väljs med index — spelet skickar aldrig mejltext. Annars kan vem som helst få hello@ att mejla valfritt innehåll till valfri adress.
 
 ## Affärskontexten
 
@@ -85,7 +85,9 @@ Mobil testas med `resize_window` (mobile-preset ger `pointer: coarse`). Liggande
 
 ## Leadflödet
 
-Formuläret postar till Power Automate-flödet **Spelet: nytt lead** (miljön HUMANOR AB (default), körs med Thomas anslutningar). Flödet hämtar `lead-mail.json` från den publicerade sajten, svarar spelet med 200 och skapar sedan ett kort i Planner-tavlan i Teams-kanalen Sälj (det är CRM:et), postar i Sälj, mejlar alla svar till team@ och skickar återblicken till besökaren från team@ (delad gruppbrevlåda).
+Formuläret postar till Power Automate-flödet **Spelet: nytt lead** (miljön HUMANOR AB (default), körs med Thomas anslutningar). Flödet hämtar `lead-mail.json` från den publicerade sajten, svarar spelet med 200 och skapar sedan ett kort i Planner-tavlan i Teams-kanalen Sälj (det är CRM:et), postar i Sälj, mejlar alla svar till hello@ och skickar återblicken till besökaren från hello@.
+
+hello@ är en delad postlåda, inte Teams-gruppens adress (team@) — den skickar till alla i teamet och går inte att skicka från via flödet. Thomas, Tomas och Christofer har Full Access och Send As, och skickade svar sparas i postlådan så alla ser vem som svarat. info@ är alias på Thomas egen postlåda.
 
 Ändras frågorna måste sajten deployas innan mejlen följer med — flödet läser alltid den publicerade filen.
 

@@ -11,7 +11,8 @@ import { BOOKING_URL, TRAINING_URL } from './config.js';
 // Power Automate-flödet "Spelet: nytt lead" (trigger: När en HTTP-begäran tas
 // emot). Adressen är offentlig i källkoden — flödet litar därför aldrig på
 // fritext i det som skickas; se scripts/build-mail-data.mjs.
-const FORM_ENDPOINT = '';
+const FORM_ENDPOINT =
+  'https://defaulta8e2e779861b470aa86846781f2ebb.6b.environment.api.powerplatform.com:443/powerautomate/automations/direct/cu/05/workflows/e6823e3115064884b3a60941f646bb37/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=ePiFzfYOL1kgU-BOhAoYyBupmfMI6tOA_JjBS-Rsnrk';
 
 const el = (id) => document.getElementById(id);
 
@@ -548,7 +549,7 @@ export function showEnd(bonus) {
     } catch (error) {
       console.error('Leadet kunde inte skickas:', error);
       status.textContent =
-        'Något gick fel — försök igen, eller mejla oss på team@superintelligent.se.';
+        'Något gick fel — försök igen, eller mejla oss på hello@superintelligent.se.';
       button.disabled = false;
     }
     status.hidden = false;
