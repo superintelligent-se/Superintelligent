@@ -295,9 +295,7 @@ function applyTouchInstructions() {
   const rows = document.querySelectorAll('#overlay-howto .howto-row');
   const replacements = [
     ['◀ ▶', 'Spring åt vänster och höger'],
-    ['▲', 'Hoppa'],
-    ['▲ ▲', 'Tryck igen i luften för ett extra hopp — så når du de höga avsatserna'],
-    ['▲ ▲ ▲', 'Trippelhopp — tre tryck tar dig högst av allt, men bara på startplattan'],
+    ['▲ ×2 ×3', 'Hoppa. ×2 i luften når de höga avsatserna, ×3 högst av allt — bara på startplattan'],
   ];
 
   rows.forEach((row, index) => {
@@ -517,8 +515,7 @@ export function showEnd(bonus) {
     // Honungsfällan: fältet är osynligt för människor, så den som fyllt i det
     // är en bot. Den får samma tack som alla andra och märker ingenting.
     if (webbplats) {
-      status.textContent = 'Tack! Dina svar är skickade.';
-      status.hidden = false;
+      showStatus(status, 'success', 'Tack! Dina svar är skickade', 'Kolla din inkorg — en sammanfattning av din bana är på väg.');
       showNextSteps(form);
       return;
     }
@@ -527,8 +524,7 @@ export function showEnd(bonus) {
 
     if (!FORM_ENDPOINT) {
       console.info('Lead payload (ingen endpoint konfigurerad ännu):', payload);
-      status.textContent = 'Tack! (Testläge — svaren loggades i webbläsarkonsolen.)';
-      status.hidden = false;
+      showStatus(status, 'success', 'Tack! (Testläge — svaren loggades i webbläsarkonsolen.)');
       showNextSteps(form);
       return;
     }
@@ -544,16 +540,28 @@ export function showEnd(bonus) {
       // fetch kastar bara vid nätverksfel. Ett 4xx/5xx från flödet betyder
       // att leadet inte kom fram — då får ingen tro att det gjorde det.
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      status.textContent = 'Tack! Dina svar är skickade — kolla din inkorg.';
+      showStatus(status, 'success', 'Tack! Dina svar är skickade', 'Kolla din inkorg — en sammanfattning av din bana är på väg.');
       showNextSteps(form);
     } catch (error) {
       console.error('Leadet kunde inte skickas:', error);
-      status.textContent =
-        'Något gick fel — försök igen, eller mejla oss på hello@superintelligent.se.';
+      showStatus(status, 'error', 'Något gick fel', 'Försök igen, eller mejla oss på hello@superintelligent.se.');
       button.disabled = false;
     }
-    status.hidden = false;
   });
+}
+
+function showStatus(status, kind, title, detail = '') {
+  status.className = `status ${kind}`;
+  status.innerHTML = '';
+  const strong = document.createElement('strong');
+  strong.textContent = kind === 'success' ? `✓ ${title}` : title;
+  status.append(strong);
+  if (detail) {
+    const span = document.createElement('span');
+    span.textContent = detail;
+    status.append(span);
+  }
+  status.hidden = false;
 }
 
 // Nästa steg visas först när svaren är inne, så leadet aldrig går förlorat

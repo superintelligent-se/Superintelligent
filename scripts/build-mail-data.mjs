@@ -40,6 +40,39 @@ function coinsHtml(dimension, coins) {
   );
 }
 
+// Överblicken överst: en rad per zon med färg, mynt och utrustning, som
+// HUD:en i spelet. Samma mynt som spelaren såg — ingen summa, ingen nivå.
+function overviewRowHtml(dimension, coins) {
+  const coin = (on) =>
+    `<td style="width:18px;height:18px;padding:0 3px 0 0;"><div style="width:16px;height:16px;border-radius:8px;` +
+    `background:${on ? dimension.color : '#e3e6eb'};"></div></td>`;
+  const coinCells = Array.from({ length: COINS_PER_DIMENSION }, (_, i) => coin(i < coins)).join('');
+  const gear =
+    coins >= GEAR_THRESHOLD
+      ? `<span style="color:#111;font-weight:bold;">${esc(dimension.gearLabel.split(':')[0])}</span>`
+      : '<span style="color:#aaa;">—</span>';
+  return (
+    `<tr>` +
+    `<td style="width:6px;background:${dimension.color};border-radius:3px;"></td>` +
+    `<td style="padding:10px 12px;${FONT}font-size:14px;font-weight:bold;color:#111;border-bottom:1px solid #eef0f3;">${esc(dimension.label)}</td>` +
+    `<td style="padding:10px 12px 10px 0;border-bottom:1px solid #eef0f3;"><table role="presentation" cellpadding="0" cellspacing="0"><tr>${coinCells}</tr></table></td>` +
+    `<td style="padding:10px 0;${FONT}font-size:13px;border-bottom:1px solid #eef0f3;text-align:right;">${gear}</td>` +
+    `</tr>`
+  );
+}
+
+const overviewOpen =
+  `<tr><td style="padding:4px 0 26px;">` +
+  `<div style="${FONT}font-size:12px;font-weight:bold;letter-spacing:1px;color:#888;text-transform:uppercase;margin-bottom:8px;">Din bana i överblick</div>` +
+  `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #eef0f3;border-radius:8px;border-collapse:separate;padding:6px 10px;">` +
+  `<tr><td></td><td style="padding:4px 12px;${FONT}font-size:11px;color:#999;">Zon</td>` +
+  `<td style="padding:4px 12px 4px 0;${FONT}font-size:11px;color:#999;">Mynt</td>` +
+  `<td style="padding:4px 0;${FONT}font-size:11px;color:#999;text-align:right;">Utrustning</td></tr>`;
+
+const overviewClose =
+  `</table></td></tr>` +
+  `<tr><td style="${FONT}font-size:12px;font-weight:bold;letter-spacing:1px;color:#888;text-transform:uppercase;padding-bottom:2px;">Svar för svar</td></tr>`;
+
 function answerHtml(question, option) {
   return (
     `<tr><td style="padding:10px 0 0 12px;border-left:2px solid #eee;${FONT}font-size:14px;color:#222;">` +
@@ -90,8 +123,22 @@ const shortcut =
 
 // Rader i bankordning. Flödet går igenom dem en i taget: en dimensionsrad
 // väljer HTML efter antal mynt, en frågerad efter svarets index. Saknas ett
-// svar blir raden tom.
-const rows = DIMENSIONS.flatMap((dimension) => [
+// svar blir raden tom. En fast rad är en dimensionsrad med ett id som inte
+// finns bland mynten — då väljs alltid index 0, så flödet behöver inte veta
+// om den.
+const fixed = (id, html) => ({ typ: 'dimension', id, html: [html] });
+
+const overview = [
+  fixed('_oversikt_start', overviewOpen),
+  ...DIMENSIONS.map((dimension) => ({
+    typ: 'dimension',
+    id: dimension.id,
+    html: Array.from({ length: COINS_PER_DIMENSION + 1 }, (_, coins) => overviewRowHtml(dimension, coins)),
+  })),
+  fixed('_oversikt_slut', overviewClose),
+];
+
+const details = DIMENSIONS.flatMap((dimension) => [
   {
     typ: 'dimension',
     id: dimension.id,
@@ -103,6 +150,8 @@ const rows = DIMENSIONS.flatMap((dimension) => [
     html: question.options.map((option) => answerHtml(question, option)),
   })),
 ]);
+
+const rows = [...overview, ...details];
 
 const [before, after] = shell('§').split('§');
 
