@@ -22,7 +22,7 @@ Bekräftelsemejlet till besökaren är en återblick, inte en analys: mynten, ut
 
 Superintelligent säljer AI-rådgivning (top-down) och AI-träning (bottom-up). Spelet ersätter steg 1–2 i deras kundresa: kostnadsfritt första möte och fördjupad assessment.
 
-**Mäklarbranschen är fokus för säljarbetet.** Spelet börjar därför med ett branschval: mäklare eller annan bransch. Valet styr rolluppsättningen — mäklare får Franchiseägare/Ägare, Kontorschef, VD, Teamledare och Annat (fritext), övriga får VD/Ledning, Chef, Medarbetare, Entreprenör. Frågorna är gemensamma; skulle de branschanpassas krävs en egen uppsättning i `gameData.js` och att `lead-mail.json` följer med.
+**Mäklarbranschen är fokus för säljarbetet.** Spelet börjar därför med ett branschval: mäklare eller annan bransch. Valet styr rolluppsättningen — mäklare får Franchiseägare/Ägare, Kontorschef, VD, Teamledare, Säljstöd/Assistent och Annat, övriga får VD/Ledning, Chef, Medarbetare, Entreprenör och Annat. Annat finns i båda och är fritext. Frågorna är gemensamma; skulle de branschanpassas krävs en egen uppsättning i `gameData.js` och att `lead-mail.json` följer med.
 
 Roller har `avatar` skild från `id` så flera roller kan dela pixelfigur. Fritexten i Annat är det enda fria fältet före spelet — den saneras i `cleanRoleText()` och går bara till leadet, aldrig till besökarens mejl.
 
