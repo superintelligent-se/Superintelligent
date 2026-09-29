@@ -37,9 +37,16 @@ export const INDUSTRIES = [
       {
         id: 'teamledare',
         label: 'Teamledare',
-        avatar: 'maklare',
+        avatar: 'teamledare',
         blurb: 'Du leder ett team av mäklare.',
         prop: 'Portfölj — du är kvar i affären',
+      },
+      {
+        id: 'maklare',
+        label: 'Mäklare',
+        avatar: 'maklare',
+        blurb: 'Du gör affärerna.',
+        prop: 'Portfölj — du är där kunden är',
       },
       {
         id: 'saljstod',

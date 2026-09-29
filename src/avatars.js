@@ -77,6 +77,22 @@ const SPRITES = {
     '..PP..PP..',
     '..BB..BB..',
   ],
+  teamledare: [
+    '..........',
+    '..HHHHHH..',
+    '.HHHHHHHH.',
+    '.HHSSSSHH.',
+    '.HSEESEEH.',
+    '.HSSSSSSH.',
+    '.CCCCCCCC.',
+    'SCCCAACCCS',
+    'MMCCAACCCS',
+    'MMCCCCCCC.',
+    '.CCCCCCCC.',
+    '..PPPPPP..',
+    '..PP..PP..',
+    '..BB..BB..',
+  ],
   foretag: [
     '..........',
     '..HHHHHH..',
@@ -127,6 +143,10 @@ const PALETTES = {
   maklare: {
     H: '#241813', S: '#7a4b2a', E: '#141821', T: '#c0392b',
     C: '#1f2937', M: '#6b4423', P: '#111827', B: '#0b0f19',
+  },
+  teamledare: {
+    H: '#5c2e1e', S: '#c98d5e', E: '#141821', A: '#cbd5e1',
+    C: '#334155', M: '#6b4423', P: '#1e293b', B: '#111827',
   },
   foretag: {
     H: '#6b4a2f', S: '#d99b6c', E: '#141821',
