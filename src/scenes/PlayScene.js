@@ -43,7 +43,9 @@ const PIPE_IN_X = ZONE_START + 300;
 const PIPE_OUT_X = MAST_X + 130;
 const PIPE_TOP = GROUND_Y - 44;
 const SHORTCUT_BONUS = 100;
-const SPARE_X = 110;
+// Dolt block: fyller i hela profilen och tar dig till slutet. Helt osynligt
+// tills det träffas — hoppa upp här på startplattan.
+const SPARE_X = 152;
 const SPARE_Y = 195;
 
 // Zon 1-2 är flacka. Från zon 3 klättrar banan: du tar en avsats för att nå
@@ -236,7 +238,7 @@ export default class PlayScene extends Phaser.Scene {
         color: '#ffffff',
       })
       .setOrigin(0.5)
-      .setAlpha(0.2);
+      .setAlpha(0);
     this.spare.add(block);
   }
 

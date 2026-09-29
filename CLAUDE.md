@@ -44,6 +44,8 @@ Svarar man lågt får man ingen utrustning och springer oskyddad — det är met
 
 ROI-mätning är medvetet utelämnad ur spelet — den har inget bra snabbsvar och hör hemma i samtalet.
 
+**Det dolda blocket** på startplattan (`SPARE_X`, `SPARE_Y` i PlayScene) fyller i alla svar och tar dig till slutet — för demo och test. Det är helt osynligt: hoppa upp i det med trippelhopp från startytan, som ligger på `x < ZONE_START`. Träffas det syns ett kort gult kvitto.
+
 ## Fallgropar som kostat tid
 
 **Phaser sover när förhandsgranskningspanelen är dold.** Skärmdumpar visar då den senast ritade bildrutan, inte nuläget. Tre gånger har det sett ut som att något är trasigt när det fungerade. Verifiera i stället genom att stega fysiken manuellt (`scene.physics.world.step(1/60)` i loop, `scene.update()` för input) eller väck loopen och vänta på två `requestAnimationFrame`.
