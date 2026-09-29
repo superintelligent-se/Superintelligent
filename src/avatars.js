@@ -5,7 +5,10 @@
 // och idélampa säger något om jobbet — inget om vem som har det.
 //
 // . transparent  H hår/keps  S hud  E ögon  C kläder  A accent
-// P byxor  B skor  K krona  D headset/sockel  M kaffemugg  L lampa
+// P byxor  B skor  K krona  D headset  M kaffemugg/portfölj  T slips  J sjal
+//
+// Figurerna varierar i hår, huvudduk och hudton så de speglar dem som
+// faktiskt spelar. Rollens attribut är sig likt oavsett vem som bär det.
 
 import { renderPixelCanvas } from './pixelart.js';
 
@@ -14,10 +17,10 @@ const SPRITES = {
     '..K.KK.K..',
     '..KKKKKK..',
     '..HHHHHH..',
-    '..SSSSSS..',
-    '..SEESEE..',
-    '..SSSSSS..',
-    '.CCCCCCCC.',
+    '.HHHHHHHH.',
+    '.HSEESEEH.',
+    '.HSSSSSSH.',
+    'HCCCCCCCCH',
     'SCCCAACCCS',
     'SCCCAACCCS',
     '.CCCAACCC.',
@@ -44,12 +47,12 @@ const SPRITES = {
   ],
   medarbetare: [
     '..........',
-    '..HHHHHH..',
-    '.HHHHHHHH.',
-    '..SSSSSS..',
-    '..SEESEE..',
-    '..SSSSSS..',
-    '.CCCCCCCC.',
+    '..JJJJJJ..',
+    '.JJJJJJJJ.',
+    '.JJSSSSJJ.',
+    '.JSEESEEJ.',
+    '.JSSSSSSJ.',
+    'JJCCCCCCJJ',
     'SCCCAACCCS',
     'MMCCCCCCCS',
     'MMCCCCCCC.',
@@ -78,9 +81,9 @@ const SPRITES = {
     '..........',
     '..HHHHHH..',
     '.HHHHHHHH.',
-    '..SSSSSS..',
-    '..SEESEE..',
-    '..SSSSSS..',
+    '.HHSSSSHH.',
+    '.HSEESEEH.',
+    '.HSSSSSSH.',
     '.CCCCCCCC.',
     'SCCCAACCCS',
     'SCCCAACCCS',
@@ -110,23 +113,23 @@ const SPRITES = {
 
 const PALETTES = {
   vd: {
-    K: '#f5c518', H: '#3f4756', S: '#e8b48a', E: '#141821',
+    K: '#f5c518', H: '#4a3520', S: '#e8b48a', E: '#141821',
     C: '#1f2937', A: '#7c3aed', P: '#111827', B: '#0b0f19',
   },
   chef: {
-    D: '#0f172a', H: '#6b4423', S: '#c98d5e', E: '#141821',
+    D: '#0f172a', H: '#2b1d12', S: '#8d5a3b', E: '#141821',
     C: '#2563eb', A: '#bfdbfe', P: '#1e3a5f', B: '#111827',
   },
   medarbetare: {
-    M: '#f3f4f6', H: '#1f2937', S: '#d99b6c', E: '#141821',
+    M: '#f3f4f6', J: '#8c5a7d', S: '#c98d5e', E: '#141821',
     C: '#2e9e63', A: '#86efac', P: '#374151', B: '#1f2937',
   },
   maklare: {
-    H: '#3b2a1d', S: '#e8b48a', E: '#141821', T: '#c0392b',
+    H: '#241813', S: '#7a4b2a', E: '#141821', T: '#c0392b',
     C: '#1f2937', M: '#6b4423', P: '#111827', B: '#0b0f19',
   },
   foretag: {
-    H: '#4a3728', S: '#d99b6c', E: '#141821',
+    H: '#6b4a2f', S: '#d99b6c', E: '#141821',
     C: '#3b4a63', A: '#93a4c3', P: '#252f42', B: '#141821',
   },
   entreprenor: {

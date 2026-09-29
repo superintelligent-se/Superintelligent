@@ -24,7 +24,9 @@ Superintelligent säljer AI-rådgivning (top-down) och AI-träning (bottom-up). 
 
 **Mäklarbranschen är fokus för säljarbetet.** Spelet börjar därför med ett branschval: mäklare eller annan bransch. Valet styr rolluppsättningen — mäklare får Franchiseägare/Ägare, Kontorschef, VD, Teamledare, Säljstöd/Assistent och Annat, övriga får VD/Ledning, Chef, Medarbetare, Entreprenör och Annat. Annat finns i båda och är fritext. Frågorna är gemensamma; skulle de branschanpassas krävs en egen uppsättning i `gameData.js` och att `lead-mail.json` följer med.
 
-Roller har `avatar` skild från `id` så flera roller kan dela pixelfigur. Fritexten i Annat är det enda fria fältet före spelet — den saneras i `cleanRoleText()` och går bara till leadet, aldrig till besökarens mejl.
+Roller har `avatar` skild från `id` så flera roller kan dela pixelfigur.
+
+Figurerna är blandade med flit: hälften läser som kvinnor, hudtonerna spänner från ljus till mörk och en bär sjal. Rollens attribut — krona, headset, mugg, portfölj, keps — är sig likt oavsett vem som bär det, och ska förbli så. Lägger du till en figur, håll balansen. Fritexten i Annat är det enda fria fältet före spelet — den saneras i `cleanRoleText()` och går bara till leadet, aldrig till besökarens mejl.
 
 De fem dimensionerna är ordnade som banan, och ordningen är medveten:
 
