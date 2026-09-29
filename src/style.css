@@ -703,6 +703,52 @@ body:has(.overlay:not([hidden])) #touch-controls {
   flex-shrink: 0;
 }
 
+/* Fritextsteget när man väljer Annat */
+
+/* .choices och formuläret är flex — utan detta vinner display över hidden. */
+#role-other[hidden],
+#role-buttons[hidden],
+#role-hint[hidden] {
+  display: none !important;
+}
+
+#role-other {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#role-other label {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+#role-other input {
+  font: inherit;
+  font-size: 15px;
+  padding: 13px 14px;
+  border-radius: 7px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--ink);
+}
+
+#role-other button {
+  font: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 13px 16px;
+  border-radius: 7px;
+  border: none;
+  background: var(--purple);
+  color: #fff;
+  cursor: pointer;
+}
+
+#role-other button:hover {
+  background: #6d28d9;
+}
+
 /* Instruktioner */
 
 .howto {

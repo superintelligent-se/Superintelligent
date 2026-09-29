@@ -1,29 +1,91 @@
 // prop förklarar figurens attribut med ett ögonkast — det sitter på rollen,
 // aldrig på personen.
-export const ROLES = [
+// Två vägar in. Mäklarbranschen är fokus för säljarbetet och har egna
+// rolltitlar; övriga får den generella uppsättningen. Frågorna är desamma —
+// det är rollerna och tilltalet som skiljer.
+//
+// avatar pekar ut pixelfiguren, skild från id så flera roller kan dela figur.
+// prop förklarar figurens attribut — det sitter på rollen, aldrig på personen.
+export const INDUSTRIES = [
   {
-    id: 'vd',
-    label: 'VD / Ledning',
-    blurb: 'Du sätter riktningen för hela bolaget.',
-    prop: 'Krona — du bestämmer vart vi ska',
+    id: 'maklare',
+    label: 'Mäklarbranschen',
+    blurb: 'Rollerna är mäklarkontorets egna.',
+    avatar: 'maklare',
+    roles: [
+      {
+        id: 'franchise',
+        label: 'Franchiseägare / Ägare',
+        avatar: 'entreprenor',
+        blurb: 'Du äger kontoret och risken.',
+        prop: 'Keps — du bär alla hattar själv',
+      },
+      {
+        id: 'kontorschef',
+        label: 'Kontorschef',
+        avatar: 'chef',
+        blurb: 'Du driver kontoret i vardagen.',
+        prop: 'Headset — i möten hela dagen',
+      },
+      {
+        id: 'vd',
+        label: 'VD',
+        avatar: 'vd',
+        blurb: 'Du sätter riktningen för bolaget.',
+        prop: 'Krona — du bestämmer vart vi ska',
+      },
+      {
+        id: 'teamledare',
+        label: 'Teamledare',
+        avatar: 'maklare',
+        blurb: 'Du leder ett team av mäklare.',
+        prop: 'Portfölj — du är kvar i affären',
+      },
+      {
+        id: 'annat',
+        label: 'Annat',
+        avatar: 'medarbetare',
+        blurb: 'Skriv in din roll i nästa steg.',
+        prop: 'Kaffemugg — du får saker gjorda',
+        freeText: true,
+      },
+    ],
   },
   {
-    id: 'chef',
-    label: 'Chef',
-    blurb: 'Du leder ett team eller en avdelning.',
-    prop: 'Headset — i möten hela dagen',
-  },
-  {
-    id: 'medarbetare',
-    label: 'Medarbetare',
-    blurb: 'Du gör jobbet där AI möter vardagen.',
-    prop: 'Kaffemugg — du får saker gjorda',
-  },
-  {
-    id: 'entreprenor',
-    label: 'Entreprenör',
-    blurb: 'Du är hela organisationen — och dess AI-lead.',
-    prop: 'Keps — du bär alla hattar själv',
+    id: 'annan',
+    label: 'Annan bransch',
+    blurb: 'Den generella versionen.',
+    avatar: 'foretag',
+    roles: [
+      {
+        id: 'vd',
+        label: 'VD / Ledning',
+        avatar: 'vd',
+        blurb: 'Du sätter riktningen för hela bolaget.',
+        prop: 'Krona — du bestämmer vart vi ska',
+      },
+      {
+        id: 'chef',
+        label: 'Chef',
+        avatar: 'chef',
+        blurb: 'Du leder ett team eller en avdelning.',
+        prop: 'Headset — i möten hela dagen',
+      },
+      {
+        id: 'medarbetare',
+        label: 'Medarbetare',
+        avatar: 'medarbetare',
+        blurb: 'Du gör jobbet där AI möter vardagen.',
+        prop: 'Kaffemugg — du får saker gjorda',
+      },
+      {
+        id: 'entreprenor',
+        label: 'Entreprenör',
+        avatar: 'entreprenor',
+        blurb: 'Du är hela organisationen — och dess AI-lead.',
+        prop: 'Keps — du bär alla hattar själv',
+      },
+    ],
   },
 ];
 

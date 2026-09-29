@@ -2,7 +2,7 @@ import { isMuted, setMuted, sfx } from './audio.js';
 import { renderAvatarCanvas } from './avatars.js';
 import { renderCoinCanvas, renderGearCanvas } from './pixelart.js';
 import { initTouchControls, isTouchDevice } from './touch.js';
-import { COINS_PER_DIMENSION, DIMENSIONS, QUESTIONS, ROLES } from './data/gameData.js';
+import { COINS_PER_DIMENSION, DIMENSIONS, INDUSTRIES, QUESTIONS } from './data/gameData.js';
 import { answeredCount, coinsEarned, state, submissionPayload } from './state.js';
 // Vart prospektet skickas efter att svaren lämnats. Mötet är huvudvägen,
 // träningen ett mindre alternativ för den som hellre börjar själv.
@@ -72,16 +72,52 @@ function attachListNavigation(buttons, { onPick, onCancel = null }) {
 // Vrid-uppmaningen ska möta besökaren direkt, före startskärmen.
 initRotateHint();
 
-export function showRoleSelect(onPick) {
-  const container = el('role-buttons');
+// Steg 1: bransch. Mäklarbranschen är fokus för säljarbetet och får egna
+// rolltitlar; övriga får den generella uppsättningen.
+export function showIndustrySelect(onPick) {
+  const container = el('industry-buttons');
   container.innerHTML = '';
 
-  const buttons = ROLES.map((role) => {
+  const buttons = INDUSTRIES.map((industry) => {
     const button = document.createElement('button');
     button.className = 'choice role';
     button.type = 'button';
+    button.appendChild(renderAvatarCanvas(industry.avatar, 4));
 
-    button.appendChild(renderAvatarCanvas(role.id, 4));
+    const text = document.createElement('span');
+    text.innerHTML = `${industry.label}<span class="role-blurb">${industry.blurb}</span>`;
+    button.appendChild(text);
+    container.appendChild(button);
+    return button;
+  });
+
+  const choose = (index) => {
+    nav.detach();
+    state.industry = INDUSTRIES[index];
+    el('overlay-industry').hidden = true;
+    showRoleSelect(onPick);
+  };
+
+  buttons.forEach((button, index) => button.addEventListener('click', () => choose(index)));
+  const nav = attachListNavigation(buttons, { onPick: choose });
+  el('overlay-industry').hidden = false;
+}
+
+// Steg 2: roll inom branschen. Escape backar till branschvalet.
+export function showRoleSelect(onPick) {
+  const industry = state.industry ?? INDUSTRIES[INDUSTRIES.length - 1];
+  const roles = industry.roles;
+  const container = el('role-buttons');
+  container.innerHTML = '';
+  el('role-other').hidden = true;
+  container.hidden = false;
+  el('role-hint').hidden = false;
+
+  const buttons = roles.map((role) => {
+    const button = document.createElement('button');
+    button.className = 'choice role';
+    button.type = 'button';
+    button.appendChild(renderAvatarCanvas(role.avatar, 4));
 
     const text = document.createElement('span');
     text.innerHTML =
@@ -92,16 +128,65 @@ export function showRoleSelect(onPick) {
     return button;
   });
 
-  const choose = (index) => {
+  const back = () => {
     nav.detach();
-    state.role = ROLES[index];
+    el('overlay-role').hidden = true;
+    showIndustrySelect(onPick);
+  };
+
+  const start = (role) => {
+    state.role = role;
     el('overlay-role').hidden = true;
     showHowTo(onPick, () => showRoleSelect(onPick));
   };
 
+  const choose = (index) => {
+    nav.detach();
+    const role = roles[index];
+    if (role.freeText) askOtherRole(role, start, () => showRoleSelect(onPick));
+    else start(role);
+  };
+
   buttons.forEach((button, index) => button.addEventListener('click', () => choose(index)));
-  const nav = attachListNavigation(buttons, { onPick: choose });
+  const nav = attachListNavigation(buttons, { onPick: choose, onCancel: back });
   el('overlay-role').hidden = false;
+}
+
+// "Annat" är det enda fria fältet före spelet. Texten går bara till oss i
+// leadet — besökarens eget mejl byggs av färdiga bitar och rör den aldrig.
+function askOtherRole(role, onReady, onBack) {
+  const form = el('role-other');
+  const input = el('role-other-input');
+  el('role-buttons').hidden = true;
+  el('role-hint').hidden = true;
+  form.hidden = false;
+  input.value = '';
+  input.focus();
+
+  const clone = form.cloneNode(true);
+  form.replaceWith(clone);
+  const field = clone.querySelector('input');
+  field.focus();
+
+  clone.addEventListener('submit', (event) => {
+    event.preventDefault();
+    onReady({ ...role, label: `Annat: ${cleanRoleText(field.value)}` });
+  });
+
+  clone.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    event.preventDefault();
+    event.stopPropagation();
+    clone.hidden = true;
+    onBack();
+  });
+}
+
+// Rollen hamnar i ett mejl och på ett Planner-kort. Inga vinklar, inga
+// radbrytningar, rimlig längd.
+function cleanRoleText(value) {
+  const cleaned = value.replace(/[<>\r\n]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 60);
+  return cleaned || 'ej angivet';
 }
 
 // Röret är ett erbjudande med glimten i ögat: hoppa över allt arbete, precis

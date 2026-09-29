@@ -349,7 +349,8 @@ export default class PlayScene extends Phaser.Scene {
   }
 
   createPlayer() {
-    const roleId = state.role?.id ?? 'medarbetare';
+    // Flera roller kan dela figur, därför avatar och inte id.
+    const roleId = state.role?.avatar ?? 'medarbetare';
     const textureKey = `avatar-${roleId}`;
     if (!this.textures.exists(textureKey)) {
       this.textures.addCanvas(textureKey, renderAvatarCanvas(roleId, PIXEL_SIZE));

@@ -51,7 +51,19 @@
       </div>
     </div>
 
-    <div id="overlay-role" class="overlay">
+    <div id="overlay-industry" class="overlay">
+      <div class="panel">
+        <h1>The Superintelligent Game</h1>
+        <p class="tagline">Först anpassar vi spelet efter din bransch.</p>
+        <h2>Vilken bransch jobbar du i?</h2>
+        <div id="industry-buttons" class="choices"></div>
+        <p class="hint">
+          <kbd>↑</kbd><kbd>↓</kbd> välj <span>·</span> <kbd>→</kbd> eller <kbd>Enter</kbd> fortsätt
+        </p>
+      </div>
+    </div>
+
+    <div id="overlay-role" class="overlay" hidden>
         <div class="panel">
           <h1>The Superintelligent Game</h1>
           <p class="tagline">
@@ -60,6 +72,23 @@
           </p>
           <h2>Vem är du i spelet?</h2>
           <div id="role-buttons" class="choices"></div>
+
+          <form id="role-other" hidden>
+            <label for="role-other-input">Vad är din roll?</label>
+            <input
+              id="role-other-input"
+              type="text"
+              maxlength="60"
+              placeholder="Skriv din roll"
+              autocomplete="organization-title"
+            />
+            <button type="submit">Fortsätt</button>
+          </form>
+
+          <p class="hint" id="role-hint">
+            <kbd>↑</kbd><kbd>↓</kbd> välj <span>·</span> <kbd>→</kbd> eller <kbd>Enter</kbd> fortsätt
+            <span>·</span> <kbd>Esc</kbd> tillbaka
+          </p>
         </div>
       </div>
 

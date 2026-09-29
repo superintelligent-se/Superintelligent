@@ -69,6 +69,7 @@ export function submissionPayload(contact) {
     genvag: state.shortcut
       ? 'JA — tog röret, hoppade över frågorna. Vet redan att hjälp behövs.'
       : 'nej',
+    bransch: state.industry?.label ?? 'okänd',
     roll: state.role?.label ?? 'okänd',
     speltid_sekunder: Math.round((Date.now() - state.startedAt) / 1000),
     svar: Object.entries(state.answers).map(([id, a]) => ({

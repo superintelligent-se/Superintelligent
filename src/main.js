@@ -1,8 +1,8 @@
 import Phaser from 'phaser';
 import PlayScene from './scenes/PlayScene.js';
-import { buildHud, initMobile, initSoundToggle, showRoleSelect } from './ui.js';
+import { buildHud, initMobile, initSoundToggle, showIndustrySelect } from './ui.js';
 
-showRoleSelect(() => {
+showIndustrySelect(() => {
   buildHud();
   initSoundToggle();
   initMobile();
