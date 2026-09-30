@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>The Superintelligent Game</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="stage">
+      <div id="game-container"></div>
+
+      <div id="hud" hidden>
+        <div id="hud-bars"></div>
+        <div id="hud-progress"></div>
+      </div>
+
+      <button id="sound-toggle" type="button" hidden>LJUD PÅ</button>
+
+      <div id="rotate-hint">Vrid enheten för större bild</div>
+    </div>
+
+    <div id="rotate-overlay">
+      <div class="rotate-inner">
+        <svg class="rotate-icon" viewBox="0 0 120 120" role="img" aria-label="Vrid enheten">
+          <rect class="rotate-phone" x="44" y="18" width="32" height="58" rx="5"
+                fill="none" stroke="currentColor" stroke-width="3" />
+          <circle class="rotate-phone" cx="60" cy="69" r="2.5" fill="currentColor" />
+          <path d="M26 96a38 38 0 0 1 68 0" fill="none" stroke="currentColor"
+                stroke-width="3" stroke-linecap="round" stroke-dasharray="4 6" />
+          <path d="M20 90 L26 98 L34 93" fill="none" stroke="currentColor"
+                stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        <h2>Vrid enheten</h2>
+        <p>
+          Spelet är byggt för liggande läge. Du ser mer av banan, och frågetecknen
+          blir mycket lättare att träffa.
+        </p>
+        <button id="rotate-dismiss" type="button">Spela i stående läge ändå</button>
+      </div>
+    </div>
+
+    <div id="touch-controls" hidden>
+      <div class="touch-cluster">
+        <button id="touch-left" type="button" aria-label="Spring vänster">◀</button>
+        <button id="touch-right" type="button" aria-label="Spring höger">▶</button>
+      </div>
+      <div class="touch-cluster">
+        <button id="touch-down" type="button" aria-label="Ner i röret">▼</button>
+        <button id="touch-jump" type="button" aria-label="Hoppa">▲</button>
+      </div>
+    </div>
+
+    <div id="overlay-industry" class="overlay">
+      <div class="panel">
+        <h1>The Superintelligent Game</h1>
+        <p class="tagline">Först anpassar vi spelet efter din bransch.</p>
+        <h2>Vilken bransch jobbar du i?</h2>
+        <div id="industry-buttons" class="choices"></div>
+        <p class="hint">
+          <kbd>↑</kbd><kbd>↓</kbd> välj <span>·</span> <kbd>→</kbd> eller <kbd>Enter</kbd> fortsätt
+        </p>
+      </div>
+    </div>
+
+    <div id="overlay-role" class="overlay" hidden>
+        <div class="panel">
+          <h2>Vem är du i spelet?</h2>
+          <div id="role-buttons" class="choices"></div>
+
+          <form id="role-other" hidden>
+            <label for="role-other-input">Vad är din roll?</label>
+            <input
+              id="role-other-input"
+              type="text"
+              maxlength="60"
+              placeholder="Skriv din roll"
+              autocomplete="organization-title"
+            />
+            <button type="submit">Fortsätt</button>
+          </form>
+
+          <p class="hint" id="role-hint">
+            <kbd>↑</kbd><kbd>↓</kbd> välj <span>·</span> <kbd>→</kbd> eller <kbd>Enter</kbd> fortsätt
+            <span>·</span> <kbd>Esc</kbd> tillbaka
+          </p>
+        </div>
+      </div>
+
+      <div id="overlay-howto" class="overlay" hidden>
+        <div class="panel">
+          <h2>Så spelar du</h2>
+          <div class="howto">
+            <div class="howto-row">
+              <span class="keys"><kbd>←</kbd><kbd>→</kbd></span>
+              <span class="howto-text">Spring åt vänster och höger</span>
+            </div>
+            <div class="howto-row">
+              <span class="keys"><kbd class="wide">mellanslag</kbd><kbd>×2</kbd><kbd>×3</kbd></span>
+              <span class="howto-text">Hoppa. ×2 i luften når de höga avsatserna, ×3 högst av allt — bara på startplattan</span>
+            </div>
+            <div class="howto-row">
+              <span class="keys"><kbd>↑</kbd><kbd>↓</kbd></span>
+              <span class="howto-text">Välj svar när en fråga är uppe</span>
+            </div>
+            <div class="howto-row">
+              <span class="keys"><kbd>→</kbd><kbd>Enter</kbd></span>
+              <span class="howto-text">
+                Svara. Besvarade frågetecken blir gröna — hoppa upp i dem igen för att ändra dig
+              </span>
+            </div>
+            <div class="howto-row">
+              <span class="keys"><kbd>Esc</kbd></span>
+              <span class="howto-text">
+                Backa ut ur en fråga utan att svara. Under spel: börja om från början
+              </span>
+            </div>
+          </div>
+
+          <div class="howto-figure">
+            <svg viewBox="0 0 220 120" role="img" aria-label="Hoppa upp i frågetecknet underifrån">
+              <rect x="86" y="8" width="44" height="44" rx="3" fill="#e0b23c" stroke="#b8860b" stroke-width="2" />
+              <text x="108" y="40" text-anchor="middle" font-size="26" font-weight="bold" fill="#3a2a00">?</text>
+              <path d="M108 96 L108 62" stroke="#2e9e63" stroke-width="4" stroke-linecap="round" />
+              <path d="M98 72 L108 60 L118 72" fill="none" stroke="#2e9e63" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+              <rect x="96" y="98" width="24" height="18" fill="#2e9e63" />
+            </svg>
+            <p class="howto-text">Träffa frågetecknet <strong>underifrån</strong> för att öppna en fråga.</p>
+          </div>
+
+          <button id="howto-start" type="button">Kör!</button>
+        </div>
+      </div>
+
+      <div id="overlay-question" class="overlay" hidden>
+        <div class="panel">
+          <div id="question-dimension" class="dimension-tag"></div>
+          <h2 id="question-text"></h2>
+          <p id="shortcut-note" class="tagline" hidden></p>
+          <div id="question-options" class="choices"></div>
+          <p class="hint" id="question-hint">
+            <kbd>↑</kbd><kbd>↓</kbd> välj <span>·</span> <kbd>→</kbd> eller <kbd>Enter</kbd> svara
+            <span>·</span> <kbd>Esc</kbd> tillbaka
+          </p>
+        </div>
+      </div>
+
+      <div id="overlay-end" class="overlay" hidden>
+        <div class="panel">
+          <h1>Bana klar!</h1>
+          <p id="end-bonus" class="bonus" hidden></p>
+          <p class="tagline" id="end-intro">
+            Du har just tagit första steget mot att spara tid, pengar och energi med AI.
+            Nästa steg är att veta var du ska börja. Vi bjuder på konkreta insikter om
+            just dina möjligheter — fyll i dina uppgifter så låser du upp vägen mot ett
+            enklare arbetsliv.
+          </p>
+          <form id="lead-form">
+            <input type="text" name="namn" placeholder="Namn" required autocomplete="name" />
+            <input type="text" name="foretag" placeholder="Företag" required autocomplete="organization" />
+            <input type="email" name="epost" placeholder="E-post" required autocomplete="email" />
+            <input type="tel" name="mobil" placeholder="Mobilnummer (frivilligt)" autocomplete="tel" />
+            <input type="text" name="webbplats" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <button type="submit" id="lead-submit">Skicka in mina svar</button>
+            <p class="consent">
+              Genom att skicka godkänner du att vi mejlar dig en sammanfattning och kontaktar dig om ett
+              uppföljande samtal. Läs vår
+              <a href="../policy/integritetspolicy.pdf" target="_blank" rel="noopener">integritetspolicy</a>,
+              <a href="../policy/cookiepolicy.pdf" target="_blank" rel="noopener">cookiepolicy</a> och
+              <a href="../policy/anvandarvillkor.pdf" target="_blank" rel="noopener">användarvillkor</a>.
+            </p>
+          </form>
+          <p id="lead-status" class="status" hidden></p>
+
+          <div id="next-steps" hidden>
+            <h2>Nästa steg</h2>
+            <p class="tagline">
+              Svaren är värda mer än summan av dem. Våra experter läser dem tillsammans och
+              säger vad ni ska börja med — och i vilken ordning resten kommer. Den genomgången
+              får du kostnadsfritt på ditt första möte.
+            </p>
+            <a id="book-link" class="cta-primary" href="#" target="_blank" rel="noopener">
+              Boka mötet — 30 minuter, kostnadsfritt
+              <span>Du får din prioritering, byggd på svaren du just gav</span>
+            </a>
+            <a id="training-link" class="cta-secondary" href="#" target="_blank" rel="noopener">
+              Eller börja träna direkt →
+            </a>
+          </div>
+        </div>
+      </div>
+
+    <script type="module" src="/src/main.js"></script>
+
+  </body>
+</html>

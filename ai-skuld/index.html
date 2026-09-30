@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI-skuld – Vad kostar det er att inte använda AI fullt ut? | Superintelligent</title>
+    <meta
+      name="description"
+      content="Räkna ut vad det kostar er organisation att AI ännu inte används systematiskt. Per år, månad och dag."
+    />
+    <!-- Testversion: ska inte indexeras förrän den ligger på superintelligent.se. -->
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+    <script type="module" src="/src/site/site.js"></script>
+    <script type="module" src="/src/site/ai-skuld.js"></script>
+  </head>
+  <body>
+    <a class="sr-only" href="#main">Hoppa till innehållet</a>
+
+    <header class="topbar">
+      <div class="wrap">
+        <a class="brand" href="../" aria-label="Superintelligent, startsida">
+          <img src="/logo.svg" alt="Superintelligent" width="133" height="26" />
+        </a>
+        <nav class="nav" id="nav" aria-label="Huvudmeny">
+          <a href="../#spelet">Spelet</a>
+          <a href="../#ai-resan">AI-resan</a>
+          <a href="https://www.superintelligent.se/">Träning</a>
+          <a href="../#radgivning">Rådgivning</a>
+          <a href="./" aria-current="page">AI-skuld</a>
+          <a href="https://www.superintelligent.se/pages/om-oss">Om oss</a>
+        </nav>
+        <div class="nav-end">
+          <a class="plain" href="https://www.superintelligent.se/users/sign_in">Logga in</a>
+          <a class="btn btn-p" data-booking href="https://bookings.cloud.microsoft/book/Superintelligent@superintelligent.se/s/B2QIYRV4KUupO4i1Rd8Pow2?ismsaljsauthenabled">Boka möte</a>
+          <button class="menu-toggle" type="button" aria-label="Meny" aria-expanded="false" aria-controls="nav">
+            <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 4h16M2 10h16M2 16h16" stroke="currentColor" stroke-width="2.5" /></svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero">
+        <div class="wrap">
+          <div class="hero-copy">
+            <p class="small"><a href="../">Start</a> / AI-skuld</p>
+            <p class="eb gold">Den dolda AI-skulden</p>
+            <h1 class="h1" style="font-size: clamp(38px, 4.4vw, 62px)">Vad kostar det er att AI ännu inte används systematiskt?</h1>
+            <p class="sub">
+              AI-skulden är vad det kostar er att inte använda AI fullt ut. För många organisationer är
+              den minst <strong style="color: var(--gold)">75 000 kr</strong> per tjänsteman och år i
+              förlorad kapacitet och utebliven genomförandekraft. <a href="#kallor">[1]</a>
+            </p>
+            <div class="btn-row"><a class="btn btn-p" href="#kalkyl">Räkna ut er AI-skuld</a></div>
+          </div>
+          <div class="stack" style="gap: 12px">
+            <div class="screen">
+              <iframe
+                src="https://player.vimeo.com/video/1179114873?dnt=1"
+                title="Den dolda AI-skulden för företag"
+                allow="fullscreen; picture-in-picture"
+                loading="lazy"
+              ></iframe>
+            </div>
+            <p class="small">Förstå er AI-skuld och hur ni kan börja minska den.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt" id="kalkyl">
+        <div class="wrap">
+          <div class="head">
+            <p class="eb gold">Hur mycket pengar förlorar ni?</p>
+            <h2 class="h2">Räkna ut vad bristande AI-användning kostar er</h2>
+            <p class="sub">
+              Ange antal tjänstemän och välj hur försiktigt ni vill räkna. Resultatet uppdateras direkt
+              och kan sparas som underlag till chef och ledning.
+            </p>
+          </div>
+          <div class="calc">
+            <form class="card calc-input" id="calc-form" novalidate>
+              <label for="employees" class="calc-label">Hur många tjänstemän vill ni räkna på?</label>
+              <div class="calc-row">
+                <input id="employees" type="number" min="1" step="1" inputmode="numeric" value="80" placeholder="t.ex. 25, 80 eller 250" aria-describedby="calc-error" />
+                <button type="button" class="chip" data-preset="25">25</button>
+                <button type="button" class="chip" data-preset="80">80</button>
+                <button type="button" class="chip" data-preset="250">250</button>
+              </div>
+              <p class="calc-error" id="calc-error" role="alert"></p>
+              <hr />
+              <fieldset>
+                <legend class="calc-label">Hur försiktigt vill ni räkna?</legend>
+                <div class="levels" id="levels"></div>
+              </fieldset>
+              <p class="level-info" id="level-info"></p>
+              <p class="small" style="font-size: 12px">Samma modell, olika nivåer för hur konservativt eller offensivt ni vill räkna i beslutsunderlaget.</p>
+            </form>
+            <div class="calc-result" id="resultat">
+              <div class="hud-title">Er uppskattade AI-skuld idag</div>
+              <div role="status" aria-live="polite" class="stack" style="gap: 12px">
+                <p class="calc-annual"><span id="r-annual">8 000 000 kr</span> <small>/ år</small></p>
+                <div class="calc-sub">
+                  <div><span>Per månad</span><strong id="r-month">666 667 kr</strong></div>
+                  <div><span>Per dag</span><strong id="r-day">21 918 kr</strong></div>
+                </div>
+              </div>
+              <p class="small" style="font-size: 12px"><span id="r-basis">Beräkningen bygger på nivå Normal (100 000 kr) per tjänsteman och år.</span> <a href="#kallor">[2]</a></p>
+              <p class="calc-note">
+                Detta är ett uppskattat produktivitets- och kapacitetsbortfall, inte en IT-kostnad. Även
+                små tidsförluster per person blir stora belopp över ett år. Därför är detta främst en
+                ledningsfråga.
+              </p>
+              <div class="btn-row">
+                <a class="btn btn-p" data-booking href="https://bookings.cloud.microsoft/book/Superintelligent@superintelligent.se/s/B2QIYRV4KUupO4i1Rd8Pow2?ismsaljsauthenabled">Boka kostnadsfri genomgång</a>
+                <button class="btn btn-o" type="button" id="print">Spara underlag som PDF</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section no-print">
+        <div class="wrap">
+          <div class="head">
+            <p class="eb purple">Resultat, beslutsunderlag och nästa steg</p>
+            <h2 class="h2">Nästa steg för er</h2>
+          </div>
+          <div class="three">
+            <div class="card step-card"><span class="qb">1</span><h3>Spara underlaget</h3><p>Använd det som presentationsunderlag för chef, ledning eller kollegor. <a href="#kallor">[3]</a></p></div>
+            <div class="card step-card"><span class="qb">2</span><h3>Bedöm hur snabbt ni bör agera</h3><p>Ju högre AI-skuld, desto större skäl att ta det första samtalet nu.</p></div>
+            <div class="card step-card"><span class="qb">3</span><h3>Boka en kostnadsfri genomgång</h3><p>Vi visar hur ni kan förankra, starta och implementera stegvis. <a href="#kallor">[4]</a></p></div>
+          </div>
+          <div class="three notes">
+            <div><h3>Vad siffran betyder affärsmässigt</h3><p>Beräkningen synliggör ett bortfall i produktivitet, kapacitet och genomförandekraft som annars lätt förblir osynligt i vardagen.</p></div>
+            <div><h3>Varför underlaget är värt att dela</h3><p>Resultatet är utformat för att kunna skickas vidare internt och ge chef eller ledning ett konkret underlag för att prioritera nästa steg.</p></div>
+            <div><h3>Varför möte är nästa naturliga steg</h3><p>I en kort genomgång visar vi hur ni kan tolka resultatet, välja rätt startpunkt och komma igång utan att göra förändringen större än nödvändigt.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt no-print" id="vagen">
+        <div class="wrap">
+          <div class="head">
+            <p class="eb green">Vägen framåt</p>
+            <h2 class="h2">Från AI-skuld till egen AI-förmåga i fem steg</h2>
+            <p class="sub">
+              Siffran visar varför ni bör agera. Er AI-resa visar hur, utan att göra det för stort,
+              svårt eller tekniktungt. <a href="../#ai-resan">Se hela AI-resan →</a>
+            </p>
+          </div>
+          <ol class="level" style="list-style: none; padding: 0; margin: 0">
+            <li class="col"><div class="txt"><div class="t">Ett första samtal</div><div class="d">Kostnadsfritt. Ni får en första bild av var ni står.</div></div><div class="qb green">1</div><div class="plat" style="height: 20px; border-top-color: var(--green)"></div></li>
+            <li class="col"><div class="txt"><div class="t">Nuläget på djupet</div><div class="d">Hinder och möjligheter hos er.</div></div><div class="qb green">2</div><div class="plat" style="height: 48px; border-top-color: var(--green)"></div></li>
+            <li class="col"><div class="txt"><div class="t">Er plan</div><div class="d">Vad ni ska göra först, och varför.</div></div><div class="qb">3</div><div class="plat" style="height: 76px; border-top-color: var(--gold)"></div></li>
+            <li class="col"><div class="txt"><div class="t">Stöd och träning</div><div class="d">Rådgivning för ledningen, träning för medarbetarna, eller båda.</div></div><div class="qb purple">4</div><div class="plat" style="height: 104px; border-top-color: var(--purple)"></div></li>
+            <li class="col"><div class="txt"><div class="t">Ni klarar er själva</div><div class="d">Kunskapen stannar hos er.</div></div><div class="qb sm">5</div><div class="plat" style="height: 132px; border-top-color: #fde047"></div></li>
+          </ol>
+          <div class="ground"></div>
+          <div class="callout-row">
+            <p class="sub" style="flex-grow: 1; color: var(--ink-2)">Det första samtalet är kostnadsfritt. Vi visar var det är enklast för er att börja.</p>
+            <a class="btn btn-p" data-booking href="https://bookings.cloud.microsoft/book/Superintelligent@superintelligent.se/s/B2QIYRV4KUupO4i1Rd8Pow2?ismsaljsauthenabled">Boka kostnadsfri genomgång</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="metod">
+        <div class="wrap">
+          <div class="head">
+            <p class="eb purple">Metod och källor</p>
+            <h2 class="h2">Så har vi räknat</h2>
+            <p class="sub">Vad forskningen faktiskt visar, vilka nivåer som används i modellen och vad som krävs för att realisera värdet.</p>
+          </div>
+          <div class="acc-list">
+            <details open>
+              <summary>1. Hur ska de tre nivåerna förstås?</summary>
+              <div class="acc-body">
+                <p>Nivåerna är samma tre som i kalkylatorn och i underlaget. De ska läsas som tre beslutsnivåer i samma modell, från försiktig bedömning till högre potential.</p>
+                <table class="levels-table">
+                  <caption class="sr-only">Nivåer för ekonomisk påverkan av AI i kunskapsarbete</caption>
+                  <thead><tr><th scope="col">Nivå</th><th scope="col">Per tjänsteman och år</th><th scope="col">Hur det ska läsas</th></tr></thead>
+                  <tbody id="levels-table"></tbody>
+                </table>
+                <div class="highlight">
+                  <h3>Potential utöver vald nivå</h3>
+                  <p>Den markerade nivån visar vilket antagande som används i kalkylatorn och i beslutsunderlaget. Den är avsedd att ge ett tydligt och jämförbart basvärde för beslut.</p>
+                  <p>Forskningen pekar samtidigt på att större värden kan frigöras när AI används mer systematiskt i arbetssätt, styrning, koordinering och implementering. Organisationer som går vidare i AI-resan kan i många fall frigöra ytterligare potential.</p>
+                </div>
+              </div>
+            </details>
+            <details>
+              <summary>2. Vad påverkar de olika kostnadsnivåerna?</summary>
+              <div class="acc-body">
+                <ul>
+                  <li><strong>Kunskapsintensitet</strong>: ju mer arbetet bygger på analys, syntes och informationshantering, desto större blir potentialen.</li>
+                  <li><strong>Arbetets innehåll</strong>: analys, skrivande, dokumentation, koordinering och beslutsstöd påverkas ofta mer än rent transaktionella moment.</li>
+                  <li><strong>Grad av underanvändning</strong>: ju bredare och mer ojämn AI-användningen är mellan roller, desto större blir det förlorade värdet.</li>
+                  <li><strong>Implementationsmognad</strong>: verktygstillgång räcker inte; faktisk adoption i arbetsflöden avgör utfallet.</li>
+                  <li><strong>Styrning och skalningsförmåga</strong>: governance, uppföljning och tydliga arbetssätt avgör om värdet realiseras säkert och i större skala.</li>
+                  <li><strong>Den ojämna teknologiska gränsen</strong>: värdet blir högre när arbetet ligger inom AI:s användbara område och lägre när uppgiften faller utanför den gränsen.</li>
+                  <li><strong>Kvalitetens ekonomiska betydelse</strong>: där bättre kvalitet och mindre omarbete spelar stor roll blir den högre potentialnivån mer relevant.</li>
+                </ul>
+              </div>
+            </details>
+            <details>
+              <summary>3. Vad visar underlaget sammantaget?</summary>
+              <div class="acc-body">
+                <p>Underlaget visar sammantaget att värdet av AI inte främst uppstår genom tillgång till verktyg, utan genom hur väl AI omsätts i verkliga arbetssätt, prioriteringar och ledning. Forskningen stödjer att effekten ökar när användningen blir mer integrerad, mer strukturerad och mer organisatoriskt förankrad.</p>
+                <p>Det är också därför nivåerna i modellen ska läsas som beslutsnivåer, inte som ett absolut tak för potential. Den valda nivån ger ett rimligt och användbart investeringsunderlag. Organisationer som går från en första aktivering till mer systematisk implementation kan ofta frigöra ytterligare värde.</p>
+                <p>För beslutsfattare innebär det att frågan inte bara är om AI ska användas, utan hur snabbt verksamheten kan gå från en begränsad användning till ett arbetssätt som stärker lönsamhet, minskar konsultberoende och bygger intern kapacitet över tid.</p>
+              </div>
+            </details>
+            <details id="kallor">
+              <summary>4. Exakta källor</summary>
+              <div class="acc-body">
+                <ol>
+                  <li>Dell'Acqua, F., McFowland III, E., Mollick, E., Lifshitz-Assaf, H., Kellogg, K. C., Rajendran, S., Krayer, L., Candelon, F. och Lakhani, K. R. (2023). <em>Navigating the Jagged Technological Frontier: Field Experimental Evidence of the Effects of AI on Knowledge Worker Productivity and Quality</em>. Working Paper 24-013. Harvard Business School.</li>
+                  <li>Forrester Consulting (2025). <em>The Total Economic Impact™ Of Microsoft 365 Copilot: Cost Savings And Business Benefits Enabled By Microsoft 365 Copilot</em>. Mars 2025. Forrester Research, Inc.</li>
+                  <li>Gartner (2024). <em>Gartner Identifies Four Emerging Challenges to Delivering Value from AI Safely and at Scale</em>. Pressmeddelande, 21 oktober.</li>
+                  <li>Gartner (2025). <em>Gartner Survey Shows Supply Chain GenAI Productivity Gains at Individual Level, While Creating New Complications for Organizations</em>. Pressmeddelande, 5 februari.</li>
+                </ol>
+              </div>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section class="section no-print" id="boka" style="padding-top: 0">
+        <div class="wrap">
+          <div class="cta-panel">
+            <div class="stack" style="gap: 18px">
+              <p class="eb gold">Nästa steg</p>
+              <h2 class="h2">Börja betala av er AI-skuld</h2>
+              <p class="sub">Boka en genomgång och se vilka arbetsflöden ni bör börja med för att spara 75 000 kr per tjänsteman och bygga egen AI-förmåga.</p>
+            </div>
+            <div class="stack" style="gap: 14px">
+              <a class="btn btn-p" data-booking href="https://bookings.cloud.microsoft/book/Superintelligent@superintelligent.se/s/B2QIYRV4KUupO4i1Rd8Pow2?ismsaljsauthenabled">Boka kostnadsfri genomgång</a>
+              <a class="btn btn-o" href="../spelet/">Eller spela spelet först</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="wrap">
+        <div class="footer-brand">
+          <img src="/logo.svg" alt="Superintelligent" width="123" height="24" />
+          <p class="eb faint" style="font-size: 12px">Vi demokratiserar AI.</p>
+          <p class="small" style="font-size: 12px">Superintelligent Group AB · 559213-4836</p>
+        </div>
+        <div class="footer-cols">
+          <div>
+            <a href="https://www.superintelligent.se/">Träning</a>
+            <a href="https://www.superintelligent.se/pages/om-oss">Om oss</a>
+            <a href="https://www.superintelligent.se/users/sign_in">Logga in</a>
+          </div>
+          <div>
+            <a href="mailto:hello@superintelligent.se">hello@superintelligent.se</a>
+            <a href="https://www.linkedin.com/company/superintelligent-ai/">LinkedIn</a>
+            <a href="../policy/integritetspolicy.pdf">Integritetspolicy</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -2,7 +2,9 @@
 
 Ett 2D-plattformsspel som ersätter en AI-mognadsassessment. Besökaren springer, hoppar upp i frågetecken och svarar på 15 frågor. Syftet är lead-generering för Superintelligent — inte att vara ett bra spel i sig.
 
-Live: https://superintelligent-se.github.io/Superintelligent/
+Live: https://superintelligent-se.github.io/Superintelligent/ (startsidan), spelet på `/spelet/`, kalkylatorn på `/ai-skuld/`.
+
+Repot är också Superintelligents nya sajt, i testskede: startsidan i roten, spelet på `/spelet/` och AI-skuld-kalkylatorn på `/ai-skuld/`. Sidorna är `noindex` tills sajten ligger på superintelligent.se. Kurserna ligger kvar i Thinkific på www.superintelligent.se, dit sajtens Träning-, Logga in- och materiallänkar pekar tills DNS flyttas.
 
 ## Principer som inte får brytas
 
@@ -75,7 +77,15 @@ src/touch.js           Touch matas in i samma ställen som tangentbordet
 src/avatars.js         Fyra pixelfigurer, 10x14 rutnät
 src/pixelart.js        Delad pixelritare, mynt och utrustning
 src/audio.js           Ljud syntetiserat med WebAudio, inga ljudfiler
+
+index.html             Sajtens startsida
+spelet/index.html      Spelet
+ai-skuld/index.html    Kalkylatorn, modellen kommer från repot superintelligent-se/roi
+src/site/              Sajtens CSS och JS, delar bara config.js med spelet
+public/                Ligger i roten: lead-mail.json, policy-PDF:er, logotyper
 ```
+
+`public/` får inte flytta in under `/spelet/`. Flödet i Power Automate läser `lead-mail.json` från sajtens rot.
 
 `rostagent/` är ett eget arbetsområde utanför spelet: ElevenLabs-agenten som intervjuar medarbetare inför den fördjupade assessmenten. Börja i `rostagent/README.md`. Inget därifrån byggs eller publiceras, och `rostagent/data/` är gitignorerad eftersom intervjuerna är personuppgifter.
 

@@ -2,195 +2,478 @@
 <html lang="sv">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>The Superintelligent Game</title>
-    <link rel="stylesheet" href="/src/style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Superintelligent – Bli ett superintelligent företag</title>
+    <meta
+      name="description"
+      content="AI-rådgivning för ledningen och AI-träning för medarbetarna. Börja med spelet: fem banor, femton frågor, inget formulär."
+    />
+    <!-- Testversion: ska inte indexeras förrän den ligger på superintelligent.se. -->
+    <meta name="robots" content="noindex" />
+    <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+    <script type="module" src="/src/site/site.js"></script>
   </head>
   <body>
-    <div id="stage">
-      <div id="game-container"></div>
+    <a class="sr-only" href="#main">Hoppa till innehållet</a>
 
-      <div id="hud" hidden>
-        <div id="hud-bars"></div>
-        <div id="hud-progress"></div>
-      </div>
-
-      <button id="sound-toggle" type="button" hidden>LJUD PÅ</button>
-
-      <div id="rotate-hint">Vrid enheten för större bild</div>
-    </div>
-
-    <div id="rotate-overlay">
-      <div class="rotate-inner">
-        <svg class="rotate-icon" viewBox="0 0 120 120" role="img" aria-label="Vrid enheten">
-          <rect class="rotate-phone" x="44" y="18" width="32" height="58" rx="5"
-                fill="none" stroke="currentColor" stroke-width="3" />
-          <circle class="rotate-phone" cx="60" cy="69" r="2.5" fill="currentColor" />
-          <path d="M26 96a38 38 0 0 1 68 0" fill="none" stroke="currentColor"
-                stroke-width="3" stroke-linecap="round" stroke-dasharray="4 6" />
-          <path d="M20 90 L26 98 L34 93" fill="none" stroke="currentColor"
-                stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-        <h2>Vrid enheten</h2>
-        <p>
-          Spelet är byggt för liggande läge. Du ser mer av banan, och frågetecknen
-          blir mycket lättare att träffa.
-        </p>
-        <button id="rotate-dismiss" type="button">Spela i stående läge ändå</button>
-      </div>
-    </div>
-
-    <div id="touch-controls" hidden>
-      <div class="touch-cluster">
-        <button id="touch-left" type="button" aria-label="Spring vänster">◀</button>
-        <button id="touch-right" type="button" aria-label="Spring höger">▶</button>
-      </div>
-      <div class="touch-cluster">
-        <button id="touch-down" type="button" aria-label="Ner i röret">▼</button>
-        <button id="touch-jump" type="button" aria-label="Hoppa">▲</button>
-      </div>
-    </div>
-
-    <div id="overlay-industry" class="overlay">
-      <div class="panel">
-        <h1>The Superintelligent Game</h1>
-        <p class="tagline">Först anpassar vi spelet efter din bransch.</p>
-        <h2>Vilken bransch jobbar du i?</h2>
-        <div id="industry-buttons" class="choices"></div>
-        <p class="hint">
-          <kbd>↑</kbd><kbd>↓</kbd> välj <span>·</span> <kbd>→</kbd> eller <kbd>Enter</kbd> fortsätt
-        </p>
-      </div>
-    </div>
-
-    <div id="overlay-role" class="overlay" hidden>
-        <div class="panel">
-          <h2>Vem är du i spelet?</h2>
-          <div id="role-buttons" class="choices"></div>
-
-          <form id="role-other" hidden>
-            <label for="role-other-input">Vad är din roll?</label>
-            <input
-              id="role-other-input"
-              type="text"
-              maxlength="60"
-              placeholder="Skriv din roll"
-              autocomplete="organization-title"
-            />
-            <button type="submit">Fortsätt</button>
-          </form>
-
-          <p class="hint" id="role-hint">
-            <kbd>↑</kbd><kbd>↓</kbd> välj <span>·</span> <kbd>→</kbd> eller <kbd>Enter</kbd> fortsätt
-            <span>·</span> <kbd>Esc</kbd> tillbaka
-          </p>
+    <header class="topbar">
+      <div class="wrap">
+        <a class="brand" href="./" aria-label="Superintelligent, startsida">
+          <img src="/logo.svg" alt="Superintelligent" width="133" height="26" />
+        </a>
+        <nav class="nav" id="nav" aria-label="Huvudmeny">
+          <a href="#spelet">Spelet</a>
+          <a href="#ai-resan">AI-resan</a>
+          <a href="https://www.superintelligent.se/">Träning</a>
+          <a href="#radgivning">Rådgivning</a>
+          <a href="ai-skuld/">AI-skuld</a>
+          <a href="https://www.superintelligent.se/pages/om-oss">Om oss</a>
+        </nav>
+        <div class="nav-end">
+          <a class="plain" href="https://www.superintelligent.se/users/sign_in">Logga in</a>
+          <a class="btn btn-p" data-booking href="https://bookings.cloud.microsoft/book/Superintelligent@superintelligent.se/s/B2QIYRV4KUupO4i1Rd8Pow2?ismsaljsauthenabled">Boka möte</a>
+          <button class="menu-toggle" type="button" aria-label="Meny" aria-expanded="false" aria-controls="nav">
+            <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 4h16M2 10h16M2 16h16" stroke="currentColor" stroke-width="2.5" /></svg>
+          </button>
         </div>
       </div>
+    </header>
 
-      <div id="overlay-howto" class="overlay" hidden>
-        <div class="panel">
-          <h2>Så spelar du</h2>
-          <div class="howto">
-            <div class="howto-row">
-              <span class="keys"><kbd>←</kbd><kbd>→</kbd></span>
-              <span class="howto-text">Spring åt vänster och höger</span>
-            </div>
-            <div class="howto-row">
-              <span class="keys"><kbd class="wide">mellanslag</kbd><kbd>×2</kbd><kbd>×3</kbd></span>
-              <span class="howto-text">Hoppa. ×2 i luften når de höga avsatserna, ×3 högst av allt — bara på startplattan</span>
-            </div>
-            <div class="howto-row">
-              <span class="keys"><kbd>↑</kbd><kbd>↓</kbd></span>
-              <span class="howto-text">Välj svar när en fråga är uppe</span>
-            </div>
-            <div class="howto-row">
-              <span class="keys"><kbd>→</kbd><kbd>Enter</kbd></span>
-              <span class="howto-text">
-                Svara. Besvarade frågetecken blir gröna — hoppa upp i dem igen för att ändra dig
-              </span>
-            </div>
-            <div class="howto-row">
-              <span class="keys"><kbd>Esc</kbd></span>
-              <span class="howto-text">
-                Backa ut ur en fråga utan att svara. Under spel: börja om från början
-              </span>
-            </div>
-          </div>
-
-          <div class="howto-figure">
-            <svg viewBox="0 0 220 120" role="img" aria-label="Hoppa upp i frågetecknet underifrån">
-              <rect x="86" y="8" width="44" height="44" rx="3" fill="#e0b23c" stroke="#b8860b" stroke-width="2" />
-              <text x="108" y="40" text-anchor="middle" font-size="26" font-weight="bold" fill="#3a2a00">?</text>
-              <path d="M108 96 L108 62" stroke="#2e9e63" stroke-width="4" stroke-linecap="round" />
-              <path d="M98 72 L108 60 L118 72" fill="none" stroke="#2e9e63" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
-              <rect x="96" y="98" width="24" height="18" fill="#2e9e63" />
-            </svg>
-            <p class="howto-text">Träffa frågetecknet <strong>underifrån</strong> för att öppna en fråga.</p>
-          </div>
-
-          <button id="howto-start" type="button">Kör!</button>
-        </div>
-      </div>
-
-      <div id="overlay-question" class="overlay" hidden>
-        <div class="panel">
-          <div id="question-dimension" class="dimension-tag"></div>
-          <h2 id="question-text"></h2>
-          <p id="shortcut-note" class="tagline" hidden></p>
-          <div id="question-options" class="choices"></div>
-          <p class="hint" id="question-hint">
-            <kbd>↑</kbd><kbd>↓</kbd> välj <span>·</span> <kbd>→</kbd> eller <kbd>Enter</kbd> svara
-            <span>·</span> <kbd>Esc</kbd> tillbaka
-          </p>
-        </div>
-      </div>
-
-      <div id="overlay-end" class="overlay" hidden>
-        <div class="panel">
-          <h1>Bana klar!</h1>
-          <p id="end-bonus" class="bonus" hidden></p>
-          <p class="tagline" id="end-intro">
-            Du har just tagit första steget mot att spara tid, pengar och energi med AI.
-            Nästa steg är att veta var du ska börja. Vi bjuder på konkreta insikter om
-            just dina möjligheter — fyll i dina uppgifter så låser du upp vägen mot ett
-            enklare arbetsliv.
-          </p>
-          <form id="lead-form">
-            <input type="text" name="namn" placeholder="Namn" required autocomplete="name" />
-            <input type="text" name="foretag" placeholder="Företag" required autocomplete="organization" />
-            <input type="email" name="epost" placeholder="E-post" required autocomplete="email" />
-            <input type="tel" name="mobil" placeholder="Mobilnummer (frivilligt)" autocomplete="tel" />
-            <input type="text" name="webbplats" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
-            <button type="submit" id="lead-submit">Skicka in mina svar</button>
-            <p class="consent">
-              Genom att skicka godkänner du att vi mejlar dig en sammanfattning och kontaktar dig om ett
-              uppföljande samtal. Läs vår
-              <a href="policy/integritetspolicy.pdf" target="_blank" rel="noopener">integritetspolicy</a>,
-              <a href="policy/cookiepolicy.pdf" target="_blank" rel="noopener">cookiepolicy</a> och
-              <a href="policy/anvandarvillkor.pdf" target="_blank" rel="noopener">användarvillkor</a>.
+    <main id="main">
+      <section class="hero">
+        <div class="wrap">
+          <div class="hero-copy">
+            <p class="eb gold"><span class="pixel-dot"></span>The Superintelligent Game</p>
+            <h1 class="h1">Bli ett superintelligent företag</h1>
+            <p class="sub">
+              Från manuellt arbete och personberoende kunskap till en organisation som lär sig och
+              blir bättre varje dag. Börja med spelet: fem banor, femton frågor, inget formulär.
             </p>
-          </form>
-          <p id="lead-status" class="status" hidden></p>
+            <div class="btn-row">
+              <a class="btn btn-p" href="spelet/">
+                <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 2h2v2h2v2h2v2h-2v2h-2v2h-2z" fill="currentColor" /></svg>
+                Spela spelet
+              </a>
+              <a class="btn btn-o" data-booking href="https://bookings.cloud.microsoft/book/Superintelligent@superintelligent.se/s/B2QIYRV4KUupO4i1Rd8Pow2?ismsaljsauthenabled">Boka gratis möte</a>
+            </div>
+            <p class="small">Cirka 5 minuter · Fungerar på mobil · Ingen poäng, ingen dom</p>
+          </div>
+          <div class="stack">
+            <div class="screen">
+              <iframe
+                src="https://player.vimeo.com/video/1231751829?background=1&amp;autoplay=1&amp;muted=1&amp;loop=1&amp;dnt=1"
+                title="Förhandsvisning av spelet"
+                allow="autoplay; fullscreen; picture-in-picture"
+                loading="eager"
+                tabindex="-1"
+              ></iframe>
+              <a class="screen-link" href="spelet/" aria-label="Starta spelet"><span>Spela ▶</span></a>
+            </div>
+          </div>
+        </div>
+      </section>
 
-          <div id="next-steps" hidden>
-            <h2>Nästa steg</h2>
-            <p class="tagline">
-              Svaren är värda mer än summan av dem. Våra experter läser dem tillsammans och
-              säger vad ni ska börja med — och i vilken ordning resten kommer. Den genomgången
-              får du kostnadsfritt på ditt första möte.
+      <section class="logos" id="kunder" aria-labelledby="kunder-titel">
+        <div class="wrap">
+          <h2 class="eb" id="kunder-titel">Organisationer som bygger AI-förmåga med oss</h2>
+          <div class="logo-grid">
+            <img src="/logos/orkla.png" alt="Orkla" width="311" height="113" loading="lazy" />
+            <img src="/logos/generationpep.png" alt="Generation Pep" width="311" height="113" loading="lazy" />
+            <img src="/logos/dole.png" alt="Dole" width="311" height="113" loading="lazy" />
+            <img src="/logos/nowaste.png" alt="Nowaste Logistics" width="311" height="113" loading="lazy" />
+            <img src="/logos/lantmannen.png" alt="Lantmännen" width="311" height="113" loading="lazy" />
+            <img src="/logos/helsingborgs_stad.png" alt="Helsingborgs stad" width="311" height="113" loading="lazy" />
+            <img src="/logos/svalovs_kommun.png" alt="Svalövs kommun" width="311" height="113" loading="lazy" />
+            <img src="/logos/astorp_kommun.png" alt="Åstorps kommun" width="311" height="113" loading="lazy" />
+            <img src="/logos/bastad_kommun.png" alt="Båstads kommun" width="311" height="113" loading="lazy" />
+            <img src="/logos/sjobo_kommun.png" alt="Sjöbo kommun" width="311" height="113" loading="lazy" />
+            <img src="/logos/clausenoloven.png" alt="Clausen &amp; Lovén" width="311" height="113" loading="lazy" />
+            <img src="/logos/bucket_pros.png" alt="Bucket Pros" width="311" height="113" loading="lazy" />
+            <img src="/logos/foodimpex.png" alt="Foodimpex" width="311" height="113" loading="lazy" />
+            <img src="/logos/sakra.png" alt="Sakra" width="311" height="113" loading="lazy" />
+            <img src="/logos/ledson.png" alt="Ledson" width="311" height="113" loading="lazy" />
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="video">
+        <div class="wrap">
+          <div class="head">
+            <p class="eb purple">Så hjälper vi er</p>
+            <h2 class="h2">AI blir en del av vardagen, inte ett projekt vid sidan av</h2>
+          </div>
+          <div class="video-grid">
+            <div class="screen">
+              <iframe
+                src="https://player.vimeo.com/video/1231746132?dnt=1"
+                title="Så hjälper vi organisationer att bli superintelligenta"
+                allow="fullscreen; picture-in-picture"
+                loading="lazy"
+              ></iframe>
+            </div>
+            <div class="method">
+              <div>
+                <h3 class="eb green">01 Var förlorar ni tid?</h3>
+                <p>Vi kartlägger var tid, kunskap och pengar försvinner i manuella moment och personberoenden.</p>
+              </div>
+              <div>
+                <h3 class="eb" style="color: var(--yellow)">02 Vad ger mest effekt?</h3>
+                <p>Vi hittar kombinationerna av er expertis, era processer och AI som ger störst effekt.</p>
+              </div>
+              <div>
+                <h3 class="eb purple">03 Vad ska ni börja med?</h3>
+                <p>Ni får varje möjlighet värderad: affärsvärde, genomförbarhet, risk, ägarskap och tid.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt" id="varfor">
+        <div class="wrap">
+          <div class="head">
+            <p class="eb purple">Varför nu</p>
+            <h2 class="h2">De som ligger först drar ifrån</h2>
+            <p class="sub">
+              På fem månader gick de från att använda AI 2,6 gånger mer än en typisk organisation
+              till 8,3 gånger mer.
             </p>
-            <a id="book-link" class="cta-primary" href="#" target="_blank" rel="noopener">
-              Boka mötet — 30 minuter, kostnadsfritt
-              <span>Du får din prioritering, byggd på svaren du just gav</span>
-            </a>
-            <a id="training-link" class="cta-secondary" href="#" target="_blank" rel="noopener">
-              Eller börja träna direkt →
-            </a>
+          </div>
+          <div class="why-grid">
+            <figure class="card chart" style="margin: 0">
+              <figcaption class="small">AI-användning per medarbetare · en typisk organisation = 1,0</figcaption>
+              <svg viewBox="0 0 624 210" role="img" aria-label="De tio procent som använder AI mest gick från 2,6 till 8,3 gånger en typisk organisation mellan januari och juni 2026.">
+                <line x1="40" y1="170" x2="560" y2="170" stroke="#5b6478" stroke-width="3" stroke-dasharray="6 6" />
+                <line x1="40" y1="124" x2="560" y2="38" stroke="#a78bfa" stroke-width="6" />
+                <text x="40" y="108" fill="#c4b5fd" font-size="26" font-weight="800" font-family="Hanken Grotesk, sans-serif">2,6×</text>
+                <text x="496" y="26" fill="#c4b5fd" font-size="32" font-weight="800" font-family="Hanken Grotesk, sans-serif">8,3×</text>
+                <text x="40" y="200" fill="#8892b0" font-size="13" font-family="IBM Plex Mono, monospace">JAN 2026</text>
+                <text x="488" y="200" fill="#8892b0" font-size="13" font-family="IBM Plex Mono, monospace">JUN 2026</text>
+                <text x="330" y="160" fill="#8892b0" font-size="13" font-family="IBM Plex Mono, monospace">Typisk organisation</text>
+              </svg>
+              <p class="small" style="font-size: 11px">Källa: OpenAI Enterprise Signals. Jämförelsen gäller de tio procent som använder AI mest.</p>
+            </figure>
+            <div class="moves">
+              <h3 style="font-size: 26px; font-weight: 800">Två saker behöver hända samtidigt</h3>
+              <div class="move" style="--c: var(--green)">
+                <div>
+                  <p class="eb green" style="margin: 0">Bottom-up · Alla medarbetare tränar</p>
+                  <p>Färdighet och motivation skapar daglig användning. Medarbetarna ser nya behov och blir bättre beställare.</p>
+                </div>
+              </div>
+              <div class="move" style="--c: var(--purple)">
+                <div>
+                  <p class="eb purple" style="margin: 0">Top-down · Ledningen får stöd att välja rätt</p>
+                  <p>Rådgivning ger riktning för möjligheter, data, investeringar, ansvar och uppföljning.</p>
+                </div>
+              </div>
+              <div class="debt">
+                <strong>75 000 kr</strong>
+                <span>
+                  Så mycket kostar det minst, per tjänsteman och år, att inte använda AI fullt ut. Vi
+                  kallar det AI-skulden. <a href="ai-skuld/">Räkna ut er AI-skuld →</a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="ai-resan">
+        <div class="wrap">
+          <div class="head">
+            <p class="eb gold">Er AI-resa · Bana för bana</p>
+            <h2 class="h2">Er AI-resa: fem steg till egen AI-förmåga</h2>
+            <p class="sub">Samma väg för alla fram till planen. Därefter väljer ni stöd efter behov och ambition.</p>
+          </div>
+          <ol class="level" style="list-style: none; padding: 0; margin: 0">
+            <li class="col">
+              <div class="txt"><div class="t">Ett första samtal</div><div class="d">Kostnadsfritt. Ni får en första bild av var ni står</div></div>
+              <div class="qb green">1</div>
+              <div class="plat" style="height: 30px"></div>
+            </li>
+            <li class="col">
+              <div class="txt"><div class="t">Nuläget på djupet</div><div class="d">Hinder och möjligheter hos er</div></div>
+              <div class="qb green">2</div>
+              <div class="plat" style="height: 70px"></div>
+            </li>
+            <li class="col">
+              <div class="txt"><div class="t">Er plan</div><div class="d">Vad ni ska göra först, och varför</div></div>
+              <div class="qb">3</div>
+              <div class="plat" style="height: 110px"></div>
+            </li>
+            <li class="col wide">
+              <div>
+                <div class="txt"><div class="eb purple">Top-down</div><div class="t">Stöd till ledningen</div></div>
+                <div class="qb purple" style="font-size: 18px">4A</div>
+                <div class="plat" style="height: 150px; border-top-color: var(--purple)"></div>
+              </div>
+              <div>
+                <div class="txt"><div class="eb green">Bottom-up</div><div class="t">Träning för medarbetarna</div></div>
+                <div class="qb green" style="font-size: 18px">4B</div>
+                <div class="plat" style="height: 150px; border-top-color: var(--green)"></div>
+              </div>
+            </li>
+            <li class="col">
+              <div class="txt"><div class="t">Ni klarar er själva</div><div class="d">Information, kunskap och färdigheter stannar hos er</div></div>
+              <div class="flag" aria-hidden="true"></div>
+              <div class="qb sm">5</div>
+              <div class="plat" style="height: 190px"></div>
+            </li>
+          </ol>
+          <div class="ground"></div>
+          <div class="under">
+            <div class="tag" style="--c: var(--gold)">
+              <div>
+                <span class="eb">Inför steg 1</span>
+                <strong><a href="#spelet">Spelet</a></strong>
+                <p>Spela i webbläsaren före mötet, så har vi något att utgå från</p>
+              </div>
+            </div>
+            <div class="tag" style="--c: #7fa5ea">
+              <div>
+                <span class="eb">Inför steg 2</span>
+                <strong>Intervjuer när det passar</strong>
+                <p>Era medarbetare svarar en AI-röst när de har tid. Mötet ägnas åt tolkning.</p>
+              </div>
+            </div>
+            <div class="spacer"></div>
+            <div class="wide">
+              <div class="split-bar"></div>
+              <p class="small">Det ena, det andra eller båda</p>
+            </div>
+            <div class="spacer"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt" id="spelet">
+        <div class="wrap game-grid">
+          <div class="stack" style="gap: 24px">
+            <p class="eb gold">Spelet · Fem minuter</p>
+            <h2 class="h2">Fem banor. Femton frågor. Ingen poäng.</h2>
+            <p class="sub">
+              Du svarar genom att hoppa upp i frågetecken. Efteråt får du en återblick på mejl, och vi
+              har något konkret att utgå från i ert första samtal.
+            </p>
+            <ol class="steps-list">
+              <li><span class="qb sm">1</span>Välj vem du är i spelet</li>
+              <li><span class="qb sm">2</span>Spring, hoppa och slå upp frågetecknen</li>
+              <li><span class="qb sm">3</span>Boka en genomgång av det du svarat</li>
+            </ol>
+            <div class="btn-row"><a class="btn btn-p" href="spelet/">Spela nu</a></div>
+          </div>
+          <div>
+            <div class="card hud">
+              <div class="hud-title">Fem banor, fem frågor · utrustning du kan vinna</div>
+              <div class="hud-row" style="--c: #2e9e63"><i></i><strong>Vem håller i rodret?</strong><span>AI-lead som följer dig</span></div>
+              <div class="hud-row" style="--c: #fbbf24"><i></i><strong>Vad kan ni redan idag?</strong><span>Fart</span></div>
+              <div class="hud-row" style="--c: #4f7fd6"><i></i><strong>Vad har ni att jobba med?</strong><span>Datakub</span></div>
+              <div class="hud-row" style="--c: #f97316"><i></i><strong>Vad får ni göra?</strong><span>Sköld</span></div>
+              <div class="hud-row" style="--c: #7c3aed"><i></i><strong>Vad skulle ni kunna göra?</strong><span>Jetpack</span></div>
+            </div>
+            <div class="pipe">
+              <div class="pipe-icon" aria-hidden="true"></div>
+              <div>
+                <strong>Vet ni redan att ni behöver hjälp?</strong>
+                <p>
+                  Ta röret. Det hoppar över hela banan, rakt till bokningen.
+                  <a data-booking href="https://bookings.cloud.microsoft/book/Superintelligent@superintelligent.se/s/B2QIYRV4KUupO4i1Rd8Pow2?ismsaljsauthenabled">Boka direkt →</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="traning">
+        <div class="wrap">
+          <div class="head-row">
+            <div class="head">
+              <p class="eb green">Bottom-up · Träning för medarbetarna</p>
+              <h2 class="h2">Era medarbetare går från nyfikna till att bygga egna agenter</h2>
+              <p class="sub">
+                Bottom-up betyder att förmågan byggs underifrån, hos dem som gör jobbet. Sex steg,
+                från inspiration till en agent som löser ett verkligt arbetsflöde.
+              </p>
+            </div>
+            <a class="btn btn-o" href="https://www.superintelligent.se/collections">Kurser &amp; priser</a>
+          </div>
+          <ol class="level" style="list-style: none; padding: 0; margin: 0">
+            <li class="col">
+              <div class="txt"><div class="t">Se vad som är möjligt</div><div class="d">Inspirationsföreläsning för ledningsgrupp eller hela organisationen</div></div>
+              <div class="qb green">1</div>
+              <div class="plat" style="height: 20px; border-top-color: var(--green)"></div>
+            </li>
+            <li class="col">
+              <div class="txt"><div class="t">Spara tid i vardagen</div><div class="d">E-learning 1 · ChatGPT gratisversion</div></div>
+              <div class="qb green">2</div>
+              <div class="plat" style="height: 60px; border-top-color: var(--green)"></div>
+            </li>
+            <li class="col">
+              <div class="txt"><div class="t">Jobba smartare i Microsoft 365</div><div class="d">E-learning 2 · Copilot Premium</div></div>
+              <div class="qb green">3</div>
+              <div class="plat" style="height: 100px; border-top-color: var(--green)"></div>
+            </li>
+            <li class="col">
+              <div class="txt"><div class="t">Låt AI göra jobb i flera steg</div><div class="d">E-learning 3 · ChatGPT betalversion</div></div>
+              <div class="qb green">4</div>
+              <div class="plat" style="height: 140px; border-top-color: var(--green)"></div>
+            </li>
+            <li class="col">
+              <div class="txt"><div class="t">Bygg er första agent</div><div class="d">Agent Masterclass · halvdag, max 10 deltagare</div></div>
+              <div class="qb green">5</div>
+              <div class="plat" style="height: 180px; border-top-color: var(--green)"></div>
+            </li>
+            <li class="col">
+              <div class="txt"><div class="t">En agent i drift</div><div class="d">För ett arbetsflöde som tar mycket av er tid i dag</div></div>
+              <div class="qb done">6</div>
+              <div class="plat" style="height: 220px; border-top-color: var(--green)"></div>
+            </li>
+          </ol>
+          <div class="ground"></div>
+          <div class="callout-row">
+            <p class="callout">Ni gör e-learningen före masterclassen. Efter fyra timmar har ni en första agent på plats.</p>
+            <p class="small">E-learning från 2 990 kr · Steg 1 + 2 paketpris 4 990 kr</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt" id="mojlighets-ai" style="border-bottom: 2px solid var(--line)">
+        <div class="wrap">
+          <div class="head">
+            <h2 class="h2">Först sparar ni tid. Sedan gör ni sådant som inte gick förut.</h2>
+            <p class="sub">Träning ger er förmågan. Rådgivning hjälper er att använda den på rätt problem.</p>
+          </div>
+          <div class="bridge">
+            <div class="card">
+              <p class="eb green" style="margin: 0">1 AI-träning</p>
+              <p>Trygghet som skapar motivation</p>
+            </div>
+            <div class="line" aria-hidden="true"></div>
+            <div class="card">
+              <p class="eb green" style="margin: 0">2 Effektiviserings-AI</p>
+              <p>AI som gör det ni redan gör snabbare och bättre</p>
+            </div>
+            <div class="jump">
+              <strong>AI-rådgivning</strong>
+              <span>gör språnget möjligt</span>
+            </div>
+            <div class="goal">
+              <p class="eb" style="margin: 0">3 Möjlighets-AI</p>
+              <strong>Tidigare utom räckhåll. Nu möjligt.</strong>
+              <p>AI som gör det ni inte kunde förut: analyser, tjänster och arbetsflöden ni saknade tid, kompetens eller resurser för</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="radgivning">
+        <div class="wrap">
+          <div class="head">
+            <p class="eb purple">Top-down · Rådgivning för ledningen</p>
+            <h2 class="h2">Stöd till er som ska leda AI-arbetet</h2>
+            <p class="sub">
+              Top-down betyder att ledningen sätter riktning och prioriterar. Tre nivåer, efter hur
+              stort ansvar ni har och hur mycket stöd ni vill ha.
+            </p>
+          </div>
+          <div class="tiers">
+            <article class="card tier" style="--c: #a78bfa; --pbg: #2a1d4a">
+              <p class="eb purple">01 · Riktning</p>
+              <h3>För en ledare eller chef</h3>
+              <p class="price">9 900 kr / mån</p>
+              <p class="prod">AI Advisor</p>
+              <p class="small">Er rådgivare: Christofer Nässil</p>
+              <hr />
+              <ul>
+                <li>Månadsvis rådgivning</li>
+                <li>Prioritering av AI-initiativ</li>
+                <li>Beslutsstöd inför nästa steg</li>
+              </ul>
+            </article>
+            <article class="card tier" style="--c: #8b5cf6; --pbg: #3b1f78">
+              <p class="eb purple">02 · Genomförande</p>
+              <h3>För avdelningschef och team</h3>
+              <p class="price">19 900 kr / mån</p>
+              <p class="prod">AI Accelerator</p>
+              <p class="small">Er rådgivare: Christofer Nässil</p>
+              <hr />
+              <ul>
+                <li>Gemensam AI Action Plan</li>
+                <li>Uppföljning av genomförandet</li>
+                <li>Stöd när hinder uppstår</li>
+              </ul>
+            </article>
+            <article class="card tier top" style="--c: #7c3aed; --pbg: #7c3aed">
+              <p class="eb purple">03 · Långsiktigt värde</p>
+              <h3>För VD, ledning eller styrelse</h3>
+              <p class="price">34 900 kr / mån</p>
+              <p class="prod">Executive AI Partner</p>
+              <p class="small">Er rådgivare: Thomas Dalebring</p>
+              <hr />
+              <ul>
+                <li>Strategisk AI-ledning</li>
+                <li>Prioritering av portfölj och investeringar</li>
+                <li>Governance och omvärldsbevakning</li>
+              </ul>
+            </article>
+          </div>
+          <p class="small" style="margin-top: 24px">Ni betalar tio månader per år. Ingen avgift under sommaruppehållet.</p>
+        </div>
+      </section>
+
+      <section class="section" id="boka" style="padding-top: 32px">
+        <div class="wrap">
+          <div class="cta-panel">
+            <div class="stack" style="gap: 20px">
+              <p class="eb gold">Steg 1 · Kostnadsfritt</p>
+              <h2 class="h2">Boka ett första samtal</h2>
+              <p class="sub">
+                15 minuter. Vi pratar om var ni står och vad som är rimligt att börja med. Har ni
+                spelat går vi igenom era svar.
+              </p>
+              <div class="btn-row">
+                <a class="btn btn-p" data-booking href="https://bookings.cloud.microsoft/book/Superintelligent@superintelligent.se/s/B2QIYRV4KUupO4i1Rd8Pow2?ismsaljsauthenabled">Boka gratis möte</a>
+                <a class="btn btn-o" href="spelet/">Spela först</a>
+              </div>
+            </div>
+            <ul class="cta-facts">
+              <li><span class="qb sm">✓</span>Kostnadsfritt</li>
+              <li><span class="qb sm">✓</span>15 minuter</li>
+              <li><span class="qb sm">✓</span>Ni väljer tid som passar</li>
+            </ul>
+          </div>
+          <div class="material">
+            <strong>Gratis material:</strong>
+            <a href="https://www.superintelligent.se/products/digital_downloads/new-digital-download">Whitepaper: Mognadsgap-modellen</a>
+            <a href="https://www.superintelligent.se/products/digital_downloads/infographic_besmastra_AI">Infografik: Bemästra AI</a>
+            <a href="https://www.superintelligent.se/products/communities/supercommunity">Supercommunity</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="wrap">
+        <div class="footer-brand">
+          <img src="/logo.svg" alt="Superintelligent" width="123" height="24" />
+          <p class="eb faint" style="font-size: 12px">Vi demokratiserar AI.</p>
+          <p class="small" style="font-size: 12px">Superintelligent Group AB · 559213-4836</p>
+        </div>
+        <div class="footer-cols">
+          <div>
+            <a href="https://www.superintelligent.se/">Träning</a>
+            <a href="https://www.superintelligent.se/pages/om-oss">Om oss</a>
+            <a href="https://www.superintelligent.se/users/sign_in">Logga in</a>
+          </div>
+          <div>
+            <a href="mailto:hello@superintelligent.se">hello@superintelligent.se</a>
+            <a href="https://www.linkedin.com/company/superintelligent-ai/">LinkedIn</a>
+            <a href="policy/integritetspolicy.pdf">Integritetspolicy</a>
           </div>
         </div>
       </div>
-
-    <script type="module" src="/src/main.js"></script>
-
+    </footer>
   </body>
 </html>
