@@ -77,6 +77,8 @@ src/pixelart.js        Delad pixelritare, mynt och utrustning
 src/audio.js           Ljud syntetiserat med WebAudio, inga ljudfiler
 ```
 
+`rostagent/` är ett eget arbetsområde utanför spelet: ElevenLabs-agenten som intervjuar medarbetare inför den fördjupade assessmenten. Börja i `rostagent/README.md`. Inget därifrån byggs eller publiceras, och `rostagent/data/` är gitignorerad eftersom intervjuerna är personuppgifter.
+
 Touch och tangentbord möts i `PlayScene.update()`. Mobil är inte en egen version — det finns ett inmatningslager och några media queries, inget annat dupliceras.
 
 ## Köra och testa

@@ -11,3 +11,6 @@ superintelligent-ai-os_OLD_DO_NOT_USE/
 
 # Genereras ur gameData.js vid dev/build
 public/lead-mail.json
+
+# Intervjudata från röstagenten — personuppgifter, får aldrig committas
+rostagent/data/
