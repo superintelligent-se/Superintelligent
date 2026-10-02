@@ -508,17 +508,22 @@ h3 {
 }
 
 .logo-grid {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 12px 32px;
+  --s: 1;
+  max-width: 980px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   align-items: center;
+  gap: 32px 56px;
 }
 
+/* Logotyperna är beskurna till sitt innehåll och färgade i bakgrundens
+   mörka ton, så att samma mellanrum ger jämna avstånd. --w är varje
+   logotyps bredd på desktop, --s skalar ner dem på mobil. */
 .logo-grid img {
-  width: 100%;
-  max-width: 180px;
+  width: calc(var(--w) * var(--s));
   height: auto;
-  margin: 0 auto;
 }
 
 /* Video och metod */
@@ -1262,9 +1267,6 @@ h3 {
     gap: 40px;
   }
 
-  .logo-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
 }
 
 @media (max-width: 900px) {
@@ -1298,8 +1300,8 @@ h3 {
 
 @media (max-width: 480px) {
   .logo-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px 20px;
+    --s: 0.87;
+    gap: 24px 28px;
   }
 }
 
