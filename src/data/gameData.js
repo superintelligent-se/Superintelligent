@@ -1,12 +1,70 @@
 // prop förklarar figurens attribut med ett ögonkast — det sitter på rollen,
 // aldrig på personen.
-// Två vägar in. Mäklarbranschen är fokus för säljarbetet och har egna
-// rolltitlar; övriga får den generella uppsättningen. Frågorna är desamma —
-// det är rollerna och tilltalet som skiljer.
+// Fyra vägar in: Enterprise, mäklare, hotell och övriga. De tre första har
+// egna rolltitlar, övriga får den generella uppsättningen. Frågorna är
+// desamma — det är rollerna och tilltalet som skiljer.
 //
 // avatar pekar ut pixelfiguren, skild från id så flera roller kan dela figur.
 // prop förklarar figurens attribut — det sitter på rollen, aldrig på personen.
 export const INDUSTRIES = [
+  {
+    id: 'enterprise',
+    label: 'Enterprise och stora företag',
+    blurb: 'Koncerner och organisationer med egna IT- och HR-funktioner.',
+    avatar: 'cio',
+    roles: [
+      {
+        id: 'ledning',
+        label: 'Ledningsgrupp / C-nivå',
+        avatar: 'vd',
+        blurb: 'Du sätter riktningen för hela organisationen.',
+        prop: 'Krona — du bestämmer vart vi ska',
+      },
+      {
+        id: 'cio',
+        label: 'IT-chef / CIO',
+        avatar: 'cio',
+        blurb: 'Du ansvarar för systemen AI ska byggas på.',
+        prop: 'Laptop — systemen ska hålla',
+      },
+      {
+        id: 'dataai',
+        label: 'Data- / AI-lead',
+        avatar: 'dataai',
+        blurb: 'Du driver AI-arbetet och datan det bygger på.',
+        prop: 'Datakub — du gör datan användbar',
+      },
+      {
+        id: 'affarsomrade',
+        label: 'Affärsområdes- / avdelningschef',
+        avatar: 'chef',
+        blurb: 'Du leder en del av verksamheten.',
+        prop: 'Headset — i möten hela dagen',
+      },
+      {
+        id: 'hr',
+        label: 'HR och kompetens',
+        avatar: 'hr',
+        blurb: 'Du ansvarar för att medarbetarna kan och vill.',
+        prop: 'Hjärta — människorna först',
+      },
+      {
+        id: 'medarbetare',
+        label: 'Medarbetare',
+        avatar: 'medarbetare',
+        blurb: 'Du gör jobbet där AI möter vardagen.',
+        prop: 'Kaffemugg — du får saker gjorda',
+      },
+      {
+        id: 'annat',
+        label: 'Annat',
+        avatar: 'foretag',
+        blurb: 'Skriv in din roll i nästa steg.',
+        prop: 'Ingen given roll — du fyller i själv',
+        freeText: true,
+      },
+    ],
+  },
   {
     id: 'maklare',
     label: 'Mäklarbranschen',
@@ -66,9 +124,60 @@ export const INDUSTRIES = [
     ],
   },
   {
+    id: 'hotell',
+    label: 'Hotellbranschen',
+    blurb: 'Rollerna är hotellets egna.',
+    avatar: 'reception',
+    roles: [
+      {
+        id: 'agare',
+        label: 'Ägare',
+        avatar: 'entreprenor',
+        blurb: 'Du äger hotellet och risken.',
+        prop: 'Keps — du bär alla hattar själv',
+      },
+      {
+        id: 'hotelldirektor',
+        label: 'Hotelldirektör',
+        avatar: 'hotelldirektor',
+        blurb: 'Du driver hotellet i vardagen.',
+        prop: 'Guldnyckel — huset är ditt ansvar',
+      },
+      {
+        id: 'avdelningschef',
+        label: 'Avdelningschef',
+        avatar: 'hotellchef',
+        blurb: 'Du leder reception, restaurang eller städ.',
+        prop: 'Klippbräda — schemat ska gå ihop',
+      },
+      {
+        id: 'reception',
+        label: 'Reception / Front office',
+        avatar: 'reception',
+        blurb: 'Du möter gästen först.',
+        prop: 'Ringklocka — gästen väntar inte',
+      },
+      {
+        id: 'event',
+        label: 'Försäljning & event',
+        avatar: 'event',
+        blurb: 'Du fyller rummen och salarna.',
+        prop: 'Kalender — du fyller huset',
+      },
+      {
+        id: 'annat',
+        label: 'Annat',
+        avatar: 'foretag',
+        blurb: 'Skriv in din roll i nästa steg.',
+        prop: 'Ingen given roll — du fyller i själv',
+        freeText: true,
+      },
+    ],
+  },
+  {
     id: 'annan',
-    label: 'Annan bransch',
-    blurb: 'Den generella versionen.',
+    label: 'Övriga branscher',
+    blurb: 'Små och medelstora företag i alla andra branscher.',
     avatar: 'foretag',
     roles: [
       {

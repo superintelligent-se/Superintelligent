@@ -24,7 +24,14 @@ Bekräftelsemejlet till besökaren är en återblick, inte en analys: mynten, ut
 
 Superintelligent säljer AI-rådgivning (top-down) och AI-träning (bottom-up). Spelet ersätter steg 1–2 i deras kundresa: kostnadsfritt första möte och fördjupad assessment.
 
-**Mäklarbranschen är fokus för säljarbetet.** Spelet börjar därför med ett branschval: mäklare eller annan bransch. Valet styr rolluppsättningen — mäklare får Franchiseägare/Ägare, Kontorschef, VD, Teamledare, Mäklare, Säljstöd/Assistent och Annat, övriga får VD/Ledning, Chef, Medarbetare, Entreprenör och Annat. Annat finns i båda och är fritext. Frågorna är gemensamma; skulle de branschanpassas krävs en egen uppsättning i `gameData.js` och att `lead-mail.json` följer med.
+**Spelet börjar med ett branschval med fyra alternativ:** Enterprise och stora företag, Mäklarbranschen, Hotellbranschen och Övriga branscher (små och medelstora företag i alla andra branscher). Valet styr rolluppsättningen:
+
+- **Enterprise:** Ledningsgrupp/C-nivå, IT-chef/CIO, Data-/AI-lead, Affärsområdes-/avdelningschef, HR och kompetens, Medarbetare, Annat.
+- **Mäklare:** Franchiseägare/Ägare, Kontorschef, VD, Teamledare, Mäklare, Säljstöd/Assistent, Annat.
+- **Hotell:** Ägare, Hotelldirektör, Avdelningschef, Reception/Front office, Försäljning & event, Annat.
+- **Övriga:** VD/Ledning, Chef, Medarbetare, Entreprenör, Annat.
+
+Annat finns i alla och är fritext. Frågorna är gemensamma; skulle de branschanpassas krävs en egen uppsättning i `gameData.js` och att `lead-mail.json` följer med. Branschens namn skickas med i leadet som `bransch`.
 
 Roller har `avatar` skild från `id` så flera roller kan dela pixelfigur.
 
@@ -74,7 +81,7 @@ src/ui.js              Alla DOM-dialoger, HUD, lead-formulär, mobilinit
 src/config.js          Boknings- och träningslänkar, delas med mejlet
 scripts/               lead-mail.json och policy-PDF:er
 src/touch.js           Touch matas in i samma ställen som tangentbordet
-src/avatars.js         Fyra pixelfigurer, 10x14 rutnät
+src/avatars.js         Pixelfigurerna, 10x14 rutnät
 src/pixelart.js        Delad pixelritare, mynt och utrustning
 src/audio.js           Ljud syntetiserat med WebAudio, inga ljudfiler
 

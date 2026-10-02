@@ -749,6 +749,26 @@ body:has(.overlay:not([hidden])) #touch-controls {
   background: #6d28d9;
 }
 
+.role-other-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.role-other-actions button[type='submit'] {
+  flex-grow: 1;
+}
+
+#role-other button.secondary {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--muted);
+}
+
+#role-other button.secondary:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--ink);
+}
+
 /* Instruktioner */
 
 .howto {
@@ -935,4 +955,13 @@ kbd.wide {
 .status[hidden],
 #lead-form[hidden] {
   display: none;
+}
+
+/* Fyra branscher får inte plats under varandra på en liggande telefon.
+   Två kolumner gör att alla syns utan att man behöver scrolla. */
+@media (max-height: 500px) and (min-width: 600px) {
+  #industry-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }

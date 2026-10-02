@@ -72,8 +72,8 @@ function attachListNavigation(buttons, { onPick, onCancel = null }) {
 // Vrid-uppmaningen ska möta besökaren direkt, före startskärmen.
 initRotateHint();
 
-// Steg 1: bransch. Mäklarbranschen är fokus för säljarbetet och får egna
-// rolltitlar; övriga får den generella uppsättningen.
+// Steg 1: bransch. Enterprise, mäklare och hotell har egna rolltitlar;
+// övriga får den generella uppsättningen.
 export function showIndustrySelect(onPick) {
   const container = el('industry-buttons');
   container.innerHTML = '';
@@ -168,18 +168,31 @@ function askOtherRole(role, onReady, onBack) {
   const field = clone.querySelector('input');
   field.focus();
 
-  clone.addEventListener('submit', (event) => {
-    event.preventDefault();
-    onReady({ ...role, label: `Annat: ${cleanRoleText(field.value)}` });
-  });
-
-  clone.addEventListener('keydown', (event) => {
+  // Escape lyssnas på hela sidan, inte bara i formuläret. Annars fastnade den
+  // som klickat bredvid fältet, och på mobil fanns ingen väg tillbaka alls.
+  const onKeyDown = (event) => {
     if (event.key !== 'Escape') return;
     event.preventDefault();
     event.stopPropagation();
+    leave();
+  };
+
+  const detach = () => document.removeEventListener('keydown', onKeyDown, true);
+
+  const leave = () => {
+    detach();
     clone.hidden = true;
     onBack();
+  };
+
+  clone.addEventListener('submit', (event) => {
+    event.preventDefault();
+    detach();
+    onReady({ ...role, label: `Annat: ${cleanRoleText(field.value)}` });
   });
+
+  clone.querySelector('#role-other-back').addEventListener('click', leave);
+  document.addEventListener('keydown', onKeyDown, true);
 }
 
 // Rollen hamnar i ett mejl och på ett Planner-kort. Inga vinklar, inga
