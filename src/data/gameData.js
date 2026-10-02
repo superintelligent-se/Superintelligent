@@ -1,8 +1,10 @@
 // prop förklarar figurens attribut med ett ögonkast — det sitter på rollen,
 // aldrig på personen.
-// Fyra vägar in: Enterprise, mäklare, hotell och övriga. De tre första har
-// egna rolltitlar, övriga får den generella uppsättningen. Frågorna är
-// desamma — det är rollerna och tilltalet som skiljer.
+// Fyra vägar in: två storlekar som gäller alla branscher (Enterprise och
+// små och medelstora företag) och två branscher med egna rolltitlar
+// (mäklare och hotell). Frågorna är desamma — det är rollerna och tilltalet
+// som skiljer. Varje vals figur finns också bland dess roller, så den man
+// ser på första skärmen går att välja.
 //
 // avatar pekar ut pixelfiguren, skild från id så flera roller kan dela figur.
 // prop förklarar figurens attribut — det sitter på rollen, aldrig på personen.
@@ -10,7 +12,7 @@ export const INDUSTRIES = [
   {
     id: 'enterprise',
     label: 'Enterprise och stora företag',
-    blurb: 'Koncerner och organisationer med egna IT- och HR-funktioner.',
+    blurb: 'Över 250 anställda, i alla branscher.',
     avatar: 'cio',
     roles: [
       {
@@ -66,9 +68,53 @@ export const INDUSTRIES = [
     ],
   },
   {
+    id: 'smf',
+    label: 'Små och medelstora företag',
+    blurb: 'Upp till 250 anställda, i alla branscher.',
+    avatar: 'entreprenor',
+    roles: [
+      {
+        id: 'vd',
+        label: 'VD / Ledning',
+        avatar: 'vd',
+        blurb: 'Du sätter riktningen för hela bolaget.',
+        prop: 'Krona — du bestämmer vart vi ska',
+      },
+      {
+        id: 'chef',
+        label: 'Chef',
+        avatar: 'chef',
+        blurb: 'Du leder ett team eller en avdelning.',
+        prop: 'Headset — i möten hela dagen',
+      },
+      {
+        id: 'medarbetare',
+        label: 'Medarbetare',
+        avatar: 'medarbetare',
+        blurb: 'Du gör jobbet där AI möter vardagen.',
+        prop: 'Kaffemugg — du får saker gjorda',
+      },
+      {
+        id: 'entreprenor',
+        label: 'Entreprenör',
+        avatar: 'entreprenor',
+        blurb: 'Du är hela organisationen — och dess AI-lead.',
+        prop: 'Keps — du bär alla hattar själv',
+      },
+      {
+        id: 'annat',
+        label: 'Annat',
+        avatar: 'foretag',
+        blurb: 'Skriv in din roll i nästa steg.',
+        prop: 'Ingen given roll — du fyller i själv',
+        freeText: true,
+      },
+    ],
+  },
+  {
     id: 'maklare',
     label: 'Mäklarbranschen',
-    blurb: 'Rollerna är mäklarkontorets egna.',
+    blurb: 'Mäklarkontor i alla storlekar, med egna roller.',
     avatar: 'maklare',
     roles: [
       {
@@ -126,7 +172,7 @@ export const INDUSTRIES = [
   {
     id: 'hotell',
     label: 'Hotellbranschen',
-    blurb: 'Rollerna är hotellets egna.',
+    blurb: 'Hotell i alla storlekar, med egna roller.',
     avatar: 'reception',
     roles: [
       {
@@ -163,50 +209,6 @@ export const INDUSTRIES = [
         avatar: 'event',
         blurb: 'Du fyller rummen och salarna.',
         prop: 'Kalender — du fyller huset',
-      },
-      {
-        id: 'annat',
-        label: 'Annat',
-        avatar: 'foretag',
-        blurb: 'Skriv in din roll i nästa steg.',
-        prop: 'Ingen given roll — du fyller i själv',
-        freeText: true,
-      },
-    ],
-  },
-  {
-    id: 'annan',
-    label: 'Övriga branscher',
-    blurb: 'Små och medelstora företag i alla andra branscher.',
-    avatar: 'foretag',
-    roles: [
-      {
-        id: 'vd',
-        label: 'VD / Ledning',
-        avatar: 'vd',
-        blurb: 'Du sätter riktningen för hela bolaget.',
-        prop: 'Krona — du bestämmer vart vi ska',
-      },
-      {
-        id: 'chef',
-        label: 'Chef',
-        avatar: 'chef',
-        blurb: 'Du leder ett team eller en avdelning.',
-        prop: 'Headset — i möten hela dagen',
-      },
-      {
-        id: 'medarbetare',
-        label: 'Medarbetare',
-        avatar: 'medarbetare',
-        blurb: 'Du gör jobbet där AI möter vardagen.',
-        prop: 'Kaffemugg — du får saker gjorda',
-      },
-      {
-        id: 'entreprenor',
-        label: 'Entreprenör',
-        avatar: 'entreprenor',
-        blurb: 'Du är hela organisationen — och dess AI-lead.',
-        prop: 'Keps — du bär alla hattar själv',
       },
       {
         id: 'annat',

@@ -72,8 +72,8 @@ function attachListNavigation(buttons, { onPick, onCancel = null }) {
 // Vrid-uppmaningen ska möta besökaren direkt, före startskärmen.
 initRotateHint();
 
-// Steg 1: bransch. Enterprise, mäklare och hotell har egna rolltitlar;
-// övriga får den generella uppsättningen.
+// Steg 1: storlek eller bransch. Enterprise, mäklare och hotell har egna
+// rolltitlar; små och medelstora företag får den generella uppsättningen.
 export function showIndustrySelect(onPick) {
   const container = el('industry-buttons');
   container.innerHTML = '';
@@ -105,7 +105,7 @@ export function showIndustrySelect(onPick) {
 
 // Steg 2: roll inom branschen. Escape backar till branschvalet.
 export function showRoleSelect(onPick) {
-  const industry = state.industry ?? INDUSTRIES[INDUSTRIES.length - 1];
+  const industry = state.industry ?? INDUSTRIES.find((i) => i.id === 'smf');
   const roles = industry.roles;
   const container = el('role-buttons');
   container.innerHTML = '';

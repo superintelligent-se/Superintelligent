@@ -24,12 +24,14 @@ Bekräftelsemejlet till besökaren är en återblick, inte en analys: mynten, ut
 
 Superintelligent säljer AI-rådgivning (top-down) och AI-träning (bottom-up). Spelet ersätter steg 1–2 i deras kundresa: kostnadsfritt första möte och fördjupad assessment.
 
-**Spelet börjar med ett branschval med fyra alternativ:** Enterprise och stora företag, Mäklarbranschen, Hotellbranschen och Övriga branscher (små och medelstora företag i alla andra branscher). Valet styr rolluppsättningen:
+**Spelet börjar med fyra val under rubriken "Var jobbar du?":** två storlekar som gäller alla branscher, Enterprise och stora företag (över 250 anställda) och Små och medelstora företag (upp till 250), samt två branscher med egna roller, Mäklarbranschen och Hotellbranschen. Valet styr rolluppsättningen:
 
 - **Enterprise:** Ledningsgrupp/C-nivå, IT-chef/CIO, Data-/AI-lead, Affärsområdes-/avdelningschef, HR och kompetens, Medarbetare, Annat.
+- **Små och medelstora:** VD/Ledning, Chef, Medarbetare, Entreprenör, Annat.
 - **Mäklare:** Franchiseägare/Ägare, Kontorschef, VD, Teamledare, Mäklare, Säljstöd/Assistent, Annat.
 - **Hotell:** Ägare, Hotelldirektör, Avdelningschef, Reception/Front office, Försäljning & event, Annat.
-- **Övriga:** VD/Ledning, Chef, Medarbetare, Entreprenör, Annat.
+
+Figuren på varje val på första skärmen finns också bland valets roller (CIO, Entreprenör, Mäklare, Reception). Byter du en roll eller figur, håll det så.
 
 Annat finns i alla och är fritext. Frågorna är gemensamma; skulle de branschanpassas krävs en egen uppsättning i `gameData.js` och att `lead-mail.json` följer med. Branschens namn skickas med i leadet som `bransch`.
 
