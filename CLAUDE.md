@@ -120,13 +120,13 @@ hello@ är en delad postlåda, inte Teams-gruppens adress (team@) — den skicka
 
 Ändras frågorna måste sajten deployas innan mejlen följer med — flödet läser alltid den publicerade filen.
 
-Policydokumenten skrivs i `docs/policy/*.html` och renderas till `public/policy/*.pdf` med `npm run policies` (kräver Chrome lokalt). PDF:erna committas.
+Policyerna gäller hela sajten, inte bara spelet. `ai-intervju` är informationen till medarbetare som intervjuas av röstagenten. Länkar mellan policyerna är absoluta, eftersom de renderas från disk till PDF. Policydokumenten skrivs i `docs/policy/*.html` och renderas till `public/policy/*.pdf` med `npm run policies` (kräver Chrome lokalt). PDF:erna committas.
 
 ## Öppet, kräver beslut eller uppgifter från Thomas
 
 - `BOOKING_URL` och `TRAINING_URL` i `src/config.js` är platshållare. De används både i spelet och i mejlet.
 - Policyerna är standardmallar — låt någon med juridisk koll läsa dem.
-- Egen subdomän är beslutad men uppskjuten. Vid byte: `base` i `vite.config.js` ska bli `/`, plus CNAME-fil och DNS-post. Glöm inte URL:en till `lead-mail.json` i flödet.
+- Egen subdomän är beslutad men uppskjuten. Vid byte: `base` i `vite.config.js` ska bli `/`, plus CNAME-fil och DNS-post. Glöm inte URL:en till `lead-mail.json` i flödet, de absoluta länkarna mellan policyerna i `docs/policy/` och länken till `ai-intervju.pdf` i `rostagent/`.
 
 ## Arbetssätt
 
