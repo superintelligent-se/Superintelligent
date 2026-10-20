@@ -38,8 +38,12 @@ rostagent/
   scripts/
     hamta-samtal.mjs      Hämtar ett företags samtal och visar status
     kontrollera-agent.mjs Jämför agentens inställningar med den här mappen
+    synka-agent.mjs       Skickar systemprompt, första meddelande och End call till agenten
+    kor-tester.mjs        Kör de simulerade testerna mot agenten
   tester/
-    testprotokoll.md      Det som ska provas innan en kund får länken
+    testprotokoll.md      Rösttesterna som en människa gör
+    simuleringar.json     Simulerade tester: scenario och krav
+    test-ids.json         Testernas ID i ElevenLabs
   compliance/
     konsekvensbedomning.md  DPIA, intresseavvägning, registerpost
     ai-forordningen.md      Bedömning enligt AI-förordningen
@@ -66,6 +70,9 @@ Allt administreras i en Claude Code-session i det här repot. Det finns inget eg
 | **Status** *Företag* | Kör `hamta-samtal.mjs`: dag X av Y, genomförda per rollgrupp mot inbjudna, under tio-varning, samtal där agenten gav råd, och samtal som kan höra hit men har fel eller ingen webbadress. |
 | **Påminn** *Företag* | Fyller i påminnelsen i `utskick.md` för kunden att skicka till alla. |
 | **Koppla** *id* till *Företag* | Lägger samtalet i `inkludera` eller `exkludera` i `uppdrag.json` efter att Thomas lyssnat. |
+| **Ändra agenten** och vad som ska ändras | Ändrar i `agent/`, visar skillnaden med `synka-agent.mjs`, skickar efter Thomas ok, kör `kontrollera-agent.mjs` och de simulerade testerna. |
+| **Testa** | Kör `kor-tester.mjs` och går igenom de fallerade samtalen. |
+| **Gallring** | Tar fram listan över samtal som ska raderas enligt `compliance/rutiner.md`. Thomas raderar. |
 | **Sammanställ** *Företag* | Fyller MMM per rollgrupp ur `sammanstallning.json` och utskrifterna, med tre- och tio-regeln, och granskar citat. |
 
 **API-nyckeln** läggs en gång i macOS nyckelring. Kör i Terminal och klistra in nyckeln när du blir tillfrågad:
@@ -80,7 +87,11 @@ Skripten för hand, om det behövs:
 node rostagent/kund/ny-omgang.mjs <domän> "<Företag>" <ÅÅÅÅ-MM-DD> ledning=2 chef=3 medarbetare=12
 node rostagent/scripts/hamta-samtal.mjs <domän>
 node rostagent/scripts/kontrollera-agent.mjs
+node rostagent/scripts/synka-agent.mjs [--skicka]
+node rostagent/scripts/kor-tester.mjs [antal] [testnyckel ...]
 ```
+
+**Efter varje ändring av prompten** körs alla simulerade tester, gärna tre gånger. Modellen svarar inte likadant varje gång. Ett test som klarar sig två av tre gånger är ett fel som kommer att hända i riktiga samtal. En hel testomgång kostade runt 7 000 credits i oktober 2026.
 
 ## Juridik
 

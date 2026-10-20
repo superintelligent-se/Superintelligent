@@ -1,5 +1,7 @@
 # Testprotokoll
 
+Logiken, alltså regler, rollgrupper, bekräftelse av företag och avslut, testas med simulerade samtal i `simuleringar.json` och `scripts/kor-tester.mjs`. Det här protokollet är det som bara en människa kan testa: rösten, taligenkänningen, turtagningen och sidan i webbläsaren. Punkt 1, 4–6, 9 och 10 täcks också av simuleringarna och kan hoppas över om de är gröna.
+
 Körs innan första kunden får länken, och igen varje gång systemprompten, rösten eller språkmodellen ändras. Starta en testomgång så att testsamtalen hålls isär från riktiga:
 
 ```bash
