@@ -60,10 +60,11 @@ kolla('LLM', hamta('conversation_config.agent.prompt.llm'), (v) => /gpt-6-luna/i
 kolla('Temperatur', hamta('conversation_config.agent.prompt.temperature'), (v) => v <= 0.4, '0,3');
 const platshallare = hamta('conversation_config.agent.dynamic_variables.dynamic_variable_placeholders');
 kolla('Dynamiska variabler', platshallare && Object.keys(platshallare), (v) => v.length === 0, 'inga');
-const verktyg = [
-  ...(hamta('conversation_config.agent.prompt.tools') ?? []),
-  ...Object.keys(hamta('conversation_config.agent.prompt.built_in_tools') ?? {}).filter((k) => hamta(`conversation_config.agent.prompt.built_in_tools.${k}`)),
-].map((t) => (typeof t === 'string' ? t : t.name));
+const inbyggda = hamta('conversation_config.agent.prompt.built_in_tools') ?? {};
+const verktyg = [...new Set([
+  ...(hamta('conversation_config.agent.prompt.tools') ?? []).map((t) => t.name),
+  ...Object.keys(inbyggda).filter((k) => inbyggda[k]),
+])];
 kolla('Verktyg', verktyg, (v) => v.includes('end_call') && !v.some((n) => ['transfer_to_number', 'transfer_to_agent', 'language_detection', 'skip_turn'].includes(n)), 'bara end_call');
 
 console.log('\nRöst');
@@ -79,13 +80,17 @@ kolla('Turn eagerness', hamta('conversation_config.turn.turn_eagerness'), (v) =>
 
 console.log('\nIntegritet och säkerhet');
 const privacy = hamta('platform_settings.privacy') ?? {};
-kolla('Utskrift, dagar', privacy.retention_days ?? privacy.conversation_retention_days, (v) => v > 0 && v <= 60, '60');
-kolla('Ljud, dagar', privacy.audio_retention_days, (v) => v > 0 && v <= 30, '30');
+// Det finns en lagringstid. delete_audio och delete_transcript_and_pii styr vad den raderar.
+kolla('Lagringstid, dagar', privacy.retention_days, (v) => v === 30, '30');
+kolla('Ljud raderas efter lagringstiden', privacy.delete_audio, (v) => v === true, 'på');
+kolla('Utskrift sparas efter lagringstiden', privacy.delete_transcript_and_pii, (v) => v === false, 'av, utskrifterna sparas och gallras av oss efter högst två år');
 kolla('Zero retention', privacy.zero_retention_mode, (v) => v === false, 'av');
 kolla('Autentisering', hamta('platform_settings.auth.enable_auth'), (v) => v === false, 'av, annars fungerar inte den öppna länken');
 const overrides = JSON.stringify(hamta('platform_settings.overrides') ?? null);
 kolla('Overrides', hamta('platform_settings.overrides') && overrides, (v) => !/true/.test(v), 'allt av');
 kolla('Dagligt samtalstak', hamta('platform_settings.call_limits.daily_limit'), (v) => v > 0 && v <= 500, 't.ex. 100');
+kolla('Villkor visas på delade sidan', hamta('platform_settings.widget.shareable_page_show_terms'), (v) => v === true, 'på');
+kolla('Villkoren länkar till informationen', hamta('platform_settings.widget.terms_text'), (v) => v.includes('policy/ai-intervju.pdf'), 'texten i KONFIGURATION.md avsnitt 7');
 
 console.log('\nAnalys');
 const onskadeFalt = [...(await readFile(join(rot, 'agent/datainsamling.md'), 'utf8')).matchAll(/^\| \d+ \| `([a-z_]+)` \|/gm)].map((m) => m[1]);

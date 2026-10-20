@@ -72,10 +72,11 @@ Det är det här som gör svaren sökbara i stället för 20 minuter ljud per pe
 | Inställning | Värde |
 |---|---|
 | **Store call audio** | På |
-| **Audio retention** | 30 dagar |
-| **Conversation (transcript) retention** | 60 dagar |
+| **Retention period** | 30 dagar |
+| **Delete audio** | På. Ljudet raderas efter 30 dagar. |
+| **Delete transcript and PII** | Av. Utskrifterna sparas och gallras av oss efter högst två år. |
 
-Standard är två år. Vi har ingen EU-lagring hos ElevenLabs, så datan ska ligga där så kort som möjligt. Utskrifterna hämtas till Microsoft 365 inom EU med `hamta-samtal.mjs` och sparas där i högst 24 månader. 60 dagar ger marginal att hämta efter sista svarsdag.
+ElevenLabs har en enda lagringstid. De två reglagen bestämmer om den raderar ljudet, utskriften eller båda. Ljudet raderas efter 30 dagar, så att det går att lyssna när något är otydligt. Utskrifterna ligger kvar hos ElevenLabs tills vi raderar dem: kunders efter högst 24 månader, övriga inom 90 dagar (se `compliance/rutiner.md`). `hamta-samtal.mjs` lägger en kopia av kunders utskrifter i Microsoft 365 inom EU.
 
 Zero Retention Mode ska vara **av**. Med det påslaget sparas ingenting, och då finns inga svar att hämta.
 

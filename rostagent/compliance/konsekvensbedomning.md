@@ -25,7 +25,7 @@ Två kriterier räcker för att en bedömning ska göras. Den görs därför, ä
 | **Mottagare** | Superintelligents rådgivare. Kunden får aggregat per roll. |
 | **Biträden** | ElevenLabs (agent, inspelning, utskrift, analys) med underbiträden, bland annat språkmodellsleverantören OpenAI (GPT-6 Luna). Microsoft 365 (lagring av hämtade utskrifter i OneDrive/SharePoint). Anthropic (Claude Code, där status och sammanställning hanteras). |
 | **Tredjeland** | USA via ElevenLabs och dess underbiträden. Stöd: EU-U.S. Data Privacy Framework eller standardavtalsklausuler, enligt ElevenLabs DPA avsnitt 11. EU data residency hos ElevenLabs är valt bort (kräver Enterprise). Kompenseras med kort lagring hos ElevenLabs och långtidslagring inom EU. |
-| **Lagring** | Ljud 30 dagar (ElevenLabs). Utskrift och fält 60 dagar hos ElevenLabs. För kunder hämtas en kopia till Microsoft 365 inom EU och sparas högst 24 månader efter samtalet. Samtal som inte hör till ett kunduppdrag hämtas aldrig och raderas hos ElevenLabs efter 60 dagar. Aggregat per roll följer kunduppdraget, högst 24 månader efter avslut. |
+| **Lagring** | Ljud 30 dagar (ElevenLabs raderar automatiskt). Utskrift och fält hos ElevenLabs och, för kunder, som kopia i Microsoft 365 inom EU, högst 24 månader efter samtalet. Samtal som inte hör till ett kunduppdrag hämtas aldrig och raderas hos ElevenLabs inom 90 dagar vid den månatliga gallringen. Aggregat per roll följer kunduppdraget, högst 24 månader efter avslut. |
 
 ### Flöde
 
@@ -36,7 +36,7 @@ Två kriterier räcker för att en bedömning ska göras. Den görs därför, ä
 5. `hamta-samtal.mjs` hämtar de samtal under perioden vars webbadress matchar kunden till `rostagent/data/<domän>/` (gitignorerad, i OneDrive). Samtal med liknande företagsnamn men annan eller ingen adress listas. Thomas lyssnar och kopplar dem för hand.
 6. Rådgivaren sammanställer per rollgrupp och tar bort identifierande citat. Grupper med färre än tre deltagare slås ihop. Under tio genomförda intervjuer görs ingen sammanställning.
 7. Kunden får sammanställningen i assessmentmötet.
-8. Samtalen raderas i ElevenLabs efter 60 dagar och lokalt efter högst 24 månader.
+8. Ljudet raderas automatiskt efter 30 dagar. Utskrifter gallras månadsvis: icke-kunder inom 90 dagar, kunder efter högst 24 månader, hos ElevenLabs och lokalt.
 
 ## 3. Nödvändighet och proportionalitet
 
@@ -44,7 +44,7 @@ Två kriterier räcker för att en bedömning ska göras. Den görs därför, ä
 - **Finns mindre ingripande alternativ?** Skriftlig enkät. Den ger tydligt sämre tidsdata, eftersom "beskriv gårdagen timme för timme" fungerar dåligt i formulär. Röst utan inspelning är inte möjligt, eftersom utskriften är själva underlaget. Ljudet behövs däremot inte länge, därför 30 dagar.
 - **Uppgiftsminimering:** inget namn, ingen e-post, ingen kod som pekar ut en person. Företag, webbadress och roll är det minsta som behövs för att kunna redovisa per roll hos rätt kund. Inga frågor om kunder eller enskilda affärer, inga känsliga frågor.
 - **Varför en öppen länk.** Personliga länkar skulle ge exakt svarsfrekvens och riktade påminnelser, men kräver att vi hanterar e-postadresser och kan koppla svar till personer. Den öppna länken gör att ingen, inte heller vi, vet vem som deltagit. Priset är att företag och roll bygger på vad personen säger, och att någon kan uppge fel företag. Det hanteras i riskanalysen.
-- **Varför utskrifter i två år.** Steg 5 i kundresan gör om kartläggningen efter sex till tolv månader och jämför med utgångsläget. Det kräver de ursprungliga svaren per roll, inte bara sammanställningen. Utskriften innehåller inget namn och ingen kod som pekar ut personen. Kopian ligger i Microsoft 365 inom EU, och ElevenLabs-kopian i USA raderas efter 60 dagar.
+- **Varför utskrifter i två år.** Steg 5 i kundresan gör om kartläggningen efter sex till tolv månader och jämför med utgångsläget. Det kräver de ursprungliga svaren per roll, inte bara sammanställningen. Utskriften innehåller inget namn och ingen kod som pekar ut personen. Utskriften finns både i Microsoft 365 inom EU och hos ElevenLabs i USA. ElevenLabs kan inte radera utskrifter automatiskt utan att också radera dem vi behöver, så gallringen görs för hand varje månad.
 - **Ändamålsbegränsning:** uppgifterna används inte för att bedöma enskilda, inte för marknadsföring och inte för att träna modeller. ElevenLabs träning på kunddata är avstängd (se KONFIGURATION.md avsnitt 0).
 
 ## 4. Intresseavvägning (art. 6.1 f)
@@ -80,8 +80,9 @@ Två kriterier räcker för att en bedömning ska göras. Den görs därför, ä
 | Obehörig åtkomst till ElevenLabs-kontot | Låg | Tvåstegsinloggning, få användare, API-nyckel bara som miljövariabel | Låg |
 | Data läcker via repot | Låg | `rostagent/data/` gitignorerad. API-nyckel i nyckelringen, aldrig i fil eller chatt | Låg |
 | Anthropic tränar på utskrifter som passerar Claude | Medel | Claude-kontot under kommersiella villkor (Team, Enterprise eller API), eller träning avstängd i Claudes inställningar under Privacy | Låg |
-| Överföring till USA | Medel | DPF/SCC via ElevenLabs DPA. Informeras. Ljud 30 och utskrift 60 dagar hos ElevenLabs, långtidskopia inom EU | Medel |
-| Personer utanför kunden gör intervjun | Hög, avsiktligt | Länken ger ingen åtkomst till andras samtal. Samtal som inte matchar ett kunduppdrag hämtas aldrig, används inte och raderas efter 60 dagar. Dagligt samtalstak begränsar kostnaden | Låg |
+| Överföring till USA | Medel | DPF/SCC via ElevenLabs DPA. Informeras. Ljud raderas efter 30 dagar. Utskrifter utan namn, gallras månadsvis | Medel |
+| Utskrifter blir liggande längre än lovat, eftersom gallringen är manuell | Medel | Månatlig rutin i `rutiner.md`, där Claude tar fram listan och Thomas raderar | Låg |
+| Personer utanför kunden gör intervjun | Hög, avsiktligt | Länken ger ingen åtkomst till andras samtal. Samtal som inte matchar ett kunduppdrag hämtas aldrig, används inte och raderas inom 90 dagar. Dagligt samtalstak begränsar kostnaden | Låg |
 | Någon uppger ett företag hen inte jobbar på, så att kundens resultat påverkas | Låg | Bara samtal inom kundens period räknas. Varning när genomförda överstiger inbjudna. Utskrifter läses vid sammanställning | Låg |
 | Fel företag eller webbadress hörs, så att ett samtal hamnar fel eller saknas | Medel | Agenten bekräftar och ber om bokstavering. Samtal med liknande namn listas och kontrolleras mot ljudet inom 30 dagar | Låg |
 | Liten rollgrupp på ett litet företag gör personen identifierbar trots att namn saknas | Medel | Tre-regeln per rollgrupp, tio-regeln per företag, citat granskas | Låg |
@@ -101,7 +102,7 @@ Två kriterier räcker för att en bedömning ska göras. Den görs därför, ä
 | Kategorier av uppgifter | Röst, utskrift, arbetsuppgifter och tid, verktyg, AI-användning, företag, webbadress, roll, tekniska uppgifter |
 | Mottagare | Kunden (aggregat), ElevenLabs med OpenAI, Anthropic, Microsoft |
 | Tredjeland | USA (DPF/SCC) |
-| Gallring | Ljud 30 dagar. Utskrift 60 dagar hos ElevenLabs. Kunders utskrifter ≤ 24 månader i Microsoft 365 |
+| Gallring | Ljud 30 dagar. Utskrifter: icke-kunder ≤ 90 dagar, kunder ≤ 24 månader, hos ElevenLabs och i Microsoft 365 |
 | Säkerhet | Åtkomst begränsad till rådgivare, tvåstegsinloggning, ingen data i git, kort lagring |
 
 ## 7. Beslut

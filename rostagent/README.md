@@ -104,7 +104,7 @@ Två saker bär hela upplägget. Ändras någon av dem måste dokumenten göras 
 ## Beslut som är tagna
 
 - Superintelligent är personuppgiftsansvarig.
-- Ljud sparas 30 dagar hos ElevenLabs. Utskrifter 60 dagar hos ElevenLabs och högst 24 månader i Microsoft 365, för jämförelsen i steg 5.
+- Ljud raderas efter 30 dagar, så att Thomas kan lyssna när något är otydligt. Utskrifter sparas i högst 24 månader, hos ElevenLabs och som kopia i Microsoft 365, för jämförelsen i steg 5. ElevenLabs har bara en lagringstid, som raderar ljudet men lämnar utskriften, så gallringen av utskrifter gör vi själva.
 - Ingen EU-lagring hos ElevenLabs (kräver Enterprise). Kompenseras med kort lagring där.
 - Språkmodell GPT-6 Luna, vilket gör OpenAI till underbiträde via ElevenLabs.
 - En generisk agent och en länk för alla. Inga dynamiska variabler, inga personliga länkar. Företag, webbadress och roll frågas i samtalet.
@@ -115,5 +115,5 @@ Två saker bär hela upplägget. Ändras någon av dem måste dokumenten göras 
 
 ## Öppet
 
-- **Samtal från personer vars arbetsgivare inte är kund.** Eftersom vem som helst kan göra intervjun kommer det sådana. Nu används de inte och raderas efter 60 dagar. Vill Thomas använda dem, till exempel som anonym jämförelsedata per bransch, måste informationen och konsekvensbedömningen ändras först.
+- **Samtal från personer vars arbetsgivare inte är kund.** Eftersom vem som helst kan göra intervjun kommer det sådana. Nu används de inte och raderas inom 90 dagar, i den månatliga gallringen i `compliance/rutiner.md`. Vill Thomas använda dem, till exempel som anonym jämförelsedata per bransch, måste informationen och konsekvensbedömningen ändras först.
 - **Juridisk granskning.** Dokumenten är skrivna mot GDPR, IMY:s och EDPB:s vägledning och AI-förordningen, men ingen jurist har läst dem.

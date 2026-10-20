@@ -9,7 +9,7 @@ Det som ska göras, av vem och när. Kort med flit.
 - [ ] ElevenLabs: tvåstegsinloggning på kontot.
 - [ ] Claude: kontot som används här ska antingen ligga under kommersiella villkor (Team, Enterprise eller API) eller ha *Help improve Claude* avstängt under Settings → Privacy. Annars får Anthropic träna på utskrifter.
 - [ ] ElevenLabs API-nyckel i nyckelringen (se README, *Arbetsgång i chatten*).
-- [ ] Agenten: Expressive mode av, retention ljud 30 / utskrift 60 dagar, Zero Retention av, overrides av, inga dynamiska variabler, dagligt samtalstak satt.
+- [ ] Agenten: Expressive mode av, lagringstid 30 dagar med ljud raderat och utskrift sparad, Zero Retention av, overrides av, inga dynamiska variabler, dagligt samtalstak satt.
 - [ ] Konsekvensbedömningen och AI-bedömningen godkända och daterade.
 - [ ] Integritetspolicy, cookiepolicy, användarvillkor och Information om AI-intervjun publicerade på sajten.
 - [ ] Alla som läser intervjuresultat har läst `ai-forordningen.md` avsnitt 5. Datum och namn nedan.
@@ -24,7 +24,16 @@ Det som ska göras, av vem och när. Kort med flit.
 | Efter sista dag | Hämta samtal en sista gång. Gå igenom kandidaterna med fel eller ingen webbadress, och lyssna inom 30 dagar medan ljudet finns. | Rådgivaren |
 | Vid sammanställning | Minst tio genomförda. Tre-regeln per rollgrupp. Citat granskas. Känsliga uppgifter och namn rensas. | Rådgivaren |
 | Dag 60 | ElevenLabs raderar utskrifterna. Kontrollera att den lokala kopian är komplett innan dess. | Rådgivaren |
-| Efter 24 månader | Radera `rostagent/data/<domän>/` utom aggregatet. | Thomas |
+| Efter 24 månader | Radera kundens samtal i ElevenLabs och `rostagent/data/<domän>/` utom aggregatet. | Thomas |
+
+## Varje månad
+
+Utskrifter raderas inte automatiskt hos ElevenLabs. Första vardagen varje månad, under Conversations:
+
+1. Radera samtal äldre än 30 dagar som inte hör till någon pågående eller avslutad kundomgång. Det är personer vars arbetsgivare inte är kund, tester och felstartade samtal.
+2. Radera kunders samtal äldre än 24 månader.
+
+Gallringen görs av Thomas i gränssnittet. Claude raderar inga samtal. Säg **Gallring** i chatten, så tar Claude fram listan över vilka samtal som ska bort.
 
 ## Begäran från en medarbetare
 
