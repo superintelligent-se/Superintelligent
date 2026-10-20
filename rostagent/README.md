@@ -14,7 +14,7 @@ Agenten är generisk: samma agent och samma länk för alla företag och bransch
 
 **Rapportering per roll, aldrig per person.** Agenten frågar inte efter namn, och länken är densamma för alla. Ingen, inte heller vi, vet vem som har deltagit. Färre än tre genomförda i en rollgrupp slås ihop med närliggande grupp, och under tio genomförda per företag görs ingen sammanställning. Utan det svarar folk som de tror att chefen vill höra, särskilt på C3 (privata AI-konton) och B1 (energitjuvar).
 
-**Inga grindar.** Vem som helst med länken kan göra intervjun. Länken bär ingen information, så den kan ligga på hemsidan, i ett mejl eller på ett intranät. Kopplingen till företaget görs i efterhand via webbadressen personen säger.
+**Inga grindar.** Vem som helst med länken kan göra intervjun. Sajten har en egen sida, `/intervju/`, där besökare kan testa samma agent; widgeten laddas först när de klickat förbi informationen. Testsamtal hanteras som alla samtal utanför ett kunduppdrag. Länken bär ingen information, så den kan ligga på hemsidan, i ett mejl eller på ett intranät. Kopplingen till företaget görs i efterhand via webbadressen personen säger.
 
 **Intervjudata committas aldrig.** Repot är publikt. `rostagent/data/` ligger i `.gitignore` och ska förbli där. API-nyckeln ligger i macOS nyckelring, aldrig i en fil eller i chatten.
 

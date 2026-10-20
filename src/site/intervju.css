@@ -1,0 +1,150 @@
+/* Intervjusidan: fakta i en HUD-ruta, vägen dit som en rad block och
+   testytan där widgeten laddas. */
+
+.iv-facts {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.iv-facts ul,
+.iv-info ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.iv-facts li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  font-size: 16px;
+  color: var(--ink-2);
+}
+
+.iv-path {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.iv-path li {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 18px;
+  background: var(--panel);
+  border: 2px solid var(--line);
+  border-top: 4px solid var(--c);
+}
+
+.iv-path li.now {
+  border-color: var(--c);
+  box-shadow: 6px 6px 0 #000;
+}
+
+.iv-path p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.iv-test {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 48px;
+  align-items: start;
+}
+
+.iv-info {
+  padding: 20px 22px;
+  border: 2px solid var(--line);
+  background: var(--panel);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  font-size: 15px;
+  color: var(--ink-2);
+}
+
+.iv-info h3 {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.iv-info p {
+  margin: 0;
+}
+
+.iv-stage {
+  min-height: 420px;
+  border: 3px solid #4f7fd6;
+  background: var(--bg);
+  box-shadow: 8px 8px 0 #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+}
+
+.iv-start {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  text-align: center;
+  max-width: 420px;
+}
+
+.iv-start p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.iv-ready {
+  color: var(--ink) !important;
+  font-size: 20px !important;
+  font-weight: 800;
+}
+
+.iv-mic {
+  font-size: 40px;
+  width: 88px;
+  height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #4f7fd6;
+  color: #fff;
+  box-shadow: 4px 4px 0 #000;
+}
+
+@media (max-width: 1080px) {
+  .iv-path {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .iv-test {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .iv-path {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .iv-stage {
+    min-height: 320px;
+    padding: 20px;
+  }
+}

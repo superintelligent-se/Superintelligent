@@ -2,7 +2,7 @@
 
 Ett 2D-plattformsspel som ersätter en AI-mognadsassessment. Besökaren springer, hoppar upp i frågetecken och svarar på 15 frågor. Syftet är lead-generering för Superintelligent — inte att vara ett bra spel i sig.
 
-Live: https://superintelligent-se.github.io/Superintelligent/ (startsidan), spelet på `/spelet/`, kalkylatorn på `/ai-skuld/`.
+Live: https://superintelligent-se.github.io/Superintelligent/ (startsidan), spelet på `/spelet/`, kalkylatorn på `/ai-skuld/`, röstagenten på `/intervju/`.
 
 Repot är också Superintelligents nya sajt, i testskede: startsidan i roten, spelet på `/spelet/` och AI-skuld-kalkylatorn på `/ai-skuld/`. Sidorna är `noindex` tills sajten ligger på superintelligent.se. Kurserna ligger kvar i Thinkific på www.superintelligent.se, dit sajtens Träning-, Logga in- och materiallänkar pekar tills DNS flyttas.
 
@@ -90,6 +90,7 @@ src/audio.js           Ljud syntetiserat med WebAudio, inga ljudfiler
 index.html             Sajtens startsida
 spelet/index.html      Spelet
 ai-skuld/index.html    Kalkylatorn, modellen kommer från repot superintelligent-se/roi
+intervju/index.html    Röstagenten att testa. Widgeten laddas först vid klick
 src/site/              Sajtens CSS och JS, delar bara config.js med spelet
 public/                Ligger i roten: lead-mail.json, policy-PDF:er, logotyper
 ```

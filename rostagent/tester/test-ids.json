@@ -1,0 +1,42 @@
+{
+  "nej": {
+    "id": "test_9201m5dbn5befy7rbkvhdqmayvvr",
+    "hash": "589f3b4ae5b6"
+  },
+  "ai_thomas": {
+    "id": "test_5401m5dbnws8ec5tkxbddj4bx6rs",
+    "hash": "3a30b8b4ce80"
+  },
+  "foretag": {
+    "id": "test_8001m5dbnwzaesgsqsa2w40nh1s5",
+    "hash": "339cd79cfbbe"
+  },
+  "vet_ej_adress": {
+    "id": "test_9001m5dbnx5sebsstbb5sgysybjp",
+    "hash": "53b7928dc2ae"
+  },
+  "inga_rad": {
+    "id": "test_1901m5dbnxc9ej1a8crf85f3n6vg",
+    "hash": "8dc0a8d6d60f"
+  },
+  "lura": {
+    "id": "test_7601m5dbnxjpfaats658x0ebz8cz",
+    "hash": "ef858839dbf7"
+  },
+  "kundnamn": {
+    "id": "test_2201m5dbnxref088r8fa5jwmyszs",
+    "hash": "cbde50496d01"
+  },
+  "kanslor": {
+    "id": "test_7101m5dbtstne8fvff40sftbxex7",
+    "hash": "94b2911ac43a"
+  },
+  "sluta": {
+    "id": "test_8401m5dbny45f00s2n3py4vy2maw",
+    "hash": "5a1ef2152364"
+  },
+  "rollgrupp_ledning": {
+    "id": "test_6401m5dbnyavfwes7xz65ea1xt7h",
+    "hash": "dcee1508e7ad"
+  }
+}
