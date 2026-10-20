@@ -24,7 +24,7 @@ Varje beskrivning skickas till en språkmodell som läser utskriften efter samta
 | 14 | `ai_niva` | String | Klassning av personens faktiska AI-användning utifrån det hen beskrev. Exakt ett av: ingen (använder inte AI), chatt (ställer enstaka frågor till en chattbot), produktivitet (använder AI regelbundet i flera arbetsuppgifter), agent (har byggt eller konfigurerat egna agenter eller automatiseringar). |
 | 15 | `privat_ai_konto` | String | Om personen använder ett privat AI-konto till jobbuppgifter. Exakt ett av: ja, ibland, nej, ej_svar. |
 | 16 | `vet_vem_fraga` | String | Om personen vet vem hen ska fråga om ett AI-verktyg är okej att använda. Exakt ett av: ja, nej, osaker, ej_svar. Om ja och en roll eller funktion nämndes, lägg till den efter ett kolon, till exempel "ja: kontorschefen". Skriv aldrig ett personnamn. |
-| 17 | `attityd` | String | Personens inställning till att använda mer AI i jobbet. Exakt ett av: nyfiken, neutral, orolig, skeptisk, ej_svar. |
+| 17 | `attityd` | String | Den inställning till att använda mer AI i jobbet som personen själv uttryckte i ord. Exakt ett av: nyfiken, neutral, orolig, skeptisk, ej_svar. Gissa aldrig utifrån tonfall eller sätt att prata. Valde personen inget av alternativen, skriv ej_svar. |
 | 18 | `ta_bort_uppgift` | String | Den återkommande uppgift personen helst skulle ta bort för alltid. Tom sträng om obesvarad. |
 | 19 | `fem_timmar` | String | Vad personen skulle lägga fem extra timmar i veckan på. Tom sträng om obesvarad. |
 | 20 | `arbetsflode` | String | Det arbetsflöde personen tror skulle gå mycket snabbare med rätt verktyg. Tom sträng om obesvarad. |
@@ -38,4 +38,4 @@ Datainsamlingen har bara fyra typer: String, Boolean, Integer och Number. En lis
 
 ## Det som inte samlas in
 
-Inget namn, ingen e-post, inget telefonnummer. Företag och `kund_id` kommer från länken och följer med varje samtal som dynamiska variabler.
+Inget namn, ingen e-post, inget telefonnummer. Inget om känsloläge, stress eller personlighet utöver det personen själv säger på fråga C5. Det är AI-förordningens förbud mot känsloigenkänning på arbetsplatsen, se `compliance/ai-forordningen.md`. Företag, roll, `kund_id` och den personliga koden `deltagare` kommer från länken och följer med varje samtal som dynamiska variabler.

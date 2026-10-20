@@ -1,6 +1,6 @@
 # Testprotokoll
 
-Körs innan första kunden får en länk, och igen varje gång systemprompten, rösten eller språkmodellen ändras. Använd en testlänk med `kund_id=test` så att testsamtalen går att skilja från riktiga.
+Körs innan första kunden får en länk, och igen varje gång systemprompten, rösten eller språkmodellen ändras. Använd testlänkar med `kund_id=test` så att testsamtalen går att skilja från riktiga. Lägg dig själv med två adresser i en testlista, så provas även personliga länkar och status.
 
 ```bash
 node rostagent/kund/lankar.mjs <agent_id> test "Testkontoret"
@@ -30,12 +30,13 @@ I **Conversations** hos agenten:
 - Utskriften är begriplig svenska. Notera ord som hörs fel (mäklarsystem, Vitec, Mspecs, Hemnet, intag).
 - `uppgifter_json` är giltig JSON och minuterna stämmer med det du sa.
 - `inga_rad` är success.
-- Dynamiska variabler `foretag`, `roll` och `kund_id` syns på samtalet.
+- Dynamiska variabler `foretag`, `roll`, `kund_id` och `deltagare` syns på samtalet.
+- `hamta-samtal.mjs` visar samtalet som genomfört för rätt person, och den andra testadressen i `paminnelser.json`.
 
 Sedan:
 
 ```bash
-ELEVENLABS_API_KEY=... node rostagent/scripts/hamta-samtal.mjs <agent_id> test
+node rostagent/scripts/hamta-samtal.mjs <agent_id> test
 ```
 
 Skriptet är skrivet mot ElevenLabs API-dokumentation men inte kört mot ett riktigt konto. Första körningen är också ett test av skriptet.

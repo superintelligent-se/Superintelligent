@@ -7,7 +7,10 @@ Räkna med 45 minuter första gången.
 ## 0. Innan du börjar
 
 - **Rösten.** Kontrollera under Voices att din klon ligger under My Voices och inte har "live moderation" påslaget. Sådana röster går inte att använda i agenter. En Professional Voice Clone tränad på svenska låter klart bättre på svenska än en Instant Clone tränad på engelska. Är din klon gjord på engelskt tal: testa först, och spela in en svensk om den bryter.
-- **Biträdesavtal.** Hämta ElevenLabs DPA under kontots inställningar innan första riktiga samtalet.
+- **v4 för din PVC.** En befintlig PVC uppgraderas inte av sig själv. Gå till My Voices, håll muspekaren över rösten och klicka på plusset vid Eleven v4. Bocken betyder att den redan är tränad på modellen. Ett utropstecken vid rösten betyder att nya modeller finns att träna på. Du får mejl när det är klart. Träningen görs på de inspelningar som redan ligger på rösten.
+- **Stäng av träning på era data.** På vanliga abonnemang får ElevenLabs använda innehåll för att träna sina modeller tills det stängs av. Gå till kontots inställningar → **Data use** och stäng av. Avstängningen gäller bara framåt, så gör det innan första riktiga samtalet. Informationen till medarbetarna säger att det är avstängt.
+- **Biträdesavtal.** ElevenLabs DPA (elevenlabs.io/dpa) ingår i deras villkor. Spara en daterad kopia, och av underbiträdeslistan på compliance.elevenlabs.io.
+- **Tvåstegsinloggning** på ElevenLabs-kontot.
 
 ## 1. Skapa agenten
 
@@ -23,7 +26,7 @@ Räkna med 45 minuter första gången.
 | **Additional languages** | Inga. Lägg till English först när en kund behöver det. |
 | **First message** | Texten under strecket i `agent/forsta-meddelande.md` |
 | **System prompt** | Allt under strecket i `agent/systemprompt.md` |
-| **Dynamic variables** | Skapas automatiskt när `{{foretag}}` och `{{roll}}` finns i texten. Lägg till `kund_id` för hand. Sätt testvärden: `foretag` = `Testkontoret`, `roll` = `annan`, `kund_id` = `test`. |
+| **Dynamic variables** | Skapas automatiskt när `{{foretag}}` och `{{roll}}` finns i texten. Lägg till `kund_id` och `deltagare` för hand. Sätt testvärden: `foretag` = `Testkontoret`, `roll` = `annan`, `kund_id` = `test`, `deltagare` = `ingen`. |
 | **LLM** | Claude Sonnet 4.6. Snabbare och billigare alternativ: Gemini 2.5 Flash. |
 | **Temperature** | 0,3 |
 | **Backup LLM** | Default |
@@ -39,11 +42,11 @@ Om testvärdena: de används bara i förhandsvisningen. Öppnas den publika län
 | Inställning | Värde |
 |---|---|
 | **Voice** | Din klon |
-| **TTS model** | Eleven Turbo v2.5. Svenska kräver en v2.5- eller v3-modell. Flash v2.5 är snabbare men något plattare. |
-| **Expressive mode (v3 Conversational)** | Av till att börja med. Prova som eget test, den ändrar både röst och turtagning. |
-| **Stability** | 0,50 |
+| **TTS model** | Eleven v4 Turbo, om din PVC är fintränad på v4 (se avsnitt 0). Annars Eleven Turbo v2.5 tills den är det. |
+| **Expressive mode** | **Av, och får inte slås på.** Funktionen anpassar tonen efter hur användaren låter. Med medarbetare blir det känsloigenkänning på arbetsplatsen, som är förbjudet enligt AI-förordningen art. 5.1 f. Se `compliance/ai-forordningen.md`. |
+| **Stability** | 0,50. Lägre ger mer uttryck men mindre stadig röst. |
 | **Similarity** | 0,80 |
-| **Speed** | 0,95. Intervallet är 0,7–1,2. Något under 1,0 ger en lugnare intervjuare. |
+| **Speed** | 0,95 på v2.5. v4 har inget hastighetsreglage, där styr prompten tempot. |
 | **Pronunciation dictionary** | Lägg till efter första testet, för ord som blir fel: Vitec, Mspecs, Hemnet, Superintelligent. |
 
 ## 4. Fliken Analysis
@@ -72,9 +75,9 @@ Det är det här som gör svaren sökbara i stället för 20 minuter ljud per pe
 |---|---|
 | **Store call audio** | På |
 | **Audio retention** | 30 dagar |
-| **Conversation (transcript) retention** | 180 dagar |
+| **Conversation (transcript) retention** | 60 dagar |
 
-Standard är två år, vilket är svårt att motivera för intervjuer med anställda. Ändrar du siffrorna: ändra även i `kund/utskick.md`. Räcker utskriften, stäng av ljudet. Se Öppet i README.
+Standard är två år. Vi har ingen EU-lagring hos ElevenLabs, så datan ska ligga där så kort som möjligt. Utskrifterna hämtas till Microsoft 365 inom EU med `hamta-samtal.mjs` och sparas där i högst 24 månader. 60 dagar ger marginal att hämta efter sista svarsdag.
 
 Zero Retention Mode ska vara **av**. Med det påslaget sparas ingenting, och då finns inga svar att hämta.
 
@@ -101,12 +104,17 @@ Eftersom agenten är publik kan vem som helst med länken prata med den. Det är
 Text till Terms:
 
 ```
-Du pratar med en AI från Superintelligent. Rösten är en AI-kopia av Thomas Dalebrings röst.
+Du pratar med en AI från Superintelligent. Rösten är en AI-kopia av Thomas Dalebrings röst, men det är inte Thomas.
 
-Samtalet spelas in och skrivs ut. Svaren sammanställs per roll, inte per person. Ljudet raderas efter 30 dagar och utskriften senast efter 180 dagar. Tekniken levereras av ElevenLabs.
+Deltagandet är frivilligt och du kan avbryta när du vill. Samtalet spelas in och skrivs ut. Svaren sammanställs per roll, inte per person, och din arbetsgivare får aldrig ta del av inspelningen eller utskriften. Ljudet raderas efter 30 dagar. Utskriften sparas i högst två år, utan koppling till dig efter intervjuperioden.
 
-Säg inga namn på kunder. Du kan avbryta när du vill.
+Säg inga namn på kunder eller kollegor.
+
+Genom att starta samtalet bekräftar du att du har tagit del av informationen om AI-intervjun:
+https://superintelligent-se.github.io/Superintelligent/policy/ai-intervju.pdf
 ```
+
+Ändras siffrorna i Data Retention ska de ändras här, i `kund/utskick.md` och i `docs/policy/ai-intervju.html`.
 
 ## 8. Hämta länken
 
@@ -121,10 +129,10 @@ node rostagent/kund/lankar.mjs <agent_id> <kund_id> "<Företagsnamn>"
 En länk ser ut så här:
 
 ```
-https://elevenlabs.io/app/talk-to?agent_id=agent_XXXX&var_foretag=Testkontoret&var_roll=maklare&var_kund_id=test
+https://elevenlabs.io/app/talk-to?agent_id=agent_XXXX&var_foretag=Testkontoret&var_roll=maklare&var_kund_id=test&var_deltagare=KtSzQSdo
 ```
 
-`var_`-prefixet gör att ElevenLabs läser parametern som en dynamisk variabel. `foretag` och `roll` går in i prompten. `kund_id` används aldrig i prompten men sparas på samtalet, och det är det `hamta-samtal.mjs` filtrerar på.
+`var_`-prefixet gör att ElevenLabs läser parametern som en dynamisk variabel. `foretag` och `roll` går in i prompten. `kund_id` och `deltagare` används aldrig i prompten men sparas på samtalet. `hamta-samtal.mjs` filtrerar på `kund_id` och räknar genomförda per `deltagare`. Saknas en deklarerad variabel i länken kan samtalet vägra starta, därför får rollänkar `deltagare=ingen`.
 
 ## 9. Testa
 
