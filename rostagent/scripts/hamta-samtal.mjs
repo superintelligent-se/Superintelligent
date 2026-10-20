@@ -1,58 +1,89 @@
 #!/usr/bin/env node
-// Hämtar en kunds intervjuer från ElevenLabs och visar status.
+// Hämtar ett företags intervjuer från ElevenLabs och visar status.
 //
-//   node rostagent/scripts/hamta-samtal.mjs <agent_id> <kund_id>
-//   node rostagent/scripts/hamta-samtal.mjs <agent_id> <kund_id> --avsluta
+//   node rostagent/scripts/hamta-samtal.mjs <domän>
+//
+// Länken bär ingen information, så samtalen kopplas till företaget via
+// webbadressen personen sa (fältet webbplats). Samtal under perioden där
+// adressen saknas eller hörts fel men namnet liknar listas för hand-koppling:
+// lägg deras conversation_id i "inkludera" i data/<domän>/uppdrag.json.
 //
 // Varje samtal sparas som <conversation_id>.json (utskrift, fält och metadata,
 // inte ljud) och en rad i sammanstallning.json. data/ är gitignorerad.
-//
-// Finns deltagare.json (från lankar.mjs) visas vem som inte har genomfört
-// intervjun, för påminnelser. --avsluta raderar kopplingen kod → e-post och
-// koden ur de sparade samtalen. Kör det när intervjuperioden är slut.
 
 import { execFileSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
-import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { INDUSTRIES } from '../../src/data/gameData.js';
 
 const API = 'https://api.elevenlabs.io/v1/convai';
 const JSON_FALT = ['uppgifter_json', 'rollsvar_json'];
 const MIN_PER_ROLL = 3;
 const MIN_PER_FORETAG = 10;
 
-const args = process.argv.slice(2);
-const avsluta = args.includes('--avsluta');
-const [agentId, kundId] = args.filter((a) => !a.startsWith('--'));
+// Spelets roller grupperade så som systemprompten väljer block R.
+const ROLLGRUPPER = {
+  ledning: ['ledning', 'vd', 'agare', 'franchise', 'hotelldirektor', 'entreprenor'],
+  chef: ['chef', 'avdelningschef', 'affarsomrade', 'kontorschef', 'teamledare'],
+  it_data: ['cio', 'dataai'],
+  hr: ['hr'],
+  medarbetare: ['medarbetare', 'maklare', 'saljstod', 'reception', 'event', 'annat'],
+};
+const ROLLNAMN = Object.fromEntries(INDUSTRIES.flatMap((i) => i.roles.map((r) => [r.id, r.label])));
+const gruppFor = (roll) => Object.keys(ROLLGRUPPER).find((g) => ROLLGRUPPER[g].includes(roll)) ?? 'medarbetare';
+
+const rot = join(dirname(fileURLToPath(import.meta.url)), '..');
+const config = JSON.parse(await readFile(join(rot, 'config.json'), 'utf8'));
+const domän = normalisera(process.argv[2] ?? '');
+
+if (!config.agent_id) {
+  console.error('Fyll i agent_id i rostagent/config.json.');
+  process.exit(1);
+}
+if (!domän) {
+  console.error('Användning: node rostagent/scripts/hamta-samtal.mjs <domän>, t.ex. fastighetsbyran.se');
+  process.exit(1);
+}
+
 // Nyckeln ligger i macOS nyckelring så att den aldrig behöver skrivas i en fil
 // eller i chatten: security add-generic-password -a "$USER" -s elevenlabs-api -w
 const apiKey = process.env.ELEVENLABS_API_KEY ?? nyckelring();
+if (!apiKey) {
+  console.error('Ingen API-nyckel. Lägg den i nyckelringen: security add-generic-password -a "$USER" -s elevenlabs-api -w');
+  process.exit(1);
+}
 
 function nyckelring() {
   try {
-    return execFileSync('security', ['find-generic-password', '-s', 'elevenlabs-api', '-w'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim();
+    return execFileSync('security', ['find-generic-password', '-s', 'elevenlabs-api', '-w'], {
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim();
   } catch {
     return undefined;
   }
 }
 
-if (!agentId || !kundId) {
-  console.error('Användning: node rostagent/scripts/hamta-samtal.mjs <agent_id> <kund_id> [--avsluta]');
-  process.exit(1);
+function normalisera(adress) {
+  return String(adress)
+    .toLowerCase()
+    .trim()
+    .replace(/^https?:\/\//, '')
+    .replace(/^www\./, '')
+    .replace(/[/?#].*$/, '');
 }
 
-const utmapp = join(dirname(fileURLToPath(import.meta.url)), '..', 'data', kundId);
-const deltagarfil = join(utmapp, 'deltagare.json');
-
-if (avsluta) {
-  await avslutaPerioden();
-  process.exit(0);
-}
-
-if (!apiKey) {
-  console.error('Ingen API-nyckel. Lägg den i nyckelringen: security add-generic-password -a "$USER" -s elevenlabs-api -w');
-  process.exit(1);
+// "Fastighetsbyrån Lund AB" och "fastighetsbyran.se" ska kunna mötas.
+function nyckelord(text) {
+  return String(text)
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/\.(se|com|nu|net|org|eu|io)\b/g, '')
+    .split(/[^a-z0-9]+/)
+    .filter((o) => o.length > 2 && !['och', 'the', 'group', 'sverige', 'sweden'].includes(o));
 }
 
 async function api(path) {
@@ -65,7 +96,7 @@ async function allaSamtal() {
   const samtal = [];
   let cursor;
   do {
-    const q = new URLSearchParams({ agent_id: agentId, page_size: '100' });
+    const q = new URLSearchParams({ agent_id: config.agent_id, page_size: '100' });
     if (cursor) q.set('cursor', cursor);
     const sida = await api(`/conversations?${q}`);
     samtal.push(...sida.conversations);
@@ -74,108 +105,112 @@ async function allaSamtal() {
   return samtal;
 }
 
+const utmapp = join(rot, 'data', domän);
 await mkdir(utmapp, { recursive: true });
+const uppdragsfil = join(utmapp, 'uppdrag.json');
+const uppdrag = existsSync(uppdragsfil) ? JSON.parse(await readFile(uppdragsfil, 'utf8')) : {};
+const inkludera = new Set(uppdrag.inkludera ?? []);
+const exkludera = new Set(uppdrag.exkludera ?? []);
+const fran = uppdrag.start ? new Date(`${uppdrag.start}T00:00:00`).getTime() / 1000 : 0;
+const till = uppdrag.sista_dag ? new Date(`${uppdrag.sista_dag}T23:59:59`).getTime() / 1000 : Infinity;
+const sokord = new Set([...nyckelord(domän), ...nyckelord(uppdrag.foretag ?? '')]);
 
 const sammanstallning = [];
-for (const { conversation_id: id } of await allaSamtal()) {
+const kandidater = [];
+
+for (const { conversation_id: id, start_time_unix_secs: start } of await allaSamtal()) {
+  if (exkludera.has(id)) continue;
+  if (!inkludera.has(id) && start && (start < fran || start > till)) continue;
+
   const samtal = await api(`/conversations/${id}`);
-  const variabler = samtal.conversation_initiation_client_data?.dynamic_variables ?? {};
-  if (variabler.kund_id !== kundId) continue;
+  const falt = Object.fromEntries(
+    Object.entries(samtal.analysis?.data_collection_results ?? {}).map(([k, v]) => [k, v.value]),
+  );
+  const traff = normalisera(falt.webbplats ?? '') === domän || inkludera.has(id);
+
+  if (!traff) {
+    const liknar = nyckelord(`${falt.foretag ?? ''} ${falt.webbplats ?? ''}`).some((o) => sokord.has(o));
+    if (liknar || (!falt.webbplats && !falt.foretag)) {
+      kandidater.push({
+        id,
+        start: start ? new Date(start * 1000).toISOString().slice(0, 16) : '',
+        foretag: falt.foretag,
+        webbplats: falt.webbplats,
+      });
+    }
+    continue;
+  }
 
   await writeFile(join(utmapp, `${id}.json`), JSON.stringify(samtal, null, 2));
 
+  const startSek = samtal.metadata?.start_time_unix_secs ?? start;
   const rad = {
     conversation_id: id,
-    start: samtal.metadata?.start_time_unix_secs
-      ? new Date(samtal.metadata.start_time_unix_secs * 1000).toISOString()
-      : null,
+    start: startSek ? new Date(startSek * 1000).toISOString() : null,
     sekunder: samtal.metadata?.call_duration_secs ?? null,
-    roll_lank: variabler.roll ?? null,
-    deltagare: variabler.deltagare && variabler.deltagare !== 'ingen' ? variabler.deltagare : null,
     utvardering: Object.fromEntries(
       Object.entries(samtal.analysis?.evaluation_criteria_results ?? {}).map(([k, v]) => [k, v.result]),
     ),
   };
-
-  for (const [falt, resultat] of Object.entries(samtal.analysis?.data_collection_results ?? {})) {
-    let varde = resultat.value;
-    if (JSON_FALT.includes(falt) && typeof varde === 'string') {
+  for (const [namn, varde] of Object.entries(falt)) {
+    rad[namn] = varde;
+    if (JSON_FALT.includes(namn) && typeof varde === 'string') {
       try {
-        varde = JSON.parse(varde);
+        rad[namn] = JSON.parse(varde);
       } catch {
-        console.warn(`${id}: ${falt} är inte giltig JSON — läs utskriften i ${id}.json`);
+        console.warn(`${id}: ${namn} är inte giltig JSON — läs utskriften i ${id}.json`);
       }
     }
-    rad[falt] = varde;
   }
+  rad.rollgrupp = gruppFor(rad.roll);
+  if (rad.roll && !ROLLNAMN[rad.roll]) console.warn(`${id}: okänd roll "${rad.roll}" — räknas som medarbetare`);
   sammanstallning.push(rad);
 }
 
 await writeFile(join(utmapp, 'sammanstallning.json'), JSON.stringify(sammanstallning, null, 2));
-console.log(`${sammanstallning.length} samtal sparade i ${utmapp}\n`);
+console.log(`${uppdrag.foretag ?? domän}: ${sammanstallning.length} samtal sparade i ${utmapp}\n`);
 
-// Ett genomfört samtal per person räknas. Pratar någon två gånger används det
-// mest kompletta i analysen; de övriga flaggas.
-const genomforda = sammanstallning.filter((r) => r.samtycke && r.komplett);
-const perPerson = new Map();
-for (const r of genomforda) if (r.deltagare) perPerson.set(r.deltagare, [...(perPerson.get(r.deltagare) ?? []), r]);
-const dubbletter = [...perPerson.values()].filter((l) => l.length > 1);
-const unika = genomforda.length - dubbletter.reduce((n, l) => n + l.length - 1, 0);
-
-const uppdrag = existsSync(join(utmapp, 'uppdrag.json'))
-  ? JSON.parse(await readFile(join(utmapp, 'uppdrag.json'), 'utf8'))
-  : null;
-if (uppdrag) {
+if (uppdrag.start && uppdrag.sista_dag) {
   const dag = (d) => new Date(`${d}T00:00:00`);
   const idag = dag(new Date().toISOString().slice(0, 10));
-  const totalt = Math.round((dag(uppdrag.sista_dag) - dag(uppdrag.skapad)) / 864e5);
-  const gatt = Math.round((idag - dag(uppdrag.skapad)) / 864e5);
+  const totalt = Math.round((dag(uppdrag.sista_dag) - dag(uppdrag.start)) / 864e5) + 1;
+  const gatt = Math.round((idag - dag(uppdrag.start)) / 864e5) + 1;
   const kvar = Math.round((dag(uppdrag.sista_dag) - idag) / 864e5);
-  console.log(`${uppdrag.foretag}: dag ${gatt} av ${totalt}, ${kvar >= 0 ? `${kvar} dagar kvar` : `stängde för ${-kvar} dagar sedan`} (sista dag ${uppdrag.sista_dag})`);
+  console.log(
+    `Dag ${Math.min(gatt, totalt)} av ${totalt}, ` +
+      `${kvar >= 0 ? `${kvar} dagar kvar` : `stängde för ${-kvar} dagar sedan`} (sista dag ${uppdrag.sista_dag})`,
+  );
 }
 
-const deltagare = existsSync(deltagarfil) ? JSON.parse(await readFile(deltagarfil, 'utf8')) : null;
-const roller = deltagare ? [...new Set(deltagare.map((d) => d.roll))] : [...new Set(genomforda.map((r) => r.roll ?? r.roll_lank))];
-
-console.log(`Genomförda: ${unika}${deltagare ? ` av ${deltagare.length} inbjudna` : ''}${unika < MIN_PER_FORETAG ? `  ← under ${MIN_PER_FORETAG}, räcker inte för assessmenten` : ''}`);
-for (const roll of roller) {
-  const klara = new Set(genomforda.filter((r) => (r.roll_lank ?? r.roll) === roll).map((r) => r.deltagare ?? r.conversation_id)).size;
-  const inbjudna = deltagare?.filter((d) => d.roll === roll).length;
-  const varning = klara < MIN_PER_ROLL ? `  ← färre än ${MIN_PER_ROLL}, slås ihop vid redovisning` : '';
-  console.log(`  ${roll}: ${klara}${inbjudna ? ` av ${inbjudna}` : ''}${varning}`);
+const genomforda = sammanstallning.filter((r) => r.samtycke && r.komplett);
+const inbjudna = uppdrag.inbjudna_per_grupp ?? {};
+const antalInbjudna = Object.values(inbjudna).reduce((a, b) => a + b, 0);
+console.log(
+  `Genomförda: ${genomforda.length}${antalInbjudna ? ` av ${antalInbjudna} inbjudna` : ''}` +
+    `${genomforda.length < MIN_PER_FORETAG ? `  ← under ${MIN_PER_FORETAG}, räcker inte för assessmenten` : ''}`,
+);
+for (const grupp of Object.keys(ROLLGRUPPER)) {
+  const iGrupp = genomforda.filter((r) => r.rollgrupp === grupp);
+  if (!iGrupp.length && !inbjudna[grupp]) continue;
+  const roller = [...new Set(iGrupp.map((r) => ROLLNAMN[r.roll] ?? r.roll))].join(', ');
+  const varning = iGrupp.length < MIN_PER_ROLL ? `  ← färre än ${MIN_PER_ROLL}, slås ihop vid redovisning` : '';
+  const over = inbjudna[grupp] && iGrupp.length > inbjudna[grupp] ? '  ← fler än inbjudna, kontrollera' : '';
+  console.log(
+    `  ${grupp}: ${iGrupp.length}${inbjudna[grupp] ? ` av ${inbjudna[grupp]}` : ''}` +
+      `${roller ? ` (${roller})` : ''}${varning}${over}`,
+  );
 }
-if (dubbletter.length) console.log(`\n${dubbletter.length} person(er) har genomfört mer än en gång. Det mest kompletta samtalet används.`);
+
+const avbrutna = sammanstallning.length - genomforda.length;
+if (avbrutna) console.log(`\n${avbrutna} samtal avbröts eller tackade nej. De räknas inte.`);
 
 const fel = sammanstallning.filter((r) => r.utvardering?.inga_rad === 'failure');
 if (fel.length) console.log(`\nLäs i sin helhet, agenten gav råd: ${fel.map((r) => r.conversation_id).join(', ')}`);
 
-if (deltagare) {
-  const klara = new Set(genomforda.map((r) => r.deltagare));
-  const pabörjade = new Set(sammanstallning.filter((r) => r.deltagare && !klara.has(r.deltagare)).map((r) => r.deltagare));
-  const ejKlara = deltagare.filter((d) => !klara.has(d.kod));
-  await writeFile(join(utmapp, 'paminnelser.json'), JSON.stringify(ejKlara.map((d) => ({ ...d, paborjat: pabörjade.has(d.kod) })), null, 2));
-  console.log(`\n${ejKlara.length} har inte genomfört intervjun (${[...pabörjade].length} har påbörjat). Listan för påminnelser ligger i paminnelser.json.`);
-}
-
-async function avslutaPerioden() {
-  for (const fil of ['deltagare.json', 'paminnelser.json']) {
-    if (existsSync(join(utmapp, fil))) await rm(join(utmapp, fil));
+if (kandidater.length) {
+  console.log(`\n${kandidater.length} samtal under perioden kan höra hit men har annan eller ingen webbadress.`);
+  console.log('Lyssna eller läs, och lägg id i "inkludera" eller "exkludera" i uppdrag.json:');
+  for (const k of kandidater) {
+    console.log(`  ${k.id}  ${k.start}  ${k.foretag || '(inget företag)'}  ${k.webbplats || '(ingen adress)'}`);
   }
-  // Koden i de sparade samtalen pekar inte längre på någon, men den tas bort
-  // så att ingen kopia av deltagarfilen kan kopplas ihop med svaren.
-  let rensade = 0;
-  for (const fil of (await readdir(utmapp)).filter((f) => f.endsWith('.json'))) {
-    const sokvag = join(utmapp, fil);
-    const innehall = JSON.parse(await readFile(sokvag, 'utf8'));
-    const lista = Array.isArray(innehall) ? innehall : [innehall];
-    let andrad = false;
-    for (const post of lista) {
-      if (post.deltagare) { post.deltagare = null; andrad = true; }
-      const vars = post.conversation_initiation_client_data?.dynamic_variables;
-      if (vars?.deltagare) { delete vars.deltagare; andrad = true; }
-    }
-    if (andrad) { await writeFile(sokvag, JSON.stringify(innehall, null, 2)); rensade++; }
-  }
-  console.log(`Kopplingen kod → e-post är raderad för ${kundId}. ${rensade} filer rensade.`);
-  console.log('Radera nu samtalen i ElevenLabs, eller låt retention (60 dagar) göra det. Där finns koden kvar tills dess.');
 }

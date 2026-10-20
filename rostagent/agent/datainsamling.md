@@ -1,6 +1,6 @@
 # Datainsamling
 
-Läggs in i **Analysis → Data collection → Add item**, ett fält i taget. ElevenLabs tillåter 25 fält per agent på vanliga abonnemang (40 på Enterprise). Här är 23.
+Läggs in i **Analysis → Data collection → Add item**, ett fält i taget. ElevenLabs tillåter 25 fält per agent på vanliga abonnemang (40 på Enterprise). Här är 25, alltså fullt. Ett nytt fält kräver att ett annat tas bort.
 
 Identifier ska skrivas exakt som nedan. De är kontraktet mot `scripts/hamta-samtal.mjs` och MMM-flikarna i Excel.
 
@@ -9,7 +9,7 @@ Varje beskrivning skickas till en språkmodell som läser utskriften efter samta
 | # | Identifier | Typ | Description (klistra in) |
 |---|---|---|---|
 | 1 | `samtycke` | Boolean | true om personen uttryckligen sa ja till att genomföra intervjun efter första meddelandet. false om personen sa nej, tvekade eller avbröt direkt. |
-| 2 | `roll` | String | Personens roll. Exakt ett av: agare, chef, maklare, saljstod, annan. Använd det personen själv säger om det avviker från länken. Skriv annan om det inte framgår. |
+| 2 | `roll` | String | Personens roll utifrån vad hen sa i början av samtalet. Exakt ett av: ledning (ledningsgrupp eller C-nivå), vd, agare, franchise (franchiseägare), hotelldirektor, entreprenor, chef, avdelningschef, affarsomrade (affärsområdeschef), kontorschef, teamledare, cio (IT-chef), dataai (data- eller AI-ansvarig), hr (HR och kompetens), medarbetare, maklare, saljstod (säljstöd eller assistent), reception (reception eller front office), event (försäljning och event), annat. Välj den som passar bäst. Skriv annat bara om ingen passar. |
 | 3 | `typisk_dag` | Boolean | true om personen sa att gårdagen var en vanlig arbetsdag. false om en annan dag användes i stället. |
 | 4 | `uppgifter_json` | String | Alla arbetsuppgifter personen beskrev från sin arbetsdag och vecka, som en JSON-lista på en rad. Varje post: {"uppgift": kort beskrivning, "min_per_dag": heltal eller null, "ggr_per_vecka": tal eller null, "min_per_gang": heltal eller null, "system": systemets namn eller null}. Använd min_per_dag för sådant som gjordes igår, och ggr_per_vecka plus min_per_gang för veckouppgifter. Gissa aldrig en siffra som personen inte sa. Skriv [] om inga uppgifter beskrevs. |
 | 5 | `tid_confidence` | Integer | Personens eget svar på hur säker hen är på tiderna, 1 till 5. Skriv 0 om frågan inte besvarades. |
@@ -31,6 +31,8 @@ Varje beskrivning skickas till en språkmodell som läser utskriften efter samta
 | 21 | `ovrigt` | String | Det personen tog upp när hen fick frågan om något borde ha frågats. Tom sträng om inget. |
 | 22 | `citat` | String | Upp till tre ordagranna citat från personen som bäst beskriver tidstjuvar, frustration eller möjligheter. Separera med " \| ". Ta aldrig med citat som innehåller namn på personer, kunder eller adresser, eller som gör det möjligt att förstå vem som sa det. |
 | 23 | `komplett` | Boolean | true om samtalet nådde frågan om vad personen skulle lägga fem extra timmar på. false om det avbröts tidigare. |
+| 24 | `foretag` | String | Namnet på företaget eller organisationen där personen arbetar, så som personen bekräftade det i början av samtalet. Använd den rättade versionen om personen rättade. Skriv med vanlig stavning och stor begynnelsebokstav. Tom sträng om personen inte sa det. |
+| 25 | `webbplats` | String | Företagets webbadress som personen bekräftade, bara domänen med små bokstäver, utan https och www, till exempel fastighetsbyran.se. Tolka uttal: "punkt se" blir ".se", "bindestreck" blir "-". Tom sträng om personen inte visste eller inte sa den. |
 
 ## Varför två fält är JSON i en sträng
 
@@ -38,4 +40,4 @@ Datainsamlingen har bara fyra typer: String, Boolean, Integer och Number. En lis
 
 ## Det som inte samlas in
 
-Inget namn, ingen e-post, inget telefonnummer. Inget om känsloläge, stress eller personlighet utöver det personen själv säger på fråga C5. Det är AI-förordningens förbud mot känsloigenkänning på arbetsplatsen, se `compliance/ai-forordningen.md`. Företag, roll, `kund_id` och den personliga koden `deltagare` kommer från länken och följer med varje samtal som dynamiska variabler.
+Inget namn på personen, ingen e-post, inget telefonnummer. Inget om känsloläge, stress eller personlighet utöver det personen själv säger på fråga C5. Det är AI-förordningens förbud mot känsloigenkänning på arbetsplatsen, se `compliance/ai-forordningen.md`. Länken bär ingen information. Företag, webbplats och roll kommer från det personen säger, i fälten 2, 24 och 25. Är fälten osäkra finns ljudet i 30 dagar att lyssna på.

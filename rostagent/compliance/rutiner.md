@@ -7,9 +7,9 @@ Det som ska göras, av vem och när. Kort med flit.
 - [ ] ElevenLabs: **Data use → stäng av träning på våra data.** Ta en skärmdump och lägg den i OneDrive.
 - [ ] ElevenLabs: läs DPA (elevenlabs.io/dpa) och underbiträdeslistan (compliance.elevenlabs.io). Spara en kopia med datum.
 - [ ] ElevenLabs: tvåstegsinloggning på kontot.
-- [ ] Claude: kontot som används här ska antingen ligga under kommersiella villkor (Team, Enterprise eller API) eller ha *Help improve Claude* avstängt under Settings → Privacy. Annars får Anthropic träna på e-postlistor och utskrifter.
+- [ ] Claude: kontot som används här ska antingen ligga under kommersiella villkor (Team, Enterprise eller API) eller ha *Help improve Claude* avstängt under Settings → Privacy. Annars får Anthropic träna på utskrifter.
 - [ ] ElevenLabs API-nyckel i nyckelringen (se README, *Arbetsgång i chatten*).
-- [ ] Agenten: Expressive mode av, retention ljud 30 / utskrift 60 dagar, Zero Retention av, overrides av, dynamisk variabel `deltagare` finns.
+- [ ] Agenten: Expressive mode av, retention ljud 30 / utskrift 60 dagar, Zero Retention av, overrides av, inga dynamiska variabler, dagligt samtalstak satt.
 - [ ] Konsekvensbedömningen och AI-bedömningen godkända och daterade.
 - [ ] Integritetspolicy, cookiepolicy, användarvillkor och Information om AI-intervjun publicerade på sajten.
 - [ ] Alla som läser intervjuresultat har läst `ai-forordningen.md` avsnitt 5. Datum och namn nedan.
@@ -19,17 +19,17 @@ Det som ska göras, av vem och när. Kort med flit.
 | När | Vad | Vem |
 |---|---|---|
 | Vid avtal | Kundbilagan med i avtalet. Kunden bekräftar MBL-information/förhandling. | Rådgivaren |
-| Före utskick | Kunden har informerat medarbetarna och facket. Minst tio inbjudna. Personliga länkar skapade med eget `kund_id`. | Rådgivaren |
+| Före utskick | Kunden har informerat medarbetarna och facket. Minst tio inbjudna. Omgången startad med `ny-omgang.mjs`. Mejlet innehåller företagets webbadress. | Rådgivaren |
 | Under perioden | Status och påminnelser enligt arbetsgången i README. Läs `inga_rad` på nya samtal. Ett samtal med failure läses i sin helhet och agenten justeras. | Rådgivaren |
-| Efter sista dag | Hämta samtal en sista gång, sedan `--avsluta`. Det raderar e-postadresser och kopplingen kod → e-post. Senast inom en vecka. | Rådgivaren |
-| Vid sammanställning | Minst tio genomförda. Tre-regeln per roll. Citat granskas. Känsliga uppgifter och namn rensas. | Rådgivaren |
+| Efter sista dag | Hämta samtal en sista gång. Gå igenom kandidaterna med fel eller ingen webbadress, och lyssna inom 30 dagar medan ljudet finns. | Rådgivaren |
+| Vid sammanställning | Minst tio genomförda. Tre-regeln per rollgrupp. Citat granskas. Känsliga uppgifter och namn rensas. | Rådgivaren |
 | Dag 60 | ElevenLabs raderar utskrifterna. Kontrollera att den lokala kopian är komplett innan dess. | Rådgivaren |
-| Efter 24 månader | Radera `rostagent/data/<kund_id>/` utom aggregatet. | Thomas |
+| Efter 24 månader | Radera `rostagent/data/<domän>/` utom aggregatet. | Thomas |
 
 ## Begäran från en medarbetare
 
 1. Svara inom en månad. Börja med en bekräftelse samma vecka.
-2. Hitta samtalet. Under perioden: via e-postadressen i `deltagare.json` och koden. Efter perioden: via dag, ungefärlig tid och roll (filtrera på `kund_id` och `roll`).
+2. Hitta samtalet via dag, ungefärlig tid, företag och roll under Conversations.
 3. **Radering:** radera i ElevenLabs och lokalt. Har aggregatet redan levererats behöver det inte göras om, eftersom det inte innehåller uppgifter om personen.
 4. **Tillgång:** skicka utskriften. Ljudet bara om personen ber om det och det finns kvar.
 5. Hittar vi inte samtalet: säg det och förklara varför (art. 11).

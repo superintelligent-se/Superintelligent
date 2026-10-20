@@ -27,7 +27,7 @@ Bilaga III punkt 4 b gör AI-system till högrisk om de är avsedda att fatta be
 Agenten är **inte** avsedd för något av det:
 
 - Den mäter hur arbetstiden används per roll, inte hur väl en person utför sitt arbete.
-- Inget namn samlas in i samtalet. Den personliga koden används bara för påminnelser och dubblettkontroll, finns bara hos Superintelligent och raderas efter perioden. Resultat redovisas bara aggregerat per roll med minst tre deltagare och minst tio per företag.
+- Inget namn, ingen e-post och ingen personlig kod samlas in. Resultat redovisas bara aggregerat per rollgrupp med minst tre deltagare och minst tio per företag.
 - Kunden får aldrig individuella svar.
 - Inga beslut om enskilda fattas, varken av systemet eller med det som underlag.
 

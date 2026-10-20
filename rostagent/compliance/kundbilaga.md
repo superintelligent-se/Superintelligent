@@ -16,11 +16,11 @@ Superintelligent genomför röstintervjuer om cirka 15 minuter med Kundens medar
 
 Superintelligent är personuppgiftsansvarig för intervjuerna, inklusive inspelningar, utskrifter och sammanfattningar. Kunden får inte tillgång till inspelningar, utskrifter eller svar från enskilda medarbetare.
 
-Kunden lämnar e-postadress och roll för de medarbetare som ska bjudas in, med stöd av sitt berättigade intresse. Superintelligent använder adresserna bara för inbjudan och påminnelser och raderar dem när intervjuperioden är slut. Varje medarbetare får en personlig länk. Kopplingen mellan länk och person finns bara hos Superintelligent.
+Kunden skickar inbjudan till sina medarbetare själv, med den gemensamma länken och den text Superintelligent tillhandahåller. Superintelligent får inga e-postadresser eller namn. Medarbetaren uppger företag, företagets webbadress och sin roll i början av intervjun, och det är så samtalen kopplas till Kunden.
 
 ### 3. Vad Kunden får
 
-En sammanställning per roll. Roller med färre än tre deltagare slås ihop med närliggande roll. Citat som återges är granskade så att de inte går att knyta till en person. Kunden får antal deltagare per roll, men inte vilka.
+En sammanställning per rollgrupp. Grupper med färre än tre deltagare slås ihop med närliggande grupp. Citat som återges är granskade så att de inte går att knyta till en person. Kunden får antal deltagare per rollgrupp. Varken Kunden eller Superintelligent vet vilka som deltagit.
 
 Assessmenten förutsätter **minst tio genomförda intervjuer**. Blir det färre förlänger parterna intervjuperioden eller kommer överens om annat upplägg. Under tio lämnas ingen sammanställning, eftersom den då riskerar att gå att knyta till enskilda.
 
@@ -33,7 +33,7 @@ Kunden ska
 3. tydligt säga att deltagandet är frivilligt, och inte pressa, belöna eller missgynna någon för att den deltar eller avstår,
 4. inte efterfråga, försöka ta reda på eller följa upp vilka medarbetare som har deltagit eller vad de har sagt,
 5. **inte använda resultatet för att bedöma, betygsätta eller fatta beslut om enskilda medarbetare**, till exempel om lön, uppsägning, omplacering eller arbetsfördelning,
-6. inte sprida intervjulänkarna utanför den krets som ska intervjuas.
+6. ange företagets webbadress i inbjudan, så att samtalen kan kopplas till Kunden, och uppge ungefär hur många som bjuds in per rollgrupp.
 
 Punkt 4 och 5 är väsentliga. Bryter Kunden mot dem får Superintelligent avbryta intervjuerna.
 
@@ -43,10 +43,10 @@ Superintelligent ska
 
 1. informera varje medarbetare om att intervjuaren är en AI, att rösten är en AI-kopia av en verklig persons röst, att samtalet spelas in och att deltagandet är frivilligt,
 2. inte använda intervjuerna för att bedöma enskilda medarbetare, och inte använda AI för att tolka känslor,
-3. radera ljud efter 30 dagar, medarbetarnas e-postadresser när intervjuperioden är slut och utskrifter senast 24 månader efter samtalet,
+3. radera ljud efter 30 dagar och utskrifter senast 24 månader efter samtalet,
 4. inte använda uppgifterna för andra ändamål än uppdraget, och inte låta dem användas för att träna AI-modeller,
 5. hantera medarbetares frågor och begäranden om sina uppgifter direkt, utan inblandning av Kunden,
-6. aldrig lämna ut vem som har deltagit, varken till Kunden eller till någon annan.
+6. inte samla in namn eller e-postadresser till de medarbetare som intervjuas.
 
 ### 6. Underlag Kunden får
 

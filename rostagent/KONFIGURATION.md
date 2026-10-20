@@ -26,16 +26,14 @@ Räkna med 45 minuter första gången.
 | **Additional languages** | Inga. Lägg till English först när en kund behöver det. |
 | **First message** | Texten under strecket i `agent/forsta-meddelande.md` |
 | **System prompt** | Allt under strecket i `agent/systemprompt.md` |
-| **Dynamic variables** | Skapas automatiskt när `{{foretag}}` och `{{roll}}` finns i texten. Lägg till `kund_id` och `deltagare` för hand. Sätt testvärden: `foretag` = `Testkontoret`, `roll` = `annan`, `kund_id` = `test`, `deltagare` = `ingen`. |
-| **LLM** | Claude Sonnet 4.6. Snabbare och billigare alternativ: Gemini 2.5 Flash. |
+| **Dynamic variables** | Inga. Har du lagt till `foretag`, `roll`, `kund_id` eller `deltagare` tidigare, ta bort dem. Agenten frågar efter företag, webbadress och roll i början av samtalet. |
+| **LLM** | GPT-6 Luna |
 | **Temperature** | 0,3 |
 | **Backup LLM** | Default |
 | **Knowledge base** | Tom. Agenten ska inte kunna svara på frågor om AI. |
 | **Tools** | Bara systemverktyget **End call**. Det brukar vara påslaget från början. Stäng av Language detection, Transfer och Skip turn. |
 
-Om modellvalet: intervjun har många villkor (roll, hoppa över, max en följdfråga, aldrig råd). En liten modell tappar dem efter tio minuter. Börja med Sonnet och byt bara om fördröjningen stör i test. Med EU data residency påslaget är vissa modeller inte valbara.
-
-Om testvärdena: de används bara i förhandsvisningen. Öppnas den publika länken utan `var_foretag` kan samtalet vägra starta. Det provas i testprotokollet, punkt 12.
+Om modellvalet: GPT-6 Luna är vald för pris och prestanda. Intervjun har många villkor (rollgrupp, hoppa över, max en följdfråga, aldrig råd), och en mindre modell kan tappa dem efter tio minuter. Testprotokollet, punkt 2 och 4, visar om den håller. Gör den inte det, prova GPT-6 Sol eller Claude Sonnet.
 
 ## 3. Fliken Voice
 
@@ -52,7 +50,7 @@ Om testvärdena: de används bara i förhandsvisningen. Öppnas den publika län
 ## 4. Fliken Analysis
 
 1. **Evaluation criteria**: lägg in de fem raderna i `agent/utvardering.md`.
-2. **Data collection**: lägg in de 23 fälten i `agent/datainsamling.md`. Identifier exakt som i filen.
+2. **Data collection**: lägg in de 25 fälten i `agent/datainsamling.md`. Identifier exakt som i filen.
 3. **Analysis language**, om fältet finns: Swedish.
 
 Det är det här som gör svaren sökbara i stället för 20 minuter ljud per person.
@@ -106,7 +104,7 @@ Text till Terms:
 ```
 Du pratar med en AI från Superintelligent. Rösten är en AI-kopia av Thomas Dalebrings röst, men det är inte Thomas.
 
-Deltagandet är frivilligt och du kan avbryta när du vill. Samtalet spelas in och skrivs ut. Svaren sammanställs per roll, inte per person, och din arbetsgivare får aldrig ta del av inspelningen eller utskriften. Ljudet raderas efter 30 dagar. Utskriften sparas i högst två år, utan koppling till dig efter intervjuperioden.
+Deltagandet är frivilligt och du kan avbryta när du vill. Samtalet spelas in och skrivs ut. Svaren sammanställs per roll, inte per person, och din arbetsgivare får aldrig ta del av inspelningen eller utskriften. Ljudet raderas efter 30 dagar. Utskriften sparas i högst två år, utan ditt namn. Har din arbetsgivare inget uppdrag hos oss lämnas ingenting ut, och samtalet raderas.
 
 Säg inga namn på kunder eller kollegor.
 
@@ -116,23 +114,28 @@ https://superintelligent-se.github.io/Superintelligent/policy/ai-intervju.pdf
 
 Ändras siffrorna i Data Retention ska de ändras här, i `kund/utskick.md` och i `docs/policy/ai-intervju.html`.
 
-## 8. Hämta länken
+## 8. Länken
 
 1. Klicka **Publish** om agenten har opublicerade ändringar.
-2. Agent-ID står under agentens namn, eller i adressfältet: `agent_...`.
-3. Bygg länkarna:
-
-```bash
-node rostagent/kund/lankar.mjs <agent_id> <kund_id> "<Företagsnamn>"
-```
-
-En länk ser ut så här:
+2. Agent-ID står under agentens namn, eller i adressfältet: `agent_...`. Skriv in det i `rostagent/config.json`. Det är inte hemligt, det står i länken.
+3. Länken är densamma för alla, alltid:
 
 ```
-https://elevenlabs.io/app/talk-to?agent_id=agent_XXXX&var_foretag=Testkontoret&var_roll=maklare&var_kund_id=test&var_deltagare=KtSzQSdo
+https://elevenlabs.io/app/talk-to?agent_id=agent_XXXX
 ```
 
-`var_`-prefixet gör att ElevenLabs läser parametern som en dynamisk variabel. `foretag` och `roll` går in i prompten. `kund_id` och `deltagare` används aldrig i prompten men sparas på samtalet. `hamta-samtal.mjs` filtrerar på `kund_id` och räknar genomförda per `deltagare`. Saknas en deklarerad variabel i länken kan samtalet vägra starta, därför får rollänkar `deltagare=ingen`.
+Den kan skickas i mejl, läggas på hemsidan eller i ett intranät. Den bär ingen information om företag eller person. Det frågar agenten efter.
+
+**På hemsidan** kan agenten bäddas in med ElevenLabs widget i stället för att länka:
+
+```html
+<elevenlabs-convai agent-id="agent_XXXX"></elevenlabs-convai>
+<script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async></script>
+```
+
+Widgeten hämtar skript från ElevenLabs när sidan laddas. Lägg den därför på en egen sida, till exempel `/intervju/`, och inte på startsidan. Då behöver cookiepolicyn bara uppdateras för den sidan.
+
+**Vem som helst kan starta en intervju.** Det är avsiktligt, men det betyder två saker. Kostnaden styrs av det dagliga samtalstaket under Security. Och någon kan uppge ett företag hen inte jobbar på. `hamta-samtal.mjs` varnar om ett företag får fler genomförda än antalet inbjudna.
 
 ## 9. Testa
 
@@ -142,11 +145,11 @@ Kör `tester/testprotokoll.md` innan någon kund får en länk.
 
 Svaren finns på tre ställen:
 
-- **I gränssnittet**: Agents → agenten → Conversations. Varje samtal har ljud, utskrift, de 23 fälten och utvärderingen.
+- **I gränssnittet**: Agents → agenten → Conversations. Varje samtal har ljud, utskrift, de 25 fälten och utvärderingen. Här lyssnar du när företag eller webbadress är osäkra. Ljudet finns i 30 dagar.
 - **Via skriptet**: skapa en API-nyckel (Developers → API keys) med läsrätt till ElevenAgents.
 
 ```bash
-ELEVENLABS_API_KEY=... node rostagent/scripts/hamta-samtal.mjs <agent_id> <kund_id>
+node rostagent/scripts/hamta-samtal.mjs <domän>
 ```
 
 - **Via webhook**, senare: Agents → Settings → Post-call webhook skickar varje avslutat samtal till en adress, till exempel ett Power Automate-flöde som lägger svaren i kundens Planner-kort. Bygg det först när flödet för hand fungerar. Webhooken stängs av automatiskt efter tio misslyckade leveranser i rad, och den signeras med HMAC i rubriken `ElevenLabs-Signature`, som flödet måste kontrollera eftersom adressen annars tar emot vad som helst.
