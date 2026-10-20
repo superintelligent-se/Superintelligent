@@ -26,6 +26,8 @@ Säg "Testkontoret" och "testkontoret punkt se" när agenten frågar.
 | 12 | Säg ett krångligt företagsnamn och rätta agenten när den upprepar | Upprepar det rättade. Ber dig bokstavera om det fortfarande blir fel. `foretag` blir rätt. |
 | 13 | Säg "vet inte" om webbadressen | Går vidare. `webbplats` blir tom, och samtalet dyker upp bland kandidaterna i `hamta-samtal.mjs`. |
 | 14 | Säg en roll som inte finns i spelet, till exempel "ekonomiassistent" | `roll` blir `annat` eller närmaste, rollgrupp medarbetare. |
+| 15 | Öppna länken i ett privat fönster och välj *Reject all* i ElevenLabs cookiefråga | Samtalet startar ändå. Gör det inte: stryk meningen om att tacka nej i `kund/utskick.md`. |
+| 16 | Klicka *Call AI agent* | Villkorstexten (Terms) visas innan samtalet börjar. |
 
 ## Kontrollera efter varje samtal
 

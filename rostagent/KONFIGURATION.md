@@ -139,7 +139,13 @@ Widgeten hämtar skript från ElevenLabs när sidan laddas. Lägg den därför p
 
 ## 9. Testa
 
-Kör `tester/testprotokoll.md` innan någon kund får en länk.
+Kör först kontrollskriptet. Det läser agentens inställningar via API:t och visar avvikelser mot den här guiden, inklusive om systemprompten, första meddelandet, datainsamlingen och utvärderingen är identiska med filerna i `agent/`:
+
+```bash
+node rostagent/scripts/kontrollera-agent.mjs
+```
+
+Kör sedan `tester/testprotokoll.md` innan någon kund får länken.
 
 ## 10. Hämta svaren
 

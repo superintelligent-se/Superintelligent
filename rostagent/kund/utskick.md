@@ -22,7 +22,7 @@ Genom att klicka och starta samtalet bekräftar du att du har läst [information
 - **Inspelning.** Samtalet spelas in och skrivs ut. Ljudet raderas efter 30 dagar. Utskriften sparas i högst två år, utan ditt namn.
 - **Säg inga namn** på kunder eller kollegor.
 
-Länken fungerar i mobil och dator. Webbläsaren ber om lov att använda mikrofonen. Sitt gärna ostört och använd hörlurar.
+Länken fungerar i mobil och dator. Sidan tillhör ElevenLabs, som levererar intervjuaren, och frågar först om cookies. Du kan tacka nej utan att det påverkar intervjun. Webbläsaren ber sedan om lov att använda mikrofonen. Sitt gärna ostört och använd hörlurar.
 
 Frågor om hur uppgifterna hanteras: hello@superintelligent.se.
 

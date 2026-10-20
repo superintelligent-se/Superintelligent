@@ -37,6 +37,7 @@ rostagent/
     utskick.md            Mejl och påminnelse till medarbetarna
   scripts/
     hamta-samtal.mjs      Hämtar ett företags samtal och visar status
+    kontrollera-agent.mjs Jämför agentens inställningar med den här mappen
   tester/
     testprotokoll.md      Det som ska provas innan en kund får länken
   compliance/
@@ -78,6 +79,7 @@ Skripten för hand, om det behövs:
 ```bash
 node rostagent/kund/ny-omgang.mjs <domän> "<Företag>" <ÅÅÅÅ-MM-DD> ledning=2 chef=3 medarbetare=12
 node rostagent/scripts/hamta-samtal.mjs <domän>
+node rostagent/scripts/kontrollera-agent.mjs
 ```
 
 ## Juridik
