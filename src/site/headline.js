@@ -1,4 +1,4 @@
-// Rubrikvalet överst på startsidan. AI tog fram fem rubriker åt oss, och
+// Rubrikvalet överst på startsidan. Vi tog fram fem rubriker med AI, och
 // besökaren får slå upp blocken och se dem alla. Knapparna Spela spelet och
 // Boka gratis möte är desamma oavsett rubrik. Rubrik 1 står i HTML:en, så
 // sökmotorer och den som inte klickar ser alltid den.
