@@ -91,6 +91,13 @@
 }
 
 @media (max-width: 900px) {
+  /* Blocken direkt under rubriken, så den syns medan man klickar. Knapparna
+     hamnar under. */
+  .headline,
+  .picker {
+    order: -1;
+  }
+
   .picker {
     max-width: none;
   }
