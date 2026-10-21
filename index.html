@@ -12,6 +12,7 @@
     <link rel="icon" href="/logo.svg" type="image/svg+xml" />
     <script type="module" src="/src/site/site.js"></script>
     <script type="module" src="/src/site/rewards.js"></script>
+    <script type="module" src="/src/site/headline.js"></script>
   </head>
   <body>
     <a class="sr-only" href="#main">Hoppa till innehållet</a>
@@ -44,12 +45,11 @@
       <section class="hero">
         <div class="wrap">
           <div class="hero-copy">
-            <p class="eb gold"><span class="pixel-dot"></span>The Superintelligent Game</p>
-            <h1 class="h1">Bli ett superintelligent företag</h1>
-            <p class="sub">
-              Från manuellt arbete och personberoende kunskap till en organisation som lär sig och
-              blir bättre varje dag. Fem steg tar er dit, och det första tar fem minuter: spela spelet.
-            </p>
+            <div class="headline" id="headline" aria-live="polite">
+              <p class="eb gold" data-part="eb"><span class="pixel-dot"></span><span data-text>Rubrik 1 · Visionen</span></p>
+              <h1 class="h1" data-part="h1">Bli ett superintelligent företag</h1>
+              <p class="sub" data-part="sub">Från manuellt arbete och personberoende kunskap till en organisation som lär sig och blir bättre varje dag. Fem steg tar er dit, och det första tar fem minuter: spela spelet.</p>
+            </div>
             <div class="btn-row">
               <a class="btn btn-p" href="spelet/">
                 <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 2h2v2h2v2h2v2h-2v2h-2v2h-2z" fill="currentColor" /></svg>
@@ -58,6 +58,16 @@
               <a class="btn btn-o" data-booking href="https://bookings.cloud.microsoft/book/Superintelligent@superintelligent.se/s/B2QIYRV4KUupO4i1Rd8Pow2?ismsaljsauthenabled">Boka gratis möte</a>
             </div>
             <p class="small">Cirka 5 minuter · Fungerar på mobil · Ingen poäng, ingen dom</p>
+            <div class="picker" role="group" aria-labelledby="picker-label">
+              <p class="picker-label" id="picker-label">AI tog fram fem rubriker åt oss. Vilken hade du valt?</p>
+              <div class="picker-blocks">
+                <button type="button" class="qb pick" data-variant="0" aria-pressed="true" aria-label="Rubrik 1, Visionen">1</button>
+                <button type="button" class="qb pick" data-variant="1" aria-pressed="false" aria-label="Rubrik 2, Pengarna">2</button>
+                <button type="button" class="qb pick" data-variant="2" aria-pressed="false" aria-label="Rubrik 3, Möjligheterna">3</button>
+                <button type="button" class="qb pick" data-variant="3" aria-pressed="false" aria-label="Rubrik 4, Människorna">4</button>
+                <button type="button" class="qb pick" data-variant="4" aria-pressed="false" aria-label="Rubrik 5, Farten">5</button>
+              </div>
+            </div>
             <p class="small"><a href="#ai-resan">Se hela AI-resan ↓</a></p>
           </div>
           <div class="stack">

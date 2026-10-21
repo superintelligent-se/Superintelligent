@@ -137,19 +137,6 @@
   color: var(--ink);
 }
 
-.confetti {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.confetti span {
-  position: absolute;
-  margin: -4px 0 0 -4px;
-}
-
 /* Mobil: stegen ligger i en lista, så kortet fälls ut direkt under texten. */
 @media (max-width: 900px) {
   /* Kortet följer textens vänsterkant, inte blocket som sticker ut åt vänster. */

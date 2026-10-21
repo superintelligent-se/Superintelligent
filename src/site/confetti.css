@@ -1,0 +1,14 @@
+/* Lagret som konfettin ritas i, ovanpå allt och utan att ta klick. */
+
+.confetti {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.confetti span {
+  position: absolute;
+  margin: -4px 0 0 -4px;
+}
