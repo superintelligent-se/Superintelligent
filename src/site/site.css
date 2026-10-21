@@ -1364,3 +1364,13 @@ h3 {
   text-decoration: underline;
   text-underline-offset: 4px;
 }
+
+/* Steg utan länk får en kommentar i stället, grå och kursiv så att den inte
+   läses som en knapp. */
+.level .note {
+  margin-top: 6px;
+  font-size: 13px;
+  line-height: 1.4;
+  font-style: italic;
+  color: var(--faint);
+}
