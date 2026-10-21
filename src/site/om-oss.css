@@ -1,0 +1,147 @@
+/* Om oss: fotoraden i hero, en kort per person, syfte och värderingar som
+   block och manifestet med början synlig. */
+
+.hero-team {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
+}
+
+.hero-team li {
+  width: calc((100% - 32px) / 3);
+}
+
+.people {
+  display: grid;
+  gap: 24px;
+}
+
+.person {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 32px;
+  padding: 28px;
+  align-items: start;
+}
+
+.person-text {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.person-text h3 {
+  font-size: 30px;
+  font-weight: 800;
+}
+
+.person-text p {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 16px;
+}
+
+.person-text .eb {
+  font-size: 12px;
+}
+
+.three-up {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.why,
+.value {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.why h3,
+.value h3 {
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.why p:not(.eb),
+.value p:not(.eb) {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 16px;
+}
+
+.value {
+  border-top: 6px solid var(--c);
+}
+
+.value .eb {
+  color: var(--c);
+  font-size: 12px;
+}
+
+.manifest {
+  max-width: 920px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.manifest blockquote {
+  margin: 0;
+  padding: 28px 32px;
+  background: var(--panel);
+  border-left: 8px solid var(--gold);
+  box-shadow: 8px 8px 0 #000;
+}
+
+.manifest-lead {
+  margin: 0;
+  font-size: clamp(26px, 3vw, 38px);
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+.manifest details summary {
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--purple-text);
+}
+
+.manifest-body {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  color: var(--ink-2);
+  font-size: 17px;
+}
+
+.manifest-body p {
+  margin: 0;
+}
+
+@media (max-width: 1080px) {
+  .hero-team {
+    display: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .person {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .person .team-photo {
+    max-width: 260px;
+  }
+
+  .three-up {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

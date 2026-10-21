@@ -1393,3 +1393,75 @@ h3 {
 .tier-price strong {
   color: var(--ink);
 }
+
+/* Laget: riktiga foton i en pixelram, så att det mänskliga syns men hör
+   ihop med spelets grafik. Används på startsidan och Om oss. */
+
+.team-photo {
+  display: block;
+  aspect-ratio: 1;
+  background: #f4f4f4;
+  border: 4px solid var(--gold);
+  box-shadow: 6px 6px 0 #000;
+  overflow: hidden;
+}
+
+.team-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.team-strip {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.team-strip a {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--ink);
+}
+
+.team-strip a:hover {
+  text-decoration: none;
+}
+
+.team-strip a:hover .team-photo {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0 #000;
+}
+
+.team-strip strong {
+  margin-top: 8px;
+  font-size: 17px;
+}
+
+.team-strip span:not(.team-photo) {
+  font-size: 14px;
+  color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .team-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .team-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .team-strip a:hover .team-photo {
+    transform: none;
+  }
+}

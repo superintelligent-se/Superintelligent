@@ -5,8 +5,8 @@ import { defineConfig } from 'vite';
 // must match the repo name. Update REPO_NAME once the repo is created.
 const REPO_NAME = 'Superintelligent';
 
-// Sajten har fyra sidor: startsidan i roten, spelet på /spelet/,
-// kalkylatorn på /ai-skuld/ och röstagenten på /intervju/. public/ ligger
+// Sajten har fem sidor: startsidan i roten, spelet på /spelet/,
+// kalkylatorn på /ai-skuld/, röstagenten på /intervju/ och /om-oss/. public/ ligger
 // kvar i roten så att lead-mail.json har samma adress som flödet i Power
 // Automate läser.
 export default defineConfig({
@@ -18,6 +18,7 @@ export default defineConfig({
         spelet: resolve(import.meta.dirname, 'spelet/index.html'),
         aiSkuld: resolve(import.meta.dirname, 'ai-skuld/index.html'),
         intervju: resolve(import.meta.dirname, 'intervju/index.html'),
+        omOss: resolve(import.meta.dirname, 'om-oss/index.html'),
       },
     },
   },
