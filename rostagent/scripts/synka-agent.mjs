@@ -5,8 +5,8 @@
 //   node rostagent/scripts/synka-agent.mjs           visa bara
 //   node rostagent/scripts/synka-agent.mjs --skicka  uppdatera agenten
 //
-// Filerna är sanningskällan. Synkas: systemprompt, första meddelande och
-// End call-verktygets beskrivning. Övriga inställningar ändras i gränssnittet
+// Filerna är sanningskällan. Synkas: systemprompt, första meddelande,
+// End call-verktygets beskrivning och utvärderingskriterierna. Övriga inställningar ändras i gränssnittet
 // och kontrolleras med kontrollera-agent.mjs. Före varje skick sparas agentens
 // inställningar i data/agent-backup/ så att det går att backa.
 
@@ -46,11 +46,15 @@ const onskat = {
   systemprompt: await efterStreck('agent/systemprompt.md'),
   forsta: (await efterStreck('agent/forsta-meddelande.md')).split('\n\n')[0],
   end_call: END_CALL_BESKRIVNING,
+  utvardering: [...(await readFile(join(rot, 'agent/utvardering.md'), 'utf8')).matchAll(/^\| `([a-z_]+)` \| (.+) \|$/gm)]
+    .map(([, namn, text]) => `${namn}: ${text}`)
+    .join('\n'),
 };
 const nu = {
   systemprompt: agent.conversation_config.agent.prompt.prompt,
   forsta: agent.conversation_config.agent.first_message,
   end_call: agent.conversation_config.agent.prompt.built_in_tools?.end_call?.description ?? null,
+  utvardering: (agent.platform_settings.evaluation?.criteria ?? []).map((k) => `${k.name}: ${k.conversation_goal_prompt}`).join('\n'),
 };
 
 function skillnad(a, b) {
@@ -96,9 +100,19 @@ const endCall = {
 };
 prompt.built_in_tools = { ...prompt.built_in_tools, end_call: endCall };
 prompt.tools = (prompt.tools ?? []).map((t) => (t.name === 'end_call' ? { ...t, description: onskat.end_call } : t));
+// Kriterierna skickas som hel lista. Befintliga behåller sina övriga fält.
+const befintliga = Object.fromEntries((agent.platform_settings.evaluation?.criteria ?? []).map((k) => [k.id, k]));
+const criteria = onskat.utvardering.split('\n').map((rad) => {
+  const [namn, ...text] = rad.split(': ');
+  return { ...(befintliga[namn] ?? { type: 'prompt', use_knowledge_base: false }), id: namn, name: namn, conversation_goal_prompt: text.join(': ') };
+});
+
 const res = await fetch(url, {
   method: 'PATCH',
   headers: { 'xi-api-key': apiKey, 'Content-Type': 'application/json' },
-  body: JSON.stringify({ conversation_config: { agent: { prompt, first_message: onskat.forsta } } }),
+  body: JSON.stringify({
+    conversation_config: { agent: { prompt, first_message: onskat.forsta } },
+    platform_settings: { evaluation: { ...agent.platform_settings.evaluation, criteria } },
+  }),
 });
 console.log(res.ok ? `\nAgenten uppdaterad: ${andrade.join(', ')}.` : `\nFel ${res.status}: ${await res.text()}`);

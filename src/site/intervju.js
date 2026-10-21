@@ -9,8 +9,8 @@ const WIDGET_SRC = 'https://unpkg.com/@elevenlabs/convai-widget-embed';
 const button = document.getElementById('iv-load');
 const stage = document.getElementById('iv-stage');
 
-// ElevenLabs lägger widgeten fast nere till höger i fönstret, oavsett var den
-// står i sidan. Rutan visar därför var den finns och hur man börjar.
+// Widgeten är inställd på always_expanded i ElevenLabs, så den öppnas som en
+// stor panel ovanpå sidan, på mobil nästan helskärm. Rutan säger hur man börjar.
 button?.addEventListener('click', () => {
   const widget = document.createElement('elevenlabs-convai');
   widget.setAttribute('agent-id', INTERVIEW_AGENT_ID);
@@ -19,9 +19,8 @@ button?.addEventListener('click', () => {
   stage.classList.add('loaded');
   stage.innerHTML = `
     <div class="iv-start">
-      <div class="iv-mic" aria-hidden="true">↘</div>
-      <p class="iv-ready">Intervjuaren finns nu nere till höger.</p>
-      <p>Tryck på <strong>Starta ett samtal</strong>. Intervjuaren presenterar sig och frågar om det är okej att ni kör.</p>
+      <p class="iv-ready">Intervjuaren är öppen.</p>
+      <p>Tryck på den lila telefonknappen under bilden. Intervjuaren presenterar sig och frågar om det är okej att ni kör. Vill du tillbaka till sidan, ladda om den.</p>
     </div>`;
 
   const script = document.createElement('script');

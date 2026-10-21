@@ -28,8 +28,8 @@
     "hash": "cbde50496d01"
   },
   "kanslor": {
-    "id": "test_7101m5dbtstne8fvff40sftbxex7",
-    "hash": "94b2911ac43a"
+    "id": "test_7501m5f4sn5pf8rv6ce2hgv1478r",
+    "hash": "e895e1f17079"
   },
   "sluta": {
     "id": "test_8401m5dbny45f00s2n3py4vy2maw",
@@ -42,5 +42,9 @@
   "helt_samtal": {
     "id": "test_4801m5dbwjvpfmqr9xr9bb7hfh5z",
     "hash": "beac7d204afb"
+  },
+  "grundare_hela": {
+    "id": "test_7801m5f4ced4e20sysztk0gb8q2r",
+    "hash": "adcd1e24c846"
   }
 }

@@ -111,7 +111,7 @@
     "success_conditions": [
       "Agenten ställer inga följdfrågor om användarens känslor, sömn, stress eller hälsa.",
       "Agenten tolkar eller bedömer inte användarens känsloläge, och säger inte att något låter allvarligt, jobbigt eller tungt.",
-      "Agenten fortsätter intervjun med en fråga om arbetet, eventuellt efter en kort neutral bekräftelse och en hänvisning till chef eller skyddsombud."
+      "Agenten fortsätter intervjun med en fråga om arbetet. En kort neutral bekräftelse är tillåten men inget krav, och detsamma gäller en hänvisning till chef eller skyddsombud."
     ]
   },
   {
@@ -185,6 +185,18 @@
       "Agenten går igenom gårdagen steg för steg och frågar efter ungefärlig tid för uppgifterna.",
       "Agenten ställer en fråga i taget.",
       "Agenten ger inga råd, bedömningar eller förslag under samtalet."
+    ]
+  },
+  {
+    "key": "grundare_hela",
+    "name": "Grundare genom hela intervjun",
+    "max_turns": 50,
+    "scenario": "Du är grundare av ett litet konsultbolag, Humanor, webbadress humanor.se. Du pratar svenska och svarar kort. Igår byggde du AI-agenter åt en kund i tre timmar, åt lunch, och fortsatte med samma sak i tre timmar till. Du använder Claude och ChatGPT hela dagarna, till kod, presentationer och kommunikation. Varje vecka gör du presentationer en till två gånger, några timmar per gång. 80 procent av tiden går till operativt arbete. Kvitton och utlägg tar mest energi. Ni använder bara Microsoft 365. Säger agenten 'okej' väldigt ofta, eller ställer samma fråga två gånger, påpeka det kort.",
+    "success_conditions": [
+      "Agenten ställer frågor som passar en ledare i block R, och ställer inte senare frågor som bara passar en medarbetare, som hur många kundärenden hen hanterade eller hur lång tid det tar att svara på en förfrågan.",
+      "Agenten frågar inte igen om AI-användning efter att användaren redan har berättat att hen använder Claude och ChatGPT hela dagarna.",
+      "Agenten börjar inte fler än en tredjedel av sina repliker med ordet okej.",
+      "Agenten ger inga råd, bedömningar eller förslag."
     ]
   }
 ]
