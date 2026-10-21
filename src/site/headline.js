@@ -3,7 +3,7 @@
 // Boka gratis möte är desamma oavsett rubrik. Rubrik 1 står i HTML:en, så
 // sökmotorer och den som inte klickar ser alltid den.
 import './headline.css';
-import { celebrate } from './effects.js';
+import { celebrate, vision } from './effects.js';
 
 const VARIANTS = [
   {
@@ -133,4 +133,8 @@ if (root && buttons.length) {
   });
   document.fonts?.ready.then(reserveHeight);
   buttons.forEach((button, i) => button.addEventListener('click', () => show(i, button)));
+
+  // Välkomnar besökaren: visionens ljusfart spelas när sidan öppnas, om
+  // rubriken syns och man inte kommit hit via en länk längre ner på sidan.
+  if (!location.hash && scrollY < 200) vision(h1, { reveal: true });
 }

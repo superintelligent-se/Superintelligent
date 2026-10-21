@@ -1,5 +1,5 @@
-// Pixelkonfetti i spelets färger. Används när man slår upp ett block: i
-// AI-resans belöningar och i rubrikvalet överst på startsidan.
+// Pixelkonfetti i spelets färger. Används när man slår upp ett block i
+// AI-resans belöningar.
 
 import './confetti.css';
 
@@ -53,31 +53,4 @@ export function confetti(from) {
   if (reducedMotion.matches) return;
   const box = from.getBoundingClientRect();
   burst(makeLayer(1700), box.left + box.width / 2, box.top + box.height / 2, 40);
-}
-
-// Hela festen: först en salva från blocket, sedan regnar det konfetti över
-// hela skärmen och den fladdrar från sida till sida på vägen ner.
-export function confettiParty(from) {
-  if (reducedMotion.matches) return;
-  const box = from.getBoundingClientRect();
-  const layer = makeLayer(3400);
-  burst(layer, box.left + box.width / 2, box.top + box.height / 2, 48);
-
-  const count = Math.min(90, Math.round(innerWidth / 8));
-  for (let i = 0; i < count; i++) {
-    const bit = piece(layer, Math.random() * innerWidth, -16, i + 1);
-    const fall = innerHeight + 40;
-    const sway = 20 + Math.random() * 30;
-    const spin = 360 + Math.random() * 720;
-    bit.animate(
-      [
-        { transform: 'translate(0, 0) rotate(0deg)' },
-        { transform: `translate(${sway}px, ${fall * 0.25}px) rotate(${spin * 0.25}deg)` },
-        { transform: `translate(${-sway}px, ${fall * 0.5}px) rotate(${spin * 0.5}deg)` },
-        { transform: `translate(${sway}px, ${fall * 0.75}px) rotate(${spin * 0.75}deg)` },
-        { transform: `translate(0, ${fall}px) rotate(${spin}deg)` },
-      ],
-      { duration: 1800 + Math.random() * 900, delay: 250 + Math.random() * 500, easing: 'steps(30, end)', fill: 'backwards' },
-    );
-  }
 }
