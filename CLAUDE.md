@@ -112,8 +112,9 @@ DNS ligger i Cloudflare (gratiskontot). Mejlposterna (MX, SPF, DKIM, DMARC) rör
 | akademi.superintelligent.se | Thinkific, Primary | CNAME till superintelligent.thinkific.com, proxy av |
 | roi. | Till `/ai-skuld/` | Regel 3. Även `/en/`, den engelska kalkylatorn är nedlagd |
 | spela., intervjua., boka. | Kampanjingångar | Regel 4–6, till `/spelet/`, `/intervju/` och Bookings |
+| www…/pages/om-oss | Gamla Om oss i Thinkific | Regel 7, före regel 2, till `/om-oss/` |
 
-**Regel 2 skickar allt på www som inte är huvudsajtens till samma sökväg på Akademin.** Så fungerar alla gamla Thinkific-länkar (kurser, köp, inloggning, `/pages/…`) utan att vi känner till dem. Undantagen är huvudsajtens toppmappar och rotfiler: `/`, `/spelet/`, `/intervju/`, `/ai-skuld/`, `/policy/`, `/assets/`, `/logos/`, `/logo.svg`, `/lead-mail.json`, `/robots.txt`, `/sitemap.xml`, `/404.html`. **Får sajten en ny toppmapp eller rotfil måste den in i undantaget**, annars skickas den till Akademin och ger 404 där.
+**Regel 2 skickar allt på www som inte är huvudsajtens till samma sökväg på Akademin.** Så fungerar alla gamla Thinkific-länkar (kurser, köp, inloggning, `/pages/…`) utan att vi känner till dem. Undantagen är huvudsajtens toppmappar och rotfiler: `/`, `/spelet/`, `/intervju/`, `/ai-skuld/`, `/om-oss/`, `/policy/`, `/assets/`, `/logos/`, `/logo.svg`, `/lead-mail.json`, `/robots.txt`, `/sitemap.xml`, `/404.html`, `/CNAME`, samt `/.well-known/` så att GitHub kan hämta sitt certifikat. **Får sajten en ny toppmapp eller rotfil måste den in i undantaget**, annars skickas den till Akademin och ger 404 där.
 
 SSL-läget i Cloudflare är Full, inte Full (strict). GitHub kan inte alltid förnya sitt certifikat för www bakom Cloudflares proxy, och strict skulle då stoppa sajten.
 
