@@ -28,10 +28,19 @@ const VARIANTS = [
     sub: 'Era medarbetare lär sig, era ledare väljer riktning och allt ni bygger är ert. Ingen plattform att hyra, inga konsulter som tar med sig kunskapen hem.',
   },
   {
-    eb: 'Rubrik 5 · Farten',
-    h1: 'De som ligger först drar ifrån',
-    sub: 'De organisationer som ligger längst fram använder AI 8,3 gånger mer än en typisk organisation, och försprånget växer varje månad. Ni kommer ikapp ett steg i taget, och det första tar fem minuter.',
+    eb: 'Rubrik 5 · Intervjun',
+    h1: 'Hör vad hela organisationen tycker om AI',
+    sub: 'Vår AI-intervjuare pratar med medarbetarna när det passar dem. Ledningen får en inblick i vad alla tänker, hoppas och oroar sig för som inget möte eller enkät kan ge.',
   },
+];
+
+// Varje rubrik leder till avsnittet den handlar om.
+const LINKS = [
+  { href: '#ai-resan', text: 'Se hela AI-resan ↓' },
+  { href: '#varfor', text: 'Varför det brådskar ↓' },
+  { href: '#mojlighets-ai', text: 'Mer om Möjlighets-AI ↓' },
+  { href: '#traning', text: 'Så tränar medarbetarna ↓' },
+  { href: 'intervju/', text: 'Prova AI-intervjun →' },
 ];
 
 const root = document.getElementById('headline');
@@ -39,6 +48,7 @@ const eb = root?.querySelector('[data-part="eb"] [data-text]');
 const h1 = root?.querySelector('[data-part="h1"]');
 const sub = root?.querySelector('[data-part="sub"]');
 const buttons = [...document.querySelectorAll('.picker .pick')];
+const go = document.getElementById('picker-go');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 let typing = 0;
@@ -100,6 +110,10 @@ async function show(index, button) {
   confetti(button);
 
   eb.textContent = v.eb;
+  if (go) {
+    go.href = LINKS[index].href;
+    go.textContent = LINKS[index].text;
+  }
   sub.classList.add('fade');
   sub.innerHTML = v.sub;
   await typeOut(v.h1, run);
