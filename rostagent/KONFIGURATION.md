@@ -110,7 +110,7 @@ Deltagandet är frivilligt och du kan avbryta när du vill. Samtalet spelas in o
 Säg inga namn på kunder eller kollegor.
 
 Genom att starta samtalet bekräftar du att du har tagit del av informationen om AI-intervjun:
-https://superintelligent-se.github.io/Superintelligent/policy/ai-intervju.pdf
+https://www.superintelligent.se/policy/ai-intervju.pdf
 ```
 
 Ändras siffrorna i Data Retention ska de ändras här, i `kund/utskick.md` och i `docs/policy/ai-intervju.html`.

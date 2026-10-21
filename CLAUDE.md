@@ -2,9 +2,9 @@
 
 Ett 2D-plattformsspel som ersätter en AI-mognadsassessment. Besökaren springer, hoppar upp i frågetecken och svarar på 15 frågor. Syftet är lead-generering för Superintelligent — inte att vara ett bra spel i sig.
 
-Live: https://superintelligent-se.github.io/Superintelligent/ (startsidan), spelet på `/spelet/`, kalkylatorn på `/ai-skuld/`, röstagenten på `/intervju/`.
+Live: https://www.superintelligent.se (startsidan), spelet på `/spelet/`, kalkylatorn på `/ai-skuld/`, röstagenten på `/intervju/`.
 
-Repot är också Superintelligents nya sajt, i testskede: startsidan i roten, spelet på `/spelet/` och AI-skuld-kalkylatorn på `/ai-skuld/`. Sidorna är `noindex` tills sajten ligger på superintelligent.se. Kurserna ligger kvar i Thinkific på www.superintelligent.se, dit sajtens Träning-, Logga in- och materiallänkar pekar tills DNS flyttas.
+Repot är också Superintelligents huvudsajt. Kurserna ligger i Thinkific som Superintelligent Akademi på akademi.superintelligent.se, dit sajtens Träning-, Logga in- och materiallänkar pekar.
 
 ## Principer som inte får brytas
 
@@ -101,6 +101,24 @@ public/                Ligger i roten: lead-mail.json, policy-PDF:er, logotyper
 
 Touch och tangentbord möts i `PlayScene.update()`. Mobil är inte en egen version — det finns ett inmatningslager och några media queries, inget annat dupliceras.
 
+## Domäner och vidarekopplingar
+
+DNS ligger i Cloudflare (gratiskontot). Mejlposterna (MX, SPF, DKIM, DMARC) rörs aldrig.
+
+| Adress | Vad | Hur |
+|---|---|---|
+| www.superintelligent.se | Huvudsajten | CNAME till superintelligent-se.github.io, proxy på. `public/CNAME` ger GitHub Pages domänen |
+| superintelligent.se | Skickas till www | Regel 1, samma sökväg |
+| akademi.superintelligent.se | Thinkific, Primary | CNAME till superintelligent.thinkific.com, proxy av |
+| roi. | Till `/ai-skuld/` | Regel 3. Även `/en/`, den engelska kalkylatorn är nedlagd |
+| spela., intervjua., boka. | Kampanjingångar | Regel 4–6, till `/spelet/`, `/intervju/` och Bookings |
+
+**Regel 2 skickar allt på www som inte är huvudsajtens till samma sökväg på Akademin.** Så fungerar alla gamla Thinkific-länkar (kurser, köp, inloggning, `/pages/…`) utan att vi känner till dem. Undantagen är huvudsajtens toppmappar och rotfiler: `/`, `/spelet/`, `/intervju/`, `/ai-skuld/`, `/policy/`, `/assets/`, `/logos/`, `/logo.svg`, `/lead-mail.json`, `/robots.txt`, `/sitemap.xml`, `/404.html`. **Får sajten en ny toppmapp eller rotfil måste den in i undantaget**, annars skickas den till Akademin och ger 404 där.
+
+SSL-läget i Cloudflare är Full, inte Full (strict). GitHub kan inte alltid förnya sitt certifikat för www bakom Cloudflares proxy, och strict skulle då stoppa sajten.
+
+Kampanjingångarna är verb. Räkna och träna används inte: å, ä och ö blir kod (xn--…) i många program.
+
 ## Köra och testa
 
 ```bash
@@ -127,9 +145,7 @@ Policyerna gäller hela sajten, inte bara spelet. `ai-intervju` är informatione
 
 ## Öppet, kräver beslut eller uppgifter från Thomas
 
-- `BOOKING_URL` och `TRAINING_URL` i `src/config.js` är platshållare. De används både i spelet och i mejlet.
 - Policyerna är standardmallar — låt någon med juridisk koll läsa dem.
-- Egen subdomän är beslutad men uppskjuten. Vid byte: `base` i `vite.config.js` ska bli `/`, plus CNAME-fil och DNS-post. Glöm inte URL:en till `lead-mail.json` i flödet, de absoluta länkarna mellan policyerna i `docs/policy/` och länken till `ai-intervju.pdf` i `rostagent/`.
 
 ## Arbetssätt
 

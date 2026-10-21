@@ -14,7 +14,7 @@ Du är inbjuden att prata med deras AI-intervjuare i ungefär 15 minuter, när d
 
 **[Starta intervjun](https://elevenlabs.io/app/talk-to?agent_id=[AGENT_ID])**
 
-Genom att klicka och starta samtalet bekräftar du att du har läst [informationen om AI-intervjun](https://superintelligent-se.github.io/Superintelligent/policy/ai-intervju.pdf). Det viktigaste:
+Genom att klicka och starta samtalet bekräftar du att du har läst [informationen om AI-intervjun](https://www.superintelligent.se/policy/ai-intervju.pdf). Det viktigaste:
 
 - **Det är frivilligt.** Du kan avstå eller avbryta när du vill, och det får inga följder för dig. Vi får inte veta vem som har deltagit.
 - **Du pratar med en AI**, inte en människa. Rösten är en AI-kopia av Thomas Dalebring på Superintelligent.
@@ -40,7 +40,7 @@ Hej, en påminnelse om AI-intervjun. Den är öppen till och med [DATUM] och tar
 
 **[Starta intervjun](https://elevenlabs.io/app/talk-to?agent_id=[AGENT_ID])**
 
-[Information om AI-intervjun](https://superintelligent-se.github.io/Superintelligent/policy/ai-intervju.pdf)
+[Information om AI-intervjun](https://www.superintelligent.se/policy/ai-intervju.pdf)
 
 [AVSÄNDARE]
 
