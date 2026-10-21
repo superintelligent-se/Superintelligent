@@ -1314,3 +1314,53 @@ h3 {
     transition: none;
   }
 }
+
+/* AI-resans steg är klickbara: länken i rubriken täcker hela steget. */
+.level .col,
+.level .col.wide > div {
+  position: relative;
+}
+
+.step-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.step-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.step-link:focus-visible {
+  outline: none;
+}
+
+.level .col:has(.step-link:focus-visible),
+.level .col.wide > div:has(.step-link:focus-visible) {
+  outline: 3px solid var(--gold);
+  outline-offset: 6px;
+}
+
+.level .go {
+  margin-top: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+.level .col:has(.step-link) .qb,
+.level .col.wide > div:has(.step-link) .qb {
+  transition: transform 0.15s;
+}
+
+.level .col:has(.step-link):hover .qb,
+.level .col.wide > div:has(.step-link):hover .qb {
+  transform: translateY(-6px);
+}
+
+.level .col:has(.step-link):hover .t,
+.level .col.wide > div:has(.step-link):hover .t {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}

@@ -175,3 +175,37 @@
 elevenlabs-convai.iv-hidden {
   visibility: hidden;
 }
+
+/* Innan intervjuaren har laddats: guld och en lugn puls som drar blicken. */
+.iv-toggle.iv-call {
+  background: var(--gold);
+  border-color: var(--gold-dark);
+  color: #0a0e17;
+  animation: iv-puls 2.4s ease-in-out infinite;
+}
+
+.iv-toggle.iv-call:hover {
+  background: #f0c24a;
+}
+
+.iv-toggle.iv-call::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 10px;
+  background: #0a0e17;
+  border-radius: 50%;
+  vertical-align: 1px;
+}
+
+@keyframes iv-puls {
+  0%, 100% { box-shadow: 4px 4px 0 #000, 0 0 0 0 rgba(224, 178, 60, 0.55); }
+  50% { box-shadow: 4px 4px 0 #000, 0 0 0 12px rgba(224, 178, 60, 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iv-toggle.iv-call {
+    animation: none;
+  }
+}

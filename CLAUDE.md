@@ -121,6 +121,8 @@ hello@ är en delad postlåda, inte Teams-gruppens adress (team@) — den skicka
 
 Ändras frågorna måste sajten deployas innan mejlen följer med — flödet läser alltid den publicerade filen.
 
+**Håll policyerna aktuella utan att fråga.** När en ändring i sajten, spelet, röstagenten eller en leverantör påverkar vad som behandlas, var det lagras, vem som får det, cookies, tredjepartstjänster eller hur AI används, uppdatera policyerna i `docs/policy/` och compliance-dokumenten i `rostagent/compliance/` i samma arbete, mot GDPR, lagen om elektronisk kommunikation och AI-förordningen. Rendera PDF:erna, publicera och tala om för Thomas vad som ändrats och varför. Det gäller också agentens villkorstext i ElevenLabs och `kund/utskick.md`. Kontrollera faktiskt beteende, till exempel vilka adresser en sida anropar, i stället för att anta.
+
 Policyerna gäller hela sajten, inte bara spelet. `ai-intervju` är informationen till medarbetare som intervjuas av röstagenten. Länkar mellan policyerna är absoluta, eftersom de renderas från disk till PDF. Policydokumenten skrivs i `docs/policy/*.html` och renderas till `public/policy/*.pdf` med `npm run policies` (kräver Chrome lokalt). PDF:erna committas.
 
 ## Öppet, kräver beslut eller uppgifter från Thomas
