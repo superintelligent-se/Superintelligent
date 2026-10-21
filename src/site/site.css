@@ -1336,7 +1336,7 @@ h3 {
   outline: none;
 }
 
-.level .col:has(.step-link:focus-visible),
+.level .col:not(.wide):has(.step-link:focus-visible),
 .level .col.wide > div:has(.step-link:focus-visible) {
   outline: 3px solid var(--gold);
   outline-offset: 6px;
@@ -1349,20 +1349,51 @@ h3 {
   color: var(--gold);
 }
 
-.level .col:has(.step-link) .qb,
+.level .col:not(.wide):has(.step-link) .qb,
 .level .col.wide > div:has(.step-link) .qb {
   transition: transform 0.15s;
 }
 
-.level .col:has(.step-link):hover .qb,
+/* Steg 4 rymmer två länkar, 4A och 4B. Där gäller hovringen varje halva för
+   sig, annars lyfter båda blocken när man pekar på det ena. */
+.level .col:not(.wide):has(.step-link):hover .qb,
 .level .col.wide > div:has(.step-link):hover .qb {
   transform: translateY(-6px);
 }
 
-.level .col:has(.step-link):hover .t,
+.level .col:not(.wide):has(.step-link):hover .t,
 .level .col.wide > div:has(.step-link):hover .t {
   text-decoration: underline;
   text-underline-offset: 4px;
+}
+
+/* Korten under banan är klickbara över hela ytan, inte bara rubriken. */
+.tag > div {
+  position: relative;
+}
+
+.tag a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.tag:has(a):hover > div {
+  background: #1a2336;
+}
+
+.tag:has(a):hover strong a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.tag a:focus-visible {
+  outline: none;
+}
+
+.tag:has(a:focus-visible) > div {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
 }
 
 /* Steg utan länk får en kommentar i stället, grå och kursiv så att den inte
