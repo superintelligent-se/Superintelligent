@@ -30,6 +30,7 @@ Säg "Testkontoret" och "testkontoret punkt se" när agenten frågar.
 | 14 | Säg en roll som inte finns i spelet, till exempel "ekonomiassistent" | `roll` blir `annat` eller närmaste, rollgrupp medarbetare. |
 | 15 | Öppna länken i ett privat fönster och välj *Reject all* i ElevenLabs cookiefråga | Samtalet startar ändå. Gör det inte: stryk meningen om att tacka nej i `kund/utskick.md`. |
 | 16 | Klicka *Call AI agent* | Villkorstexten (Terms) visas innan samtalet börjar. |
+| 17 | På `/intervju/` i mobilen: starta ett samtal, tryck *Minimera intervjuaren*, prata vidare, tryck *Visa intervjuaren* | Samtalet fortsätter hörbart medan panelen är dold. Gör det inte: ta bort meningen om att samtalet fortsätter i `src/site/intervju.js`. |
 
 ## Kontrollera efter varje samtal
 
