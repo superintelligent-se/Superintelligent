@@ -91,7 +91,8 @@ index.html             Sajtens startsida
 spelet/index.html      Spelet
 ai-skuld/index.html    Kalkylatorn, modellen kommer från repot superintelligent-se/roi
 intervju/index.html    Röstagenten att testa. Widgeten laddas först vid klick
-src/site/              Sajtens CSS och JS, delar bara config.js med spelet
+src/site/              Sajtens CSS och JS. Delar config.js med spelet, och rubrikvalets
+                       effekter lånar pixelart.js och avatars.js
 public/                Ligger i roten: lead-mail.json, policy-PDF:er, logotyper
 ```
 

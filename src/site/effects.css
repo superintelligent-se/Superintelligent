@@ -1,0 +1,134 @@
+/* Lagret som rubrikvalets effekter ritas i, ovanpå allt och utan att ta klick. */
+
+.fx {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.fx img {
+  position: absolute;
+  image-rendering: pixelated;
+}
+
+/* Kassaapparaten som räknar upp beloppet. */
+.fx-till {
+  position: absolute;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #0b0f1a;
+  border: 4px solid var(--gold);
+  box-shadow: 6px 6px 0 #000;
+  font-family: var(--pixel);
+  color: #3fbf7f;
+  white-space: nowrap;
+}
+
+.fx-till-kr {
+  font-size: 28px;
+  min-width: 6.5ch;
+  text-align: right;
+}
+
+.fx-till-unit {
+  font-size: 14px;
+}
+
+.fx-till.ching {
+  animation: till-shake 0.3s steps(4, end);
+}
+
+@keyframes till-shake {
+  25% { translate: -4px 0; }
+  75% { translate: 4px 0; }
+}
+
+.fx-word {
+  position: absolute;
+  left: 50%;
+  bottom: 100%;
+  margin-bottom: 8px;
+  translate: -50% 0;
+  font-family: var(--pixel);
+  font-size: 18px;
+  color: var(--gold);
+  text-shadow: 3px 3px 0 #000;
+  animation: word-pop 0.5s steps(5, end) both;
+}
+
+@keyframes word-pop {
+  from { transform: scale(0); }
+  60% { transform: scale(1.3); }
+  to { transform: scale(1); }
+}
+
+/* Ljusblixten och tryckvågen när möjligheterna smäller. */
+.fx-flash {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at var(--x) var(--y), rgba(255, 255, 255, 0.9), rgba(253, 224, 71, 0.35) 25%, transparent 60%);
+}
+
+.fx-ring {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 4px solid #fde047;
+}
+
+/* Applåderna över publiken. */
+.fx-clap {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background:
+    linear-gradient(#fde047, #fde047) 8px 0 / 4px 6px no-repeat,
+    linear-gradient(#fde047, #fde047) 0 8px / 6px 4px no-repeat,
+    linear-gradient(#fde047, #fde047) 14px 8px / 6px 4px no-repeat,
+    linear-gradient(#fde047, #fde047) 8px 14px / 4px 6px no-repeat;
+}
+
+/* Pratbubblorna från intervjun. */
+.fx-bubble {
+  position: absolute;
+  padding: 10px 14px;
+  background: #fff;
+  color: #0b0f1a;
+  border: 3px solid #0b0f1a;
+  box-shadow: 4px 4px 0 var(--purple);
+  font-family: var(--pixel);
+  font-size: 12px;
+  line-height: 1.5;
+  min-height: 1.5em;
+  transform-origin: 20px 100%;
+}
+
+.fx-bubble::after {
+  content: '';
+  position: absolute;
+  left: 16px;
+  top: 100%;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border: 3px solid #0b0f1a;
+  border-top: 0;
+  border-left: 0;
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+
+.fx-bubble.right {
+  transform-origin: calc(100% - 20px) 100%;
+}
+
+.fx-bubble.right::after {
+  left: auto;
+  right: 16px;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+  border-right: 0;
+  border-left: 3px solid #0b0f1a;
+}

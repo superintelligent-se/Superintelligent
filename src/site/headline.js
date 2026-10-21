@@ -3,7 +3,7 @@
 // Boka gratis möte är desamma oavsett rubrik. Rubrik 1 står i HTML:en, så
 // sökmotorer och den som inte klickar ser alltid den.
 import './headline.css';
-import { confetti } from './confetti.js';
+import { celebrate } from './effects.js';
 
 const VARIANTS = [
   {
@@ -15,7 +15,7 @@ const VARIANTS = [
     eb: 'Rubrik 2 · Pengarna',
     // Hårda mellanslag så att beloppet och "och år" inte bryts isär.
     h1: '100\u00a0000\u00a0kr per tjänsteman och\u00a0år',
-    sub: 'Så mycket kostar det när AI inte används systematiskt i det dagliga arbetet, enligt vårt normala antagande. <a href="ai-skuld/">Räkna på er egen siffra</a>, eller börja med spelet.',
+    sub: 'Så mycket kostar det när AI inte används systematiskt i det dagliga arbetet, enligt vårt normala antagande. Räkna på er egen siffra, eller börja med spelet.',
   },
   {
     eb: 'Rubrik 3 · Möjligheterna',
@@ -37,9 +37,9 @@ const VARIANTS = [
 // Varje rubrik leder till avsnittet den handlar om.
 const LINKS = [
   { href: '#ai-resan', text: 'Se hela AI-resan ↓' },
-  { href: '#varfor', text: 'Varför det brådskar ↓' },
-  { href: '#mojlighets-ai', text: 'Mer om Möjlighets-AI ↓' },
-  { href: '#traning', text: 'Så tränar medarbetarna ↓' },
+  { href: 'ai-skuld/', text: 'Räkna på din AI-skuld →' },
+  { href: '#mojlighets-ai', text: 'Se vad som blir möjligt ↓' },
+  { href: '#traning', text: 'Så växer era medarbetare ↓' },
   { href: 'intervju/', text: 'Prova AI-intervjun →' },
 ];
 
@@ -107,12 +107,15 @@ async function show(index, button) {
   button.classList.remove('bump');
   void button.offsetWidth;
   button.classList.add('bump');
-  confetti(button);
+  celebrate(index, button);
 
   eb.textContent = v.eb;
   if (go) {
     go.href = LINKS[index].href;
     go.textContent = LINKS[index].text;
+    go.classList.remove('flash');
+    void go.offsetWidth;
+    go.classList.add('flash');
   }
   sub.classList.add('fade');
   sub.innerHTML = v.sub;
