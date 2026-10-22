@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Presentationens titel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500&family=Silkscreen&display=swap" />
+<style>
+/* ==== TEMA: rör inget härifrån till SLUT TEMA. Innehållet bor i <main>. ====
+   Superintelligents presentationstema. Samma formspråk som www.superintelligent.se:
+   mörk bana, frågetecken-block, plattformar, tegelmark och etiketter i pixelfont.
+   Grönt är bottom-up och träning, lila top-down och rådgivning, gult spelet och
+   nästa steg. Varje bild är 1920 x 1080 och skalas till skärmen. */
+
+:root {
+  --bg: #0a0e17;
+  --bg-alt: #0d1220;
+  --panel: #131a28;
+  --line: #24304a;
+  --line-strong: #3a4766;
+  --ink: #f2f5fa;
+  --ink-2: #cdd3e3;
+  --muted: #a3adc8;
+  --faint: #8892b0;
+  --gold: #e0b23c;
+  --gold-dark: #b8860b;
+  --green: #2e9e63;
+  --green-dark: #1c7a49;
+  --green-text: #3fbf7f;
+  --purple: #7c3aed;
+  --purple-dark: #5b21b6;
+  --purple-text: #c4b5fd;
+  --blue: #4f7fd6;
+  --yellow: #fbbf24;
+  --orange: #f97316;
+  --plat: #2a3550;
+  --plat-top: #3d4b6e;
+  --ground: #1b2436;
+  --pixel: 'Silkscreen', ui-monospace, monospace;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --sans: 'Hanken Grotesk', system-ui, sans-serif;
+  --pad-x: 128px;
+  --pad-top: 96px;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #000;
+  color: var(--ink);
+  font-family: var(--sans);
+  overflow: hidden;
+}
+
+/* Scenen är alltid 1920 x 1080. deck.js sätter --scale efter fönstret. */
+.deck {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+.slide {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1920px;
+  height: 1080px;
+  margin: -540px 0 0 -960px;
+  transform: scale(var(--scale, 0.5));
+  background: var(--bg);
+  overflow: hidden;
+  display: none;
+  flex-direction: column;
+  padding: var(--pad-top) var(--pad-x) 0;
+}
+
+.slide.is-active { display: flex; }
+
+/* Typografi, skalan från sajten uppräknad till 1920 px */
+
+.eb {
+  font-family: var(--pixel);
+  font-size: 26px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  margin: 0;
+  color: var(--faint);
+}
+.eb.gold { color: var(--gold); }
+.eb.green { color: var(--green-text); }
+.eb.purple { color: var(--purple-text); }
+
+.pixel-dot {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: var(--gold);
+  margin-right: 18px;
+  vertical-align: -1px;
+}
+
+h1, h2, h3 { margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
+
+.h1 {
+  font-size: 136px;
+  line-height: 1.0;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.h2 {
+  font-size: 84px;
+  line-height: 1.05;
+  font-weight: 800;
+}
+
+.sub {
+  margin: 0;
+  font-size: 38px;
+  line-height: 1.4;
+  color: var(--muted);
+  max-width: 30ch;
+  text-wrap: pretty;
+}
+
+.small {
+  font-family: var(--mono);
+  font-size: 24px;
+  color: var(--faint);
+  margin: 0;
+}
+
+/* Sidhuvud och sidfot, samma plats på varje bild */
+
+.s-head {
+  position: absolute;
+  top: 48px;
+  left: var(--pad-x);
+  right: var(--pad-x);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo { height: 34px; width: auto; color: var(--ink); display: block; }
+
+.s-foot {
+  position: absolute;
+  left: var(--pad-x);
+  right: var(--pad-x);
+  bottom: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--mono);
+  font-size: 22px;
+  color: var(--faint);
+}
+
+.s-foot .num { font-family: var(--pixel); font-size: 22px; letter-spacing: 0.08em; }
+
+/* Bilder med tegelmark i botten har sidfoten ovanpå marken */
+.slide.has-ground .s-foot { bottom: 22px; color: var(--muted); }
+
+/* Spelets block, plattformar och mark */
+
+.qb {
+  width: 96px;
+  height: 96px;
+  flex-shrink: 0;
+  background: var(--gold);
+  border: 5px solid var(--gold-dark);
+  box-shadow: inset -8px -8px 0 rgba(0, 0, 0, 0.25), inset 8px 8px 0 rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--pixel);
+  font-size: 38px;
+  color: #3d2a00;
+}
+.qb.sm { width: 64px; height: 64px; font-size: 26px; border-width: 4px; box-shadow: inset -6px -6px 0 rgba(0,0,0,.25), inset 6px 6px 0 rgba(255,255,255,.3); }
+.qb.green { background: var(--green); border-color: var(--green-dark); color: #fff; }
+.qb.purple { background: var(--purple); border-color: var(--purple-dark); color: #fff; }
+.qb.blue { background: var(--blue); border-color: #2f5bab; color: #fff; }
+.qb.orange { background: var(--orange); border-color: #c2570c; color: #fff; }
+.qb.yellow { background: var(--yellow); border-color: #c79410; color: #3d2a00; }
+.qb.done { background: var(--plat); border-color: var(--line-strong); color: var(--faint); box-shadow: none; }
+
+.plat { width: 100%; background: var(--plat); border-top: 6px solid var(--plat-top); }
+
+.ground {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 80px;
+  background-color: var(--ground);
+  background-image: linear-gradient(var(--bg) 3px, transparent 3px),
+    linear-gradient(90deg, var(--bg) 3px, transparent 3px);
+  background-size: 64px 32px;
+}
+
+.flag { display: flex; align-items: flex-end; }
+.flag::before { content: ''; width: 12px; height: 120px; background: #8b95a8; }
+.flag::after { content: ''; width: 64px; height: 42px; background: #fde047; align-self: flex-start; }
+
+.card { background: var(--panel); border: 3px solid var(--line); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 84px;
+  padding: 0 36px;
+  font-weight: 700;
+  font-size: 30px;
+  border: 3px solid transparent;
+  box-shadow: 6px 6px 0 #000;
+  color: #fff;
+  text-decoration: none;
+}
+.btn-p { background: var(--purple); }
+.btn-o { border-color: var(--ink); color: var(--ink); }
+.btn small { font-family: var(--mono); font-weight: 400; font-size: 22px; opacity: 0.8; }
+
+/* ---- Bildtyp: försättsblad ---- */
+
+.cover { display: grid; grid-template-columns: 1fr 600px; gap: 24px; align-items: center; padding-bottom: 80px; }
+.cover .h1 { font-size: 116px; }
+.cover .copy { display: flex; flex-direction: column; gap: 40px; min-width: 0; }
+.cover .by { display: flex; gap: 32px; align-items: center; font-family: var(--mono); font-size: 26px; color: var(--ink-2); }
+.cover .by span + span::before { content: '·'; margin-right: 32px; color: var(--faint); }
+
+/* Banan till höger: fem plattformar som stiger, ett block per område, flagga sist */
+.level { align-self: end; display: flex; align-items: flex-end; gap: 16px; height: 720px; }
+.level .col { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 56px; }
+.level .col .qb { width: 88px; height: 88px; }
+.level .col.end { gap: 0; align-items: flex-start; }
+.level .col.end .flag { margin: 0 0 0 40px; }
+
+/* ---- Bildtyp: innehåll (agenda) ---- */
+
+.agenda { display: grid; grid-template-columns: 640px 1fr; gap: 112px; padding-top: 72px; }
+.agenda .intro { display: flex; flex-direction: column; gap: 32px; }
+.agenda ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.agenda li {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: 40px;
+  align-items: center;
+  padding: 26px 0;
+  border-bottom: 3px solid var(--line);
+}
+.agenda li:first-child { border-top: 3px solid var(--line); }
+.agenda li strong { display: block; font-size: 44px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; }
+.agenda li div > span { display: block; font-size: 26px; color: var(--muted); margin-top: 6px; }
+.agenda li time { font-family: var(--mono); font-size: 24px; color: var(--faint); }
+/* data-current på listan markerar var vi är, så samma bild kan återkomma som avsnittsbild */
+.agenda li.is-done strong { color: var(--faint); }
+.agenda li.is-current strong { color: var(--gold); }
+
+/* ---- Bildtyp: avslutning ---- */
+
+.closing { display: grid; grid-template-columns: 1fr 520px; gap: 120px; align-items: start; padding-top: 64px; }
+.closing .copy { display: flex; flex-direction: column; gap: 44px; min-width: 0; }
+.person { display: flex; gap: 32px; align-items: center; }
+.person img { width: 132px; height: 132px; object-fit: cover; border: 4px solid var(--gold); box-shadow: 6px 6px 0 #000; display: block; }
+.person strong { display: block; font-size: 40px; font-weight: 700; }
+.person .small { color: var(--ink-2); margin-top: 6px; }
+.closing .btns { display: flex; gap: 28px; flex-wrap: wrap; }
+
+.qr-card { display: flex; flex-direction: column; gap: 28px; align-items: stretch; }
+.qr {
+  background: #fff;
+  padding: 28px;
+  border: 6px solid var(--gold);
+  box-shadow: 10px 10px 0 #000;
+  aspect-ratio: 1;
+}
+.qr svg { display: block; width: 100%; height: 100%; }
+.qr-card .eb { text-align: center; }
+.qr-card .small { text-align: center; color: var(--ink-2); }
+
+.closing-flag { position: absolute; right: 200px; bottom: 80px; }
+
+/* Navigering på skärmen. Syns när musen rör sig, aldrig i utskrift. */
+
+.nav-ui {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 5;
+}
+.nav-ui.show { opacity: 1; }
+.nav-ui button {
+  width: 44px;
+  height: 44px;
+  background: var(--panel);
+  color: var(--ink);
+  border: 2px solid var(--line-strong);
+  font-family: var(--pixel);
+  font-size: 16px;
+  cursor: pointer;
+}
+.nav-ui button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+.progress { position: fixed; left: 0; top: 0; height: 4px; background: var(--gold); width: 0; transition: width 0.25s steps(6, end); z-index: 5; }
+
+@media (prefers-reduced-motion: reduce) {
+  .progress, .nav-ui { transition: none; }
+}
+
+/* Utskrift och PDF: en bild per sida, 1920 x 1080 */
+@page { size: 1920px 1080px; margin: 0; }
+@media print {
+  html, body { height: auto; overflow: visible; background: var(--bg); }
+  .deck { position: static; display: block; }
+  .slide { display: flex !important; position: relative; left: 0; top: 0; margin: 0; transform: none; break-after: page; }
+  .nav-ui, .progress { display: none; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+/* ==== SLUT TEMA ==== */
+</style>
+</head>
+<body>
+<!-- LOGO: definieras en gång, används med <svg class="logo"><use href="#logo" /></svg> -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="logo" viewBox="0 0 459.96 90" fill="currentColor"><path d="M32.72,2.18c5.88,0,10.69,1.23,14.45,3.68,3.76,2.45,5.65,5.73,5.68,9.82.03,4.09-1.23,7.53-3.77,10.32-1.45,1.52-2.8,2.27-4.04,2.27s-2.2-.3-2.86-.91c-.67-.6-1-1.33-1-2.18s.3-1.61.91-2.27c1.94-2.06,2.91-4.29,2.91-6.68s-1.23-4.29-3.68-5.68c-2.45-1.39-5.5-2.09-9.13-2.09s-7.09.92-10.36,2.77c-3.27,1.85-4.91,4.08-4.91,6.68s.73,4.57,2.18,5.91c1.45,1.33,3.89,2.94,7.32,4.82,3.42,1.88,5.5,3.02,6.23,3.41.73.39,1.83,1,3.32,1.82,1.48.82,2.47,1.36,2.95,1.64.48.27,1.33.79,2.55,1.54,1.21.76,2.01,1.3,2.41,1.64.39.33,1.05.86,1.95,1.59.91.73,1.51,1.33,1.82,1.82.3.49.73,1.12,1.27,1.91,1.27,1.82,1.91,4.39,1.91,7.73,0,5.63-2.45,10.09-7.36,13.36s-11,4.91-18.27,4.91-13.31-1.54-18.13-4.64c-4.82-3.09-7.04-5.5-7.04-11.26,0-2.3.68-4.32,2.05-6.04,1.36-1.73,3.03-2.59,5-2.59s2.95.82,2.95,2.45c0,.67-.21,1.65-.64,2.95-.42,1.3-.64,2.38-.64,3.23,0,3.63,1.73,5.1,4.63,7.04,2.91,1.94,6.59,2.22,11.95,2.22s9.42-1,12.18-3c2.76-2,4.14-4.59,4.14-7.77s-1.33-5.8-4-7.86c-1.39-1.03-2.71-1.89-3.95-2.59-1.24-.7-2.92-1.59-5.04-2.68-2.12-1.09-3.56-1.86-4.32-2.32-.76-.45-1.89-1.12-3.41-2-1.52-.88-2.44-1.44-2.77-1.68-.33-.24-1.12-.76-2.36-1.54-1.24-.79-2.03-1.36-2.36-1.73-.33-.36-.94-.94-1.82-1.73-.88-.79-1.45-1.47-1.73-2.04-.27-.57-.7-1.42-1.27-2.54-.58-1.12-.86-2.86-.86-5.23,0-5.03,2.5-9.03,7.5-12,5-2.97,10.83-4.45,17.5-4.45ZM9.35,42.9c-3.27,0-4.91-1.42-4.91-4.27,0-1.51.53-2.71,1.59-3.59,1.06-.88,2.41-1.32,4.04-1.32,3.03,0,4.54,1.36,4.54,4.09,0,1.58-.49,2.82-1.45,3.73-.97.91-2.24,1.36-3.82,1.36Z"/><path d="M84.06,32.63c-2.12,6.36-3.49,12.39-4.09,18.09l-.09,1.09c0,1.39.42,2.09,1.27,2.09,1.94-.12,4.45-1.88,7.54-5.27.79-.6,1.44-.91,1.95-.91s1.14.35,1.86,1.05c.73.7,1.09,1.35,1.09,1.95,0,1.4-1.86,3.29-5.59,5.68-3.73,2.39-6.71,3.59-8.95,3.59-3.58,0-5.39-1.79-5.45-5.36l.27-2.82c-.67,1.88-1.94,3.73-3.82,5.54-1.88,1.82-4.12,2.73-6.73,2.73s-4.56-.88-5.86-2.64c-1.3-1.76-1.95-4.03-1.95-6.82,0-3.63.62-7.42,1.86-11.36,1.24-3.94,2.23-6.53,2.95-7.77.73-1.24,1.68-1.86,2.86-1.86s2.07.23,2.68.68c.61.45.91.88.91,1.27s-.73,2.62-2.18,6.68c-1.45,4.06-2.3,7.63-2.54,10.72v.64c0,2.97,1.03,4.45,3.09,4.45,1.64,0,3.32-.95,5.04-2.86,1.73-1.91,3.07-4.53,4.04-7.86l2.45-9.09c.61-2,1.2-3.27,1.77-3.82.57-.55,1.33-.82,2.27-.82s1.74.27,2.41.82c.67.55,1,1.15,1,1.82l-.09.36Z"/><path d="M83.7,77.52c.18-2,.97-6.53,2.36-13.59,1.39-7.06,2.2-10.94,2.41-11.63.21-.7.74-2.42,1.59-5.18.85-2.76,1.91-5.44,3.18-8.04,1.03-2.06,2.12-3.71,3.27-4.95,1.15-1.24,2.67-2.3,4.54-3.18,1.88-.88,4.1-1.32,6.68-1.32s4.56.89,5.95,2.68c1.39,1.79,2.09,4.08,2.09,6.86,0,.67-.06,1.61-.18,2.82,3.03-.67,7.03-3.33,12-8,.36-.18.73-.27,1.09-.27s.71.24,1.05.73c.33.48.5,1.12.5,1.91s-.33,1.42-1,1.91c-1.52,1.82-3.79,3.73-6.82,5.73-3.03,2-5.82,3.3-8.36,3.91-1.33,3.51-3.27,6.42-5.82,8.72-2.54,2.3-5.39,3.45-8.54,3.45-1.88,0-3.67-.79-5.36-2.36-.18.73-.83,4.09-1.95,10.09-1.12,6-1.83,9.42-2.14,10.27-.3.85-1.03,1.62-2.18,2.32-1.15.7-2.18,1.05-3.09,1.05l-.64-.91c-.48-.67-.73-1.3-.73-1.91l.09-1.09ZM99.97,53.99c1.57,0,3.07-.6,4.5-1.82,1.42-1.21,2.59-2.79,3.5-4.73-1.52-.73-2.27-2-2.27-3.82,0-1.03.17-1.86.5-2.5.33-.64,1.07-1.41,2.23-2.32.12-.24.24-.39.36-.45-.73-1.88-1.79-2.82-3.18-2.82s-2.62.39-3.68,1.18c-1.06.79-1.95,1.94-2.68,3.45-.73,1.52-1.29,2.88-1.68,4.09-.39,1.21-.82,2.73-1.27,4.54s-.74,2.94-.86,3.36c1.45,1.21,2.97,1.82,4.54,1.82Z"/><path d="M119.05,47.9c0-4.48,1.47-8.65,4.41-12.5,2.94-3.85,6.5-5.77,10.68-5.77,2.48,0,4.54.7,6.18,2.09,1.64,1.39,2.45,3.27,2.45,5.63,0,3.33-1.36,6.03-4.09,8.09-2.73,2.06-6.85,3.67-12.36,4.82.85,2.61,3.03,3.91,6.54,3.91,4.85,0,9.42-2.06,13.72-6.18.24-.24.62-.36,1.14-.36s1,.21,1.45.64c.45.42.68.94.68,1.54s-.21,1.21-.64,1.82c-1.52,2.12-3.91,4.08-7.18,5.86-3.27,1.79-6.68,2.68-10.22,2.68s-6.56-1.05-9.04-3.14c-2.48-2.09-3.73-5.14-3.73-9.13ZM134.28,35.54c-1.97,0-3.86,1.14-5.68,3.41-1.82,2.27-2.73,4.71-2.73,7.32,7.57-2.6,11.36-5.33,11.36-8.18,0-1.7-.99-2.54-2.95-2.54Z"/><path d="M152.59,48.17c1.09-3.45,3.14-7.39,6.13-11.81,3-4.42,5.44-6.63,7.32-6.63,2.67,0,4,1.03,4,3.09,0,1.33-.32,2.86-.95,4.59s-.95,2.77-.95,3.14c0,.91.65,1.36,1.95,1.36s3.44-.88,6.41-2.64c.12-.06.36-.09.73-.09s.83.33,1.41,1c.57.67.86,1.26.86,1.77s-.12.89-.36,1.14c-3.64,3.27-7.18,4.91-10.63,4.91-4.12,0-6.18-1.76-6.18-5.27,0-.12.48-2.09,1.45-5.91-.06,0-.55.73-1.45,2.18-2.85,4.73-5.63,10.82-8.36,18.27-.79,1.58-2.09,2.36-3.91,2.36-2.48,0-3.73-2-3.73-6v-.73c0-6.54.94-12.94,2.82-19.18.91-2.73,2.36-4.09,4.36-4.09.79,0,1.42.24,1.91.73.48.49.73,1.09.73,1.82l-3.54,16Z"/><path d="M175.58,50.89c0-2.67.48-5.8,1.45-9.41.97-3.6,1.94-6.29,2.91-8.04.97-1.76,1.8-2.8,2.5-3.14.7-.33,1.48-.5,2.36-.5s1.64.21,2.27.64c.64.42.95.88.95,1.36s-.35,1.33-1.05,2.54c-.7,1.21-1.59,3.58-2.68,7.09-1.09,3.51-1.64,6.33-1.64,8.45,0,2.85,1.06,4.27,3.18,4.27,2.55,0,5.6-2.06,9.18-6.18.48-.6,1.07-.91,1.77-.91s1.33.26,1.91.77c.57.52.86,1.12.86,1.82s-.33,1.47-1,2.32c-4.48,5.27-9.15,7.91-14,7.91-2.73,0-4.91-.83-6.54-2.5-1.64-1.67-2.45-3.83-2.45-6.5ZM188.94,23.81c-3.27,0-4.91-1.42-4.91-4.27,0-1.51.53-2.71,1.59-3.59,1.06-.88,2.41-1.32,4.04-1.32,3.03,0,4.54,1.36,4.54,4.09,0,1.58-.49,2.82-1.45,3.73-.97.91-2.24,1.36-3.82,1.36Z"/><path d="M218.75,53.53c2.3-.48,5.09-2.27,8.36-5.36.24-.24.59-.36,1.05-.36s.94.41,1.45,1.23c.51.82.77,1.45.77,1.91s-.06.8-.18,1.05c-1.94,2.48-4.36,4.39-7.27,5.73-2.91,1.33-5.33,2-7.27,2-3.52,0-5.27-1.91-5.27-5.73,0-2,.6-4.88,1.82-8.63,1.21-3.76,1.82-5.77,1.82-6.04s-.06-.41-.18-.41h-.09c-1.03.42-3.2,2.83-6.5,7.23-3.3,4.39-5.32,7.5-6.04,9.32-.73,1.82-1.35,2.99-1.86,3.5-.52.52-1.35.77-2.5.77-2.24-.06-3.36-2.36-3.36-6.91.12-6.42,1.45-13.06,4-19.9.79-2.18,2.12-3.27,4-3.27.73,0,1.33.24,1.82.73.48.49.73.99.73,1.5s-.03.86-.09,1.05c-1.4,4-2.52,8.48-3.36,13.45,3.15-5.45,6.24-9.62,9.27-12.5,3.03-2.88,5.73-4.32,8.09-4.32,1.21,0,2.27.38,3.18,1.14.91.76,1.36,1.56,1.36,2.41,0,1.33-.77,4.35-2.32,9.04-1.55,4.7-2.38,7.47-2.5,8.32-.12.85-.18,1.59-.18,2.23s.2.94.59.91c.39-.03.62-.05.68-.05Z"/><path d="M228.38,44.9v-1c-.79.55-1.47.82-2.05.82s-1.06-.26-1.45-.77c-.39-.51-.59-1.15-.59-1.91s.36-1.33,1.09-1.73,1.88-.95,3.45-1.68c1.03-8.06,3.15-15.72,6.36-22.99,1.64-3.7,3.67-6.74,6.09-9.13,2.42-2.39,4.79-3.59,7.09-3.59s3.95.58,4.95,1.73c1,1.15,1.5,2.55,1.5,4.18v.64c-.36,4.48-2.05,8.94-5.04,13.36-3,4.42-6.53,8.3-10.59,11.63,5.03-1.7,8.24-2.55,9.63-2.55.48,0,.95.26,1.41.77.45.52.68,1.2.68,2.05s-.52,1.36-1.54,1.54c-3.09.49-7.82,2.03-14.18,4.64-.12,1.94-.18,3.45-.18,4.54,0,5.76,1.24,8.63,3.73,8.63,2.91,0,6.27-2.12,10.09-6.36.42-.42.95-.64,1.59-.64s1.24.26,1.82.77c.57.52.86,1.15.86,1.91s-.36,1.53-1.09,2.32c-4.67,5.21-9.36,7.82-14.09,7.82-3.51,0-5.98-1.32-7.41-3.95-1.42-2.64-2.14-6.32-2.14-11.04ZM247.83,10.45c-1.7,0-3.39,1.27-5.09,3.82-3.15,4.67-5.3,10.6-6.45,17.81.12-.12.86-.94,2.23-2.45,1.36-1.51,2.21-2.45,2.54-2.82.33-.36,1.06-1.23,2.18-2.59,1.12-1.36,1.86-2.41,2.23-3.14s.86-1.7,1.5-2.91c.64-1.21,1.06-2.36,1.27-3.45.21-1.09.32-2.06.32-2.91s-.24-1.3-.73-1.36Z"/><path d="M249.56,47.9c0-4.48,1.47-8.65,4.41-12.5,2.94-3.85,6.5-5.77,10.68-5.77,2.48,0,4.54.7,6.18,2.09,1.64,1.39,2.45,3.27,2.45,5.63,0,3.33-1.36,6.03-4.09,8.09-2.73,2.06-6.85,3.67-12.36,4.82.85,2.61,3.03,3.91,6.54,3.91,4.85,0,9.42-2.06,13.72-6.18.24-.24.62-.36,1.14-.36s1,.21,1.45.64c.45.42.68.94.68,1.54s-.21,1.21-.64,1.82c-1.52,2.12-3.91,4.08-7.18,5.86-3.27,1.79-6.68,2.68-10.22,2.68s-6.56-1.05-9.04-3.14c-2.48-2.09-3.73-5.14-3.73-9.13ZM264.78,35.54c-1.97,0-3.86,1.14-5.68,3.41-1.82,2.27-2.73,4.71-2.73,7.32,7.57-2.6,11.36-5.33,11.36-8.18,0-1.7-.99-2.54-2.95-2.54Z"/><path d="M287.82,59.89c-3.03,0-5.36-1.23-7-3.68-1.64-2.45-2.45-5.8-2.45-10.04,0-1.27.03-2.24.09-2.91.79-8.78,3.09-17.93,6.91-27.45,1.88-4.54,4.21-8.32,7-11.32,2.79-3,5.73-4.5,8.82-4.5,1.82,0,3.27.59,4.36,1.77,1.09,1.18,1.64,2.65,1.64,4.41v.73c-.61,6.12-3.09,12.51-7.45,19.18-4.36,6.67-9.18,12.06-14.45,16.18-.24,1.94-.36,3.42-.36,4.45,0,4.91,1.45,7.36,4.36,7.36s6.39-2.12,10.09-6.36c.42-.42.95-.64,1.59-.64s1.24.26,1.82.77c.57.52.86,1.15.86,1.91s-.36,1.53-1.09,2.32c-4.61,5.21-9.51,7.82-14.72,7.82ZM298.91,7.45c-2.54,0-5.1,3.24-7.68,9.72-2.58,6.48-4.32,12.63-5.23,18.45,3.57-4,6.86-8.54,9.86-13.63,3-5.09,4.53-9.33,4.59-12.72,0-1.21-.52-1.82-1.55-1.82Z"/><path d="M310.45,59.89c-3.03,0-5.36-1.23-7-3.68-1.64-2.45-2.45-5.8-2.45-10.04,0-1.27.03-2.24.09-2.91.79-8.78,3.09-17.93,6.91-27.45,1.88-4.54,4.21-8.32,7-11.32,2.79-3,5.73-4.5,8.82-4.5,1.82,0,3.27.59,4.36,1.77,1.09,1.18,1.64,2.65,1.64,4.41v.73c-.61,6.12-3.09,12.51-7.45,19.18-4.36,6.67-9.18,12.06-14.45,16.18-.24,1.94-.36,3.42-.36,4.45,0,4.91,1.45,7.36,4.36,7.36s6.39-2.12,10.09-6.36c.42-.42.95-.64,1.59-.64s1.24.26,1.82.77c.57.52.86,1.15.86,1.91s-.36,1.53-1.09,2.32c-4.61,5.21-9.51,7.82-14.72,7.82ZM321.54,7.45c-2.54,0-5.1,3.24-7.68,9.72-2.58,6.48-4.32,12.63-5.23,18.45,3.57-4,6.86-8.54,9.86-13.63,3-5.09,4.53-9.33,4.59-12.72,0-1.21-.52-1.82-1.55-1.82Z"/><path d="M322.54,50.89c0-2.67.48-5.8,1.45-9.41.97-3.6,1.94-6.29,2.91-8.04.97-1.76,1.8-2.8,2.5-3.14.7-.33,1.48-.5,2.36-.5s1.64.21,2.27.64c.64.42.95.88.95,1.36s-.35,1.33-1.05,2.54c-.7,1.21-1.59,3.58-2.68,7.09-1.09,3.51-1.64,6.33-1.64,8.45,0,2.85,1.06,4.27,3.18,4.27,2.55,0,5.6-2.06,9.18-6.18.48-.6,1.07-.91,1.77-.91s1.33.26,1.91.77c.57.52.86,1.12.86,1.82s-.33,1.47-1,2.32c-4.48,5.27-9.15,7.91-14,7.91-2.73,0-4.91-.83-6.54-2.5-1.64-1.67-2.45-3.83-2.45-6.5ZM335.9,23.81c-3.27,0-4.91-1.42-4.91-4.27,0-1.51.53-2.71,1.59-3.59,1.06-.88,2.41-1.32,4.04-1.32,3.03,0,4.54,1.36,4.54,4.09,0,1.58-.49,2.82-1.45,3.73-.97.91-2.24,1.36-3.82,1.36Z"/><path d="M367.8,34.99l-5.09,21.54c6.24-5.09,10.6-7.63,13.09-7.63.55,0,1.14.29,1.77.86.64.58.95,1.35.95,2.32s-.67,1.79-2,2.45c-7.03,3.82-11.91,6.63-14.63,8.45-2.18,9.87-4.6,16.39-7.27,19.54-3.39,3.94-7.15,5.91-11.27,5.91-5.03,0-7.54-2.06-7.54-6.18,0-1.09.18-2.03.55-2.82.18-.49.35-.93.5-1.32.15-.39.39-.83.73-1.32.33-.49.59-.86.77-1.14s.48-.68.91-1.23c.42-.55.71-.91.86-1.09.15-.18.47-.53.95-1.05.48-.52,1.17-1.29,2.04-2.32.88-1.03,2.68-2.55,5.41-4.54.97-.79,2.26-1.77,3.86-2.95,1.6-1.18,2.8-2.08,3.59-2.68l.91-4.36c-.79,1.15-2,2.14-3.63,2.95-1.64.82-3.21,1.23-4.73,1.23-2.55,0-4.59-.83-6.13-2.5-1.54-1.67-2.32-3.74-2.32-6.23,0-5.57,1.94-10.47,5.82-14.68,3.88-4.21,8.27-6.32,13.18-6.32h.36c1.03,0,1.82.23,2.36.68s.82.95.82,1.5c.55-.24,1.24-.36,2.09-.36s1.59.26,2.23.77c.64.52.95,1.17.95,1.95l-.09.55ZM342.89,83.52c3.09,0,5.79-2.04,8.09-6.13,2.3-4.09,3.85-8.07,4.64-11.95-.61.55-1.56,1.36-2.86,2.45-1.3,1.09-2.29,1.92-2.95,2.5-.67.57-1.53,1.33-2.59,2.27-1.06.94-1.86,1.73-2.41,2.36s-1.24,1.53-2.09,2.68c-.85,1.15-1.27,2.45-1.27,3.91,0,1.27.48,1.91,1.45,1.91ZM350.53,53.71c3.64,0,6.27-2.94,7.91-8.82l2.45-9.27c-3.63,0-6.8,1.54-9.5,4.64-2.7,3.09-4.04,6.1-4.04,9.04s1.06,4.41,3.18,4.41Z"/><path d="M370.89,47.9c0-4.48,1.47-8.65,4.41-12.5,2.94-3.85,6.5-5.77,10.68-5.77,2.48,0,4.54.7,6.18,2.09,1.64,1.39,2.45,3.27,2.45,5.63,0,3.33-1.36,6.03-4.09,8.09-2.73,2.06-6.85,3.67-12.36,4.82.85,2.61,3.03,3.91,6.54,3.91,4.85,0,9.42-2.06,13.72-6.18.24-.24.62-.36,1.14-.36s1,.21,1.45.64c.45.42.68.94.68,1.54s-.21,1.21-.64,1.82c-1.52,2.12-3.91,4.08-7.18,5.86-3.27,1.79-6.68,2.68-10.22,2.68s-6.56-1.05-9.04-3.14c-2.48-2.09-3.73-5.14-3.73-9.13ZM386.11,35.54c-1.97,0-3.86,1.14-5.68,3.41-1.82,2.27-2.73,4.71-2.73,7.32,7.57-2.6,11.36-5.33,11.36-8.18,0-1.7-.99-2.54-2.95-2.54Z"/><path d="M423.14,53.53c2.3-.48,5.09-2.27,8.36-5.36.24-.24.59-.36,1.05-.36s.94.41,1.45,1.23c.51.82.77,1.45.77,1.91s-.06.8-.18,1.05c-1.94,2.48-4.36,4.39-7.27,5.73-2.91,1.33-5.33,2-7.27,2-3.51,0-5.27-1.91-5.27-5.73,0-2,.6-4.88,1.82-8.63,1.21-3.76,1.82-5.77,1.82-6.04s-.06-.41-.18-.41h-.09c-1.03.42-3.2,2.83-6.5,7.23-3.3,4.39-5.32,7.5-6.04,9.32-.73,1.82-1.35,2.99-1.86,3.5s-1.35.77-2.5.77c-2.24-.06-3.36-2.36-3.36-6.91.12-6.42,1.45-13.06,4-19.9.79-2.18,2.12-3.27,4-3.27.73,0,1.33.24,1.82.73.48.49.73.99.73,1.5s-.03.86-.09,1.05c-1.39,4-2.51,8.48-3.36,13.45,3.15-5.45,6.24-9.62,9.27-12.5,3.03-2.88,5.73-4.32,8.09-4.32,1.21,0,2.27.38,3.18,1.14.91.76,1.36,1.56,1.36,2.41,0,1.33-.77,4.35-2.32,9.04-1.54,4.7-2.38,7.47-2.5,8.32-.12.85-.18,1.59-.18,2.23s.2.94.59.91c.39-.03.62-.05.68-.05Z"/><path d="M432.78,44.9v-1c-.79.55-1.47.82-2.05.82s-1.06-.26-1.45-.77c-.39-.51-.59-1.15-.59-1.91s.36-1.33,1.09-1.73,1.88-.95,3.45-1.68c1.03-8.06,3.15-15.72,6.36-22.99,1.64-3.7,3.67-6.74,6.09-9.13,2.42-2.39,4.79-3.59,7.09-3.59s3.95.58,4.95,1.73c1,1.15,1.5,2.55,1.5,4.18v.64c-.36,4.48-2.05,8.94-5.04,13.36-3,4.42-6.53,8.3-10.59,11.63,5.03-1.7,8.24-2.55,9.63-2.55.48,0,.95.26,1.41.77.45.52.68,1.2.68,2.05s-.52,1.36-1.54,1.54c-3.09.49-7.82,2.03-14.18,4.64-.12,1.94-.18,3.45-.18,4.54,0,5.76,1.24,8.63,3.73,8.63,2.91,0,6.27-2.12,10.09-6.36.42-.42.95-.64,1.59-.64s1.24.26,1.82.77c.57.52.86,1.15.86,1.91s-.36,1.53-1.09,2.32c-4.67,5.21-9.36,7.82-14.09,7.82-3.51,0-5.98-1.32-7.41-3.95-1.42-2.64-2.14-6.32-2.14-11.04ZM452.23,10.45c-1.7,0-3.39,1.27-5.09,3.82-3.15,4.67-5.3,10.6-6.45,17.81.12-.12.86-.94,2.23-2.45,1.36-1.51,2.21-2.45,2.54-2.82.33-.36,1.06-1.23,2.18-2.59,1.12-1.36,1.86-2.41,2.23-3.14s.86-1.7,1.5-2.91c.64-1.21,1.06-2.36,1.27-3.45.21-1.09.32-2.06.32-2.91s-.24-1.3-.73-1.36Z"/></symbol></svg>
+
+<main class="deck" id="deck">
+
+  <!-- 1. Försättsblad. Fortsätter där startsidan slutar: samma rubrik, samma bana. -->
+  <section class="slide has-ground" data-title="Försättsblad">
+    <div class="s-head"><svg class="logo" viewBox="0 0 459.96 90" role="img" aria-label="Superintelligent"><use href="#logo" /></svg></div>
+    <div class="cover" style="flex: 1">
+      <div class="copy">
+        <p class="eb gold"><span class="pixel-dot"></span>Typ av tillfälle · Datum</p>
+        <h1 class="h1">Presentationens titel.</h1>
+        <p class="sub">En mening som säger vad publiken går därifrån med.</p>
+        <p class="by"><span>Förnamn Efternamn</span><span>Roll, Superintelligent</span></p>
+      </div>
+      <div class="level" aria-hidden="true">
+        <div class="col"><div class="qb green">?</div><div class="plat" style="height: 60px"></div></div>
+        <div class="col"><div class="qb yellow">?</div><div class="plat" style="height: 150px"></div></div>
+        <div class="col"><div class="qb blue">?</div><div class="plat" style="height: 240px"></div></div>
+        <div class="col"><div class="qb orange">?</div><div class="plat" style="height: 330px"></div></div>
+        <div class="col"><div class="qb purple">?</div><div class="plat" style="height: 420px"></div></div>
+      </div>
+    </div>
+    <div class="ground"></div>
+    <div class="s-foot"><span>superintelligent.se</span><span class="num"></span></div>
+  </section>
+
+  <!-- 2. Innehåll. Lägg data-current="2" på <ol> för att återanvända bilden som avsnittsbild. -->
+  <section class="slide" data-title="Innehåll">
+    <div class="s-head"><svg class="logo" viewBox="0 0 459.96 90" role="img" aria-label="Superintelligent"><use href="#logo" /></svg></div>
+    <div class="agenda">
+      <div class="intro">
+        <p class="eb gold"><span class="pixel-dot"></span>Det här går vi igenom</p>
+        <h2 class="h2">Rubrik för dagens upplägg</h2>
+        <p class="sub" style="font-size: 32px">En kort mening om varför ordningen är just den här.</p>
+      </div>
+      <ol>
+        <li><span class="qb sm">1</span><div><strong>Första avsnittet</strong><span>Vad det handlar om, en rad</span></div><time>10 min</time></li>
+        <li><span class="qb sm">2</span><div><strong>Andra avsnittet</strong><span>Vad det handlar om, en rad</span></div><time>15 min</time></li>
+        <li><span class="qb sm">3</span><div><strong>Tredje avsnittet</strong><span>Vad det handlar om, en rad</span></div><time>15 min</time></li>
+        <li><span class="qb sm">4</span><div><strong>Frågor och nästa steg</strong><span>Vad det handlar om, en rad</span></div><time>5 min</time></li>
+      </ol>
+    </div>
+    <div class="s-foot"><span>Presentationens titel</span><span class="num"></span></div>
+  </section>
+
+  <!-- 3. Avslutning. QR-koden: lägg en färdig <svg> i .qr, eller lämna tom med data-qr="adress" så ritas den när sidan öppnas. -->
+  <section class="slide has-ground" data-title="Avslutning">
+    <div class="s-head"><svg class="logo" viewBox="0 0 459.96 90" role="img" aria-label="Superintelligent"><use href="#logo" /></svg></div>
+    <div class="closing">
+      <div class="copy">
+        <p class="eb gold"><span class="pixel-dot"></span>Tack · Frågor?</p>
+        <h1 class="h1" style="font-size: 120px">Låt oss hålla kontakten.</h1>
+        <div class="person">
+          <img src="" alt="Förnamn Efternamn" />
+          <div><strong>Förnamn Efternamn</strong><p class="small">Roll, Superintelligent</p><p class="small">hello@superintelligent.se</p></div>
+        </div>
+        <div class="btns">
+          <a class="btn btn-p" href="https://spela.superintelligent.se">Spela spelet <small>spela.superintelligent.se</small></a>
+          <a class="btn btn-o" href="https://boka.superintelligent.se">Boka möte <small>boka.superintelligent.se</small></a>
+        </div>
+      </div>
+      <div class="qr-card">
+        <div class="qr" data-qr="https://www.linkedin.com/in/ANVANDARNAMN/" role="img" aria-label="QR-kod till LinkedIn"></div>
+        <p class="eb gold">Skanna · Connecta</p>
+        <p class="small">linkedin.com/in/ANVANDARNAMN</p>
+      </div>
+    </div>
+    <div class="flag closing-flag" aria-hidden="true"></div>
+    <div class="ground"></div>
+    <div class="s-foot"><span>superintelligent.se</span><span class="num"></span></div>
+  </section>
+
+</main>
+
+<div class="progress" id="progress"></div>
+<div class="nav-ui" id="nav-ui">
+  <button type="button" id="prev" aria-label="Föregående bild">&lt;</button>
+  <button type="button" id="next" aria-label="Nästa bild">&gt;</button>
+  <button type="button" id="full" aria-label="Helskärm">[ ]</button>
+</div>
+
+<script>
+/* ==== TEMA: deck.js. Pilar, mellanslag och PageUp/PageDown bläddrar, F ger helskärm,
+   Home/End går till första och sista. Svep på mobil. Bildnumret står i adressens #. ==== */
+(() => {
+  const slides = [...document.querySelectorAll('.slide')];
+  const progress = document.getElementById('progress');
+  const navUi = document.getElementById('nav-ui');
+  let i = 0;
+
+  slides.forEach((s, n) => {
+    const num = s.querySelector('.num');
+    if (num) num.textContent = String(n + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+  });
+
+  // Agendan markerar avklarade och aktuellt avsnitt utifrån data-current
+  document.querySelectorAll('.agenda ol[data-current]').forEach((ol) => {
+    const cur = Number(ol.dataset.current);
+    [...ol.children].forEach((li, n) => {
+      li.classList.toggle('is-done', n + 1 < cur);
+      li.classList.toggle('is-current', n + 1 === cur);
+      const qb = li.querySelector('.qb');
+      if (qb && n + 1 < cur) qb.classList.add('done');
+    });
+  });
+
+  function fit() {
+    const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+    document.documentElement.style.setProperty('--scale', s);
+  }
+
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle('is-active', k === i));
+    progress.style.width = ((i + 1) / slides.length) * 100 + '%';
+    try { history.replaceState(null, '', '#' + (i + 1)); } catch (e) {}
+  }
+
+  addEventListener('keydown', (e) => {
+    if (e.target.closest('input, textarea')) return;
+    const k = e.key;
+    if (['ArrowRight', 'ArrowDown', 'PageDown', ' ', 'Enter'].includes(k)) { e.preventDefault(); show(i + 1); }
+    else if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(k)) { e.preventDefault(); show(i - 1); }
+    else if (k === 'Home') show(0);
+    else if (k === 'End') show(slides.length - 1);
+    else if (k === 'f' || k === 'F') toggleFull();
+  });
+
+  function toggleFull() {
+    try {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen().catch(() => {});
+    } catch (e) {}
+  }
+
+  document.getElementById('prev').onclick = () => show(i - 1);
+  document.getElementById('next').onclick = () => show(i + 1);
+  document.getElementById('full').onclick = toggleFull;
+
+  let hideTimer;
+  addEventListener('pointermove', () => {
+    navUi.classList.add('show');
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => navUi.classList.remove('show'), 2000);
+  });
+
+  let x0 = null;
+  addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+  addEventListener('touchend', (e) => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 40) show(dx < 0 ? i + 1 : i - 1);
+    x0 = null;
+  });
+
+  // QR-koder som saknar färdig bild ritas här, med qrcode-generator från cdnjs
+  const empty = [...document.querySelectorAll('.qr[data-qr]')].filter((el) => !el.querySelector('svg'));
+  if (empty.length) {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js';
+    s.onload = () => empty.forEach((el) => {
+      const q = qrcode(0, 'M');
+      q.addData(el.dataset.qr);
+      q.make();
+      el.innerHTML = q.createSvgTag({ cellSize: 8, margin: 0, scalable: true });
+    });
+    document.head.appendChild(s);
+  }
+
+  addEventListener('resize', fit);
+  fit();
+  const start = parseInt(location.hash.slice(1), 10);
+  show(Number.isFinite(start) ? start - 1 : 0);
+})();
+/* ==== SLUT TEMA ==== */
+</script>
+</body>
+</html>

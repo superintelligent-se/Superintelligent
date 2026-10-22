@@ -105,6 +105,9 @@ om-oss/                Navsida med tre vägval: spelregler/ (DNA, värderingar, 
 src/site/              Sajtens CSS och JS. Delar config.js med spelet, och rubrikvalets
                        effekter lånar pixelart.js och avatars.js
 public/                Ligger i roten: lead-mail.json, policy-PDF:er, logotyper
+presentationer/        Presentationer i sajtens formspråk, en HTML-fil per presentation.
+                       Byggs och publiceras inte. Mall och regler i skillen
+                       .claude/skills/superintelligent-presentation/, som också delas med kollegor
 ```
 
 `public/` får inte flytta in under `/spelet/`. Flödet i Power Automate läser `lead-mail.json` från sajtens rot.
