@@ -1,6 +1,7 @@
 // Effekterna i rubrikvalet. Varje rubrik har sin egen: ljusfart för visionen,
-// myntregn och kassaapparat för pengarna, stjärnsmäll för möjligheterna, en
-// publik som gör vågen för människorna och pratbubblor för intervjun.
+// myntregn och kassaapparat för pengarna, en mur som rasar för möjligheterna,
+// en publik som gör vågen för människorna, pratbubblor för intervjun och en
+// kedja som brister för skillnaden.
 // Mynt och figurer ritas med spelets egna pixelritare, så det är samma värld.
 
 import './effects.css';
@@ -123,58 +124,271 @@ function canvasLayer(draw) {
 // Rutnät på 4 px, så att allt som rör sig hamnar på pixlar som i spelet.
 const snap = (v) => Math.round(v / 4) * 4;
 
-const STAR = ['...Y...', '...Y...', '..YWY..', 'YYWWWYY', '..YWY..', '...Y...', '...Y...'];
-const STAR_COLORS = ['#fde047', '#c4b5fd', '#ffffff', '#3fbf7f', '#e0b23c'];
-const starCanvases = [];
+// Spelets pixelföremål för det som blir möjligt. Varje tecken är en pixel.
+const OBJECTS = {
+  rocket: {
+    rows: ['...W...', '..WWW..', '..WBW..', '..WWW..', '.RWWWR.', 'RR.W.RR', '...O...'],
+    palette: { W: '#f1f5f9', B: '#4f7fd6', R: '#ef4444', O: '#f97316' },
+  },
+  bulb: {
+    rows: ['..YYY..', '.YYWYY.', '.YYYYY.', '.YYYYY.', '..YYY..', '..GGG..', '...G...'],
+    palette: { Y: '#fde047', W: '#ffffff', G: '#8b95a8' },
+  },
+  globe: {
+    rows: ['..BBB..', '.BGGBB.', 'BGGBBGB', 'BBGBBGB', 'BBBBGGB', '.BBBGB.', '..BBB..'],
+    palette: { B: '#4f7fd6', G: '#3fbf7f' },
+  },
+  star: {
+    rows: ['...Y...', '...Y...', '..YWY..', 'YYWWWYY', '..YWY..', '...Y...', '...Y...'],
+    palette: { Y: '#c4b5fd', W: '#ffffff' },
+  },
+};
+const objectCanvases = {};
 
-// Ett ljussken runt blocket, två tryckvågor och stjärnor som flyger ut åt
-// alla håll och gnistrar på vägen. Det omöjliga blir möjligt med en smäll.
-function stars(from) {
+function objectCanvas(name) {
+  objectCanvases[name] ??= renderPixelCanvas(OBJECTS[name].rows, OBJECTS[name].palette, 4);
+  return objectCanvases[name];
+}
+
+// Möjligheterna: en mur av pixelstenar byggs upp framför blocket, spricker,
+// och rasar. Genom hålet strömmar ljus, och ut ur det flyger det som blir
+// möjligt: en raket som skjuter rakt upp, glödlampor, jordklot och stjärnor.
+// Bakom muren fanns något man inte såg förut.
+function breakthrough(from) {
   const { x, y } = center(from);
-  if (!starCanvases.length) {
-    for (const c of STAR_COLORS) starCanvases.push(renderPixelCanvas(STAR, { Y: c, W: '#ffffff' }, 4));
+  const cols = 7;
+  const rows = 6;
+  const bw = 32;
+  const bh = 16;
+  const left = snap(x - (cols * bw) / 2);
+  const top = snap(y - (rows * bh) / 2);
+
+  const bricks = [];
+  for (let r = 0; r < rows; r++) {
+    // Varannan rad förskjuten en halv sten, som en riktig mur.
+    const shift = r % 2 ? bw / 2 : 0;
+    for (let c = 0; c < cols + (r % 2); c++) {
+      const bx = left + c * bw - shift;
+      const w = Math.min(bw, left + cols * bw - bx) - (bx < left ? left - bx : 0);
+      if (w <= 4) continue;
+      const cx = Math.max(bx, left);
+      const dx = cx + w / 2 - x;
+      const dy = top + r * bh + bh / 2 - y;
+      bricks.push({
+        x: cx, y: top + r * bh, w: w - 4, appear: r * 40 + Math.random() * 60,
+        vx: dx * (0.004 + Math.random() * 0.004), vy: dy * 0.004 - 0.25 - Math.random() * 0.2,
+        shade: ['#5b6478', '#4a5266', '#6b7488'][(r + c) % 3],
+      });
+    }
   }
-  const reach = Math.min(260, innerWidth / 2);
-  const flying = Array.from({ length: 28 }, (_, i) => {
-    const angle = (Math.PI * 2 * i) / 28 + (Math.random() - 0.5) * 0.3;
-    const dist = 140 + Math.random() * reach;
-    return { dx: Math.cos(angle) * dist, dy: Math.sin(angle) * dist, life: 1100 + Math.random() * 500, img: starCanvases[i % starCanvases.length] };
+
+  // Sprickor som växer ut från mitten i små pixelsteg.
+  const cracks = Array.from({ length: 6 }, (_, i) => {
+    const angle = (Math.PI * 2 * i) / 6 + Math.random() * 0.5;
+    const path = [];
+    let px = x;
+    let py = y;
+    for (let k = 0; k < 18; k++) {
+      px += Math.cos(angle) * 6 + (Math.random() - 0.5) * 8;
+      py += Math.sin(angle) * 6 + (Math.random() - 0.5) * 8;
+      path.push([snap(px), snap(py)]);
+    }
+    return path;
   });
 
+  const kinds = ['rocket', 'bulb', 'globe', 'star', 'bulb', 'globe', 'star', 'rocket', 'globe', 'bulb'];
+  const things = kinds.map((kind, i) => {
+    const angle = -Math.PI / 2 + (i / (kinds.length - 1) - 0.5) * Math.PI * 1.3;
+    const power = 0.45 + Math.random() * 0.35;
+    return { kind, vx: Math.cos(angle) * power, vy: Math.sin(angle) * power - 0.15, delay: 760 + i * 45 };
+  });
+
+  const BUILD = 380;
+  const BREAK = 760;
+
   canvasLayer((ctx, t) => {
-    // Skenet: en ring av ljus kring blocket, aldrig över hela sidan.
-    if (t < 450) {
-      const a = 1 - t / 450;
-      const glow = ctx.createRadialGradient(x, y, 0, x, y, 140);
-      glow.addColorStop(0, `rgba(255, 255, 255, ${0.85 * a})`);
-      glow.addColorStop(0.4, `rgba(253, 224, 71, ${0.4 * a})`);
-      glow.addColorStop(1, 'rgba(253, 224, 71, 0)');
-      ctx.fillStyle = glow;
-      ctx.fillRect(x - 140, y - 140, 280, 280);
+    // Ljuset bakom muren, synligt i sprickorna och sedan genom hålet.
+    if (t > BUILD) {
+      const open = Math.min(1, Math.max(0, (t - BREAK + 200) / 500));
+      const fade = t < 1900 ? 1 : Math.max(0, 1 - (t - 1900) / 500);
+      const radius = 60 + open * 260;
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(t / 1600);
+      for (let k = 0; k < 12; k++) {
+        ctx.rotate((Math.PI * 2) / 12);
+        ctx.globalAlpha = (k % 2 ? 0.35 : 0.6) * fade * (0.3 + open * 0.7);
+        const ray = ctx.createLinearGradient(0, 0, radius, 0);
+        ray.addColorStop(0, '#ffffff');
+        ray.addColorStop(0.3, '#fde047');
+        ray.addColorStop(1, 'rgba(253, 224, 71, 0)');
+        ctx.fillStyle = ray;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(radius, -radius * 0.12);
+        ctx.lineTo(radius, radius * 0.12);
+        ctx.fill();
+      }
+      ctx.restore();
+      ctx.globalAlpha = fade * (0.4 + open * 0.6);
+      ctx.fillStyle = '#ffffff';
+      const core = snap(8 + open * 28);
+      ctx.fillRect(x - core / 2, y - core / 2, core, core);
+      ctx.globalAlpha = 1;
     }
 
-    for (const delay of [0, 160]) {
-      const p = (t - delay) / 700;
-      if (p < 0 || p > 1) continue;
-      const r = snap(20 + p * 170);
-      ctx.strokeStyle = `rgba(253, 224, 71, ${1 - p})`;
-      ctx.lineWidth = 4;
-      ctx.strokeRect(x - r, y - r, r * 2, r * 2);
-    }
-
-    let alive = t < 900;
-    for (const s of flying) {
-      const p = Math.min(1, t / s.life);
-      if (p >= 1) continue;
-      alive = true;
-      const ease = 1 - (1 - p) ** 3;
-      const scale = p < 0.4 ? 0.3 + p * 2.7 : 1.4 - (p - 0.4) * 1.2;
-      const size = snap(28 * scale) || 4;
-      ctx.globalAlpha = p > 0.7 ? (1 - p) / 0.3 : 1;
-      ctx.drawImage(s.img, snap(x + s.dx * ease - size / 2), snap(y + s.dy * ease + p * p * 30 - size / 2), size, size);
+    // Muren: byggs upp, skakar, rasar.
+    const shake = t > BUILD + 150 && t < BREAK ? snap((Math.random() - 0.5) * 6) : 0;
+    for (const b of bricks) {
+      if (t < b.appear) continue;
+      let bx = b.x + shake;
+      let by = b.y;
+      let alpha = 1;
+      if (t > BREAK) {
+        const f = t - BREAK;
+        bx += b.vx * f;
+        by += b.vy * f + 0.0011 * f * f;
+        alpha = Math.max(0, 1 - f / 900);
+      }
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = b.shade;
+      ctx.fillRect(snap(bx), snap(by), b.w, bh - 4);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.18)';
+      ctx.fillRect(snap(bx), snap(by), b.w, 4);
     }
     ctx.globalAlpha = 1;
-    return alive;
+
+    // Sprickorna lyser av ljuset bakom.
+    if (t > BUILD && t < BREAK + 60) {
+      const grow = Math.min(1, (t - BUILD) / (BREAK - BUILD - 100));
+      ctx.fillStyle = '#fff7c2';
+      for (const path of cracks) {
+        const n = Math.ceil(path.length * grow);
+        for (let k = 0; k < n; k++) ctx.fillRect(path[k][0], path[k][1], 4, 4);
+      }
+    }
+
+    // Det som blir möjligt flyger ut ur hålet.
+    let alive = t < 2400;
+    for (const o of things) {
+      const f = t - o.delay;
+      if (f < 0) continue;
+      const img = objectCanvas(o.kind);
+      const scale = Math.min(1.5, 0.6 + f / 400);
+      const size = snap(28 * scale);
+      let ox;
+      let oy;
+      if (o.kind === 'rocket') {
+        // Raketen skjuter rakt upp och accelererar, med en flamma efter sig.
+        ox = x + o.vx * f * 0.4;
+        oy = y - 0.0009 * f * f - 0.2 * f;
+        ctx.fillStyle = '#f97316';
+        for (let k = 0; k < 4; k++) ctx.fillRect(snap(ox - 2), snap(oy + size / 2 + k * 8), 4, 4);
+      } else {
+        ox = x + o.vx * f;
+        oy = y + o.vy * f + 0.0004 * f * f;
+      }
+      if (oy > -40 && oy < innerHeight + 40 && f < 2000) alive = true;
+      ctx.globalAlpha = f > 1300 ? Math.max(0, 1 - (f - 1300) / 500) : 1;
+      ctx.drawImage(img, snap(ox - size / 2), snap(oy - size / 2), size, size);
+    }
+    ctx.globalAlpha = 1;
+    return alive && t < 3200;
+  });
+}
+
+const BIRD = [
+  ['B.......B', 'BB.....BB', '.BBBEBBB.', '...BBB...'],
+  ['...BBB...', '.BBBEBBB.', 'BB.....BB', 'B.......B'],
+];
+const birdCanvases = [];
+
+// Skillnaden: en kedja spänns över blocket, skakar och brister. Länkarna
+// faller, och ur blocket flyger en flock fåglar iväg upp mot kanten. Frihet,
+// inte beroende.
+function freedom(from) {
+  const { x, y } = center(from);
+  if (!birdCanvases.length) {
+    for (const frame of BIRD) birdCanvases.push(renderPixelCanvas(frame, { B: '#f1f5f9', E: '#e0b23c' }, 6));
+  }
+  const linkW = 20;
+  const links = [];
+  for (let lx = -linkW; lx < innerWidth + linkW; lx += linkW) {
+    const side = lx + linkW / 2 < x ? -1 : 1;
+    const near = Math.abs(lx + linkW / 2 - x);
+    links.push({
+      x: lx, side, near,
+      vx: side * (0.15 + Math.random() * 0.25) * (1 - Math.min(near, 300) / 400),
+      vy: -0.2 - Math.random() * 0.3,
+      vertical: (lx / linkW) % 2 === 0,
+    });
+  }
+  const flock = Array.from({ length: 5 }, (_, i) => ({
+    delay: 700 + i * 110,
+    dx: (i - 2) * 22,
+    drift: 0.08 + Math.random() * 0.08,
+    phase: Math.random() * Math.PI * 2,
+  }));
+
+  const PULL = 300;
+  const SNAP = 700;
+  const heading = x > innerWidth / 2 ? -1 : 1;
+
+  canvasLayer((ctx, t) => {
+    // Kedjan glider in från båda sidor, spänns och skakar mer och mer.
+    const slide = Math.min(1, t / PULL);
+    const shake = t > PULL && t < SNAP ? ((t - PULL) / (SNAP - PULL)) * 6 : 0;
+    for (const l of links) {
+      let lx = l.x + l.side * (1 - slide) * innerWidth * 0.5;
+      let ly = y + snap((Math.random() - 0.5) * shake);
+      let alpha = 1;
+      if (t > SNAP) {
+        const f = t - SNAP;
+        lx += l.vx * f * (l.near < 120 ? 2.5 : 1);
+        ly += l.vy * f * (l.near < 120 ? 1 : 0.2) + 0.0012 * f * f;
+        alpha = Math.max(0, 1 - f / 1100);
+      }
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = '#8b95a8';
+      if (l.vertical) {
+        ctx.fillRect(snap(lx + 6), snap(ly - 8), 8, 4);
+        ctx.fillRect(snap(lx + 6), snap(ly + 4), 8, 4);
+        ctx.fillRect(snap(lx + 4), snap(ly - 4), 4, 8);
+        ctx.fillRect(snap(lx + 12), snap(ly - 4), 4, 8);
+      } else {
+        ctx.fillRect(snap(lx - 2), snap(ly - 4), 24, 4);
+        ctx.fillRect(snap(lx - 2), snap(ly + 4), 24, 4);
+        ctx.fillStyle = '#c3cad6';
+        ctx.fillRect(snap(lx), snap(ly - 4), 8, 4);
+      }
+    }
+    ctx.globalAlpha = 1;
+
+    // Gnistor där kedjan brister.
+    if (t > SNAP && t < SNAP + 400) {
+      const f = (t - SNAP) / 400;
+      ctx.fillStyle = '#fde047';
+      for (let k = 0; k < 12; k++) {
+        const a = (Math.PI * 2 * k) / 12;
+        ctx.globalAlpha = 1 - f;
+        ctx.fillRect(snap(x + Math.cos(a) * f * 60), snap(y + Math.sin(a) * f * 60), 4, 4);
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    // Fåglarna lyfter och flaxar iväg uppåt i en båge, in över skärmen så att
+    // de syns hela vägen även när blocket står vid kanten.
+    let alive = t < 1500;
+    for (const b of flock) {
+      const f = t - b.delay;
+      if (f < 0) continue;
+      const bx = x + b.dx + f * b.drift * heading + Math.sin(f / 300 + b.phase) * 12;
+      const by = y - f * 0.32 - 0.00008 * f * f;
+      if (by > -40) alive = true;
+      const frame = birdCanvases[Math.floor(f / 120) % 2];
+      ctx.drawImage(frame, snap(bx - 27), snap(by - 12));
+    }
+    return alive && t < 4000;
   });
 }
 
@@ -383,9 +597,10 @@ function chatter() {
 const EFFECTS = [
   () => vision(document.querySelector('#headline .h1')),
   coins,
-  stars,
+  breakthrough,
   crowd,
   chatter,
+  freedom,
 ];
 
 export function celebrate(index, from) {

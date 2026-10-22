@@ -1,4 +1,4 @@
-// Rubrikvalet överst på startsidan. Vi tog fram fem rubriker med AI, och
+// Rubrikvalet överst på startsidan. Vi tog fram sex rubriker med AI, och
 // besökaren får slå upp blocken och se dem alla. Varje block har sin färg,
 // och den stora knappen tar blockets färg och leder dit rubriken handlar om.
 // Innan något valts är den lila och startar spelet. Boka gratis möte är
@@ -7,42 +7,54 @@
 import './headline.css';
 import { celebrate, vision } from './effects.js';
 
+// Rubrikerna är korta och säger vad kunden vinner. Brödtexten under bär
+// resonemanget, och siffrorna kommer från samma källor som resten av sidan.
 const VARIANTS = [
   {
     eb: 'Rubrik 1 · Visionen',
-    h1: 'Bli ett superintelligent företag',
+    h1: 'Hela organisationen. AI-driven.',
     sub: 'Från manuellt arbete och personberoende kunskap till en organisation som lär sig och blir bättre varje dag. Fem steg tar er dit, och det första tar fem minuter: spela spelet.',
   },
   {
     eb: 'Rubrik 2 · Pengarna',
-    // Hårda mellanslag så att beloppet och "och år" inte bryts isär.
-    h1: '100\u00a0000\u00a0kr per tjänsteman och\u00a0år',
-    sub: 'Så mycket kostar det när AI inte används systematiskt i det dagliga arbetet, enligt vårt normala antagande. Räkna på er egen siffra, eller börja med spelet.',
+    // Samma tre nivåer som AI-skuldkalkylatorn. Hårda mellanslag så att
+    // beloppet inte bryts isär.
+    h1: '75–125\u00a0000\u00a0kr per tjänsteman. Varje\u00a0år.',
+    sub: 'Så mycket kostar det när AI inte används systematiskt i det dagliga arbetet, beroende på hur mycket av jobbet som är rutin. Räkna på er egen siffra.',
   },
   {
     eb: 'Rubrik 3 · Möjligheterna',
-    h1: 'Spara tid först. Gör det omöjliga sedan.',
-    sub: 'Alla börjar med att effektivisera, och det betalar sig snabbt. Det stora värdet kommer när ni gör sådant ni tidigare saknade tid, kompetens eller resurser för. Vi kallar det Möjlighets-AI.',
+    h1: 'Gör det som var omöjligt. Nu.',
+    sub: 'Alla börjar med att effektivisera, och det betalar sig snabbt. Det stora värdet kommer när ni gör sådant ni tidigare saknade tid, kompetens eller resurser för. Vi kallar det Möjlighets-AI, och vår rådgivning hjälper er att hitta det.',
   },
   {
     eb: 'Rubrik 4 · Människorna',
-    h1: 'AI-förmåga som stannar hos er',
-    sub: 'Era medarbetare lär sig, era ledare väljer riktning och allt ni bygger är ert. Ingen plattform att hyra, inga konsulter som tar med sig kunskapen hem.',
+    h1: 'Alla medarbetare. AI-kompetenta. På\u00a0riktigt.',
+    sub: 'Inte bara IT och några eldsjälar. Varje medarbetare lär sig använda AI i sitt eget jobb, från första frågan till en egen agent. Kunskapen stannar hos er.',
   },
   {
     eb: 'Rubrik 5 · Intervjun',
-    h1: 'Hör vad hela organisationen tycker om AI',
+    h1: 'Vad tänker er organisation om AI?',
     sub: 'Vår AI-intervjuare pratar med medarbetarna när det passar dem. Ledningen får en inblick i vad alla tänker, hoppas och oroar sig för som inget möte eller enkät kan ge.',
+  },
+  {
+    eb: 'Rubrik 6 · Skillnaden',
+    h1: 'Vi gör oss umbärliga. Med\u00a0flit.',
+    sub: 'Vi har inget intresse av att ni ska behöva oss för alltid. Vår uppgift är att bygga er egen AI-förmåga, så att ni klarar er utan oss. Det är så vi förtjänar ert förtroende.',
   },
 ];
 
 // Vart den stora knappen leder för varje rubrik. Färgen sätts i headline.css.
+// Möjligheterna leder till rådgivningen och Människorna till Akademin, som
+// sidan själv kopplar ihop dem: rådgivning gör språnget till Möjlighets-AI,
+// träningen bygger förmågan hos medarbetarna.
 const CTAS = [
   { href: '#ai-resan', text: 'Se hela AI-resan ↓' },
   { href: 'ai-skuld/', text: 'Räkna på din AI-skuld →' },
-  { href: '#mojlighets-ai', text: 'Se vad som blir möjligt ↓' },
-  { href: '#traning', text: 'Så växer era medarbetare ↓' },
+  { href: '#radgivning', text: 'Ta språnget med rådgivning ↓' },
+  { href: 'https://akademi.superintelligent.se/collections', text: 'Utforska AI-akademin →' },
   { href: 'intervju/', text: 'Prova AI-intervjun →' },
+  { href: 'om-oss/umbarliga/', text: 'Läs hur vi tänker →' },
 ];
 
 const root = document.getElementById('headline');

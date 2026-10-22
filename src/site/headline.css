@@ -1,4 +1,4 @@
-/* Rubrikvalet: fem frågetecken-block under knapparna i toppen. */
+/* Rubrikvalet: sex frågetecken-block under knapparna i toppen. */
 
 .headline {
   display: flex;
@@ -51,14 +51,18 @@
   color: var(--muted);
 }
 
+/* Sex block på en rad. På smala skärmar krymper de i stället för att
+   sticka ut, men blir aldrig större än 48 px. */
 .picker-blocks {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 48px));
   gap: 10px;
 }
 
 .qb.pick {
-  width: 48px;
-  height: 48px;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
   font-size: 18px;
   cursor: pointer;
   padding: 0;
@@ -98,6 +102,12 @@
   --c: var(--orange);
   --c-edge: #c2560c;
   --c-ink: #3d1a00;
+}
+
+[data-variant='5'] {
+  --c: #e11d48;
+  --c-edge: #9f1239;
+  --c-ink: #fff;
 }
 
 .qb.pick {
@@ -166,7 +176,13 @@
   }
 
   .picker-blocks {
-    justify-content: space-between;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .qb.pick {
+    max-width: 52px;
+    justify-self: center;
   }
 }
 
