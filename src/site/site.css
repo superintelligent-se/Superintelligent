@@ -455,6 +455,26 @@ h3 {
   vertical-align: -1px;
 }
 
+/* Rubriken över spelvideon i toppen. */
+.screen-head {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.screen-title {
+  font-size: clamp(24px, 2.2vw, 30px);
+  line-height: 1.15;
+  font-weight: 800;
+}
+
+.screen-sub {
+  margin: 0;
+  font-size: 16px;
+  color: var(--muted);
+}
+
 .screen {
   position: relative;
   aspect-ratio: 16 / 9;

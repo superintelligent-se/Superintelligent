@@ -56,35 +56,6 @@
   gap: 10px;
 }
 
-.picker-go {
-  align-self: flex-start;
-  padding: 8px 12px;
-  border: 2px solid var(--gold);
-  font-family: var(--pixel);
-  font-size: 12px;
-  letter-spacing: 0.06em;
-  line-height: 1.5;
-  text-transform: uppercase;
-  text-decoration: none;
-  color: var(--gold);
-}
-
-.picker-go:hover,
-.picker-go:focus-visible {
-  background: var(--gold);
-  color: #0b0f1a;
-}
-
-/* Blinkar till när den byter mål, så att man ser att den hör till valet. */
-.picker-go.flash {
-  animation: go-flash 0.6s steps(6, end);
-}
-
-@keyframes go-flash {
-  0%, 34%, 68% { background: var(--gold); color: #0b0f1a; }
-  17%, 51%, 100% { background: transparent; color: var(--gold); }
-}
-
 .qb.pick {
   width: 48px;
   height: 48px;
@@ -97,10 +68,73 @@
   transform: translateY(-3px);
 }
 
+/* Varje rubrik har sin färg ur spelets palett. Blocket bär den alltid, och
+   den stora knappen tar den när rubriken väljs. */
+[data-variant='0'] {
+  --c: var(--gold);
+  --c-edge: var(--gold-dark);
+  --c-ink: #3d2a00;
+}
+
+[data-variant='1'] {
+  --c: var(--green);
+  --c-edge: var(--green-dark);
+  --c-ink: #fff;
+}
+
+[data-variant='2'] {
+  --c: var(--purple);
+  --c-edge: var(--purple-dark);
+  --c-ink: #fff;
+}
+
+[data-variant='3'] {
+  --c: var(--blue);
+  --c-edge: #2f5aa8;
+  --c-ink: #fff;
+}
+
+[data-variant='4'] {
+  --c: var(--orange);
+  --c-edge: #c2560c;
+  --c-ink: #3d1a00;
+}
+
+.qb.pick {
+  background: var(--c);
+  border-color: var(--c-edge);
+  color: var(--c-ink);
+}
+
+/* Det valda blocket står upphöjt med en ram, färgen är densamma. */
 .qb.pick[aria-pressed='true'] {
-  background: var(--green);
-  border-color: var(--green-dark);
-  color: #fff;
+  transform: translateY(-4px);
+  outline: 3px solid var(--ink);
+  outline-offset: 3px;
+}
+
+/* Stora knappen. Lila och Spela spelet tills en rubrik väljs. */
+.btn-cta {
+  transition: transform 80ms, box-shadow 80ms, background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease;
+}
+
+.btn-cta[data-variant],
+.btn-cta[data-variant]:hover {
+  background: var(--c);
+  border-color: var(--c-edge);
+  color: var(--c-ink);
+}
+
+.btn-cta[data-variant]:hover {
+  filter: brightness(1.08);
+}
+
+.btn-cta[data-variant] svg {
+  display: none;
+}
+
+.cta-label {
+  display: inline-block;
 }
 
 .qb.pick:focus-visible {
@@ -138,12 +172,12 @@
 
 @media (prefers-reduced-motion: reduce) {
   .qb.pick.bump,
-  .picker-go.flash,
   .type-cursor {
     animation: none;
   }
 
-  .headline .sub {
+  .headline .sub,
+  .btn-cta {
     transition: none;
   }
 }

@@ -1,7 +1,9 @@
 // Rubrikvalet överst på startsidan. Vi tog fram fem rubriker med AI, och
-// besökaren får slå upp blocken och se dem alla. Knapparna Spela spelet och
-// Boka gratis möte är desamma oavsett rubrik. Rubrik 1 står i HTML:en, så
-// sökmotorer och den som inte klickar ser alltid den.
+// besökaren får slå upp blocken och se dem alla. Varje block har sin färg,
+// och den stora knappen tar blockets färg och leder dit rubriken handlar om.
+// Innan något valts är den lila och startar spelet. Boka gratis möte är
+// densamma hela tiden. Rubrik 1 står i HTML:en, så sökmotorer och den som
+// inte klickar ser alltid den.
 import './headline.css';
 import { celebrate, vision } from './effects.js';
 
@@ -34,8 +36,8 @@ const VARIANTS = [
   },
 ];
 
-// Varje rubrik leder till avsnittet den handlar om.
-const LINKS = [
+// Vart den stora knappen leder för varje rubrik. Färgen sätts i headline.css.
+const CTAS = [
   { href: '#ai-resan', text: 'Se hela AI-resan ↓' },
   { href: 'ai-skuld/', text: 'Räkna på din AI-skuld →' },
   { href: '#mojlighets-ai', text: 'Se vad som blir möjligt ↓' },
@@ -48,7 +50,8 @@ const eb = root?.querySelector('[data-part="eb"] [data-text]');
 const h1 = root?.querySelector('[data-part="h1"]');
 const sub = root?.querySelector('[data-part="sub"]');
 const buttons = [...document.querySelectorAll('.picker .pick')];
-const go = document.getElementById('picker-go');
+const cta = document.getElementById('hero-cta');
+const ctaLabel = cta?.querySelector('.cta-label');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 let typing = 0;
@@ -99,6 +102,33 @@ function typeOut(text, run) {
   });
 }
 
+// Knappen byter färg mjukt i CSS. Texten glider ut uppåt och den nya in
+// underifrån, så att man ser att knappen hör till valet.
+let ctaRun = 0;
+
+async function setCta(index) {
+  if (!cta || !ctaLabel) return;
+  const { href, text } = CTAS[index];
+  const run = ++ctaRun;
+  cta.dataset.variant = String(index);
+  cta.href = href;
+  if (reducedMotion.matches) {
+    ctaLabel.textContent = text;
+    return;
+  }
+  await ctaLabel.animate(
+    [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(-10px)' }],
+    { duration: 160, easing: 'ease-in', fill: 'forwards' },
+  ).finished.catch(() => {});
+  if (run !== ctaRun) return;
+  ctaLabel.textContent = text;
+  ctaLabel.getAnimations().forEach((a) => a.cancel());
+  ctaLabel.animate(
+    [{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }],
+    { duration: 220, easing: 'ease-out' },
+  );
+}
+
 async function show(index, button) {
   const v = VARIANTS[index];
   const run = ++typing;
@@ -110,13 +140,7 @@ async function show(index, button) {
   celebrate(index, button);
 
   eb.textContent = v.eb;
-  if (go) {
-    go.href = LINKS[index].href;
-    go.textContent = LINKS[index].text;
-    go.classList.remove('flash');
-    void go.offsetWidth;
-    go.classList.add('flash');
-  }
+  setCta(index);
   sub.classList.add('fade');
   sub.innerHTML = v.sub;
   await typeOut(v.h1, run);
