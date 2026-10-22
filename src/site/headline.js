@@ -147,9 +147,12 @@ async function setCta(index) {
   }
 }
 
+let current = -1;
+
 async function show(index, button) {
   const v = VARIANTS[index];
   const run = ++typing;
+  current = index;
   buttons.forEach((b, i) => b.setAttribute('aria-pressed', String(i === index)));
 
   button.classList.remove('bump');
@@ -165,6 +168,108 @@ async function show(index, button) {
   if (run === typing) sub.classList.remove('fade');
 }
 
+// Rubrikerna byts av sig själva, en gång varje gång spelvideon börjar om
+// (18 sekunder). Det gör startsidan till en öppningsbild i presentationer.
+// Takten kommer från Vimeospelaren via postMessage, så bytet sker samtidigt
+// som videon loopar. Svarar inte spelaren tar en egen klocka över.
+//
+// Bytet stannar för gott när besökaren själv klickar ett block, och kan
+// pausas med knappen bredvid förloppsstapeln. Det hoppas över när toppen
+// av sidan inte syns eller fliken ligger i bakgrunden, och körs inte alls
+// för den som bett om mindre rörelse.
+const VIMEO = 'https://player.vimeo.com';
+const LOOP_SECONDS = 18;
+const video = document.getElementById('hero-video');
+const autoBox = document.getElementById('picker-auto');
+const autoBtn = autoBox?.querySelector('.picker-auto-btn');
+const autoFill = autoBox?.querySelector('.picker-auto-fill');
+
+let autoOn = false;
+let heroVisible = true;
+let synced = false;
+let lastSeconds = 0;
+
+function setProgress(fraction) {
+  if (!autoFill) return;
+  autoFill.style.transform = `scaleX(${autoOn ? Math.min(1, Math.max(0, fraction)) : 0})`;
+  autoFill.dataset.variant = String(upNext());
+}
+
+// Rubrik 1 står på sidan från början, så första bytet går till rubrik 2.
+function upNext() {
+  return (Math.max(current, 0) + 1) % buttons.length;
+}
+
+function nextVariant() {
+  if (!autoOn || document.hidden || !heroVisible) return;
+  const i = upNext();
+  show(i, buttons[i]);
+}
+
+function setAuto(on) {
+  autoOn = on;
+  autoBtn?.setAttribute('aria-pressed', String(!on));
+  autoBtn?.setAttribute('aria-label', on ? 'Pausa bytet av rubriker' : 'Starta bytet av rubriker');
+  setProgress(0);
+}
+
+function stopAuto() {
+  setAuto(false);
+}
+
+function onVimeoMessage(event) {
+  if (event.origin !== VIMEO || event.source !== video?.contentWindow) return;
+  let msg;
+  try {
+    msg = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+  } catch {
+    return;
+  }
+  if (msg?.event === 'ready') listenToVideo();
+  // Bakgrundsspelaren skickar playProgress av sig själv, andra spelare
+  // timeupdate när man bett om det. Båda bär sekunder och längd.
+  if ((msg?.event !== 'timeupdate' && msg?.event !== 'playProgress') || !msg.data) return;
+  synced = true;
+  const { seconds, duration } = msg.data;
+  // Sekunderna hoppar tillbaka när videon börjar om.
+  if (seconds + 1 < lastSeconds) nextVariant();
+  lastSeconds = seconds;
+  setProgress(seconds / (duration || LOOP_SECONDS));
+}
+
+function listenToVideo() {
+  video?.contentWindow?.postMessage(JSON.stringify({ method: 'addEventListener', value: 'timeupdate' }), VIMEO);
+}
+
+function startAuto() {
+  if (!autoBox || reducedMotion.matches) return;
+  autoBox.hidden = false;
+  setAuto(true);
+  autoBtn.addEventListener('click', () => setAuto(!autoOn));
+
+  addEventListener('message', onVimeoMessage);
+  video?.addEventListener('load', listenToVideo);
+  listenToVideo();
+
+  new IntersectionObserver(([entry]) => {
+    heroVisible = entry.isIntersecting;
+  }).observe(root);
+
+  // Egen klocka tills spelaren hörs av, eller om den aldrig gör det.
+  let start = performance.now();
+  let lap = 0;
+  setInterval(() => {
+    if (synced) return;
+    const elapsed = (performance.now() - start) / 1000;
+    const thisLap = Math.floor(elapsed / LOOP_SECONDS);
+    if (thisLap > lap) {
+      lap = thisLap;
+      nextVariant();
+    }
+    setProgress((elapsed % LOOP_SECONDS) / LOOP_SECONDS);
+  }, 200);
+}
+
 if (root && buttons.length) {
   reserveHeight();
   let width = innerWidth;
@@ -174,9 +279,14 @@ if (root && buttons.length) {
     reserveHeight();
   });
   document.fonts?.ready.then(reserveHeight);
-  buttons.forEach((button, i) => button.addEventListener('click', () => show(i, button)));
+  buttons.forEach((button, i) => button.addEventListener('click', () => {
+    stopAuto();
+    show(i, button);
+  }));
 
   // Välkomnar besökaren: visionens ljusfart spelas när sidan öppnas, om
   // rubriken syns och man inte kommit hit via en länk längre ner på sidan.
   if (!location.hash && scrollY < 200) vision(h1, { reveal: true });
+
+  startAuto();
 }

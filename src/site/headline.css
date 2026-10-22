@@ -72,6 +72,62 @@
   transform: translateY(-3px);
 }
 
+/* Det automatiska bytet: en pausknapp och en stapel som fylls fram till nästa
+   rubrik, i nästa rubriks färg. */
+.picker-auto {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.picker-auto[hidden] {
+  display: none;
+}
+
+.picker-auto-btn {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 2px solid var(--line-strong);
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.picker-auto-btn:hover,
+.picker-auto-btn:focus-visible {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.picker-auto-btn .play,
+.picker-auto-btn[aria-pressed='true'] .pause {
+  display: none;
+}
+
+.picker-auto-btn[aria-pressed='true'] .play {
+  display: block;
+}
+
+.picker-auto-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.picker-auto-fill {
+  display: block;
+  height: 100%;
+  background: var(--c, var(--gold));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s linear;
+}
+
 /* Varje rubrik har sin färg ur spelets palett. Blocket bär den alltid, och
    den stora knappen tar den när rubriken väljs. */
 [data-variant='0'] {

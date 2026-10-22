@@ -68,6 +68,13 @@
                 <button type="button" class="qb pick" data-variant="4" aria-pressed="false" aria-label="Rubrik 5, Intervjun">5</button>
                 <button type="button" class="qb pick" data-variant="5" aria-pressed="false" aria-label="Rubrik 6, Skillnaden">6</button>
               </div>
+              <div class="picker-auto" id="picker-auto" hidden>
+                <button type="button" class="picker-auto-btn" aria-pressed="false" aria-label="Pausa bytet av rubriker">
+                  <svg class="pause" width="10" height="12" viewBox="0 0 10 12" aria-hidden="true"><path d="M0 0h3v12H0zM7 0h3v12H7z" fill="currentColor" /></svg>
+                  <svg class="play" width="10" height="12" viewBox="0 0 10 12" aria-hidden="true"><path d="M0 0h2v2h2v2h2v2h2v2H6v2H4v2H2v-2H0z" fill="currentColor" /></svg>
+                </button>
+                <span class="picker-auto-bar" aria-hidden="true"><span class="picker-auto-fill"></span></span>
+              </div>
             </div>
           </div>
           <div class="stack">
@@ -78,6 +85,7 @@
             </div>
             <div class="screen">
               <iframe
+                id="hero-video"
                 src="https://player.vimeo.com/video/1231751829?background=1&amp;autoplay=1&amp;muted=1&amp;loop=1&amp;dnt=1"
                 title="Förhandsvisning av spelet"
                 allow="autoplay; fullscreen; picture-in-picture"
@@ -494,7 +502,7 @@
               <a href="om-oss/laget/#tomas">
                 <span class="team-photo"><img src="/om-oss/tomas.jpg" alt="Tomas Söderling" width="640" height="640" loading="lazy" /></span>
                 <strong>Tomas Söderling</strong>
-                <span>Success Manager</span>
+                <span>AI-affärscoach</span>
               </a>
             </li>
             <li>
