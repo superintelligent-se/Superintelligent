@@ -1,0 +1,1292 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Modul 4 · Microsoft Copilot Premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500&family=Silkscreen&display=swap" />
+<style>
+/* ==== TEMA: rör inget härifrån till SLUT TEMA. Innehållet bor i <main>. ====
+   Superintelligents presentationstema. Samma formspråk som www.superintelligent.se:
+   mörk bana, frågetecken-block, plattformar, tegelmark och etiketter i pixelfont.
+   Grönt är bottom-up och träning, lila top-down och rådgivning, gult spelet och
+   nästa steg. Varje bild är 1920 x 1080 och skalas till skärmen. */
+
+:root {
+  --bg: #0a0e17;
+  --bg-alt: #0d1220;
+  --panel: #131a28;
+  --line: #24304a;
+  --line-strong: #3a4766;
+  --ink: #f2f5fa;
+  --ink-2: #cdd3e3;
+  --muted: #a3adc8;
+  --faint: #8892b0;
+  --gold: #e0b23c;
+  --gold-dark: #b8860b;
+  --green: #2e9e63;
+  --green-dark: #1c7a49;
+  --green-text: #3fbf7f;
+  --purple: #7c3aed;
+  --purple-dark: #5b21b6;
+  --purple-text: #c4b5fd;
+  --blue: #4f7fd6;
+  --yellow: #fbbf24;
+  --orange: #f97316;
+  --red: #ef4444;
+  --plat: #2a3550;
+  --plat-top: #3d4b6e;
+  --ground: #1b2436;
+  --pixel: 'Silkscreen', ui-monospace, monospace;
+  --mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --sans: 'Hanken Grotesk', system-ui, sans-serif;
+  --pad-x: 128px;
+  --pad-top: 96px;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #000;
+  color: var(--ink);
+  font-family: var(--sans);
+  overflow: hidden;
+}
+
+/* Scenen är alltid 1920 x 1080. deck.js sätter --scale efter fönstret. */
+.deck {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+.slide {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1920px;
+  height: 1080px;
+  margin: -540px 0 0 -960px;
+  transform: scale(var(--scale, 0.5));
+  background: var(--bg);
+  overflow: hidden;
+  display: none;
+  flex-direction: column;
+  padding: var(--pad-top) var(--pad-x) 0;
+}
+
+.slide.is-active { display: flex; }
+
+/* Typografi, skalan från sajten uppräknad till 1920 px */
+
+.eb {
+  font-family: var(--pixel);
+  font-size: 26px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  line-height: 1.4;
+  margin: 0;
+  color: var(--faint);
+}
+.eb.gold { color: var(--gold); }
+.eb.green { color: var(--green-text); }
+.eb.purple { color: var(--purple-text); }
+
+.pixel-dot {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: var(--gold);
+  margin-right: 18px;
+  vertical-align: -1px;
+}
+
+h1, h2, h3 { margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
+
+.h1 {
+  font-size: 136px;
+  line-height: 1.0;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+}
+
+.h2 {
+  font-size: 84px;
+  line-height: 1.05;
+  font-weight: 800;
+}
+
+.sub {
+  margin: 0;
+  font-size: 38px;
+  line-height: 1.4;
+  color: var(--muted);
+  max-width: 30ch;
+  text-wrap: pretty;
+}
+
+.small {
+  font-family: var(--mono);
+  font-size: 24px;
+  color: var(--faint);
+  margin: 0;
+}
+
+/* Sidhuvud och sidfot, samma plats på varje bild */
+
+.s-head {
+  position: absolute;
+  top: 48px;
+  left: var(--pad-x);
+  right: var(--pad-x);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo { height: 34px; width: auto; color: var(--ink); display: block; }
+
+.s-foot {
+  position: absolute;
+  left: var(--pad-x);
+  right: var(--pad-x);
+  bottom: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: var(--mono);
+  font-size: 22px;
+  color: var(--faint);
+}
+
+.s-foot .num { font-family: var(--pixel); font-size: 22px; letter-spacing: 0.08em; }
+.s-foot .end { display: flex; gap: 36px; align-items: center; }
+
+/* Bilder med tegelmark i botten har sidfoten ovanpå marken */
+.slide.has-ground .s-foot { bottom: 22px; color: var(--muted); }
+
+/* Spelets block, plattformar och mark */
+
+.qb {
+  width: 96px;
+  height: 96px;
+  flex-shrink: 0;
+  background: var(--gold);
+  border: 5px solid var(--gold-dark);
+  box-shadow: inset -8px -8px 0 rgba(0, 0, 0, 0.25), inset 8px 8px 0 rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--pixel);
+  font-size: 38px;
+  color: #3d2a00;
+}
+.qb.sm { width: 64px; height: 64px; font-size: 26px; border-width: 4px; box-shadow: inset -6px -6px 0 rgba(0,0,0,.25), inset 6px 6px 0 rgba(255,255,255,.3); }
+.qb.green { background: var(--green); border-color: var(--green-dark); color: #fff; }
+.qb.purple { background: var(--purple); border-color: var(--purple-dark); color: #fff; }
+.qb.blue { background: var(--blue); border-color: #2f5bab; color: #fff; }
+.qb.orange { background: var(--orange); border-color: #c2570c; color: #fff; }
+.qb.yellow { background: var(--yellow); border-color: #c79410; color: #3d2a00; }
+.qb.done { background: var(--plat); border-color: var(--line-strong); color: var(--faint); box-shadow: none; }
+
+.plat { width: 100%; background: var(--plat); border-top: 6px solid var(--plat-top); }
+
+.ground {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 80px;
+  background-color: var(--ground);
+  background-image: linear-gradient(var(--bg) 3px, transparent 3px),
+    linear-gradient(90deg, var(--bg) 3px, transparent 3px);
+  background-size: 64px 32px;
+}
+
+.flag { display: flex; align-items: flex-end; }
+.flag::before { content: ''; width: 12px; height: 120px; background: #8b95a8; }
+.flag::after { content: ''; width: 64px; height: 42px; background: #fde047; align-self: flex-start; }
+
+.card { background: var(--panel); border: 3px solid var(--line); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 84px;
+  padding: 0 36px;
+  font-weight: 700;
+  font-size: 30px;
+  border: 3px solid transparent;
+  box-shadow: 6px 6px 0 #000;
+  color: #fff;
+  text-decoration: none;
+}
+.btn-p { background: var(--purple); }
+.btn-o { border-color: var(--ink); color: var(--ink); }
+.btn small { font-family: var(--mono); font-weight: 400; font-size: 22px; opacity: 0.8; }
+
+/* ---- Bildtyp: försättsblad ---- */
+
+.cover { display: grid; grid-template-columns: 1fr 600px; gap: 24px; align-items: center; padding-bottom: 80px; }
+.cover .h1 { font-size: 116px; }
+.cover .copy { display: flex; flex-direction: column; gap: 40px; min-width: 0; }
+.cover .by { display: flex; gap: 32px; align-items: center; font-family: var(--mono); font-size: 26px; color: var(--ink-2); }
+.cover .by span + span::before { content: '·'; margin-right: 32px; color: var(--faint); }
+
+/* Banan till höger: fem plattformar som stiger, ett block per område, flagga sist */
+.level { align-self: end; display: flex; align-items: flex-end; gap: 16px; height: 720px; }
+.level .col { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 56px; }
+.level .col .qb { width: 88px; height: 88px; }
+.level .col.end { gap: 0; align-items: flex-start; }
+.level .col.end .flag { margin: 0 0 0 40px; }
+
+/* ---- Bildtyp: innehåll (agenda) ---- */
+
+.agenda { display: grid; grid-template-columns: 640px 1fr; gap: 112px; padding-top: 72px; }
+.agenda .intro { display: flex; flex-direction: column; gap: 32px; }
+.agenda ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.agenda li {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: 40px;
+  align-items: center;
+  padding: 26px 0;
+  border-bottom: 3px solid var(--line);
+}
+/* Fler än fem avsnitt: tätare rader så att listan ryms ovanför sidfoten */
+.agenda ol:has(> li:nth-child(6)) li { padding: 16px 0; }
+.agenda ol:has(> li:nth-child(6)) li strong { font-size: 38px; }
+.agenda ol:has(> li:nth-child(6)) li div > span { font-size: 24px; margin-top: 2px; }
+.agenda li:first-child { border-top: 3px solid var(--line); }
+.agenda li strong { display: block; font-size: 44px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; }
+.agenda li div > span { display: block; font-size: 26px; color: var(--muted); margin-top: 6px; }
+.agenda li time { font-family: var(--mono); font-size: 24px; color: var(--faint); }
+/* data-current på listan markerar var vi är, så samma bild kan återkomma som avsnittsbild */
+.agenda li.is-done strong { color: var(--faint); }
+.agenda li.is-current strong { color: var(--gold); }
+
+/* ---- Bildtyp: avslutning ---- */
+
+.closing { display: grid; grid-template-columns: 1fr 520px; gap: 120px; align-items: start; padding-top: 64px; }
+.closing .copy { display: flex; flex-direction: column; gap: 44px; min-width: 0; }
+.person { display: flex; gap: 32px; align-items: center; }
+.person img { width: 132px; height: 132px; object-fit: cover; border: 4px solid var(--gold); box-shadow: 6px 6px 0 #000; display: block; }
+.person strong { display: block; font-size: 40px; font-weight: 700; }
+.person .small { color: var(--ink-2); margin-top: 6px; }
+.closing .btns { display: flex; gap: 28px; flex-wrap: wrap; }
+
+.qr-card { display: flex; flex-direction: column; gap: 28px; align-items: stretch; }
+.qr {
+  background: #fff;
+  padding: 28px;
+  border: 6px solid var(--gold);
+  box-shadow: 10px 10px 0 #000;
+  aspect-ratio: 1;
+}
+.qr svg { display: block; width: 100%; height: 100%; }
+.qr-card .eb { text-align: center; }
+.qr-card .small { text-align: center; color: var(--ink-2); }
+
+.closing-flag { position: absolute; right: 200px; bottom: 80px; }
+
+/* Partnerlogotyper i sidfoten, till exempel när ett projekt kräver EU-märkning.
+   Ligger på vitt eftersom logotyperna är gjorda för ljus botten. */
+.partners { display: flex; gap: 20px; align-items: center; background: #fff; padding: 8px 16px; }
+.partners img { height: 44px; width: auto; display: block; }
+.slide.has-ground .partners { padding: 6px 14px; }
+.slide.has-ground .partners img { height: 36px; }
+
+/* Bildrubrik som återkommer på innehållsbilder: etikett, rubrik, ingress */
+.s-title { display: flex; flex-direction: column; gap: 24px; max-width: 1400px; padding-top: 40px; }
+.s-title .sub { max-width: 52ch; font-size: 32px; }
+.s-body { flex: 1; display: flex; flex-direction: column; justify-content: center; padding-bottom: 120px; min-height: 0; }
+.footnote { font-family: var(--mono); font-size: 22px; color: var(--faint); margin: 0; max-width: 90ch; }
+
+/* ---- Bildtyp: kort i rad (två eller tre) ---- */
+
+.cards { display: grid; grid-template-columns: repeat(var(--n, 3), 1fr); gap: 40px; }
+.cards .card { padding: 44px; display: flex; flex-direction: column; gap: 22px; }
+.cards .card h3 { font-size: 44px; font-weight: 700; line-height: 1.1; }
+.cards .card p { margin: 0; font-size: 28px; line-height: 1.45; color: var(--ink-2); }
+.cards .card .tip { margin-top: auto; padding-top: 22px; border-top: 3px solid var(--line); font-size: 24px; color: var(--muted); }
+.cards .card.is-key { border-color: var(--gold); box-shadow: 8px 8px 0 #000; }
+.badge-img { background: #fff; padding: 12px 16px; align-self: flex-start; }
+.badge-img img { height: 52px; width: auto; display: block; }
+
+/* ---- Bildtyp: matris med status per cell ---- */
+
+.matrix { width: 100%; border-collapse: collapse; font-size: 22px; line-height: 1.3; }
+.matrix th { font-family: var(--pixel); font-weight: 400; font-size: 19px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); text-align: left; white-space: nowrap; padding: 0 20px 14px; border-bottom: 3px solid var(--line-strong); }
+.matrix th:last-child { color: var(--gold); }
+.matrix td { padding: 9px 20px; border-bottom: 2px solid var(--line); vertical-align: middle; color: var(--ink-2); }
+.matrix td:first-child { color: var(--ink); font-weight: 600; width: 27%; }
+.matrix td i { display: inline-block; width: 16px; height: 16px; margin-right: 14px; vertical-align: 0; background: var(--faint); }
+.matrix .ja i { background: var(--green-text); }
+.matrix .nej i { background: var(--red); }
+.matrix .villkor i { background: var(--yellow); }
+.legend { display: flex; gap: 40px; font-family: var(--mono); font-size: 22px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 12px; }
+.legend i { width: 16px; height: 16px; display: inline-block; }
+
+/* ---- Bildtyp: länklista (material, källor) ---- */
+
+.links { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; max-width: 1400px; }
+.links li { border-bottom: 3px solid var(--line); }
+.links li:first-child { border-top: 3px solid var(--line); }
+.links a { display: grid; grid-template-columns: 180px 1fr auto; gap: 40px; align-items: center; padding: 30px 0; color: var(--ink); text-decoration: none; font-size: 40px; font-weight: 700; }
+.links a .eb { font-size: 22px; }
+.links a .arrow { font-family: var(--pixel); font-size: 30px; color: var(--gold); }
+
+/* ---- Bildtyp: övning ---- */
+
+.exercise { flex: 1; display: grid; grid-template-columns: 1fr 640px; gap: 96px; padding: 40px 0 80px; min-height: 0; }
+.exercise .copy { display: flex; flex-direction: column; gap: 36px; min-width: 0; }
+.exercise .h2 { font-size: 76px; }
+.goals { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 22px; }
+.goals li { display: grid; grid-template-columns: 28px 1fr; gap: 28px; align-items: baseline; font-size: 34px; line-height: 1.3; color: var(--ink-2); }
+.goals li::before { content: ''; width: 20px; height: 20px; background: var(--green-text); transform: translateY(-2px); }
+.result { border: 3px solid var(--line); background: var(--panel); padding: 28px 36px; display: flex; flex-direction: column; gap: 10px; max-width: 1000px; }
+.result p:last-child { margin: 0; font-size: 32px; font-weight: 600; line-height: 1.35; }
+.tools { display: flex; gap: 14px; flex-wrap: wrap; }
+.tools span { font-family: var(--mono); font-size: 22px; color: var(--ink-2); border: 2px solid var(--line-strong); padding: 6px 14px; }
+
+/* Banan till höger visar var i passet vi är: klarade block grå, aktuellt gult och störst */
+.track { align-self: end; display: flex; flex-direction: column; gap: 32px; }
+.track .row { display: flex; align-items: flex-end; gap: 12px; height: 560px; }
+.track .col { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 32px; }
+.track .qb { width: 60px; height: 60px; font-size: 24px; border-width: 4px; }
+.track .col.next .qb { background: transparent; border: 3px dashed var(--line-strong); box-shadow: none; color: var(--faint); }
+.track .col.now .qb { width: 84px; height: 84px; font-size: 34px; }
+.track .col.now .plat { border-top-color: var(--gold); }
+.track .time { font-family: var(--mono); font-size: 24px; color: var(--faint); text-align: right; }
+
+/* ---- Bildtyp: budskap (en mening, paus, avsnitt) ---- */
+
+.statement { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 40px; padding-bottom: 140px; max-width: 1500px; }
+.statement .sub { max-width: 46ch; }
+
+/* Prompt att skriva av eller kopiera */
+.prompt { background: var(--panel); border: 3px solid var(--line-strong); padding: 36px 44px; display: flex; flex-direction: column; gap: 18px; max-width: 1500px; }
+.prompt p:last-child { margin: 0; font-family: var(--mono); font-size: 29px; line-height: 1.5; color: var(--ink); }
+
+/* Talaranteckningar: <aside class="notes"> i en bild. Visas bara när N trycks. */
+.slide .notes { display: none; }
+.notes-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(560px, 92vw);
+  background: var(--bg-alt);
+  border-left: 2px solid var(--line-strong);
+  padding: 28px 28px 48px;
+  overflow-y: auto;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  z-index: 6;
+}
+.notes-panel h4 { font-family: var(--pixel); font-weight: 400; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); margin: 22px 0 8px; }
+.notes-panel h4:first-child { margin-top: 0; }
+.notes-panel p { margin: 0 0 10px; }
+.notes-panel ol, .notes-panel ul { margin: 0 0 10px; padding-left: 22px; }
+.notes-panel blockquote { margin: 8px 0 14px; padding: 12px 14px; background: var(--panel); border: 1px solid var(--line-strong); font-family: var(--mono); font-size: 14px; color: var(--ink); white-space: pre-line; }
+.notes-panel table { border-collapse: collapse; width: 100%; font-size: 15px; }
+.notes-panel td { padding: 6px 4px; border-bottom: 1px solid var(--line); }
+.notes-panel td:last-child { text-align: right; font-family: var(--mono); color: var(--faint); white-space: nowrap; }
+
+/* Navigering på skärmen. Syns när musen rör sig, aldrig i utskrift. */
+
+.nav-ui {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 5;
+}
+.nav-ui.show { opacity: 1; }
+.nav-ui button {
+  width: 44px;
+  height: 44px;
+  background: var(--panel);
+  color: var(--ink);
+  border: 2px solid var(--line-strong);
+  font-family: var(--pixel);
+  font-size: 16px;
+  cursor: pointer;
+}
+.nav-ui button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+.progress { position: fixed; left: 0; top: 0; height: 4px; background: var(--gold); width: 0; transition: width 0.25s steps(6, end); z-index: 5; }
+
+@media (prefers-reduced-motion: reduce) {
+  .progress, .nav-ui { transition: none; }
+}
+
+/* Utskrift och PDF: en bild per sida, 1920 x 1080 */
+@page { size: 1920px 1080px; margin: 0; }
+@media print {
+  html, body { height: auto; overflow: visible; background: var(--bg); }
+  .deck { position: static; display: block; }
+  .slide { display: flex !important; position: relative; left: 0; top: 0; margin: 0; transform: none; break-after: page; }
+  .nav-ui, .progress, .notes-panel { display: none !important; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}
+/* ==== SLUT TEMA ==== */
+</style>
+</head>
+<body>
+<!-- LOGO: definieras en gång, används med <svg class="logo"><use href="#logo" /></svg> -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="logo" viewBox="0 0 459.96 90" fill="currentColor"><path d="M32.72,2.18c5.88,0,10.69,1.23,14.45,3.68,3.76,2.45,5.65,5.73,5.68,9.82.03,4.09-1.23,7.53-3.77,10.32-1.45,1.52-2.8,2.27-4.04,2.27s-2.2-.3-2.86-.91c-.67-.6-1-1.33-1-2.18s.3-1.61.91-2.27c1.94-2.06,2.91-4.29,2.91-6.68s-1.23-4.29-3.68-5.68c-2.45-1.39-5.5-2.09-9.13-2.09s-7.09.92-10.36,2.77c-3.27,1.85-4.91,4.08-4.91,6.68s.73,4.57,2.18,5.91c1.45,1.33,3.89,2.94,7.32,4.82,3.42,1.88,5.5,3.02,6.23,3.41.73.39,1.83,1,3.32,1.82,1.48.82,2.47,1.36,2.95,1.64.48.27,1.33.79,2.55,1.54,1.21.76,2.01,1.3,2.41,1.64.39.33,1.05.86,1.95,1.59.91.73,1.51,1.33,1.82,1.82.3.49.73,1.12,1.27,1.91,1.27,1.82,1.91,4.39,1.91,7.73,0,5.63-2.45,10.09-7.36,13.36s-11,4.91-18.27,4.91-13.31-1.54-18.13-4.64c-4.82-3.09-7.04-5.5-7.04-11.26,0-2.3.68-4.32,2.05-6.04,1.36-1.73,3.03-2.59,5-2.59s2.95.82,2.95,2.45c0,.67-.21,1.65-.64,2.95-.42,1.3-.64,2.38-.64,3.23,0,3.63,1.73,5.1,4.63,7.04,2.91,1.94,6.59,2.22,11.95,2.22s9.42-1,12.18-3c2.76-2,4.14-4.59,4.14-7.77s-1.33-5.8-4-7.86c-1.39-1.03-2.71-1.89-3.95-2.59-1.24-.7-2.92-1.59-5.04-2.68-2.12-1.09-3.56-1.86-4.32-2.32-.76-.45-1.89-1.12-3.41-2-1.52-.88-2.44-1.44-2.77-1.68-.33-.24-1.12-.76-2.36-1.54-1.24-.79-2.03-1.36-2.36-1.73-.33-.36-.94-.94-1.82-1.73-.88-.79-1.45-1.47-1.73-2.04-.27-.57-.7-1.42-1.27-2.54-.58-1.12-.86-2.86-.86-5.23,0-5.03,2.5-9.03,7.5-12,5-2.97,10.83-4.45,17.5-4.45ZM9.35,42.9c-3.27,0-4.91-1.42-4.91-4.27,0-1.51.53-2.71,1.59-3.59,1.06-.88,2.41-1.32,4.04-1.32,3.03,0,4.54,1.36,4.54,4.09,0,1.58-.49,2.82-1.45,3.73-.97.91-2.24,1.36-3.82,1.36Z"/><path d="M84.06,32.63c-2.12,6.36-3.49,12.39-4.09,18.09l-.09,1.09c0,1.39.42,2.09,1.27,2.09,1.94-.12,4.45-1.88,7.54-5.27.79-.6,1.44-.91,1.95-.91s1.14.35,1.86,1.05c.73.7,1.09,1.35,1.09,1.95,0,1.4-1.86,3.29-5.59,5.68-3.73,2.39-6.71,3.59-8.95,3.59-3.58,0-5.39-1.79-5.45-5.36l.27-2.82c-.67,1.88-1.94,3.73-3.82,5.54-1.88,1.82-4.12,2.73-6.73,2.73s-4.56-.88-5.86-2.64c-1.3-1.76-1.95-4.03-1.95-6.82,0-3.63.62-7.42,1.86-11.36,1.24-3.94,2.23-6.53,2.95-7.77.73-1.24,1.68-1.86,2.86-1.86s2.07.23,2.68.68c.61.45.91.88.91,1.27s-.73,2.62-2.18,6.68c-1.45,4.06-2.3,7.63-2.54,10.72v.64c0,2.97,1.03,4.45,3.09,4.45,1.64,0,3.32-.95,5.04-2.86,1.73-1.91,3.07-4.53,4.04-7.86l2.45-9.09c.61-2,1.2-3.27,1.77-3.82.57-.55,1.33-.82,2.27-.82s1.74.27,2.41.82c.67.55,1,1.15,1,1.82l-.09.36Z"/><path d="M83.7,77.52c.18-2,.97-6.53,2.36-13.59,1.39-7.06,2.2-10.94,2.41-11.63.21-.7.74-2.42,1.59-5.18.85-2.76,1.91-5.44,3.18-8.04,1.03-2.06,2.12-3.71,3.27-4.95,1.15-1.24,2.67-2.3,4.54-3.18,1.88-.88,4.1-1.32,6.68-1.32s4.56.89,5.95,2.68c1.39,1.79,2.09,4.08,2.09,6.86,0,.67-.06,1.61-.18,2.82,3.03-.67,7.03-3.33,12-8,.36-.18.73-.27,1.09-.27s.71.24,1.05.73c.33.48.5,1.12.5,1.91s-.33,1.42-1,1.91c-1.52,1.82-3.79,3.73-6.82,5.73-3.03,2-5.82,3.3-8.36,3.91-1.33,3.51-3.27,6.42-5.82,8.72-2.54,2.3-5.39,3.45-8.54,3.45-1.88,0-3.67-.79-5.36-2.36-.18.73-.83,4.09-1.95,10.09-1.12,6-1.83,9.42-2.14,10.27-.3.85-1.03,1.62-2.18,2.32-1.15.7-2.18,1.05-3.09,1.05l-.64-.91c-.48-.67-.73-1.3-.73-1.91l.09-1.09ZM99.97,53.99c1.57,0,3.07-.6,4.5-1.82,1.42-1.21,2.59-2.79,3.5-4.73-1.52-.73-2.27-2-2.27-3.82,0-1.03.17-1.86.5-2.5.33-.64,1.07-1.41,2.23-2.32.12-.24.24-.39.36-.45-.73-1.88-1.79-2.82-3.18-2.82s-2.62.39-3.68,1.18c-1.06.79-1.95,1.94-2.68,3.45-.73,1.52-1.29,2.88-1.68,4.09-.39,1.21-.82,2.73-1.27,4.54s-.74,2.94-.86,3.36c1.45,1.21,2.97,1.82,4.54,1.82Z"/><path d="M119.05,47.9c0-4.48,1.47-8.65,4.41-12.5,2.94-3.85,6.5-5.77,10.68-5.77,2.48,0,4.54.7,6.18,2.09,1.64,1.39,2.45,3.27,2.45,5.63,0,3.33-1.36,6.03-4.09,8.09-2.73,2.06-6.85,3.67-12.36,4.82.85,2.61,3.03,3.91,6.54,3.91,4.85,0,9.42-2.06,13.72-6.18.24-.24.62-.36,1.14-.36s1,.21,1.45.64c.45.42.68.94.68,1.54s-.21,1.21-.64,1.82c-1.52,2.12-3.91,4.08-7.18,5.86-3.27,1.79-6.68,2.68-10.22,2.68s-6.56-1.05-9.04-3.14c-2.48-2.09-3.73-5.14-3.73-9.13ZM134.28,35.54c-1.97,0-3.86,1.14-5.68,3.41-1.82,2.27-2.73,4.71-2.73,7.32,7.57-2.6,11.36-5.33,11.36-8.18,0-1.7-.99-2.54-2.95-2.54Z"/><path d="M152.59,48.17c1.09-3.45,3.14-7.39,6.13-11.81,3-4.42,5.44-6.63,7.32-6.63,2.67,0,4,1.03,4,3.09,0,1.33-.32,2.86-.95,4.59s-.95,2.77-.95,3.14c0,.91.65,1.36,1.95,1.36s3.44-.88,6.41-2.64c.12-.06.36-.09.73-.09s.83.33,1.41,1c.57.67.86,1.26.86,1.77s-.12.89-.36,1.14c-3.64,3.27-7.18,4.91-10.63,4.91-4.12,0-6.18-1.76-6.18-5.27,0-.12.48-2.09,1.45-5.91-.06,0-.55.73-1.45,2.18-2.85,4.73-5.63,10.82-8.36,18.27-.79,1.58-2.09,2.36-3.91,2.36-2.48,0-3.73-2-3.73-6v-.73c0-6.54.94-12.94,2.82-19.18.91-2.73,2.36-4.09,4.36-4.09.79,0,1.42.24,1.91.73.48.49.73,1.09.73,1.82l-3.54,16Z"/><path d="M175.58,50.89c0-2.67.48-5.8,1.45-9.41.97-3.6,1.94-6.29,2.91-8.04.97-1.76,1.8-2.8,2.5-3.14.7-.33,1.48-.5,2.36-.5s1.64.21,2.27.64c.64.42.95.88.95,1.36s-.35,1.33-1.05,2.54c-.7,1.21-1.59,3.58-2.68,7.09-1.09,3.51-1.64,6.33-1.64,8.45,0,2.85,1.06,4.27,3.18,4.27,2.55,0,5.6-2.06,9.18-6.18.48-.6,1.07-.91,1.77-.91s1.33.26,1.91.77c.57.52.86,1.12.86,1.82s-.33,1.47-1,2.32c-4.48,5.27-9.15,7.91-14,7.91-2.73,0-4.91-.83-6.54-2.5-1.64-1.67-2.45-3.83-2.45-6.5ZM188.94,23.81c-3.27,0-4.91-1.42-4.91-4.27,0-1.51.53-2.71,1.59-3.59,1.06-.88,2.41-1.32,4.04-1.32,3.03,0,4.54,1.36,4.54,4.09,0,1.58-.49,2.82-1.45,3.73-.97.91-2.24,1.36-3.82,1.36Z"/><path d="M218.75,53.53c2.3-.48,5.09-2.27,8.36-5.36.24-.24.59-.36,1.05-.36s.94.41,1.45,1.23c.51.82.77,1.45.77,1.91s-.06.8-.18,1.05c-1.94,2.48-4.36,4.39-7.27,5.73-2.91,1.33-5.33,2-7.27,2-3.52,0-5.27-1.91-5.27-5.73,0-2,.6-4.88,1.82-8.63,1.21-3.76,1.82-5.77,1.82-6.04s-.06-.41-.18-.41h-.09c-1.03.42-3.2,2.83-6.5,7.23-3.3,4.39-5.32,7.5-6.04,9.32-.73,1.82-1.35,2.99-1.86,3.5-.52.52-1.35.77-2.5.77-2.24-.06-3.36-2.36-3.36-6.91.12-6.42,1.45-13.06,4-19.9.79-2.18,2.12-3.27,4-3.27.73,0,1.33.24,1.82.73.48.49.73.99.73,1.5s-.03.86-.09,1.05c-1.4,4-2.52,8.48-3.36,13.45,3.15-5.45,6.24-9.62,9.27-12.5,3.03-2.88,5.73-4.32,8.09-4.32,1.21,0,2.27.38,3.18,1.14.91.76,1.36,1.56,1.36,2.41,0,1.33-.77,4.35-2.32,9.04-1.55,4.7-2.38,7.47-2.5,8.32-.12.85-.18,1.59-.18,2.23s.2.94.59.91c.39-.03.62-.05.68-.05Z"/><path d="M228.38,44.9v-1c-.79.55-1.47.82-2.05.82s-1.06-.26-1.45-.77c-.39-.51-.59-1.15-.59-1.91s.36-1.33,1.09-1.73,1.88-.95,3.45-1.68c1.03-8.06,3.15-15.72,6.36-22.99,1.64-3.7,3.67-6.74,6.09-9.13,2.42-2.39,4.79-3.59,7.09-3.59s3.95.58,4.95,1.73c1,1.15,1.5,2.55,1.5,4.18v.64c-.36,4.48-2.05,8.94-5.04,13.36-3,4.42-6.53,8.3-10.59,11.63,5.03-1.7,8.24-2.55,9.63-2.55.48,0,.95.26,1.41.77.45.52.68,1.2.68,2.05s-.52,1.36-1.54,1.54c-3.09.49-7.82,2.03-14.18,4.64-.12,1.94-.18,3.45-.18,4.54,0,5.76,1.24,8.63,3.73,8.63,2.91,0,6.27-2.12,10.09-6.36.42-.42.95-.64,1.59-.64s1.24.26,1.82.77c.57.52.86,1.15.86,1.91s-.36,1.53-1.09,2.32c-4.67,5.21-9.36,7.82-14.09,7.82-3.51,0-5.98-1.32-7.41-3.95-1.42-2.64-2.14-6.32-2.14-11.04ZM247.83,10.45c-1.7,0-3.39,1.27-5.09,3.82-3.15,4.67-5.3,10.6-6.45,17.81.12-.12.86-.94,2.23-2.45,1.36-1.51,2.21-2.45,2.54-2.82.33-.36,1.06-1.23,2.18-2.59,1.12-1.36,1.86-2.41,2.23-3.14s.86-1.7,1.5-2.91c.64-1.21,1.06-2.36,1.27-3.45.21-1.09.32-2.06.32-2.91s-.24-1.3-.73-1.36Z"/><path d="M249.56,47.9c0-4.48,1.47-8.65,4.41-12.5,2.94-3.85,6.5-5.77,10.68-5.77,2.48,0,4.54.7,6.18,2.09,1.64,1.39,2.45,3.27,2.45,5.63,0,3.33-1.36,6.03-4.09,8.09-2.73,2.06-6.85,3.67-12.36,4.82.85,2.61,3.03,3.91,6.54,3.91,4.85,0,9.42-2.06,13.72-6.18.24-.24.62-.36,1.14-.36s1,.21,1.45.64c.45.42.68.94.68,1.54s-.21,1.21-.64,1.82c-1.52,2.12-3.91,4.08-7.18,5.86-3.27,1.79-6.68,2.68-10.22,2.68s-6.56-1.05-9.04-3.14c-2.48-2.09-3.73-5.14-3.73-9.13ZM264.78,35.54c-1.97,0-3.86,1.14-5.68,3.41-1.82,2.27-2.73,4.71-2.73,7.32,7.57-2.6,11.36-5.33,11.36-8.18,0-1.7-.99-2.54-2.95-2.54Z"/><path d="M287.82,59.89c-3.03,0-5.36-1.23-7-3.68-1.64-2.45-2.45-5.8-2.45-10.04,0-1.27.03-2.24.09-2.91.79-8.78,3.09-17.93,6.91-27.45,1.88-4.54,4.21-8.32,7-11.32,2.79-3,5.73-4.5,8.82-4.5,1.82,0,3.27.59,4.36,1.77,1.09,1.18,1.64,2.65,1.64,4.41v.73c-.61,6.12-3.09,12.51-7.45,19.18-4.36,6.67-9.18,12.06-14.45,16.18-.24,1.94-.36,3.42-.36,4.45,0,4.91,1.45,7.36,4.36,7.36s6.39-2.12,10.09-6.36c.42-.42.95-.64,1.59-.64s1.24.26,1.82.77c.57.52.86,1.15.86,1.91s-.36,1.53-1.09,2.32c-4.61,5.21-9.51,7.82-14.72,7.82ZM298.91,7.45c-2.54,0-5.1,3.24-7.68,9.72-2.58,6.48-4.32,12.63-5.23,18.45,3.57-4,6.86-8.54,9.86-13.63,3-5.09,4.53-9.33,4.59-12.72,0-1.21-.52-1.82-1.55-1.82Z"/><path d="M310.45,59.89c-3.03,0-5.36-1.23-7-3.68-1.64-2.45-2.45-5.8-2.45-10.04,0-1.27.03-2.24.09-2.91.79-8.78,3.09-17.93,6.91-27.45,1.88-4.54,4.21-8.32,7-11.32,2.79-3,5.73-4.5,8.82-4.5,1.82,0,3.27.59,4.36,1.77,1.09,1.18,1.64,2.65,1.64,4.41v.73c-.61,6.12-3.09,12.51-7.45,19.18-4.36,6.67-9.18,12.06-14.45,16.18-.24,1.94-.36,3.42-.36,4.45,0,4.91,1.45,7.36,4.36,7.36s6.39-2.12,10.09-6.36c.42-.42.95-.64,1.59-.64s1.24.26,1.82.77c.57.52.86,1.15.86,1.91s-.36,1.53-1.09,2.32c-4.61,5.21-9.51,7.82-14.72,7.82ZM321.54,7.45c-2.54,0-5.1,3.24-7.68,9.72-2.58,6.48-4.32,12.63-5.23,18.45,3.57-4,6.86-8.54,9.86-13.63,3-5.09,4.53-9.33,4.59-12.72,0-1.21-.52-1.82-1.55-1.82Z"/><path d="M322.54,50.89c0-2.67.48-5.8,1.45-9.41.97-3.6,1.94-6.29,2.91-8.04.97-1.76,1.8-2.8,2.5-3.14.7-.33,1.48-.5,2.36-.5s1.64.21,2.27.64c.64.42.95.88.95,1.36s-.35,1.33-1.05,2.54c-.7,1.21-1.59,3.58-2.68,7.09-1.09,3.51-1.64,6.33-1.64,8.45,0,2.85,1.06,4.27,3.18,4.27,2.55,0,5.6-2.06,9.18-6.18.48-.6,1.07-.91,1.77-.91s1.33.26,1.91.77c.57.52.86,1.12.86,1.82s-.33,1.47-1,2.32c-4.48,5.27-9.15,7.91-14,7.91-2.73,0-4.91-.83-6.54-2.5-1.64-1.67-2.45-3.83-2.45-6.5ZM335.9,23.81c-3.27,0-4.91-1.42-4.91-4.27,0-1.51.53-2.71,1.59-3.59,1.06-.88,2.41-1.32,4.04-1.32,3.03,0,4.54,1.36,4.54,4.09,0,1.58-.49,2.82-1.45,3.73-.97.91-2.24,1.36-3.82,1.36Z"/><path d="M367.8,34.99l-5.09,21.54c6.24-5.09,10.6-7.63,13.09-7.63.55,0,1.14.29,1.77.86.64.58.95,1.35.95,2.32s-.67,1.79-2,2.45c-7.03,3.82-11.91,6.63-14.63,8.45-2.18,9.87-4.6,16.39-7.27,19.54-3.39,3.94-7.15,5.91-11.27,5.91-5.03,0-7.54-2.06-7.54-6.18,0-1.09.18-2.03.55-2.82.18-.49.35-.93.5-1.32.15-.39.39-.83.73-1.32.33-.49.59-.86.77-1.14s.48-.68.91-1.23c.42-.55.71-.91.86-1.09.15-.18.47-.53.95-1.05.48-.52,1.17-1.29,2.04-2.32.88-1.03,2.68-2.55,5.41-4.54.97-.79,2.26-1.77,3.86-2.95,1.6-1.18,2.8-2.08,3.59-2.68l.91-4.36c-.79,1.15-2,2.14-3.63,2.95-1.64.82-3.21,1.23-4.73,1.23-2.55,0-4.59-.83-6.13-2.5-1.54-1.67-2.32-3.74-2.32-6.23,0-5.57,1.94-10.47,5.82-14.68,3.88-4.21,8.27-6.32,13.18-6.32h.36c1.03,0,1.82.23,2.36.68s.82.95.82,1.5c.55-.24,1.24-.36,2.09-.36s1.59.26,2.23.77c.64.52.95,1.17.95,1.95l-.09.55ZM342.89,83.52c3.09,0,5.79-2.04,8.09-6.13,2.3-4.09,3.85-8.07,4.64-11.95-.61.55-1.56,1.36-2.86,2.45-1.3,1.09-2.29,1.92-2.95,2.5-.67.57-1.53,1.33-2.59,2.27-1.06.94-1.86,1.73-2.41,2.36s-1.24,1.53-2.09,2.68c-.85,1.15-1.27,2.45-1.27,3.91,0,1.27.48,1.91,1.45,1.91ZM350.53,53.71c3.64,0,6.27-2.94,7.91-8.82l2.45-9.27c-3.63,0-6.8,1.54-9.5,4.64-2.7,3.09-4.04,6.1-4.04,9.04s1.06,4.41,3.18,4.41Z"/><path d="M370.89,47.9c0-4.48,1.47-8.65,4.41-12.5,2.94-3.85,6.5-5.77,10.68-5.77,2.48,0,4.54.7,6.18,2.09,1.64,1.39,2.45,3.27,2.45,5.63,0,3.33-1.36,6.03-4.09,8.09-2.73,2.06-6.85,3.67-12.36,4.82.85,2.61,3.03,3.91,6.54,3.91,4.85,0,9.42-2.06,13.72-6.18.24-.24.62-.36,1.14-.36s1,.21,1.45.64c.45.42.68.94.68,1.54s-.21,1.21-.64,1.82c-1.52,2.12-3.91,4.08-7.18,5.86-3.27,1.79-6.68,2.68-10.22,2.68s-6.56-1.05-9.04-3.14c-2.48-2.09-3.73-5.14-3.73-9.13ZM386.11,35.54c-1.97,0-3.86,1.14-5.68,3.41-1.82,2.27-2.73,4.71-2.73,7.32,7.57-2.6,11.36-5.33,11.36-8.18,0-1.7-.99-2.54-2.95-2.54Z"/><path d="M423.14,53.53c2.3-.48,5.09-2.27,8.36-5.36.24-.24.59-.36,1.05-.36s.94.41,1.45,1.23c.51.82.77,1.45.77,1.91s-.06.8-.18,1.05c-1.94,2.48-4.36,4.39-7.27,5.73-2.91,1.33-5.33,2-7.27,2-3.51,0-5.27-1.91-5.27-5.73,0-2,.6-4.88,1.82-8.63,1.21-3.76,1.82-5.77,1.82-6.04s-.06-.41-.18-.41h-.09c-1.03.42-3.2,2.83-6.5,7.23-3.3,4.39-5.32,7.5-6.04,9.32-.73,1.82-1.35,2.99-1.86,3.5s-1.35.77-2.5.77c-2.24-.06-3.36-2.36-3.36-6.91.12-6.42,1.45-13.06,4-19.9.79-2.18,2.12-3.27,4-3.27.73,0,1.33.24,1.82.73.48.49.73.99.73,1.5s-.03.86-.09,1.05c-1.39,4-2.51,8.48-3.36,13.45,3.15-5.45,6.24-9.62,9.27-12.5,3.03-2.88,5.73-4.32,8.09-4.32,1.21,0,2.27.38,3.18,1.14.91.76,1.36,1.56,1.36,2.41,0,1.33-.77,4.35-2.32,9.04-1.54,4.7-2.38,7.47-2.5,8.32-.12.85-.18,1.59-.18,2.23s.2.94.59.91c.39-.03.62-.05.68-.05Z"/><path d="M432.78,44.9v-1c-.79.55-1.47.82-2.05.82s-1.06-.26-1.45-.77c-.39-.51-.59-1.15-.59-1.91s.36-1.33,1.09-1.73,1.88-.95,3.45-1.68c1.03-8.06,3.15-15.72,6.36-22.99,1.64-3.7,3.67-6.74,6.09-9.13,2.42-2.39,4.79-3.59,7.09-3.59s3.95.58,4.95,1.73c1,1.15,1.5,2.55,1.5,4.18v.64c-.36,4.48-2.05,8.94-5.04,13.36-3,4.42-6.53,8.3-10.59,11.63,5.03-1.7,8.24-2.55,9.63-2.55.48,0,.95.26,1.41.77.45.52.68,1.2.68,2.05s-.52,1.36-1.54,1.54c-3.09.49-7.82,2.03-14.18,4.64-.12,1.94-.18,3.45-.18,4.54,0,5.76,1.24,8.63,3.73,8.63,2.91,0,6.27-2.12,10.09-6.36.42-.42.95-.64,1.59-.64s1.24.26,1.82.77c.57.52.86,1.15.86,1.91s-.36,1.53-1.09,2.32c-4.67,5.21-9.36,7.82-14.09,7.82-3.51,0-5.98-1.32-7.41-3.95-1.42-2.64-2.14-6.32-2.14-11.04ZM452.23,10.45c-1.7,0-3.39,1.27-5.09,3.82-3.15,4.67-5.3,10.6-6.45,17.81.12-.12.86-.94,2.23-2.45,1.36-1.51,2.21-2.45,2.54-2.82.33-.36,1.06-1.23,2.18-2.59,1.12-1.36,1.86-2.41,2.23-3.14s.86-1.7,1.5-2.91c.64-1.21,1.06-2.36,1.27-3.45.21-1.09.32-2.06.32-2.91s-.24-1.3-.73-1.36Z"/></symbol></svg>
+
+<main class="deck" id="deck">
+
+  <section class="slide has-ground" data-title="Försättsblad">
+    <div class="s-head"><svg class="logo" viewBox="0 0 459.96 90" role="img" aria-label="Superintelligent"><use href="#logo" /></svg></div>
+    <div class="cover" style="flex: 1">
+      <div class="copy">
+        <p class="eb gold"><span class="pixel-dot"></span>Kompetens 5.0 · Webbinarium · Modul 4</p>
+        <h1 class="h1">Microsoft Copilot Premium.</h1>
+        <p class="sub">Åtta övningar där Copilot arbetar med dina dokument, mejl, möten och data.</p>
+        <p class="by"><span>Thomas Dalebring</span><span>21 oktober 2026</span><span>08.30–10.30</span></p>
+        <div class="partners" style="align-self: flex-start; padding: 14px 22px"><img src="material/partners.png" alt="Svalövs kommun, Åstorps kommun, Marknadsföreningen i Helsingborgsregionen, Medfinansieras av Europeiska unionen, Kompetens 5.0" style="height: 64px" /></div>
+      </div>
+      <div class="level" aria-hidden="true">
+        <div class="col"><div class="qb done">1</div><div class="plat" style="height: 60px"></div></div>
+        <div class="col"><div class="qb done">2</div><div class="plat" style="height: 150px"></div></div>
+        <div class="col"><div class="qb done">3</div><div class="plat" style="height: 240px"></div></div>
+        <div class="col"><div class="qb">4</div><div class="plat" style="height: 330px; border-top-color: var(--gold)"></div></div>
+        <div class="col"><div class="qb purple">?</div><div class="plat" style="height: 420px"></div></div>
+      </div>
+    </div>
+    <div class="ground"></div>
+    <div class="s-foot"><span>superintelligent.se</span><span class="num"></span></div>
+    <aside class="notes">
+<h4>Körschema · 120 minuter</h4><table><tr><td>Välkommen och arbetskontext</td><td>7 min</td></tr><tr><td>Övning 1 · Fråga Copilot vad den kan se</td><td>7 min</td></tr><tr><td>Övning 2 · Marknadsanalys med Research-agenten</td><td>9 min</td></tr><tr><td>Övning 3 · Förstå, analysera och granska dokument</td><td>15 min</td></tr><tr><td>Övning 4 · Beslutsunderlag och presentation</td><td>16 min</td></tr><tr><td>Övning 5 · Exceldata med Analyst</td><td>14 min</td></tr><tr><td>Paus</td><td>6 min</td></tr><tr><td>Övning 6 · Verifiera mejl och mötesinformation</td><td>14 min</td></tr><tr><td>Övning 7 · Interna källor och Researcher</td><td>15 min</td></tr><tr><td>Övning 8 · Utforma och testa en agent</td><td>13 min</td></tr><tr><td>Avslutning</td><td>4 min</td></tr></table><p>Tiderna inkluderar instruktion, eget arbete och gemensam avstämning.</p><h4>Inledning</h4>
+<p>Webbinarium - Modul 4 ”Microsoft Copilot Premium” med Thomas Dalebring. Deltagarversion för personer med Microsoft 365 Copilot Premium. Funktioner och tillgång till källor styrs även av organisationens behörigheter och tenantinställningar.</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="Innehåll">
+    <div class="s-head"><svg class="logo" viewBox="0 0 459.96 90" role="img" aria-label="Superintelligent"><use href="#logo" /></svg></div>
+    <div class="agenda">
+      <div class="intro">
+        <p class="eb gold"><span class="pixel-dot"></span>Det här gör vi i dag</p>
+        <h2 class="h2">Två timmar, åtta övningar</h2>
+        <p class="sub" style="font-size: 32px">Varje övning börjar med ett mål och slutar med något du kan använda i morgon.</p>
+      </div>
+      <ol>
+        <li><span class="qb sm">1</span><div><strong>Välkommen och arbetskontext</strong><span>Licenser, badge och vad Copilot kan se</span></div><time>7 min</time></li>
+        <li><span class="qb sm">2</span><div><strong>Övning 1–2</strong><span>Copilot som assistent och Research-agenten</span></div><time>16 min</time></li>
+        <li><span class="qb sm">3</span><div><strong>Övning 3–5</strong><span>Dokument, presentationer och Excel</span></div><time>45 min</time></li>
+        <li><span class="qb sm">4</span><div><strong>Paus</strong><span>Spara det du har gjort</span></div><time>6 min</time></li>
+        <li><span class="qb sm">5</span><div><strong>Övning 6–8</strong><span>Mejl och möten, samlad kunskap, din första agent</span></div><time>42 min</time></li>
+        <li><span class="qb sm">6</span><div><strong>Avslutning</strong><span>Så följer du upp din utveckling</span></div><time>4 min</time></li>
+      </ol>
+    </div>
+    <div class="s-foot"><span>Kompetens 5.0 · Modul 4 · Microsoft Copilot Premium</span><span class="end"><span class="partners"><img src="material/kompetens-5-0.png" alt="Kompetens 5.0" /><img src="material/eu-medfinansieras.png" alt="Medfinansieras av Europeiska unionen" /></span><span class="num"></span></span></div>
+  </section>
+
+  <section class="slide" data-title="Läs av badgen">
+    <div class="s-head"><svg class="logo" viewBox="0 0 459.96 90" role="img" aria-label="Superintelligent"><use href="#logo" /></svg></div>
+    <div class="s-title">
+      <p class="eb gold"><span class="pixel-dot"></span>Kontrollera din Copilot-licens</p>
+      <h2 class="h2">Läs av badgen. Gissa inte.</h2>
+      <p class="sub">Logga in med arbetskontot på <span class="mono" style="color: var(--ink)">m365.cloud.microsoft</span> och titta under ditt namn.</p>
+    </div>
+    <div class="s-body" style="gap: 40px">
+      <div class="cards" style="--n: 3">
+        <div class="card"><div class="badge-img"><img src="material/badge-copilot-chat-basic.png" alt="Badge: Copilot Chat (Basic)" /></div><h3>Copilot Chat (Basic)</h3><p>Copilot Chat, webb och uttryckligen uppladdat innehåll. Ingen Copilot Chat i Word, Excel, PowerPoint eller OneNote.</p></div>
+        <div class="card"><div class="badge-img"><img src="material/badge-m365-copilot-basic.png" alt="Badge: M365 Copilot (Basic)" /></div><h3>M365 Copilot (Basic)</h3><p>Standardåtkomst till Copilot Chat, även i Microsoft 365-apparna med den öppna filen som kontext.</p></div>
+        <div class="card is-key"><div class="badge-img"><img src="material/badge-m365-copilot-premium.png" alt="Badge: M365 Copilot (Premium)" /></div><h3>M365 Copilot (Premium)</h3><p>Tilläggslicensen med prioriterad åtkomst, Work IQ och avancerade funktioner. Den som dagens övningar bygger på.</p></div>
+      </div>
+      <p class="footnote">Övningarnas instruktioner använder de tre badge-namnen exakt som Microsoft visar dem.</p>
+    </div>
+    <div class="s-foot"><span>Kompetens 5.0 · Modul 4 · Microsoft Copilot Premium</span><span class="end"><span class="partners"><img src="material/kompetens-5-0.png" alt="Kompetens 5.0" /><img src="material/eu-medfinansieras.png" alt="Medfinansieras av Europeiska unionen" /></span><span class="num"></span></span></div>
+    <aside class="notes">
+<p>Be deltagarna skriva av badgen exakt och behålla den. Källa: https://support.microsoft.com/en-us/microsoft-365-copilot/what-copilot-license-do-i-have</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="Licensmatris">
+    <div class="s-head"><svg class="logo" viewBox="0 0 459.96 90" role="img" aria-label="Superintelligent"><use href="#logo" /></svg></div>
+    <div class="s-title" style="gap: 14px; padding-top: 16px; max-width: none">
+      <p class="eb gold"><span class="pixel-dot"></span>Licensmatris · kontrollerad 7 oktober 2026</p>
+      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 40px"><h2 class="h2" style="font-size: 60px">Tre badge-nivåer, olika räckvidd</h2>
+      <div class="legend"><span><i style="background: var(--green-text)"></i>Ingår</span><span><i style="background: var(--red)"></i>Ingår inte</span><span><i style="background: var(--yellow)"></i>Villkorat eller kan variera</span></div></div>
+    </div>
+    <div class="s-body" style="justify-content: flex-start; gap: 20px; padding: 32px 0 100px">
+      <table class="matrix">
+        <thead><tr><th>Funktion</th><th>Copilot Chat (Basic)</th><th>M365 Copilot (Basic)</th><th>M365 Copilot (Premium)</th></tr></thead>
+        <tbody>
+          <tr><td>Copilot Chat och assisterande svar</td><td class="ja"><i></i>Ja · webb + uppladdat</td><td class="ja"><i></i>Ja · standardåtkomst</td><td class="ja"><i></i>Ja · prioriterad åtkomst</td></tr>
+<tr><td>Diktering · tal till text</td><td class="ja"><i></i>Ja*</td><td class="ja"><i></i>Ja*</td><td class="ja"><i></i>Ja*</td></tr>
+<tr><td>Copilot Voice · talat samtal</td><td class="nej"><i></i>Nej/inte garanterat</td><td class="nej"><i></i>Nej/inte garanterat</td><td class="ja"><i></i>Ja · prioriterat</td></tr>
+<tr><td>Anteckningsböcker och Pages</td><td class="ja"><i></i>Ja*</td><td class="ja"><i></i>Ja*</td><td class="ja"><i></i>Ja*</td></tr>
+<tr><td>Agent Builder · enkel agent</td><td class="villkor"><i></i>Ja* · webb</td><td class="villkor"><i></i>Ja* · webb</td><td class="ja"><i></i>Ja · fler arbetskällor</td></tr>
+<tr><td>Work IQ · jobbkontext</td><td class="nej"><i></i>Nej</td><td class="nej"><i></i>Nej · öppen/bifogad fil</td><td class="ja"><i></i>Ja · behörig jobbdata</td></tr>
+<tr><td>Word, Excel, PowerPoint, OneNote</td><td class="nej"><i></i>Ingen Copilot i apparna</td><td class="villkor"><i></i>Standard · beror på konfiguration</td><td class="ja"><i></i>Full + prioriterad</td></tr>
+<tr><td>Modellval och avancerat resonemang</td><td class="nej"><i></i>Nej</td><td class="nej"><i></i>Nej</td><td class="ja"><i></i>Ja</td></tr>
+<tr><td>Researcher och Analyst</td><td class="nej"><i></i>Nej</td><td class="nej"><i></i>Nej</td><td class="ja"><i></i>Ja*</td></tr>
+<tr><td>Copilot Studio · avancerad agent</td><td class="villkor"><i></i>Credits/PAYG + admin</td><td class="villkor"><i></i>Credits/PAYG + admin</td><td class="villkor"><i></i>Ja (inkl. eget nyttjande) · Delning kräver credits</td></tr>
+<tr><td>Copilot Cowork</td><td class="nej"><i></i>Nej</td><td class="nej"><i></i>Nej</td><td class="villkor"><i></i>Premium + Credits + aktivering</td></tr>
+        </tbody>
+      </table>
+      <p class="footnote">* Kan bero på serviceplan, klient, region, policy eller utrullning. Copilot Credits är organisationens konsumtionsbudget.</p>
+    </div>
+    <div class="s-foot"><span>Kompetens 5.0 · Modul 4 · Microsoft Copilot Premium</span><span class="end"><span class="partners"><img src="material/kompetens-5-0.png" alt="Kompetens 5.0" /><img src="material/eu-medfinansieras.png" alt="Medfinansieras av Europeiska unionen" /></span><span class="num"></span></span></div>
+    <aside class="notes">
+<p>Behåll användarens v13-formulering om Copilot Studio: Ja (inkl. eget nyttjande) - Delning kräver credits. Källor: https://support.microsoft.com/en-us/microsoft-365-copilot/what-copilot-license-do-i-have ; https://learn.microsoft.com/en-us/office365/servicedescriptions/office-365-platform-service-description/microsoft-365-copilot</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="Arbetskontext">
+    <div class="s-head"><svg class="logo" viewBox="0 0 459.96 90" role="img" aria-label="Superintelligent"><use href="#logo" /></svg></div>
+    <div class="s-title">
+      <p class="eb gold"><span class="pixel-dot"></span>Licens och arbetskontext</p>
+      <h2 class="h2">Copilot kan arbeta med din Microsoft 365-kontext</h2>
+      <p class="sub">Med Premium kan Copilot använda arbetsinformation som du redan har behörighet att se. Vad som visas beror också på organisationens inställningar.</p>
+    </div>
+    <div class="s-body">
+      <div class="cards" style="--n: 2">
+        <div class="card"><p class="eb green">Arbetsinformation</p><h3>Filer, mejl, möten och chattar</h3><p>Copilot kan hitta och sammanfatta relevant information som du har åtkomst till.</p><p class="tip">Be Copilot visa vad svaret bygger på och kontrollera viktiga slutsatser.</p></div>
+        <div class="card"><p class="eb purple">Analys och agenter</p><h3>Analyst, Researcher och agenter</h3><p>Premium omfattar avancerade funktioner, där de är aktiverade i organisationen.</p><p class="tip">Välj rätt verktyg för uppgiften och granska källor, behörigheter och resultat.</p></div>
+      </div>
+    </div>
+    <div class="s-foot"><span>Kompetens 5.0 · Modul 4 · Microsoft Copilot Premium</span><span class="end"><span class="partners"><img src="material/kompetens-5-0.png" alt="Kompetens 5.0" /><img src="material/eu-medfinansieras.png" alt="Medfinansieras av Europeiska unionen" /></span><span class="num"></span></span></div>
+    <aside class="notes">
+<p>Arbetsåtkomst är inte obegränsad: Copilot använder information som användaren redan har behörighet till, och tillgängliga funktioner kan begränsas av tenantinställningar. Microsoft beskriver skillnaden mellan Microsoft Copilot-licens och Copilot Chat: work data och Researcher/Analyst-agenter kräver Microsoft Copilot-licens. Källor: https://support.microsoft.com/en-us/microsoft-365-copilot/what-s-the-difference-between-microsoft-copilot-free-and-copilot-in-microsoft-365 ; https://support.microsoft.com/en-us/microsoft-365-copilot/about-copilot-chat-responses</p>
+<p>Källa: https://support.microsoft.com/en-us/microsoft-365-copilot/what-s-the-difference-between-microsoft-copilot-free-and-copilot-in-microsoft-365</p>
+<p>Källa: https://support.microsoft.com/en-us/microsoft-365-copilot/about-copilot-chat-responses</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="Exempelfiler">
+    <div class="s-head"><svg class="logo" viewBox="0 0 459.96 90" role="img" aria-label="Superintelligent"><use href="#logo" /></svg></div>
+    <div class="s-title">
+      <p class="eb gold"><span class="pixel-dot"></span>Träningsmaterial</p>
+      <h2 class="h2">Exempelfiler och källor</h2>
+      <p class="sub">Filerna finns också i webbinariets Teams-chatt. Använd gärna eget, godkänt material i stället.</p>
+    </div>
+    <div class="s-body">
+      <ul class="links">
+        <li><a href="https://humanorio-my.sharepoint.com/:w:/g/personal/ludwig_superintelligent_se/IQAwvVH1e7RISpqC9QosmM5gAUE6EwRj8HJbYe6Xs6_W4os?e=UZZnyA"><span class="eb gold">Word</span><span>Projektplan · Superintelligent Scale</span><span class="arrow">&gt;</span></a></li>
+        <li><a href="https://humanorio-my.sharepoint.com/:x:/g/personal/ludwig_superintelligent_se/IQA1bf5j0eVhQKNhaMbCv84MAaOzTgla3Hfz0C1UTYvnRE4?e=Juu1Uj"><span class="eb gold">Excel</span><span>Fiktiv utbildningsdata 2026</span><span class="arrow">&gt;</span></a></li>
+        <li><a href="https://humanorio-my.sharepoint.com/:w:/g/personal/ludwig_superintelligent_se/IQA0tWDewCNoS5gB-3Y1H8gWAZhtguHnPpjZBFNSTyJs5Bo?e=Bsgmbc"><span class="eb gold">Word</span><span>FAQ till din agent · fiktiv källa</span><span class="arrow">&gt;</span></a></li>
+        <li><a href="https://humanorio-my.sharepoint.com/:w:/g/personal/ludwig_superintelligent_se/IQB_5eN_1rZKTJX8Hwm3UElnAWRpU3tohOHZH1pHIASUKpE?e=skVTqJ"><span class="eb gold">Word</span><span>Riktlinjer för kundkommunikation · agent</span><span class="arrow">&gt;</span></a></li>
+      </ul>
+    </div>
+    <div class="s-foot"><span>Kompetens 5.0 · Modul 4 · Microsoft Copilot Premium</span><span class="end"><span class="partners"><img src="material/kompetens-5-0.png" alt="Kompetens 5.0" /><img src="material/eu-medfinansieras.png" alt="Medfinansieras av Europeiska unionen" /></span><span class="num"></span></span></div>
+  </section>
+
+  <section class="slide" data-title="Övning 1">
+    <div class="s-head"><svg class="logo" viewBox="0 0 459.96 90" role="img" aria-label="Superintelligent"><use href="#logo" /></svg></div>
+    <div class="exercise">
+      <div class="copy">
+        <p class="eb gold"><span class="pixel-dot"></span>Övning 1 av 8 · 7 minuter</p>
+        <h2 class="h2">Fråga Copilot vad den kan se</h2>
+        <div class="tools"><span>Copilot Chat</span></div>
+        <ul class="goals">
+          <li>Förstå vad Copilot har åtkomst till</li>
+          <li>Få hjälp att prioritera dagen</li>
+          <li>Sammanfatta status inom valfritt område</li>
+        </ul>
+        <div class="result"><p class="eb green">Resultat</p><p>Du kan använda Copilot som din personliga assistent.</p></div>
+      </div>
+      <div class="track" aria-hidden="true">
+        <div class="row"><div class="col now"><div class="qb">1</div><div class="plat" style="height: 40px"></div></div><div class="col next"><div class="qb">2</div><div class="plat" style="height: 98px"></div></div><div class="col next"><div class="qb">3</div><div class="plat" style="height: 156px"></div></div><div class="col next"><div class="qb">4</div><div class="plat" style="height: 214px"></div></div><div class="col next"><div class="qb">5</div><div class="plat" style="height: 272px"></div></div><div class="col next"><div class="qb">6</div><div class="plat" style="height: 330px"></div></div><div class="col next"><div class="qb">7</div><div class="plat" style="height: 388px"></div></div><div class="col next"><div class="qb">8</div><div class="plat" style="height: 446px"></div></div></div>
+      </div>
+    </div>
+    <div class="s-foot"><span>Kompetens 5.0 · Modul 4 · Microsoft Copilot Premium</span><span class="end"><span class="partners"><img src="material/kompetens-5-0.png" alt="Kompetens 5.0" /><img src="material/eu-medfinansieras.png" alt="Medfinansieras av Europeiska unionen" /></span><span class="num"></span></span></div>
+  </section>
+
+  <section class="slide" data-title="Övning 2">
+    <div class="s-head"><svg class="logo" viewBox="0 0 459.96 90" role="img" aria-label="Superintelligent"><use href="#logo" /></svg></div>
+    <div class="exercise">
+      <div class="copy">
+        <p class="eb gold"><span class="pixel-dot"></span>Övning 2 av 8 · 9 minuter</p>
+        <h2 class="h2">Använd Research-agenten</h2>
+        <div class="tools"><span>Researcher</span></div>
+        <ul class="goals">
+          <li>Förstå skillnaden mot svar från Chat-assistenten</li>
+          <li>Gör en marknadsanalys inom ditt arbetsområde</li>
+          <li>Anpassa analysen tillsammans med agenten</li>
+        </ul>
+        <div class="result"><p class="eb green">Resultat</p><p>Du kan använda en färdig agent för allt researcharbete.</p></div>
+      </div>
+      <div class="track" aria-hidden="true">
+        <div class="row"><div class="col done"><div class="qb done">1</div><div class="plat" style="height: 40px"></div></div><div class="col now"><div class="qb">2</div><div class="plat" style="height: 98px"></div></div><div class="col next"><div class="qb">3</div><div class="plat" style="height: 156px"></div></div><div class="col next"><div class="qb">4</div><div class="plat" style="height: 214px"></div></div><div class="col next"><div class="qb">5</div><div class="plat" style="height: 272px"></div></div><div class="col next"><div class="qb">6</div><div class="plat" style="height: 330px"></div></div><div class="col next"><div class="qb">7</div><div class="plat" style="height: 388px"></div></div><div class="col next"><div class="qb">8</div><div class="plat" style="height: 446px"></div></div></div>
+      </div>
+    </div>
+    <div class="s-foot"><span>Kompetens 5.0 · Modul 4 · Microsoft Copilot Premium</span><span class="end"><span class="partners"><img src="material/kompetens-5-0.png" alt="Kompetens 5.0" /><img src="material/eu-medfinansieras.png" alt="Medfinansieras av Europeiska unionen" /></span><span class="num"></span></span></div>
+  </section>
+
+  <section class="slide" data-title="Övning 3">
+    <div class="s-head"><svg class="logo" viewBox="0 0 459.96 90" role="img" aria-label="Superintelligent"><use href="#logo" /></svg></div>
+    <div class="exercise">
+      <div class="copy">
+        <p class="eb gold"><span class="pixel-dot"></span>Övning 3 av 8 · 15 minuter</p>
+        <h2 class="h2">Analysera information med Microsoft 365 Copilot</h2>
+        <div class="tools"><span>Copilot Chat</span><span>Källor</span></div>
+        <ul class="goals">
+          <li>Förstå och sammanfatta befintlig information</li>
+          <li>Identifiera risker, oklarheter och nästa steg</li>
+          <li>Anpassa samma underlag för rätt mottagare</li>
+        </ul>
+        <div class="result"><p class="eb green">Resultat</p><p>Du kan omvandla ett dokument till ett tydligt beslutsunderlag.</p></div>
+      </div>
+      <div class="track" aria-hidden="true">
+        <div class="row"><div class="col done"><div class="qb done">1</div><div class="plat" style="height: 40px"></div></div><div class="col done"><div class="qb done">2</div><div class="plat" style="height: 98px"></div></div><div class="col now"><div class="qb">3</div><div class="plat" style="height: 156px"></div></div><div class="col next"><div class="qb">4</div><div class="plat" style="height: 214px"></div></div><div class="col next"><div class="qb">5</div><div class="plat" style="height: 272px"></div></div><div class="col next"><div class="qb">6</div><div class="plat" style="height: 330px"></div></div><div class="col next"><div class="qb">7</div><div class="plat" style="height: 388px"></div></div><div class="col next"><div class="qb">8</div><div class="plat" style="height: 446px"></div></div></div>
+      </div>
+    </div>
+    <div class="s-foot"><span>Kompetens 5.0 · Modul 4 · Microsoft Copilot Premium</span><span class="end"><span class="partners"><img src="material/kompetens-5-0.png" alt="Kompetens 5.0" /><img src="material/eu-medfinansieras.png" alt="Medfinansieras av Europeiska unionen" /></span><span class="num"></span></span></div>
+    <aside class="notes">
+<h4>Övning 3 · Analysera information med Microsoft 365 Copilot</h4>
+<p><strong>Målet:</strong> Använd ett befintligt dokument för att gå från snabb förståelse till analys, kvalitetskontroll och ett underlag anpassat för en specifik mottagare.</p>
+<p>Du behöver inte använda samma projektplan som i videon. Välj ett dokument som är relevant för dig, exempelvis en rapport, projektplan, processbeskrivning, mötessammanfattning eller annat verksamhetsmaterial. Anpassa vem analysen är till för och vilka frågor som är viktiga för just ditt material.</p>
+<p>Öppna Microsoft 365 Copilot och starta en ny chatt.</p>
+<p>Lägg till ett relevant dokument via Lägg till arbetsinnehåll.</p>
+<p>Börja med att skapa en snabb förståelse av materialet:</p>
+<blockquote>Sammanfatta det viktigaste i detta dokument.</blockquote>
+<p>Gå därefter från sammanfattning till analys:</p>
+<blockquote>Agera projektanalytiker. Analysera projektet inför ett styrgruppsmöte. Strukturera svaret i nuläge, mål, viktiga risker, oklarheter, beslut som behöver fattas och rekommenderade nästa steg.</blockquote>
+<p>Du behöver inte analysera just ett projekt eller förbereda ett styrgruppsmöte. Anpassa rollen, mottagaren och syftet om ditt material handlar om något annat. Principen är att ge AI:n en tydlig roll, ett arbetsbehov och en önskad struktur.</p>
+<p>Leta aktivt efter sådant som behöver kontrolleras:</p>
+<blockquote>Identifiera motsägelser, oklarheter eller information i dokumentet som behöver verifieras innan projektet går vidare.</blockquote>
+<p>Välj en relevant oklarhet och fördjupa den. I videon använder vi:</p>
+<blockquote>Förklara exakt vad som är oklart med innehållet och vilken information jag behöver kontrollera innan vi fattar beslut.</blockquote>
+<p>Anpassa informationen till en specifik mottagare:</p>
+<blockquote>Skapa en sammanfattning på maximalt 150 ord för VD:n. Prioritera affärsnytta, viktiga risker, beslut och nästa steg. Undvik operativa detaljer.</blockquote>
+<p>Byt mottagare om det passar bättre, exempelvis kund, projektgrupp, chef eller kollega.</p>
+<p>Öppna Källor och kontrollera vilket material Copilots slutsatser bygger på.</p>
+<p>Övningen är klar när: du har använt samma underlag för att förstå, analysera, kontrollera, fördjupa och mottagaranpassa information – och granskat källorna bakom viktiga slutsatser.</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="Övning 4">
+    <div class="s-head"><svg class="logo" viewBox="0 0 459.96 90" role="img" aria-label="Superintelligent"><use href="#logo" /></svg></div>
+    <div class="exercise">
+      <div class="copy">
+        <p class="eb gold"><span class="pixel-dot"></span>Övning 4 av 8 · 16 minuter</p>
+        <h2 class="h2">Skapa dokument och presentationer med Copilot</h2>
+        <div class="tools"><span>Word</span><span>PowerPoint</span></div>
+        <ul class="goals">
+          <li>Omvandla ett underlag till ett tydligt dokument</li>
+          <li>Skapa en presentation utifrån samma information</li>
+          <li>Förädla en källa till flera användbara leveranser</li>
+        </ul>
+        <div class="result"><p class="eb green">Resultat</p><p>Du kan skapa både beslutsunderlag och presentationer från samma material.</p></div>
+      </div>
+      <div class="track" aria-hidden="true">
+        <div class="row"><div class="col done"><div class="qb done">1</div><div class="plat" style="height: 40px"></div></div><div class="col done"><div class="qb done">2</div><div class="plat" style="height: 98px"></div></div><div class="col done"><div class="qb done">3</div><div class="plat" style="height: 156px"></div></div><div class="col now"><div class="qb">4</div><div class="plat" style="height: 214px"></div></div><div class="col next"><div class="qb">5</div><div class="plat" style="height: 272px"></div></div><div class="col next"><div class="qb">6</div><div class="plat" style="height: 330px"></div></div><div class="col next"><div class="qb">7</div><div class="plat" style="height: 388px"></div></div><div class="col next"><div class="qb">8</div><div class="plat" style="height: 446px"></div></div></div>
+      </div>
+    </div>
+    <div class="s-foot"><span>Kompetens 5.0 · Modul 4 · Microsoft Copilot Premium</span><span class="end"><span class="partners"><img src="material/kompetens-5-0.png" alt="Kompetens 5.0" /><img src="material/eu-medfinansieras.png" alt="Medfinansieras av Europeiska unionen" /></span><span class="num"></span></span></div>
+    <aside class="notes">
+<h4>Övning 4 · Skapa dokument och presentationer med Copilot</h4>
+<p><strong>Målet:</strong> Träna på att återanvända samma information för flera olika arbetsresultat istället för att börja om från början varje gång.</p>
+<p>Du behöver inte använda vår projektplan eller skapa exakt samma ledningsmaterial. Utgå från ett dokument som innehåller tillräckligt med information för att skapa ett nytt, mer fokuserat underlag. Anpassa mottagare, format och prioriteringar efter ditt eget material.</p>
+<h4>Del 1 – Skapa ett beslutsunderlag i Word</h4>
+<ol start="1">
+<li>Öppna ett nytt Word-dokument och starta Copilot.</li>
+<li>Lägg till relevant arbetsinnehåll. Exempelvis: Superintelligent Scale – Fiktiv Projektplan.docx</li>
+<li>Be Copilot skapa ett koncentrerat underlag på maximalt en sida för den mottagare du väljer.</li>
+</ol>
+<p>I videon skapar vi ett beslutsunderlag för en ledningsgrupp med följande innehåll:</p>
+<p>Bakgrund</p>
+<p>Nuläge</p>
+<p>Beslut som behöver fattas</p>
+<p>Rekommendation</p>
+<p>Nästa steg</p>
+<p>Använd följande prompt och anpassa vid behov:</p>
+<blockquote>Utifrån källmaterialet, skapa ett beslutsunderlag på max en sida för [mottagare]. Ta med bakgrund, nuläge, beslut som behöver fattas, rekommendation och nästa steg. Prioritera det viktigaste för mottagaren och utgå endast från informationen i källan.</blockquote>
+<p><strong>Principen är: Välj vilken information mottagaren faktiskt behöver och be AI:n prioritera därefter.</strong></p>
+<ol start="4">
+<li>Granska första versionen och fortsätt dialogen. Be Copilot göra materialet ungefär 25 procent kortare, ta bort generella formuleringar och göra besluten tydligare och mer handlingsorienterade.</li>
+<blockquote>Minska texten med cirka 25 %. Ta bort generella formuleringar och gör beslut, rekommendationer och nästa steg tydligare och mer handlingsorienterade.</blockquote>
+<li>Be därefter Copilot lägga till en kort sektion med information som behöver verifieras. Ta endast med sådant som är oklart, saknas eller motsägelsefullt i källmaterialet.</li>
+<blockquote>Lägg till en kort sektion med information som behöver verifieras. Ta endast med uppgifter som är oklara, saknas eller motsäger varandra i källmaterialet. Hitta inte på information.</blockquote>
+<li>Spara det nya dokumentet.</li>
+</ol>
+<h4>Del 2 – Skapa en presentation i PowerPoint</h4>
+<ol start="7">
+<li>Öppna PowerPoint och starta Copilot.</li>
+<li>Lägg till relevanta källor. Använd gärna både originalmaterialet och dokumentet du precis skapade.</li>
+<li>Be Copilot skapa en kort presentation anpassad till din valda mottagare.</li>
+</ol>
+<p>I videon prioriterar vi följande innehåll:</p>
+<p>Varför projektet behövs</p>
+<p>Nuläge</p>
+<p>Potential</p>
+<p>Viktigaste risker</p>
+<p>Beslut som behöver fattas</p>
+<p>Använd följande prompt och anpassa vid behov:</p>
+<blockquote>Skapa en kort presentation på 5–7 slides för [mottagare], baserad på källmaterialet. Fokusera på varför projektet behövs, nuläge, potential, viktigaste risker och beslut som behöver fattas. Anpassa innehåll och detaljnivå efter mottagaren. Använd tydliga budskap och lite text per slide.</blockquote>
+<ol start="10">
+<li>Om Copilot ställer kompletterande frågor om exempelvis visuell riktning, välj det alternativ som bäst stödjer syftet.</li>
+<li>Granska presentationen och förbättra minst en slide genom att minska text, prioritera innehåll eller göra budskapet tydligare.</li>
+</ol>
+<p>Använd följande prompt:</p>
+<blockquote>Förbättra den här sliden genom att minska texten, prioritera huvudbudskapet och göra slutsatsen tydligare. Behåll bara information som hjälper mottagaren att förstå eller fatta beslut.</blockquote>
+<ol start="12">
+<li>Spara presentationen.</li>
+</ol>
+<p>Nu är övningen klar!</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="Övning 5">
+    <div class="s-head"><svg class="logo" viewBox="0 0 459.96 90" role="img" aria-label="Superintelligent"><use href="#logo" /></svg></div>
+    <div class="exercise">
+      <div class="copy">
+        <p class="eb gold"><span class="pixel-dot"></span>Övning 5 av 8 · 14 minuter</p>
+        <h2 class="h2">Upptäck insikter i data med Excel och Analyst</h2>
+        <div class="tools"><span>Excel</span><span>Analyst</span></div>
+        <ul class="goals">
+          <li>Hitta mönster, avvikelser och viktiga insikter i data</li>
+          <li>Se vilket underlag som ligger bakom slutsatserna</li>
+          <li>Skilj mellan fakta, hypoteser och databehov</li>
+        </ul>
+        <div class="result"><p class="eb green">Resultat</p><p>Du kan gå från rådata till analys, visualisering och bättre beslutsstöd.</p></div>
+      </div>
+      <div class="track" aria-hidden="true">
+        <div class="row"><div class="col done"><div class="qb done">1</div><div class="plat" style="height: 40px"></div></div><div class="col done"><div class="qb done">2</div><div class="plat" style="height: 98px"></div></div><div class="col done"><div class="qb done">3</div><div class="plat" style="height: 156px"></div></div><div class="col done"><div class="qb done">4</div><div class="plat" style="height: 214px"></div></div><div class="col now"><div class="qb">5</div><div class="plat" style="height: 272px"></div></div><div class="col next"><div class="qb">6</div><div class="plat" style="height: 330px"></div></div><div class="col next"><div class="qb">7</div><div class="plat" style="height: 388px"></div></div><div class="col next"><div class="qb">8</div><div class="plat" style="height: 446px"></div></div></div>
+      </div>
+    </div>
+    <div class="s-foot"><span>Kompetens 5.0 · Modul 4 · Microsoft Copilot Premium</span><span class="end"><span class="partners"><img src="material/kompetens-5-0.png" alt="Kompetens 5.0" /><img src="material/eu-medfinansieras.png" alt="Medfinansieras av Europeiska unionen" /></span><span class="num"></span></span></div>
+    <aside class="notes">
+<h4>Övning 5 · Upptäck insikter i data med Excel och Analyst</h4>
+<p><strong>Målet:</strong> Använd AI för att hitta mönster i data, men träna framför allt på att kontrollera vad slutsatserna faktiskt bygger på och vad datan inte kan bevisa.</p>
+<p>Du behöver inte använda vår utbildningsdata. Använd en Excel-fil med tillräckligt många rader och relevanta variabler för att det ska gå att jämföra resultat, perioder, kategorier eller andra faktorer.</p>
+<h4>Del 1 – Hitta mönster i data</h4>
+<ol start="1">
+<li>Öppna Excel-filen och Copilot-panelen.</li>
+<li>Be Copilot analysera datan och identifiera tre viktiga insikter. Be också om en kort förklaring till varför varje insikt är relevant.</li>
+</ol>
+<p>Använd följande prompt:</p>
+<blockquote>Analysera datan och identifiera tre viktiga insikter. Förklara kort varför varje insikt är relevant och hänvisa till de värden eller jämförelser i datan som stödjer respektive insikt. Hitta inte på information.</blockquote>
+<ol start="3">
+<li>Granska resultatet och byt därefter till chattläge.</li>
+</ol>
+<p>Skriv följande prompt:</p>
+<blockquote>Finns det någon tydlig avvikelse eller period som sticker ut negativt i datan? Visa vilka värden och jämförelser som stödjer din bedömning.</blockquote>
+<ol start="4">
+<li>Välj en relevant avvikelse och be Copilot visa vilket underlag slutsatsen bygger på.</li>
+</ol>
+<p>I videon undersöker vi juni. Anpassa period, kategori eller variabel efter din egen data.</p>
+<p>Använd följande prompt:</p>
+<blockquote>Undersök avvikelsen för [period eller kategori]. Visa de relevanta värdena och jämför med [annan period, kategori eller genomsnitt] så att jag kan kontrollera vad slutsatsen bygger på.</blockquote>
+<ol start="5">
+<li>Be därefter Copilot förklara möjliga orsaker, men tydligt separera vad datan faktiskt visar från hypoteser som behöver undersökas vidare.</li>
+</ol>
+<p>Använd följande prompt:</p>
+<blockquote>Förklara möjliga orsaker till avvikelsen. Dela upp svaret i vad datan faktiskt visar och vilka orsaker som endast är hypoteser. Förklara vad som behöver undersökas vidare och dra inga säkra slutsatser om orsakssamband utan stöd.</blockquote>
+<p><strong>Principen är: skilj observation från förklaring. Ett mönster i data betyder inte automatiskt att AI:n vet vad som orsakat det.</strong></p>
+<p>Bonus! Be Copilot skapa en ny flik i Excel med en sammanfattning av de viktigaste positiva slutsatserna för ledningsgruppen.</p>
+<p>Använd följande prompt:</p>
+<blockquote>Skapa en ny flik i Excel med en sammanfattning för min ledningsgrupp. Lyft fram de viktigaste positiva slutsatserna du kan hitta i datan, exempelvis förbättringar, starka resultat och positiva trender. För varje slutsats, visa relevanta värden eller jämförelser som stödjer den och förklara kort varför den är viktig. Prioritera de mest betydelsefulla insikterna, använd ett tydligt och professionellt språk och hitta inte på information.</blockquote>
+<p>Granska resultatet: Kontrollera att de positiva slutsatserna stöds av faktiska värden i datan och att sammanfattningen är relevant för ledningsgruppen.</p>
+<h4>Del 2 – Undersök samband med Analytiker</h4>
+<ol start="6">
+<li>Öppna Analytiker i Microsoft 365 Copilot och lägg till samma Excel-fil.</li>
+<li>Be Analytiker undersöka vilka faktorer som verkar ha starkast samband med det resultat du vill förstå.</li>
+</ol>
+<p>I videon undersöker vi kundnöjdhet och återköp. Anpassa detta till relevanta utfall i din data.</p>
+<p>Använd följande prompt:</p>
+<blockquote>Analysera vilka faktorer som verkar ha starkast samband med [resultat du vill förstå]. Identifiera tre relevanta mönster eller hypoteser och visa vilken data som stödjer respektive slutsats. Skilj mellan observerade samband och möjliga förklaringar.</blockquote>
+<ol start="8">
+<li>Testa sedan analysens begränsningar.</li>
+</ol>
+<p>Använd följande prompt:</p>
+<blockquote>Vilka slutsatser kan vi inte dra säkert från den här datan? Förklara vilka begränsningar, osäkerheter eller saknade uppgifter som påverkar analysen.</blockquote>
+<ol start="9">
+<li>Avsluta med att undersöka vilken ytterligare information som behövs.</li>
+</ol>
+<p>Använd följande prompt:</p>
+<blockquote>Vilken ytterligare data skulle vi behöva samla in för att kunna förstå resultaten bättre och fatta säkrare beslut? Prioritera de tre viktigaste kompletteringarna och förklara kort varför de behövs.</blockquote>
+<p>När är övningen klar?</p>
+<p>Övningen är klar när du har gått från rådata → mönster → kontroll av underlag → hypoteser → begränsningar → behov av mer data.</p>
+    </aside>
+  </section>
+
+  <section class="slide has-ground" data-title="Paus">
+    <div class="s-head"><svg class="logo" viewBox="0 0 459.96 90" role="img" aria-label="Superintelligent"><use href="#logo" /></svg></div>
+    <div class="statement">
+      <p class="eb gold"><span class="pixel-dot"></span>Paus · 6 minuter</p>
+      <h1 class="h1">Paus och återställning.</h1>
+      <p class="sub">Spara dokument, presentation och analysresultat. Efter pausen arbetar vi med mejl och mötesinformation.</p>
+    </div>
+    <div class="ground"></div><div class="s-foot"><span>Kompetens 5.0 · Modul 4 · Microsoft Copilot Premium</span><span class="end"><span class="partners"><img src="material/kompetens-5-0.png" alt="Kompetens 5.0" /><img src="material/eu-medfinansieras.png" alt="Medfinansieras av Europeiska unionen" /></span><span class="num"></span></span></div>
+    <aside class="notes">
+<p>Kontrollera att övningsfilerna för Outlook och Teams finns tillgängliga.</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="Efter pausen">
+    <div class="s-head"><svg class="logo" viewBox="0 0 459.96 90" role="img" aria-label="Superintelligent"><use href="#logo" /></svg></div>
+    <div class="agenda">
+      <div class="intro">
+        <p class="eb gold"><span class="pixel-dot"></span>Efter pausen</p>
+        <h2 class="h2">Nu: mejl, möten, kunskap och agenter</h2>
+        <p class="sub" style="font-size: 32px">Tre övningar kvar. Vi börjar i Outlook och Teams.</p>
+      </div>
+      <ol data-current="5">
+        <li><span class="qb sm">1</span><div><strong>Välkommen och arbetskontext</strong><span>Licenser, badge och vad Copilot kan se</span></div><time>7 min</time></li>
+        <li><span class="qb sm">2</span><div><strong>Övning 1–2</strong><span>Copilot som assistent och Research-agenten</span></div><time>16 min</time></li>
+        <li><span class="qb sm">3</span><div><strong>Övning 3–5</strong><span>Dokument, presentationer och Excel</span></div><time>45 min</time></li>
+        <li><span class="qb sm">4</span><div><strong>Paus</strong><span>Spara det du har gjort</span></div><time>6 min</time></li>
+        <li><span class="qb sm">5</span><div><strong>Övning 6–8</strong><span>Mejl och möten, samlad kunskap, din första agent</span></div><time>42 min</time></li>
+        <li><span class="qb sm">6</span><div><strong>Avslutning</strong><span>Så följer du upp din utveckling</span></div><time>4 min</time></li>
+      </ol>
+    </div>
+    <div class="s-foot"><span>Kompetens 5.0 · Modul 4 · Microsoft Copilot Premium</span><span class="end"><span class="partners"><img src="material/kompetens-5-0.png" alt="Kompetens 5.0" /><img src="material/eu-medfinansieras.png" alt="Medfinansieras av Europeiska unionen" /></span><span class="num"></span></span></div>
+  </section>
+
+  <section class="slide" data-title="Övning 6">
+    <div class="s-head"><svg class="logo" viewBox="0 0 459.96 90" role="img" aria-label="Superintelligent"><use href="#logo" /></svg></div>
+    <div class="exercise">
+      <div class="copy">
+        <p class="eb gold"><span class="pixel-dot"></span>Övning 6 av 8 · 14 minuter</p>
+        <h2 class="h2">Effektivisera kommunikation i Outlook och Teams</h2>
+        <div class="tools"><span>Outlook</span><span>Teams</span></div>
+        <ul class="goals">
+          <li>Omvandla mejl och möten till beslut och nästa steg</li>
+          <li>Skilj på vad som är beslutat och vad som är öppet</li>
+          <li>Skapa tydlig uppföljning med hjälp av Copilot</li>
+        </ul>
+        <div class="result"><p class="eb green">Resultat</p><p>Du kan förvandla ostrukturerad kommunikation till ett tydligt handlingsunderlag.</p></div>
+      </div>
+      <div class="track" aria-hidden="true">
+        <div class="row"><div class="col done"><div class="qb done">1</div><div class="plat" style="height: 40px"></div></div><div class="col done"><div class="qb done">2</div><div class="plat" style="height: 98px"></div></div><div class="col done"><div class="qb done">3</div><div class="plat" style="height: 156px"></div></div><div class="col done"><div class="qb done">4</div><div class="plat" style="height: 214px"></div></div><div class="col done"><div class="qb done">5</div><div class="plat" style="height: 272px"></div></div><div class="col now"><div class="qb">6</div><div class="plat" style="height: 330px"></div></div><div class="col next"><div class="qb">7</div><div class="plat" style="height: 388px"></div></div><div class="col next"><div class="qb">8</div><div class="plat" style="height: 446px"></div></div></div>
+      </div>
+    </div>
+    <div class="s-foot"><span>Kompetens 5.0 · Modul 4 · Microsoft Copilot Premium</span><span class="end"><span class="partners"><img src="material/kompetens-5-0.png" alt="Kompetens 5.0" /><img src="material/eu-medfinansieras.png" alt="Medfinansieras av Europeiska unionen" /></span><span class="num"></span></span></div>
+    <aside class="notes">
+<h4>Övning 6 · Effektivisera kommunikation i Outlook och Teams</h4>
+<p><strong>Målet:</strong> Omvandla utspridd kommunikation till verifierade beslut, ansvar och konkreta nästa steg.</p>
+<p>Använd gärna dina egna arbetsrelaterade mejl och möten. Promptarna nedan är generella och kan anpassas efter innehållet du arbetar med.</p>
+<h4>Del 1 – Outlook: Från mejltråd till tydliga beslut</h4>
+<ol start="1">
+<li>Öppna en relevant mejltråd med flera meddelanden och starta Copilot.</li>
+<li>Be Copilot sammanfatta tråden.</li>
+</ol>
+<p>Använd följande prompt:</p>
+<blockquote>Sammanfatta mejltråden kort. Lyft fram huvudfrågan, viktigaste informationen, vad deltagarna verkar vara överens om och vad som fortfarande behöver klargöras. Utgå endast från informationen i tråden.</blockquote>
+<ol start="3">
+<li>Gå sedan från vanlig sammanfattning till strukturerad arbetsinformation.</li>
+</ol>
+<p>Använd följande prompt:</p>
+<blockquote>&quot;Analysera mejltråden och strukturera informationen under följande rubriker:
+Fattade beslut.
+Förslag och frågor som fortfarande diskuteras.
+Actions och ansvariga.
+Viktiga nästa steg.
+Skilj tydligt mellan bekräftade beslut och sådant som bara föreslås. Ange om information saknas eller är oklar. Hänvisa till relevanta meddelanden som stöd för slutsatserna.&quot;</blockquote>
+<ol start="4">
+<li>Kontrollera en konkret uppgift där skillnaden mellan förslag och beslut spelar roll.</li>
+</ol>
+<p>Välj en fråga som faktiskt förekommer i mejltråden och använd följande prompt:</p>
+<blockquote>Undersök om [beslut, datum, ansvar eller annan konkret fråga] är slutligt beslutat eller fortfarande ett förslag. Förklara vilken information i mejltråden som stödjer din bedömning. Om det inte går att avgöra säkert, förklara vad som saknas.</blockquote>
+<p><strong>Principen är: Be AI:n visa vad slutsatserna bygger på. Ett förslag blir inte automatiskt ett beslut bara för att det nämns i en mejltråd.</strong></p>
+<ol start="5">
+<li>När informationen är verifierad, be Copilot skriva ett svar som hjälper arbetet framåt.</li>
+</ol>
+<p>Använd följande prompt:</p>
+<blockquote>Skriv ett kort, professionellt svar till [mottagare] baserat på mejltråden. Bekräfta det som faktiskt har beslutats, tydliggör kända ansvar och sammanfatta nästa steg. Ta upp sådant som fortfarande behöver klargöras utan att presentera det som ett fattat beslut. Max 150 ord.</blockquote>
+<p>Granska svaret innan du använder det och anpassa mottagaren om det behövs.</p>
+<h4>Del 2 – Teams: Från möte till ansvar och nästa steg</h4>
+<ol start="6">
+<li>Öppna ett transkriberat Teams-möte och gå till mötets sammanfattning.</li>
+<li>Titta kort på Transkription och AI-sammanfattning för att se vilket underlag som finns tillgängligt.</li>
+<li>Öppna Copilot för mötet och be om en strukturerad sammanställning.</li>
+</ol>
+<p>Använd följande prompt:</p>
+<blockquote>&quot;Strukturera mötets innehåll under följande rubriker:
+Beslut.
+Actions.
+Ansvariga.
+Deadlines.
+Risker.
+Öppna frågor.
+Skilj mellan uttryckliga beslut och förslag. Ange bara ansvariga och deadlines som framgår av underlaget. Markera sådant som är oklart eller saknas.&quot;</blockquote>
+<ol start="9">
+<li>Kontrollera sedan en fråga där ansvar, beslut eller tidsplan verkar oklart.</li>
+</ol>
+<p>Välj en relevant fråga från mötet och använd följande prompt:</p>
+<blockquote>Undersök vad mötet säger om [beslut, ansvar, deadline eller annan konkret fråga]. Vem eller vad anges i underlaget? Visa vilket stöd som finns i transkriptionen. Om inget tydligt beslut eller ansvar framgår, säg det uttryckligen.</blockquote>
+<p>Det intressanta kan lika gärna vara att upptäcka att ingen faktiskt har fått ansvaret.</p>
+<ol start="10">
+<li>Be Copilot prioritera vad som bör hända efter mötet.</li>
+</ol>
+<p>Använd följande prompt:</p>
+<blockquote>Vilka tre saker bör prioriteras direkt efter mötet? Utgå från fattade beslut, identifierade actions och olösta frågor. Förklara kort varför varje punkt är viktig och markera om något ansvar eller någon deadline behöver bekräftas.</blockquote>
+<ol start="11">
+<li>Använd Copilot för att skapa en lämplig uppföljning till gruppen.</li>
+</ol>
+<p>Använd följande prompt:</p>
+<blockquote>Skriv ett kort uppföljningsmeddelande till [mottagare] baserat på mötet. Sammanfatta bekräftade beslut, överenskomna actions och nästa steg. Ta med ansvariga och deadlines där de är kända. Lista eventuella oklarheter som behöver bekräftas. Hitta inte på information.</blockquote>
+<p>Granska meddelandet och säkerställ att det inte framställer obekräftade uppgifter som beslut.</p>
+<p>Övningen är klar när: du har tränat på kedjan kommunikation → struktur → verifiering → beslut → ansvar → handling, både i mejl och mötesinformation.</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="Övning 7">
+    <div class="s-head"><svg class="logo" viewBox="0 0 459.96 90" role="img" aria-label="Superintelligent"><use href="#logo" /></svg></div>
+    <div class="exercise">
+      <div class="copy">
+        <p class="eb gold"><span class="pixel-dot"></span>Övning 7 av 8 · 15 minuter</p>
+        <h2 class="h2">Samla, jämför och utveckla kunskap med Notebooks och Researcher</h2>
+        <div class="tools"><span>Anteckningsböcker</span><span>Researcher</span></div>
+        <ul class="goals">
+          <li>Samla flera källor i en gemensam AI-arbetsyta</li>
+          <li>Skapa en nulägesbild och hitta kunskapsluckor</li>
+          <li>Kombinera intern information med extern research</li>
+        </ul>
+        <div class="result"><p class="eb green">Resultat</p><p>Du kan gå från spridda källor till en samlad bild och tydliga nästa steg.</p></div>
+      </div>
+      <div class="track" aria-hidden="true">
+        <div class="row"><div class="col done"><div class="qb done">1</div><div class="plat" style="height: 40px"></div></div><div class="col done"><div class="qb done">2</div><div class="plat" style="height: 98px"></div></div><div class="col done"><div class="qb done">3</div><div class="plat" style="height: 156px"></div></div><div class="col done"><div class="qb done">4</div><div class="plat" style="height: 214px"></div></div><div class="col done"><div class="qb done">5</div><div class="plat" style="height: 272px"></div></div><div class="col done"><div class="qb done">6</div><div class="plat" style="height: 330px"></div></div><div class="col now"><div class="qb">7</div><div class="plat" style="height: 388px"></div></div><div class="col next"><div class="qb">8</div><div class="plat" style="height: 446px"></div></div></div>
+      </div>
+    </div>
+    <div class="s-foot"><span>Kompetens 5.0 · Modul 4 · Microsoft Copilot Premium</span><span class="end"><span class="partners"><img src="material/kompetens-5-0.png" alt="Kompetens 5.0" /><img src="material/eu-medfinansieras.png" alt="Medfinansieras av Europeiska unionen" /></span><span class="num"></span></span></div>
+    <aside class="notes">
+<h4>Övning 7 · Samla, jämför och utveckla kunskap med Notebooks och Researcher</h4>
+<p><strong>Målet:</strong> Bygg en gemensam AI-arbetsyta där flera interna källor först analyseras tillsammans och därefter kompletteras med extern research.</p>
+<p>Du behöver inte använda samma fyra dokument eller arbeta med Superintelligent Scale. Välj ett verkligt projekt, problem eller arbetsområde och samla några relevanta källor kring det. Det kan vara dokument, analyser, mötesinformation, data eller tidigare Copilot-konversationer.</p>
+<h4>Del 1 – Samla information i en anteckningsbok</h4>
+<ol start="1">
+<li>Öppna Anteckningsböcker i Microsoft 365 Copilot och skapa en ny anteckningsbok.</li>
+<li>Ge den ett namn som beskriver ditt projekt eller arbetsområde.</li>
+<li>Lägg till flera relevanta interna källor.</li>
+<li>När källorna är samlade, be Copilot skapa en gemensam nulägesbild.</li>
+</ol>
+<p>Använd följande prompt och anpassa vid behov:</p>
+<blockquote>Skapa en nulägesbild av [projekt eller arbetsområde] utifrån materialet i denna anteckningsbok. Strukturera resultatet i: mål, nuläge, styrkor och möjligheter, risker och problem, viktiga beslut, öppna frågor och rekommenderade nästa steg. Utgå från de tillgängliga källorna och var tydlig med vad som saknas eller är oklart. Hitta inte på information.</blockquote>
+<p>Behåll principen men anpassa namnet och formuleringen till ditt eget material.</p>
+<h4>Del 2 – Identifiera kunskapsluckor</h4>
+<ol start="5">
+<li>Leta aktivt efter kunskapsluckor i det samlade materialet.</li>
+</ol>
+<p>Använd följande prompt:</p>
+<blockquote>Vilken viktig information saknas eller är otillräcklig i materialet för att vi ska kunna bedöma [projektets förutsättningar, problem eller önskat resultat]? Lista de fem viktigaste kunskapsluckorna och förklara kort varför de spelar roll. Skilj mellan information som saknas och information som finns men är osäker.</blockquote>
+<p>Anpassa frågan efter vad du vill förstå eller bedöma.</p>
+<h4>Del 3 – Prioritera möjligheter</h4>
+<ol start="6">
+<li>Använd materialet för att prioritera de mest lovande möjligheterna utifrån ett tydligt mål.</li>
+</ol>
+<p>Använd följande prompt:</p>
+<blockquote>Utifrån materialet i anteckningsboken, vilka tre områden verkar mest lovande om målet är att [önskat resultat]? Förklara varför du prioriterar dessa områden, vilken information som stödjer bedömningen och vilka osäkerheter som finns. Jämför relevanta källor och undvik att dra slutsatser som underlaget inte stödjer.</blockquote>
+<p>Anpassa målet efter ditt eget arbete.</p>
+<p><strong>Principen är att låta AI jämföra flera källor och prioritera utifrån ett tydligt mål.</strong></p>
+<h4>Del 4 – Komplettera med extern research</h4>
+<ol start="7">
+<li>Öppna Researcher i Microsoft 365 Copilot.</li>
+<li>Formulera en researchfråga som kan komplettera den interna informationen med relevant extern kunskap.</li>
+</ol>
+<p>Använd följande prompt och anpassa vid behov:</p>
+<blockquote>Undersök [fråga eller problem] med fokus på [relevant bransch, målgrupp eller område]. Ta fram en strukturerad rapport med sammanfattning, viktigaste insikter, möjligheter, risker och rekommendationer. Beskriv vilka slutsatser som har stöd i extern research, ange trovärdiga källor och länkar och tydliggör eventuella osäkerheter. Fokusera på information som kan hjälpa oss att fatta bättre beslut kring [projekt eller önskat resultat].</blockquote>
+<p>Gör motsvarande för din egen fråga.</p>
+<ol start="9">
+<li>Besvara eventuella kompletterande frågor från Researcher och låt undersökningen genomföras.</li>
+<li>Läs resultatet och kontrollera framför allt vilka externa källor slutsatserna bygger på. Granska om källorna är relevanta och tillförlitliga och om de faktiskt stödjer slutsatserna.</li>
+</ol>
+<h4>Del 5 – Jämför intern och extern kunskap</h4>
+<ol start="11">
+<li>Jämför researchens slutsatser med informationen i din anteckningsbok.</li>
+</ol>
+<p>Använd följande prompt:</p>
+<blockquote>Jämför slutsatserna från den externa researchen med informationen i vår interna anteckningsbok om [projekt eller arbetsområde]. Identifiera tre saker som vår nuvarande plan verkar hantera väl, tre viktiga luckor och tre saker vi bör prioritera härnäst. Skilj tydligt mellan vad som kommer från våra interna källor och vad som kommer från den externa researchen. Ange relevanta källor och markera eventuella motsägelser eller osäkerheter.</blockquote>
+<p>Byt ut projektnamnet och anpassa jämförelsen efter ditt eget material.</p>
+<ol start="12">
+<li>Granska resultatet och välj en prioritering som du tycker är särskilt viktig. Kontrollera att rekommendationen stöds av underlaget och fundera på om den behöver justeras innan du använder den i ditt arbete.</li>
+</ol>
+<p>Övningen är klar när du har gått från:</p>
+<p>Separata interna källor → gemensam nulägesbild → kunskapsluckor → extern research → jämförelse → tydligare prioriteringar.</p>
+<p>Det centrala är inte att använda exakt våra filer. Det är att förstå hur intern kontext och extern kunskap kan kombineras utan att blanda ihop vad som kommer varifrån.</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="Övning 8">
+    <div class="s-head"><svg class="logo" viewBox="0 0 459.96 90" role="img" aria-label="Superintelligent"><use href="#logo" /></svg></div>
+    <div class="exercise">
+      <div class="copy">
+        <p class="eb gold"><span class="pixel-dot"></span>Övning 8 av 8 · 13 minuter</p>
+        <h2 class="h2">Bygg organisationens första AI-agent</h2>
+        <div class="tools"><span>Agent Builder</span></div>
+        <ul class="goals">
+          <li>Definiera en tydlig uppgift för en agent</li>
+          <li>Ge agenten instruktioner och kunskapskällor</li>
+          <li>Testa vad agenten kan, och vad den inte ska svara på</li>
+        </ul>
+        <div class="result"><p class="eb green">Resultat</p><p>Du kan skapa en enkel agent som hjälper till i en verklig arbetsuppgift.</p></div>
+      </div>
+      <div class="track" aria-hidden="true">
+        <div class="row"><div class="col done"><div class="qb done">1</div><div class="plat" style="height: 40px"></div></div><div class="col done"><div class="qb done">2</div><div class="plat" style="height: 98px"></div></div><div class="col done"><div class="qb done">3</div><div class="plat" style="height: 156px"></div></div><div class="col done"><div class="qb done">4</div><div class="plat" style="height: 214px"></div></div><div class="col done"><div class="qb done">5</div><div class="plat" style="height: 272px"></div></div><div class="col done"><div class="qb done">6</div><div class="plat" style="height: 330px"></div></div><div class="col done"><div class="qb done">7</div><div class="plat" style="height: 388px"></div></div><div class="col now"><div class="qb">8</div><div class="plat" style="height: 446px"></div></div></div>
+      </div>
+    </div>
+    <div class="s-foot"><span>Kompetens 5.0 · Modul 4 · Microsoft Copilot Premium</span><span class="end"><span class="partners"><img src="material/kompetens-5-0.png" alt="Kompetens 5.0" /><img src="material/eu-medfinansieras.png" alt="Medfinansieras av Europeiska unionen" /></span><span class="num"></span></span></div>
+    <aside class="notes">
+<h4>Övning 8 · Bygg organisationens första AI-agent</h4>
+<p><strong>Målet:</strong> Skapa och testa en enkel kunskapsbaserad AI-agent som hjälper till med en tydlig och återkommande arbetsuppgift i en organisation.</p>
+<p>Du behöver inte bygga samma utbildningsassistent som i videon. Välj istället ett användningsfall som är relevant för dig, exempelvis en agent som svarar på vanliga frågor, hjälper medarbetare att hitta information, tolkar interna riktlinjer eller stödjer en återkommande arbetsprocess.</p>
+<p>Det viktiga är principen: agenten ska ha ett tydligt syfte, tydliga instruktioner, relevant kunskap och tydliga gränser för vad den får och inte får göra.</p>
+<h4>Del 1 – Förbered agentens kunskap</h4>
+<ol start="1">
+<li>Bestäm vilken avgränsad arbetsuppgift agenten ska hjälpa till med.</li>
+</ol>
+<p>Definiera följande:</p>
+<p>Vem agenten är till för.</p>
+<p>Vilket problem den ska lösa.</p>
+<p>Vilken information den behöver.</p>
+<p>Vad den inte ska hitta på eller fatta egna beslut om.</p>
+<ol start="2">
+<li>Förbered ett eller flera enkla kunskapsunderlag.</li>
+</ol>
+<p>I videon använder vi:</p>
+<p>En FAQ med fakta om utbildningarna.</p>
+<p>En riktlinjefil för kundkommunikation.</p>
+<p>Dina filer kan istället innehålla exempelvis vanliga frågor, rutiner, policys, produktinformation, processbeskrivningar eller annan information som agenten behöver för sin uppgift.</p>
+<p>Du kan använda våra exempelfiler eller skapa egna i Copilot utifrån information du redan har.</p>
+<p><strong>Principen är inte att dokumenten måste vara perfekta. De ska ge agenten ett konkret och kontrollerbart underlag att arbeta från.</strong></p>
+<h4>Del 2 – Skapa agenten</h4>
+<ol start="3">
+<li>Öppna Microsoft 365 Copilot och välj Ny agent.</li>
+<li>Beskriv med vanligt språk vilken agent du vill skapa.</li>
+</ol>
+<p>I videon använder vi en intern utbildningsassistent. Du kan istället använda följande generella prompt och anpassa den till ditt eget användningsfall:</p>
+<blockquote>Skapa en AI-agent som hjälper [målgrupp] med [arbetsuppgift eller problem]. Agenten ska använda det godkända kunskapsunderlaget för att ge relevanta och korrekta svar. Den ska skilja mellan verifierad information och sådant som är oklart, inte hitta på fakta och tydligt säga till när underlaget inte räcker för att svara.</blockquote>
+<ol start="5">
+<li>Låt Agent Builder skapa ett första förslag. Granska namn, beskrivning och instruktioner.</li>
+</ol>
+<p>Det automatiska förslaget är en startpunkt – inte en färdig agent.</p>
+<ol start="6">
+<li>Gå till Konfigurera och granska eller förbättra instruktionerna.</li>
+</ol>
+<p>Om du vill ha hjälp att skapa tydligare instruktioner kan du använda följande prompt i Copilot chat eller ChatGPT:</p>
+<blockquote>Skriv tydliga instruktioner för min AI-agent. Agentens syfte är [syfte], målgruppen är [målgrupp] och arbetsuppgiften är [arbetsuppgift]. Beskriv agentens roll, hur den ska använda kunskapskällorna, hur den ska hantera osäker information och vad den inte får göra. Håll instruktionerna konkreta och anpassade för en agent som ska användas i det dagliga arbetet.</blockquote>
+<p>Anpassa instruktionerna efter din agent och lägg in dem i Agent Builder.</p>
+<h4>Del 3 – Koppla kunskapskällor</h4>
+<ol start="7">
+<li>Gå till Kunskap och lägg till de filer som agenten ska använda.</li>
+</ol>
+<p>I videon använder vi vår FAQ och våra riktlinjer för kundkommunikation. Använd istället de dokument som är relevanta för ditt användningsfall.</p>
+<p><strong>Principen är att faktauppgifter ska kunna hämtas från definierade och kontrollerbara källor.</strong></p>
+<h4>Del 4 – Testa vad agenten kan</h4>
+<ol start="8">
+<li>Öppna Testa. Börja med en enkel fråga där svaret tydligt finns i kunskapsunderlaget.</li>
+</ol>
+<p>Använd följande prompt och anpassa den efter din agent:</p>
+<blockquote>Besvara frågan [ställ en konkret fråga vars svar finns i kunskapsunderlaget]. Ge ett tydligt och kortfattat svar.</blockquote>
+<p>Kontrollera att svaret stämmer med källmaterialet.</p>
+<ol start="9">
+<li>Testa sedan om agenten kan använda informationen i ett praktiskt arbetsmoment.</li>
+</ol>
+<p>Använd följande prompt:</p>
+<blockquote>En [kund, kollega eller annan mottagare] behöver hjälp med [relevant situation]. Använd kunskapsunderlaget för att skapa [ett svar, en instruktion eller ett annat konkret arbetsresultat]. Anpassa språket efter mottagaren och ta bara med information som stöds av källorna.</blockquote>
+<p><strong>Principen är att agenten inte bara ska hitta information utan kunna använda den på ett relevant sätt.</strong></p>
+<h4>Del 5 – Testa agentens gränser</h4>
+<ol start="10">
+<li>Ställ medvetet en fråga där nödvändig information inte finns i kunskapsunderlaget.</li>
+</ol>
+<p>Använd följande prompt och anpassa den efter din agent:</p>
+<blockquote>Besvara följande fråga: [ställ en realistisk fråga som kräver information som saknas i kunskapsunderlaget]. Ge ett konkret svar om möjligt, men gissa inte. Förklara tydligt vilken information som saknas och vad som behöver verifieras.</blockquote>
+<p>Kontrollera att agenten inte hittar på ett svar bara för att frågan ställs.</p>
+<ol start="11">
+<li>Testa ytterligare en gräns genom att ställa en fråga som kräver en garanti, ett antagande eller ett beslut som agenten inte har tillräckligt underlag för.</li>
+</ol>
+<p>Använd följande prompt:</p>
+<blockquote>Kan du garantera att [påstående som agenten inte säkert kan verifiera]? Förklara vad du kan bekräfta utifrån kunskapsunderlaget och vad du inte kan garantera. Hitta inte på information eller presentera antaganden som fakta.</blockquote>
+<p>Det här är en central del av övningen. Testa inte bara om agenten kan svara – testa om den kan låta bli att svara fel.</p>
+<ol start="12">
+<li>Om agenten beter sig fel, justera instruktionerna eller kunskapsunderlaget och testa igen.</li>
+</ol>
+<p>Du kan exempelvis använda följande prompt i ChatGPT för att få hjälp att förbättra instruktionerna:</p>
+<blockquote>Min agent fick följande fråga: [fråga]. Den svarade: [agentens svar]. Det önskade beteendet är: [beskriv vad agenten borde ha gjort]. Föreslå en konkret förbättring av agentens instruktioner eller kunskapsunderlag som minskar risken för samma fel.</blockquote>
+<h4>Del 6 – Skapa och dela agenten</h4>
+<ol start="13">
+<li>När agenten fungerar som tänkt, välj Skapa.</li>
+<li>Öppna den färdiga agenten och testa den igen i sin vanliga användningsmiljö.</li>
+</ol>
+<p>Använd följande prompt som ett avslutande test:</p>
+<blockquote>Hjälp mig med [en realistisk arbetsuppgift som agenten är byggd för]. Använd dina kunskapskällor, förklara eventuella osäkerheter och ge ett konkret resultat som jag kan använda i mitt arbete.</blockquote>
+<ol start="15">
+<li>Om din Microsoft-miljö och dina behörigheter tillåter det kan du även dela agenten med andra.</li>
+</ol>
+<p>I videon visar vi exempelvis hur agenten kan delas vidare via Teams.</p>
+<p>Delningen är inte huvudmålet med övningen. Poängen är att förstå hur samma agent, instruktioner och kunskapskällor kan göras tillgängliga för fler personer i organisationen.</p>
+<ol start="16">
+<li>Avsluta genom att öppna Fler agenter och titta på andra agenttyper och exempelvis Workflows.</li>
+</ol>
+<p>Agenten vi har byggt är främst kunskapsbaserad. Andra agenter kan istället kopplas närmare till verktyg, processer och arbetsflöden.</p>
+<p>Du behöver inte bygga någon sådan i den här övningen. Målet är att se hur principen kan utvecklas vidare.</p>
+<p>Övningen är klar när du har gått från:</p>
+<p>Användningsfall → instruktioner → kunskapskällor → testning → gränskontroll → fungerande agent.</p>
+<p>Det viktigaste är inte att bygga samma agent som i videon. Det är att förstå modellen:</p>
+<p>Tydligt problem + rätt kunskap + tydliga instruktioner + tydliga gränser + systematisk testning = grunden för en användbar organisatorisk AI-agent.</p>
+    </aside>
+  </section>
+
+  <section class="slide" data-title="Följ upp">
+    <div class="s-head"><svg class="logo" viewBox="0 0 459.96 90" role="img" aria-label="Superintelligent"><use href="#logo" /></svg></div>
+    <div class="statement" style="gap: 36px">
+      <p class="eb gold"><span class="pixel-dot"></span>Innan du går</p>
+      <h2 class="h2">Följ upp hur du utvecklas varje vecka</h2>
+      <p class="sub" style="max-width: none">Skapa en återkommande kalenderpåminnelse och ställ den här frågan till Copilot:</p>
+      <div class="prompt"><p class="eb green">Prompt</p><p>Analysera vilka nya sätt du märker att jag har börjat arbeta med Copilot. Jämför med hur jag arbetat tidigare och lyft fram nya arbetssätt, återkommande mönster och konkreta exempel. Fokusera på sådant som kan hjälpa mig att få större affärsnytta och produktivitet av Copilot.</p></div>
+    </div>
+    <div class="s-foot"><span>Kompetens 5.0 · Modul 4 · Microsoft Copilot Premium</span><span class="end"><span class="partners"><img src="material/kompetens-5-0.png" alt="Kompetens 5.0" /><img src="material/eu-medfinansieras.png" alt="Medfinansieras av Europeiska unionen" /></span><span class="num"></span></span></div>
+    <aside class="notes">
+<p>Avsluta med individuell reflektion och kort delning i Teams-chatten.</p>
+    </aside>
+  </section>
+
+  <!-- 3. Avslutning. QR-koden: lägg en färdig <svg> i .qr, eller lämna tom med data-qr="adress" så ritas den när sidan öppnas. -->
+  <section class="slide has-ground" data-title="Avslutning">
+    <div class="s-head"><svg class="logo" viewBox="0 0 459.96 90" role="img" aria-label="Superintelligent"><use href="#logo" /></svg></div>
+    <div class="closing">
+      <div class="copy">
+        <p class="eb gold"><span class="pixel-dot"></span>Tack för i dag · Frågor?</p>
+        <h1 class="h1" style="font-size: 120px">Låt oss hålla kontakten.</h1>
+        <div class="person">
+          <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAASABIAAD/4QBsRXhpZgAATU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAABJADAAIAAAAUAAAAUKABAAMAAAABAAEAAKACAAQAAAABAAACgKADAAQAAAABAAACgAAAAAAyMDI1OjExOjE4IDEyOjMzOjM1AP/hCtdodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IlhNUCBDb3JlIDYuMC4wIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6cGhvdG9zaG9wPSJodHRwOi8vbnMuYWRvYmUuY29tL3Bob3Rvc2hvcC8xLjAvIiB4bWxuczpJcHRjNHhtcEV4dD0iaHR0cDovL2lwdGMub3JnL3N0ZC9JcHRjNHhtcEV4dC8yMDA4LTAyLTI5LyIgcGhvdG9zaG9wOkNyZWRpdD0iRWRpdGVkIHdpdGggR29vZ2xlIEFJIiBwaG90b3Nob3A6RGF0ZUNyZWF0ZWQ9IjIwMjUtMTEtMThUMTI6MzM6MzUiIElwdGM0eG1wRXh0OkRpZ2l0YWxTb3VyY2VGaWxlVHlwZT0iaHR0cDovL2N2LmlwdGMub3JnL25ld3Njb2Rlcy9kaWdpdGFsc291cmNldHlwZS9jb21wb3NpdGVXaXRoVHJhaW5lZEFsZ29yaXRobWljTWVkaWEiIElwdGM0eG1wRXh0OkRpZ2l0YWxTb3VyY2VUeXBlPSJodHRwOi8vY3YuaXB0Yy5vcmcvbmV3c2NvZGVzL2RpZ2l0YWxzb3VyY2V0eXBlL2NvbXBvc2l0ZVdpdGhUcmFpbmVkQWxnb3JpdGhtaWNNZWRpYSIvPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg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" alt="Thomas Dalebring" />
+          <div><strong>Thomas Dalebring</strong><p class="small">Grundare & VD, Superintelligent</p><p class="small">hello@superintelligent.se</p></div>
+        </div>
+        <div class="btns">
+          <a class="btn btn-p" href="https://spela.superintelligent.se">Spela spelet <small>spela.superintelligent.se</small></a>
+          <a class="btn btn-o" href="https://boka.superintelligent.se">Boka möte <small>boka.superintelligent.se</small></a>
+        </div>
+      </div>
+      <div class="qr-card">
+        <div class="qr" data-qr="https://www.linkedin.com/in/dalebring/" role="img" aria-label="QR-kod till Thomas på LinkedIn"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" shape-rendering="crispEdges"><path fill="#ffffff" d="M0 0h29v29H0z"/><path stroke="#0a0e17" d="M0 0.5h7m1 0h2m3 0h6m3 0h7M0 1.5h1m5 0h1m3 0h3m4 0h1m1 0h1m2 0h1m5 0h1M0 2.5h1m1 0h3m1 0h1m2 0h4m1 0h1m2 0h3m2 0h1m1 0h3m1 0h1M0 3.5h1m1 0h3m1 0h1m1 0h1m1 0h1m2 0h1m2 0h1m1 0h1m3 0h1m1 0h3m1 0h1M0 4.5h1m1 0h3m1 0h1m1 0h2m1 0h2m1 0h5m3 0h1m1 0h3m1 0h1M0 5.5h1m5 0h1m1 0h2m1 0h2m3 0h1m2 0h2m1 0h1m5 0h1M0 6.5h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7M8 7.5h2m4 0h7M0 8.5h1m3 0h1m1 0h3m1 0h1m1 0h4m1 0h2m1 0h6m2 0h1M1 9.5h1m1 0h1m4 0h4m2 0h5m1 0h1m1 0h7M1 10.5h2m3 0h2m2 0h7m1 0h1m4 0h2m3 0h1M0 11.5h1m3 0h1m2 0h5m1 0h1m2 0h7m1 0h2m1 0h2M0 12.5h7m5 0h2m2 0h2m2 0h2m5 0h1M0 13.5h1m1 0h3m2 0h1m3 0h8m3 0h1m1 0h5M1 14.5h1m1 0h6m1 0h1m4 0h3m2 0h2m2 0h3m1 0h1M1 15.5h2m1 0h1m9 0h1m1 0h3m3 0h1m4 0h2M1 16.5h1m2 0h3m1 0h1m1 0h1m1 0h3m2 0h1m2 0h2m1 0h1m3 0h1M0 17.5h1m2 0h1m3 0h1m2 0h1m1 0h1m2 0h4m3 0h4m1 0h2M2 18.5h1m1 0h4m1 0h1m2 0h4m2 0h1m5 0h1m1 0h1m1 0h1M3 19.5h3m4 0h4m1 0h1m1 0h1m2 0h2m5 0h2M0 20.5h2m3 0h3m1 0h2m2 0h1m3 0h9m2 0h1M8 21.5h2m3 0h8m3 0h1m3 0h1M0 22.5h7m1 0h1m1 0h3m2 0h2m1 0h3m1 0h1m1 0h3m1 0h1M0 23.5h1m5 0h1m5 0h1m1 0h2m1 0h4m3 0h1m2 0h1M0 24.5h1m1 0h3m1 0h1m1 0h3m1 0h4m1 0h1m1 0h7m1 0h1M0 25.5h1m1 0h3m1 0h1m2 0h2m4 0h2m1 0h1m1 0h2m1 0h1m4 0h1M0 26.5h1m1 0h3m1 0h1m3 0h1m1 0h2m1 0h1m1 0h3m1 0h1m3 0h4M0 27.5h1m5 0h1m2 0h2m4 0h3m2 0h2m2 0h2m1 0h2M0 28.5h7m1 0h1m2 0h2m1 0h1m2 0h1m2 0h5m2 0h1"/></svg>
+</div>
+        <p class="eb gold">Skanna · Connecta</p>
+        <p class="small">linkedin.com/in/dalebring</p>
+      </div>
+    </div>
+    <div class="flag closing-flag" aria-hidden="true"></div>
+    <div class="ground"></div>
+    <div class="s-foot"><span>superintelligent.se</span><span class="end"><span class="partners"><img src="material/kompetens-5-0.png" alt="Kompetens 5.0" /><img src="material/eu-medfinansieras.png" alt="Medfinansieras av Europeiska unionen" /></span><span class="num"></span></span></div>
+  </section>
+
+</main>
+
+<div class="progress" id="progress"></div>
+<div class="notes-panel" id="notes-panel" hidden></div>
+<div class="nav-ui" id="nav-ui">
+  <button type="button" id="prev" aria-label="Föregående bild">&lt;</button>
+  <button type="button" id="next" aria-label="Nästa bild">&gt;</button>
+  <button type="button" id="full" aria-label="Helskärm">[ ]</button>
+</div>
+
+<script>
+/* ==== TEMA: deck.js. Pilar, mellanslag och PageUp/PageDown bläddrar, F ger helskärm, N visar anteckningar,
+   Home/End går till första och sista. Svep på mobil. Bildnumret står i adressens #. ==== */
+(() => {
+  const slides = [...document.querySelectorAll('.slide')];
+  const progress = document.getElementById('progress');
+  const navUi = document.getElementById('nav-ui');
+  const notesPanel = document.getElementById('notes-panel');
+  let i = 0;
+
+  slides.forEach((s, n) => {
+    const num = s.querySelector('.num');
+    if (num) num.textContent = String(n + 1).padStart(2, '0') + ' / ' + String(slides.length).padStart(2, '0');
+  });
+
+  // Agendan markerar avklarade och aktuellt avsnitt utifrån data-current
+  document.querySelectorAll('.agenda ol[data-current]').forEach((ol) => {
+    const cur = Number(ol.dataset.current);
+    [...ol.children].forEach((li, n) => {
+      li.classList.toggle('is-done', n + 1 < cur);
+      li.classList.toggle('is-current', n + 1 === cur);
+      const qb = li.querySelector('.qb');
+      if (qb && n + 1 < cur) qb.classList.add('done');
+    });
+  });
+
+  function fit() {
+    const s = Math.min(innerWidth / 1920, innerHeight / 1080);
+    document.documentElement.style.setProperty('--scale', s);
+  }
+
+  function show(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach((s, k) => s.classList.toggle('is-active', k === i));
+    const notes = slides[i].querySelector('.notes');
+    notesPanel.innerHTML = notes ? notes.innerHTML : '<p>Inga anteckningar till den här bilden.</p>';
+    notesPanel.scrollTop = 0;
+    progress.style.width = ((i + 1) / slides.length) * 100 + '%';
+    try { history.replaceState(null, '', '#' + (i + 1)); } catch (e) {}
+  }
+
+  addEventListener('keydown', (e) => {
+    if (e.target.closest('input, textarea')) return;
+    const k = e.key;
+    if (['ArrowRight', 'ArrowDown', 'PageDown', ' ', 'Enter'].includes(k)) { e.preventDefault(); show(i + 1); }
+    else if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(k)) { e.preventDefault(); show(i - 1); }
+    else if (k === 'Home') show(0);
+    else if (k === 'End') show(slides.length - 1);
+    else if (k === 'f' || k === 'F') toggleFull();
+    else if (k === 'n' || k === 'N') notesPanel.hidden = !notesPanel.hidden;
+  });
+
+  function toggleFull() {
+    try {
+      if (document.fullscreenElement) document.exitFullscreen();
+      else document.documentElement.requestFullscreen().catch(() => {});
+    } catch (e) {}
+  }
+
+  document.getElementById('prev').onclick = () => show(i - 1);
+  document.getElementById('next').onclick = () => show(i + 1);
+  document.getElementById('full').onclick = toggleFull;
+
+  let hideTimer;
+  addEventListener('pointermove', () => {
+    navUi.classList.add('show');
+    clearTimeout(hideTimer);
+    hideTimer = setTimeout(() => navUi.classList.remove('show'), 2000);
+  });
+
+  let x0 = null;
+  addEventListener('touchstart', (e) => { x0 = e.touches[0].clientX; }, { passive: true });
+  addEventListener('touchend', (e) => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 40) show(dx < 0 ? i + 1 : i - 1);
+    x0 = null;
+  });
+
+  // QR-koder som saknar färdig bild ritas här, med qrcode-generator från cdnjs
+  const empty = [...document.querySelectorAll('.qr[data-qr]')].filter((el) => !el.querySelector('svg'));
+  if (empty.length) {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js';
+    s.onload = () => empty.forEach((el) => {
+      const q = qrcode(0, 'M');
+      q.addData(el.dataset.qr);
+      q.make();
+      el.innerHTML = q.createSvgTag({ cellSize: 8, margin: 0, scalable: true });
+    });
+    document.head.appendChild(s);
+  }
+
+  addEventListener('resize', fit);
+  fit();
+  const start = parseInt(location.hash.slice(1), 10);
+  show(Number.isFinite(start) ? start - 1 : 0);
+})();
+/* ==== SLUT TEMA ==== */
+</script>
+</body>
+</html>

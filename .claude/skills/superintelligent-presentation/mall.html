@@ -35,6 +35,7 @@
   --blue: #4f7fd6;
   --yellow: #fbbf24;
   --orange: #f97316;
+  --red: #ef4444;
   --plat: #2a3550;
   --plat-top: #3d4b6e;
   --ground: #1b2436;
@@ -165,6 +166,7 @@ h1, h2, h3 { margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
 }
 
 .s-foot .num { font-family: var(--pixel); font-size: 22px; letter-spacing: 0.08em; }
+.s-foot .end { display: flex; gap: 36px; align-items: center; }
 
 /* Bilder med tegelmark i botten har sidfoten ovanpå marken */
 .slide.has-ground .s-foot { bottom: 22px; color: var(--muted); }
@@ -258,6 +260,10 @@ h1, h2, h3 { margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
   padding: 26px 0;
   border-bottom: 3px solid var(--line);
 }
+/* Fler än fem avsnitt: tätare rader så att listan ryms ovanför sidfoten */
+.agenda ol:has(> li:nth-child(6)) li { padding: 16px 0; }
+.agenda ol:has(> li:nth-child(6)) li strong { font-size: 38px; }
+.agenda ol:has(> li:nth-child(6)) li div > span { font-size: 24px; margin-top: 2px; }
 .agenda li:first-child { border-top: 3px solid var(--line); }
 .agenda li strong { display: block; font-size: 44px; font-weight: 700; letter-spacing: -0.01em; line-height: 1.15; }
 .agenda li div > span { display: block; font-size: 26px; color: var(--muted); margin-top: 6px; }
@@ -289,6 +295,112 @@ h1, h2, h3 { margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
 .qr-card .small { text-align: center; color: var(--ink-2); }
 
 .closing-flag { position: absolute; right: 200px; bottom: 80px; }
+
+/* Partnerlogotyper i sidfoten, till exempel när ett projekt kräver EU-märkning.
+   Ligger på vitt eftersom logotyperna är gjorda för ljus botten. */
+.partners { display: flex; gap: 20px; align-items: center; background: #fff; padding: 8px 16px; }
+.partners img { height: 44px; width: auto; display: block; }
+.slide.has-ground .partners { padding: 6px 14px; }
+.slide.has-ground .partners img { height: 36px; }
+
+/* Bildrubrik som återkommer på innehållsbilder: etikett, rubrik, ingress */
+.s-title { display: flex; flex-direction: column; gap: 24px; max-width: 1400px; padding-top: 40px; }
+.s-title .sub { max-width: 52ch; font-size: 32px; }
+.s-body { flex: 1; display: flex; flex-direction: column; justify-content: center; padding-bottom: 120px; min-height: 0; }
+.footnote { font-family: var(--mono); font-size: 22px; color: var(--faint); margin: 0; max-width: 90ch; }
+
+/* ---- Bildtyp: kort i rad (två eller tre) ---- */
+
+.cards { display: grid; grid-template-columns: repeat(var(--n, 3), 1fr); gap: 40px; }
+.cards .card { padding: 44px; display: flex; flex-direction: column; gap: 22px; }
+.cards .card h3 { font-size: 44px; font-weight: 700; line-height: 1.1; }
+.cards .card p { margin: 0; font-size: 28px; line-height: 1.45; color: var(--ink-2); }
+.cards .card .tip { margin-top: auto; padding-top: 22px; border-top: 3px solid var(--line); font-size: 24px; color: var(--muted); }
+.cards .card.is-key { border-color: var(--gold); box-shadow: 8px 8px 0 #000; }
+.badge-img { background: #fff; padding: 12px 16px; align-self: flex-start; }
+.badge-img img { height: 52px; width: auto; display: block; }
+
+/* ---- Bildtyp: matris med status per cell ---- */
+
+.matrix { width: 100%; border-collapse: collapse; font-size: 22px; line-height: 1.3; }
+.matrix th { font-family: var(--pixel); font-weight: 400; font-size: 19px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); text-align: left; white-space: nowrap; padding: 0 20px 14px; border-bottom: 3px solid var(--line-strong); }
+.matrix th:last-child { color: var(--gold); }
+.matrix td { padding: 9px 20px; border-bottom: 2px solid var(--line); vertical-align: middle; color: var(--ink-2); }
+.matrix td:first-child { color: var(--ink); font-weight: 600; width: 27%; }
+.matrix td i { display: inline-block; width: 16px; height: 16px; margin-right: 14px; vertical-align: 0; background: var(--faint); }
+.matrix .ja i { background: var(--green-text); }
+.matrix .nej i { background: var(--red); }
+.matrix .villkor i { background: var(--yellow); }
+.legend { display: flex; gap: 40px; font-family: var(--mono); font-size: 22px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 12px; }
+.legend i { width: 16px; height: 16px; display: inline-block; }
+
+/* ---- Bildtyp: länklista (material, källor) ---- */
+
+.links { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; max-width: 1400px; }
+.links li { border-bottom: 3px solid var(--line); }
+.links li:first-child { border-top: 3px solid var(--line); }
+.links a { display: grid; grid-template-columns: 180px 1fr auto; gap: 40px; align-items: center; padding: 30px 0; color: var(--ink); text-decoration: none; font-size: 40px; font-weight: 700; }
+.links a .eb { font-size: 22px; }
+.links a .arrow { font-family: var(--pixel); font-size: 30px; color: var(--gold); }
+
+/* ---- Bildtyp: övning ---- */
+
+.exercise { flex: 1; display: grid; grid-template-columns: 1fr 640px; gap: 96px; padding: 40px 0 80px; min-height: 0; }
+.exercise .copy { display: flex; flex-direction: column; gap: 36px; min-width: 0; }
+.exercise .h2 { font-size: 76px; }
+.goals { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 22px; }
+.goals li { display: grid; grid-template-columns: 28px 1fr; gap: 28px; align-items: baseline; font-size: 34px; line-height: 1.3; color: var(--ink-2); }
+.goals li::before { content: ''; width: 20px; height: 20px; background: var(--green-text); transform: translateY(-2px); }
+.result { border: 3px solid var(--line); background: var(--panel); padding: 28px 36px; display: flex; flex-direction: column; gap: 10px; max-width: 1000px; }
+.result p:last-child { margin: 0; font-size: 32px; font-weight: 600; line-height: 1.35; }
+.tools { display: flex; gap: 14px; flex-wrap: wrap; }
+.tools span { font-family: var(--mono); font-size: 22px; color: var(--ink-2); border: 2px solid var(--line-strong); padding: 6px 14px; }
+
+/* Banan till höger visar var i passet vi är: klarade block grå, aktuellt gult och störst */
+.track { align-self: end; display: flex; flex-direction: column; gap: 32px; }
+.track .row { display: flex; align-items: flex-end; gap: 12px; height: 560px; }
+.track .col { flex: 1 1 0; display: flex; flex-direction: column; align-items: center; gap: 32px; }
+.track .qb { width: 60px; height: 60px; font-size: 24px; border-width: 4px; }
+.track .col.next .qb { background: transparent; border: 3px dashed var(--line-strong); box-shadow: none; color: var(--faint); }
+.track .col.now .qb { width: 84px; height: 84px; font-size: 34px; }
+.track .col.now .plat { border-top-color: var(--gold); }
+.track .time { font-family: var(--mono); font-size: 24px; color: var(--faint); text-align: right; }
+
+/* ---- Bildtyp: budskap (en mening, paus, avsnitt) ---- */
+
+.statement { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 40px; padding-bottom: 140px; max-width: 1500px; }
+.statement .sub { max-width: 46ch; }
+
+/* Prompt att skriva av eller kopiera */
+.prompt { background: var(--panel); border: 3px solid var(--line-strong); padding: 36px 44px; display: flex; flex-direction: column; gap: 18px; max-width: 1500px; }
+.prompt p:last-child { margin: 0; font-family: var(--mono); font-size: 29px; line-height: 1.5; color: var(--ink); }
+
+/* Talaranteckningar: <aside class="notes"> i en bild. Visas bara när N trycks. */
+.slide .notes { display: none; }
+.notes-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(560px, 92vw);
+  background: var(--bg-alt);
+  border-left: 2px solid var(--line-strong);
+  padding: 28px 28px 48px;
+  overflow-y: auto;
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  z-index: 6;
+}
+.notes-panel h4 { font-family: var(--pixel); font-weight: 400; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); margin: 22px 0 8px; }
+.notes-panel h4:first-child { margin-top: 0; }
+.notes-panel p { margin: 0 0 10px; }
+.notes-panel ol, .notes-panel ul { margin: 0 0 10px; padding-left: 22px; }
+.notes-panel blockquote { margin: 8px 0 14px; padding: 12px 14px; background: var(--panel); border: 1px solid var(--line-strong); font-family: var(--mono); font-size: 14px; color: var(--ink); white-space: pre-line; }
+.notes-panel table { border-collapse: collapse; width: 100%; font-size: 15px; }
+.notes-panel td { padding: 6px 4px; border-bottom: 1px solid var(--line); }
+.notes-panel td:last-child { text-align: right; font-family: var(--mono); color: var(--faint); white-space: nowrap; }
 
 /* Navigering på skärmen. Syns när musen rör sig, aldrig i utskrift. */
 
@@ -327,7 +439,7 @@ h1, h2, h3 { margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
   html, body { height: auto; overflow: visible; background: var(--bg); }
   .deck { position: static; display: block; }
   .slide { display: flex !important; position: relative; left: 0; top: 0; margin: 0; transform: none; break-after: page; }
-  .nav-ui, .progress { display: none; }
+  .nav-ui, .progress, .notes-panel { display: none !important; }
   * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 /* ==== SLUT TEMA ==== */
@@ -410,6 +522,7 @@ h1, h2, h3 { margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
 </main>
 
 <div class="progress" id="progress"></div>
+<div class="notes-panel" id="notes-panel" hidden></div>
 <div class="nav-ui" id="nav-ui">
   <button type="button" id="prev" aria-label="Föregående bild">&lt;</button>
   <button type="button" id="next" aria-label="Nästa bild">&gt;</button>
@@ -417,12 +530,13 @@ h1, h2, h3 { margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
 </div>
 
 <script>
-/* ==== TEMA: deck.js. Pilar, mellanslag och PageUp/PageDown bläddrar, F ger helskärm,
+/* ==== TEMA: deck.js. Pilar, mellanslag och PageUp/PageDown bläddrar, F ger helskärm, N visar anteckningar,
    Home/End går till första och sista. Svep på mobil. Bildnumret står i adressens #. ==== */
 (() => {
   const slides = [...document.querySelectorAll('.slide')];
   const progress = document.getElementById('progress');
   const navUi = document.getElementById('nav-ui');
+  const notesPanel = document.getElementById('notes-panel');
   let i = 0;
 
   slides.forEach((s, n) => {
@@ -449,6 +563,9 @@ h1, h2, h3 { margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
   function show(n) {
     i = Math.max(0, Math.min(slides.length - 1, n));
     slides.forEach((s, k) => s.classList.toggle('is-active', k === i));
+    const notes = slides[i].querySelector('.notes');
+    notesPanel.innerHTML = notes ? notes.innerHTML : '<p>Inga anteckningar till den här bilden.</p>';
+    notesPanel.scrollTop = 0;
     progress.style.width = ((i + 1) / slides.length) * 100 + '%';
     try { history.replaceState(null, '', '#' + (i + 1)); } catch (e) {}
   }
@@ -461,6 +578,7 @@ h1, h2, h3 { margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
     else if (k === 'Home') show(0);
     else if (k === 'End') show(slides.length - 1);
     else if (k === 'f' || k === 'F') toggleFull();
+    else if (k === 'n' || k === 'N') notesPanel.hidden = !notesPanel.hidden;
   });
 
   function toggleFull() {

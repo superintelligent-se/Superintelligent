@@ -25,7 +25,7 @@ presentationer/
   exempel/       Mallen ifylld, att jämföra mot
 ```
 
-Varje presentation får en egen mapp som heter `ÅÅÅÅ-MM-kort-namn`, till exempel `presentationer/kund/2026-11-lantmannen-ledningsgrupp/index.html`. Bilder som presentationen använder ligger i samma mapp.
+Varje presentation får en egen mapp som heter `ÅÅÅÅ-MM-kort-namn`, till exempel `presentationer/kund/2026-11-lantmannen-ledningsgrupp/index.html`. Hör presentationen till ett program eller en kurs med flera tillfällen, samlas de i en mapp för programmet: `presentationer/kund/kompetens-5.0/2026-10-modul-4-copilot-premium/`. Bilder och logotyper som presentationen använder ligger i undermappen `material/`.
 
 ## Bildtyper
 
@@ -35,7 +35,35 @@ Varje presentation får en egen mapp som heter `ÅÅÅÅ-MM-kort-namn`, till exe
 
 **Avslutning** (`.closing`). Tack, talarens foto, namn och roll, två knappar (Spela spelet, Boka möte) och QR-koden till talarens LinkedIn.
 
-Fler bildtyper (budskap, siffra, jämförelse, citat, bild) läggs till i `mall.html` när de behövs. Lägg dem där, inte bara i en enskild presentation, så att alla får dem.
+**Innehållsbild** (`.s-title` följt av `.s-body`). Etikett, rubrik och ingress överst, sedan något av:
+
+- `.cards` med två eller tre kort (`style="--n: 2"`). `.is-key` lyfter fram det kort som gäller publiken.
+- `.matrix`, en tabell där varje cell har status `ja`, `nej` eller `villkor` och en ruta i grönt, rött eller gult, med `.legend` som förklaring.
+- `.links`, en lista med länkar till material, med filtyp i pixelfont.
+
+**Övning** (`.exercise`). Övningens nummer och tid, rubrik, verktyg (`.tools`), tre mål (`.goals`) och resultatet (`.result`). Till höger banan med ett block per övning: klarade grå, aktuell gul och störst, kommande streckade. Publiken ser var i passet de är.
+
+**Budskap** (`.statement`). En mening som står för sig själv: paus, avsnittsbyte, en slutsats. Med `.prompt` för en prompt som publiken ska skriva av.
+
+**Avslutning** (`.closing`). Tack, talarens foto, namn och roll, två knappar (Spela spelet, Boka möte) och QR-koden till talarens LinkedIn.
+
+Fler bildtyper (siffra, jämförelse, citat, bild) läggs till i `mall.html` när de behövs. Lägg dem där, inte bara i en enskild presentation, så att alla får dem.
+
+## Talaranteckningar
+
+Lägg `<aside class="notes">` sist i en bild. Den syns aldrig för publiken. Tryck N under presentationen för att visa anteckningarna i en panel till höger. Där får körschema, instruktioner och prompter plats, med `<h4>`, `<ol>` och `<blockquote>` för prompter.
+
+## Partnerlogotyper
+
+När ett projekt kräver logotyper, till exempel EU-märkningen "Medfinansieras av Europeiska unionen", läggs de i sidfoten på varje bild: `<span class="end"><span class="partners"><img …></span><span class="num"></span></span>`. På försättsbladet visas hela raden med partner. Logotyperna ligger på vitt eftersom de är gjorda för ljus botten.
+
+## Flytta in en gammal presentation
+
+1. Läs ut text, tabeller och anteckningar ur filen (för .pptx: `python-pptx`). Text som sitter i bilder läses av från en renderad version.
+2. Behåll innehållet och ordningen, men skriv om rubrikerna så att de säger slutsatsen. Fyll inte på med nytt sakinnehåll.
+3. Byt varje gammal bild mot närmaste bildtyp ovan. Illustrationer i den gamla stilen tas bort, banan och blocken ersätter dem.
+4. Dolda bilder, till exempel ett körschema, blir talaranteckningar på försättsbladet.
+5. Partnerlogotyper och obligatoriska märkningar följer med.
 
 ## QR-koden
 
@@ -57,6 +85,6 @@ LinkedIn för laget: Thomas `dalebring`, Christofer `chrisnassil`, Tomas `tomas-
 
 ## Visa och dela
 
-- Bläddra med piltangenterna, mellanslag eller en klickare. F ger helskärm. Adressen slutar på bildens nummer, till exempel `#3`.
+- Bläddra med piltangenterna, mellanslag eller en klickare. F ger helskärm, N visar talaranteckningarna. Adressen slutar på bildens nummer, till exempel `#3`.
 - PDF: öppna i Chrome, skriv ut, välj Spara som PDF. Varje bild blir en sida i 16:9.
 - Typsnitten hämtas från Google Fonts. Utan internet visas systemtypsnitt, så öppna presentationen en gång före föreläsningen.
