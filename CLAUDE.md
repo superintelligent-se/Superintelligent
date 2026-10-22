@@ -93,6 +93,9 @@ index.html             Sajtens startsida. Avsnitten följer kundresan i ordning:
                        och markerar avsnittet man läser (site.js); Om oss markeras vid laget.
                        Steg 3 och 5 har ingen menylänk men syns i mobilens remsa (data-c).
                        Nytt avsnitt i resan: lägg till det i menyn på alla sidor
+                       AI-resan är sidans innehållsförteckning: varje steg leder ner till sitt
+                       avsnitt, och avsnittets knapp leder vidare till undersidan. Steg 3 och 5
+                       sprutar konfetti först (rewards.js)
 spelet/index.html      Spelet
 ai-skuld/index.html    Kalkylatorn, modellen kommer från repot superintelligent-se/roi
 intervju/index.html    Röstagenten att testa. Widgeten laddas först vid klick
