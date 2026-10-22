@@ -91,6 +91,9 @@ index.html             Sajtens startsida
 spelet/index.html      Spelet
 ai-skuld/index.html    Kalkylatorn, modellen kommer från repot superintelligent-se/roi
 intervju/index.html    Röstagenten att testa. Widgeten laddas först vid klick
+om-oss/                Navsida med tre vägval: spelregler/ (DNA, värderingar, manifest),
+                       laget/ och sa-tanker-vi/ (Slutspelet, hur vi gör oss umbärliga, med
+                       källor i Harvardformat). umbarliga/ skickar vidare till Slutspelet
 src/site/              Sajtens CSS och JS. Delar config.js med spelet, och rubrikvalets
                        effekter lånar pixelart.js och avatars.js
 public/                Ligger i roten: lead-mail.json, policy-PDF:er, logotyper

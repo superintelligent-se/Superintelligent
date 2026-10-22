@@ -54,7 +54,7 @@ const CTAS = [
   { href: '#radgivning', text: 'Ta språnget med rådgivning ↓' },
   { href: 'https://akademi.superintelligent.se/collections', text: 'Utforska AI-akademin →' },
   { href: 'intervju/', text: 'Prova AI-intervjun →' },
-  { href: 'om-oss/umbarliga/', text: 'Läs hur vi tänker →' },
+  { href: 'om-oss/sa-tanker-vi/', text: 'Läs hur vi tänker →' },
 ];
 
 const root = document.getElementById('headline');

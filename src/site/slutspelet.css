@@ -1,0 +1,459 @@
+/* Slutspelet: hur vi tänker. Principskissen över överlämningen, mätarna,
+   plattformen, varningssignalerna, vägvalet och källorna. */
+
+.prose {
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.prose p {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--ink-2);
+}
+
+.prose strong {
+  color: var(--ink);
+}
+
+/* Källhänvisning i löptexten, som i Harvardsystemet. */
+.cite {
+  font-family: var(--mono);
+  font-size: 0.82em;
+  color: var(--faint);
+}
+
+.cite a {
+  color: inherit;
+}
+
+/* Det ödmjuka svaret på "varför?", som en pratbubbla från laget. */
+.honest {
+  position: relative;
+  max-width: 760px;
+  padding: 24px 28px;
+  background: var(--panel);
+  border: 3px solid var(--gold);
+  box-shadow: 8px 8px 0 #000;
+}
+
+.honest p {
+  margin: 0;
+  font-size: clamp(19px, 1.8vw, 23px);
+  line-height: 1.45;
+  font-weight: 700;
+}
+
+.honest::after {
+  content: '';
+  position: absolute;
+  left: 40px;
+  top: 100%;
+  width: 20px;
+  height: 20px;
+  background: var(--gold);
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 56px;
+  align-items: center;
+}
+
+/* Principskissen: vårt engagemang ner, er förmåga upp. */
+.handover {
+  margin: 0;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.handover svg {
+  width: 100%;
+  height: auto;
+  shape-rendering: crispEdges;
+}
+
+.handover figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--faint);
+}
+
+.legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-2);
+}
+
+.legend i {
+  width: 14px;
+  height: 14px;
+  background: var(--c);
+}
+
+/* Mätarna, som spelets HUD: en färg per spår. */
+.meters {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.meter {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border-top: 6px solid var(--c);
+}
+
+.meter .eb {
+  color: var(--c);
+  font-size: 12px;
+}
+
+.meter h3 {
+  font-size: 23px;
+  line-height: 1.2;
+  font-weight: 800;
+}
+
+.meter ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.meter li {
+  display: flex;
+  gap: 12px;
+  color: var(--ink-2);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.meter li::before {
+  content: '';
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  margin-top: 8px;
+  background: var(--c);
+}
+
+.meter .note {
+  margin: 0;
+  padding-top: 12px;
+  border-top: 2px dashed var(--line-strong);
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.keeps {
+  margin-top: 32px;
+  font-size: 18px;
+  color: var(--ink-2);
+  max-width: 760px;
+}
+
+/* Det vi gör med Orkla, som brickor. */
+.chips {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.chips li {
+  padding: 8px 14px;
+  border: 2px solid var(--c, var(--line-strong));
+  font-family: var(--pixel);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.case {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-left: 8px solid var(--green);
+}
+
+.case img {
+  height: 40px;
+  width: auto;
+  align-self: flex-start;
+  filter: brightness(0) invert(1);
+  opacity: 0.9;
+}
+
+/* Plattformen: allt hos er i en ram, det extra lagret utanför och struket. */
+.platform {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: stretch;
+}
+
+.platform-own,
+.platform-extra {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.platform-own {
+  border: 3px solid var(--green);
+  box-shadow: 8px 8px 0 #000;
+  background: var(--panel);
+}
+
+.platform-own .eb {
+  color: var(--green-text);
+}
+
+.platform-own .chips li {
+  --c: var(--green);
+}
+
+.platform-extra {
+  position: relative;
+  border: 3px dashed #e11d48;
+  color: var(--muted);
+  justify-content: center;
+}
+
+.platform-extra .eb {
+  color: #fb7185;
+}
+
+.platform-extra .chips li {
+  --c: #9f1239;
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.platform-extra::after {
+  content: 'X';
+  position: absolute;
+  top: -18px;
+  right: -14px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  background: #e11d48;
+  border: 3px solid #9f1239;
+  font-family: var(--pixel);
+  font-size: 16px;
+  color: #fff;
+}
+
+.platform-own strong,
+.platform-extra strong {
+  font-size: 20px;
+  color: var(--ink);
+}
+
+/* Varningssignalerna: röda utropsblock. */
+.signs {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 920px;
+}
+
+.sign {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 20px;
+  padding: 22px 24px;
+  align-items: start;
+}
+
+.sign .qb {
+  background: #e11d48;
+  border-color: #9f1239;
+  color: #fff;
+}
+
+.sign h3 {
+  font-size: 21px;
+  line-height: 1.25;
+  font-weight: 800;
+}
+
+.sign p {
+  margin: 8px 0 0;
+  color: var(--ink-2);
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+/* Vägvalet i slutet: fyra sätt att börja. */
+.starts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.start {
+  position: relative;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-top: 6px solid var(--c);
+  transition: transform 80ms, box-shadow 80ms;
+}
+
+.start .qb {
+  width: 44px;
+  height: 44px;
+  font-size: 16px;
+  background: var(--c);
+  border-color: var(--c-edge);
+  color: var(--c-ink, #fff);
+}
+
+.start .for {
+  margin: 0;
+  font-family: var(--pixel);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  line-height: 1.5;
+  text-transform: uppercase;
+  color: var(--c);
+}
+
+.start h3 {
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.start p:not(.for) {
+  margin: 0;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.start a {
+  margin-top: auto;
+  font-weight: 700;
+  color: var(--c);
+  text-decoration: none;
+}
+
+.start a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.start:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 #000;
+}
+
+.start:has(a:focus-visible) {
+  outline: 3px solid var(--gold);
+  outline-offset: 4px;
+}
+
+.start a:focus-visible {
+  outline: none;
+}
+
+/* Källförteckningen, Harvardsystemet. */
+.refs {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 920px;
+}
+
+.refs li {
+  padding-left: 32px;
+  text-indent: -32px;
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-2);
+  overflow-wrap: anywhere;
+}
+
+.refs a {
+  color: var(--purple-text);
+}
+
+@media (max-width: 1080px) {
+  .starts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .split,
+  .meters,
+  .platform {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .platform-extra {
+    margin-top: 12px;
+  }
+
+  .sign {
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 14px;
+    padding: 18px;
+  }
+
+  .sign .qb {
+    width: 44px;
+    height: 44px;
+    font-size: 16px;
+  }
+
+  .case {
+    padding: 22px;
+  }
+}
+
+@media (max-width: 600px) {
+  .starts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .start {
+    transition: none;
+  }
+}
