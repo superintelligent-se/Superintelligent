@@ -23,13 +23,13 @@
           <img src="/logo.svg" alt="Superintelligent" width="133" height="26" />
         </a>
         <nav class="nav" id="nav" aria-label="Huvudmeny">
-          <a href="#spelet">Spelet</a>
-          <a href="#ai-resan">AI-resan</a>
-          <a href="intervju/">AI-intervjun</a>
-          <a href="https://akademi.superintelligent.se/">Akademin</a>
-          <a href="#radgivning">Rådgivning</a>
-          <a href="ai-skuld/">AI-skuld</a>
-          <a href="om-oss/">Om oss</a>
+          <a href="#ai-resan" style="--c: var(--gold)">AI-resan</a>
+          <a href="#spelet" style="--c: var(--green-text)">Spelet</a>
+          <a href="#intervju" style="--c: var(--green-text)">AI-intervjun</a>
+          <a href="#radgivning" style="--c: var(--purple-nav)">Rådgivning</a>
+          <a href="#traning" style="--c: var(--green-text)">Träning</a>
+          <a href="#slutspelet" style="--c: var(--gold)">Slutspelet</a>
+          <a href="om-oss/" style="--c: var(--ink)">Om oss</a>
         </nav>
         <div class="nav-end">
           <a class="plain" href="https://akademi.superintelligent.se/users/sign_in">Logga in</a>
@@ -121,72 +121,50 @@
         </div>
       </section>
 
-      <section class="section alt" id="spelet">
-        <div class="wrap game-grid">
-          <div class="stack" style="gap: 24px">
-            <p class="eb gold">Spelet · Fem minuter</p>
-            <h2 class="h2">5 minuter. 5 områden. 15 frågor.</h2>
-            <p class="sub">
-              Du svarar genom att hoppa upp i frågetecken. Efteråt får du en återblick på mejl, och vi
-              har något konkret att utgå från i ert första samtal.
-            </p>
-            <ol class="steps-list">
-              <li><span class="qb sm">1</span>Du lär dig direkt av frågorna som ställs</li>
-              <li><span class="qb sm">2</span>Det är interaktivt och roligt att spela</li>
-              <li><span class="qb sm">3</span>Du får alla dina svar på mejl att arbeta vidare med, och kan boka ett uppföljande möte med oss</li>
-            </ol>
-            <div class="btn-row"><a class="btn btn-p" href="spelet/">Spela nu</a></div>
-          </div>
-          <div>
-            <div class="card hud">
-              <div class="hud-title">Fem områden · utrustning du kan vinna</div>
-              <div class="hud-row" style="--c: #2e9e63"><i></i><strong>Vem håller i rodret?</strong><span>AI-lead som följer dig</span></div>
-              <div class="hud-row" style="--c: #fbbf24"><i></i><strong>Vad kan ni redan idag?</strong><span>Fart</span></div>
-              <div class="hud-row" style="--c: #4f7fd6"><i></i><strong>Vad har ni att jobba med?</strong><span>Datakub</span></div>
-              <div class="hud-row" style="--c: #f97316"><i></i><strong>Vad får ni göra?</strong><span>Sköld</span></div>
-              <div class="hud-row" style="--c: #7c3aed"><i></i><strong>Vad skulle ni kunna göra?</strong><span>Jetpack</span></div>
-            </div>
-            <div class="pipe">
-              <div class="pipe-icon" aria-hidden="true"></div>
-              <div>
-                <strong>Vet ni redan att ni behöver hjälp?</strong>
-                <p>
-                  Ta röret. Det hoppar över hela spelet, rakt till bokningen.
-                  <a data-booking href="https://bookings.cloud.microsoft/book/Superintelligent@superintelligent.se/s/B2QIYRV4KUupO4i1Rd8Pow2?ismsaljsauthenabled">Boka direkt →</a>
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="video">
+      <section class="section" id="varfor">
         <div class="wrap">
           <div class="head">
-            <p class="eb purple">Så arbetar vi</p>
-            <h2 class="h2">AI blir en del av vardagen, inte ett projekt vid sidan av</h2>
+            <p class="eb purple">Varför nu</p>
+            <h2 class="h2">De som ligger först drar ifrån</h2>
+            <p class="sub">
+              På fem månader gick de från att använda AI 2,6 gånger mer än en typisk organisation
+              till 8,3 gånger mer.
+            </p>
           </div>
-          <div class="video-grid">
-            <div class="screen">
-              <iframe
-                src="https://player.vimeo.com/video/1231746132?dnt=1"
-                title="Så hjälper vi organisationer att bli superintelligenta"
-                allow="fullscreen; picture-in-picture"
-                loading="lazy"
-              ></iframe>
-            </div>
-            <div class="method">
-              <div>
-                <h3 class="eb green">01 Var förlorar ni tid?</h3>
-                <p>Vi kartlägger var tid, kunskap och pengar försvinner i manuella moment och personberoenden.</p>
+          <div class="why-grid">
+            <figure class="card chart" style="margin: 0">
+              <figcaption class="small">AI-användning per medarbetare · en typisk organisation = 1,0</figcaption>
+              <svg viewBox="0 0 624 210" role="img" aria-label="De tio procent som använder AI mest gick från 2,6 till 8,3 gånger en typisk organisation mellan januari och juni 2026.">
+                <line x1="40" y1="170" x2="560" y2="170" stroke="#5b6478" stroke-width="3" stroke-dasharray="6 6" />
+                <line x1="40" y1="124" x2="560" y2="38" stroke="#a78bfa" stroke-width="6" />
+                <text x="40" y="108" fill="#c4b5fd" font-size="26" font-weight="800" font-family="Hanken Grotesk, sans-serif">2,6×</text>
+                <text x="496" y="26" fill="#c4b5fd" font-size="32" font-weight="800" font-family="Hanken Grotesk, sans-serif">8,3×</text>
+                <text x="40" y="200" fill="#8892b0" font-size="13" font-family="IBM Plex Mono, monospace">JAN 2026</text>
+                <text x="488" y="200" fill="#8892b0" font-size="13" font-family="IBM Plex Mono, monospace">JUN 2026</text>
+                <text x="330" y="160" fill="#8892b0" font-size="13" font-family="IBM Plex Mono, monospace">Typisk organisation</text>
+              </svg>
+              <p class="small" style="font-size: 11px">Källa: OpenAI Enterprise Signals. Jämförelsen gäller de tio procent som använder AI mest.</p>
+            </figure>
+            <div class="moves">
+              <h3 style="font-size: 26px; font-weight: 800">Två saker behöver hända samtidigt</h3>
+              <div class="move" style="--c: var(--green)">
+                <div>
+                  <p class="eb green" style="margin: 0">Bottom-up · Alla medarbetare tränar</p>
+                  <p>Färdighet och motivation skapar daglig användning. Medarbetarna ser nya behov och blir bättre beställare.</p>
+                </div>
               </div>
-              <div>
-                <h3 class="eb" style="color: var(--yellow)">02 Vad ger mest effekt?</h3>
-                <p>Vi hittar kombinationerna av er expertis, era processer och AI som ger störst effekt.</p>
+              <div class="move" style="--c: var(--purple)">
+                <div>
+                  <p class="eb purple" style="margin: 0">Top-down · Ledningen får stöd att välja rätt</p>
+                  <p>Rådgivning ger riktning för möjligheter, data, investeringar, ansvar och uppföljning.</p>
+                </div>
               </div>
-              <div>
-                <h3 class="eb purple">03 Vad ska ni börja med?</h3>
-                <p>Ni får varje möjlighet värderad: affärsvärde, genomförbarhet, risk, ägarskap och tid.</p>
+              <div class="debt">
+                <strong>75 000 kr</strong>
+                <span>
+                  Så mycket kostar det minst, per tjänsteman och år, att inte använda AI fullt ut. Vi
+                  kallar det AI-skulden. <a href="ai-skuld/">Räkna ut er AI-skuld →</a>
+                </span>
               </div>
             </div>
           </div>
@@ -282,112 +260,70 @@
         </div>
       </section>
 
-      <section class="section" id="varfor">
-        <div class="wrap">
-          <div class="head">
-            <p class="eb purple">Varför nu</p>
-            <h2 class="h2">De som ligger först drar ifrån</h2>
+      <section class="section" id="spelet">
+        <div class="wrap game-grid">
+          <div class="stack" style="gap: 24px">
+            <p class="eb green">Steg 1 · Spelet</p>
+            <h2 class="h2">5 minuter. 5 områden. 15 frågor.</h2>
             <p class="sub">
-              På fem månader gick de från att använda AI 2,6 gånger mer än en typisk organisation
-              till 8,3 gånger mer.
+              Du svarar genom att hoppa upp i frågetecken. Efteråt får du en återblick på mejl, och vi
+              har något konkret att utgå från i ert första samtal.
             </p>
+            <ol class="steps-list">
+              <li><span class="qb sm">1</span>Du lär dig direkt av frågorna som ställs</li>
+              <li><span class="qb sm">2</span>Det är interaktivt och roligt att spela</li>
+              <li><span class="qb sm">3</span>Du får alla dina svar på mejl att arbeta vidare med, och kan boka ett uppföljande möte med oss</li>
+            </ol>
+            <div class="btn-row"><a class="btn btn-p" href="spelet/">Spela nu</a></div>
           </div>
-          <div class="why-grid">
-            <figure class="card chart" style="margin: 0">
-              <figcaption class="small">AI-användning per medarbetare · en typisk organisation = 1,0</figcaption>
-              <svg viewBox="0 0 624 210" role="img" aria-label="De tio procent som använder AI mest gick från 2,6 till 8,3 gånger en typisk organisation mellan januari och juni 2026.">
-                <line x1="40" y1="170" x2="560" y2="170" stroke="#5b6478" stroke-width="3" stroke-dasharray="6 6" />
-                <line x1="40" y1="124" x2="560" y2="38" stroke="#a78bfa" stroke-width="6" />
-                <text x="40" y="108" fill="#c4b5fd" font-size="26" font-weight="800" font-family="Hanken Grotesk, sans-serif">2,6×</text>
-                <text x="496" y="26" fill="#c4b5fd" font-size="32" font-weight="800" font-family="Hanken Grotesk, sans-serif">8,3×</text>
-                <text x="40" y="200" fill="#8892b0" font-size="13" font-family="IBM Plex Mono, monospace">JAN 2026</text>
-                <text x="488" y="200" fill="#8892b0" font-size="13" font-family="IBM Plex Mono, monospace">JUN 2026</text>
-                <text x="330" y="160" fill="#8892b0" font-size="13" font-family="IBM Plex Mono, monospace">Typisk organisation</text>
-              </svg>
-              <p class="small" style="font-size: 11px">Källa: OpenAI Enterprise Signals. Jämförelsen gäller de tio procent som använder AI mest.</p>
-            </figure>
-            <div class="moves">
-              <h3 style="font-size: 26px; font-weight: 800">Två saker behöver hända samtidigt</h3>
-              <div class="move" style="--c: var(--green)">
-                <div>
-                  <p class="eb green" style="margin: 0">Bottom-up · Alla medarbetare tränar</p>
-                  <p>Färdighet och motivation skapar daglig användning. Medarbetarna ser nya behov och blir bättre beställare.</p>
-                </div>
-              </div>
-              <div class="move" style="--c: var(--purple)">
-                <div>
-                  <p class="eb purple" style="margin: 0">Top-down · Ledningen får stöd att välja rätt</p>
-                  <p>Rådgivning ger riktning för möjligheter, data, investeringar, ansvar och uppföljning.</p>
-                </div>
-              </div>
-              <div class="debt">
-                <strong>75 000 kr</strong>
-                <span>
-                  Så mycket kostar det minst, per tjänsteman och år, att inte använda AI fullt ut. Vi
-                  kallar det AI-skulden. <a href="ai-skuld/">Räkna ut er AI-skuld →</a>
-                </span>
+          <div>
+            <div class="card hud">
+              <div class="hud-title">Fem områden · utrustning du kan vinna</div>
+              <div class="hud-row" style="--c: #2e9e63"><i></i><strong>Vem håller i rodret?</strong><span>AI-lead som följer dig</span></div>
+              <div class="hud-row" style="--c: #fbbf24"><i></i><strong>Vad kan ni redan idag?</strong><span>Fart</span></div>
+              <div class="hud-row" style="--c: #4f7fd6"><i></i><strong>Vad har ni att jobba med?</strong><span>Datakub</span></div>
+              <div class="hud-row" style="--c: #f97316"><i></i><strong>Vad får ni göra?</strong><span>Sköld</span></div>
+              <div class="hud-row" style="--c: #7c3aed"><i></i><strong>Vad skulle ni kunna göra?</strong><span>Jetpack</span></div>
+            </div>
+            <div class="pipe">
+              <div class="pipe-icon" aria-hidden="true"></div>
+              <div>
+                <strong>Vet ni redan att ni behöver hjälp?</strong>
+                <p>
+                  Ta röret. Det hoppar över hela spelet, rakt till bokningen.
+                  <a data-booking href="https://bookings.cloud.microsoft/book/Superintelligent@superintelligent.se/s/B2QIYRV4KUupO4i1Rd8Pow2?ismsaljsauthenabled">Boka direkt →</a>
+                </p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="section alt" id="traning">
-        <div class="wrap">
-          <div class="head-row">
-            <div class="head">
-              <p class="eb green">Bottom-up · Träning för medarbetarna</p>
-              <h2 class="h2">Era medarbetare går från nyfikna till att bygga egna agenter</h2>
-              <p class="sub">
-                Bottom-up betyder att förmågan byggs underifrån, hos dem som gör jobbet. Sex steg,
-                från inspiration till en agent som löser ett verkligt arbetsflöde.
-              </p>
-            </div>
-            <a class="btn btn-o" href="https://akademi.superintelligent.se/collections">Kurser &amp; priser</a>
+      <section class="section alt" id="intervju">
+        <div class="wrap game-grid">
+          <div class="stack" style="gap: 24px">
+            <p class="eb green">Steg 2 · AI-intervjun</p>
+            <h2 class="h2">15 minuter om arbetsdagen, när det passar</h2>
+            <p class="sub">
+              Era medarbetare intervjuas av vår AI-röst om vad de gjorde i går, vad som tar tid och
+              energi, och hur de använder AI i dag. Tillsammans med spelet blir svaren grunden för er
+              plan, steg 3 i resan.
+            </p>
+            <div class="btn-row"><a class="btn btn-p" href="intervju/">Prova AI-intervjun</a></div>
           </div>
-          <ol class="level" style="list-style: none; padding: 0; margin: 0">
-            <li class="col">
-              <div class="txt"><div class="t">Se vad som är möjligt</div><div class="d">Inspirationsföreläsning för ledningsgrupp eller hela organisationen</div></div>
-              <div class="qb green">1</div>
-              <div class="plat" style="height: 20px; border-top-color: var(--green)"></div>
-            </li>
-            <li class="col">
-              <div class="txt"><div class="t">Spara tid i vardagen</div><div class="d">E-learning 1 · ChatGPT gratisversion</div></div>
-              <div class="qb green">2</div>
-              <div class="plat" style="height: 60px; border-top-color: var(--green)"></div>
-            </li>
-            <li class="col">
-              <div class="txt"><div class="t">Jobba smartare i Microsoft 365</div><div class="d">E-learning 2 · Copilot Premium</div></div>
-              <div class="qb green">3</div>
-              <div class="plat" style="height: 100px; border-top-color: var(--green)"></div>
-            </li>
-            <li class="col">
-              <div class="txt"><div class="t">Låt AI göra jobb i flera steg</div><div class="d">E-learning 3 · ChatGPT betalversion</div></div>
-              <div class="qb green">4</div>
-              <div class="plat" style="height: 140px; border-top-color: var(--green)"></div>
-            </li>
-            <li class="col">
-              <div class="txt"><div class="t">Bygg er första agent</div><div class="d">Agent Masterclass · halvdag, max 10 deltagare</div></div>
-              <div class="qb green">5</div>
-              <div class="plat" style="height: 180px; border-top-color: var(--green)"></div>
-            </li>
-            <li class="col">
-              <div class="txt"><div class="t">En agent i drift</div><div class="d">För ett arbetsflöde som tar mycket av er tid i dag</div></div>
-              <div class="qb done">6</div>
-              <div class="plat" style="height: 220px; border-top-color: var(--green)"></div>
-            </li>
+          <ol class="steps-list">
+            <li><span class="qb sm green">1</span>En länk för alla. Ingen behöver konto eller app.</li>
+            <li><span class="qb sm green">2</span>Cirka 15 minuter, i mobilen eller datorn, när det passar.</li>
+            <li><span class="qb sm green">3</span>Gårdagen, inte en idealvecka. Konkreta tider i stället för önsketänkande.</li>
+            <li><span class="qb sm green">4</span>Per roll, aldrig per person. Mötet med oss ägnas åt tolkning.</li>
           </ol>
-          <div class="ground"></div>
-          <div class="callout-row">
-            <p class="callout">Ni gör e-learningen före masterclassen. Efter fyra timmar har ni en första agent på plats.</p>
-            <p class="small">E-learning från 2 990 kr · Steg 1 + 2 paketpris 4 990 kr</p>
-          </div>
         </div>
       </section>
 
       <section class="section" id="mojlighets-ai">
         <div class="wrap">
           <div class="head">
+            <p class="eb gold">Steg 4 · Två vägar, ett mål</p>
             <h2 class="h2">Först sparar ni tid. Sedan gör ni sådant som inte gick förut.</h2>
             <p class="sub">Träning ger er förmågan. Rådgivning hjälper er att använda den på rätt problem.</p>
           </div>
@@ -417,7 +353,7 @@
       <section class="section alt" id="radgivning">
         <div class="wrap">
           <div class="head">
-            <p class="eb purple">Top-down · Rådgivning för ledningen</p>
+            <p class="eb purple">Steg 4A · Rådgivning för ledningen</p>
             <h2 class="h2">Stöd till er som ska leda AI-arbetet</h2>
             <p class="sub">
               Top-down betyder att ledningen sätter riktning och prioriterar. Tre nivåer, efter hur
@@ -470,6 +406,79 @@
             </p>
             <a class="btn btn-p" data-booking href="https://bookings.cloud.microsoft/book/Superintelligent@superintelligent.se/s/B2QIYRV4KUupO4i1Rd8Pow2?ismsaljsauthenabled">Boka gratis första samtal</a>
           </div>
+        </div>
+      </section>
+
+      <section class="section" id="traning">
+        <div class="wrap">
+          <div class="head-row">
+            <div class="head">
+              <p class="eb green">Steg 4B · Träning för medarbetarna</p>
+              <h2 class="h2">Era medarbetare går från nyfikna till att bygga egna agenter</h2>
+              <p class="sub">
+                Bottom-up betyder att förmågan byggs underifrån, hos dem som gör jobbet. Sex steg,
+                från inspiration till en agent som löser ett verkligt arbetsflöde.
+              </p>
+            </div>
+            <a class="btn btn-o" href="https://akademi.superintelligent.se/collections">Kurser &amp; priser</a>
+          </div>
+          <ol class="level" style="list-style: none; padding: 0; margin: 0">
+            <li class="col">
+              <div class="txt"><div class="t">Se vad som är möjligt</div><div class="d">Inspirationsföreläsning för ledningsgrupp eller hela organisationen</div></div>
+              <div class="qb green">1</div>
+              <div class="plat" style="height: 20px; border-top-color: var(--green)"></div>
+            </li>
+            <li class="col">
+              <div class="txt"><div class="t">Spara tid i vardagen</div><div class="d">E-learning 1 · ChatGPT gratisversion</div></div>
+              <div class="qb green">2</div>
+              <div class="plat" style="height: 60px; border-top-color: var(--green)"></div>
+            </li>
+            <li class="col">
+              <div class="txt"><div class="t">Jobba smartare i Microsoft 365</div><div class="d">E-learning 2 · Copilot Premium</div></div>
+              <div class="qb green">3</div>
+              <div class="plat" style="height: 100px; border-top-color: var(--green)"></div>
+            </li>
+            <li class="col">
+              <div class="txt"><div class="t">Låt AI göra jobb i flera steg</div><div class="d">E-learning 3 · ChatGPT betalversion</div></div>
+              <div class="qb green">4</div>
+              <div class="plat" style="height: 140px; border-top-color: var(--green)"></div>
+            </li>
+            <li class="col">
+              <div class="txt"><div class="t">Bygg er första agent</div><div class="d">Agent Masterclass · halvdag, max 10 deltagare</div></div>
+              <div class="qb green">5</div>
+              <div class="plat" style="height: 180px; border-top-color: var(--green)"></div>
+            </li>
+            <li class="col">
+              <div class="txt"><div class="t">En agent i drift</div><div class="d">För ett arbetsflöde som tar mycket av er tid i dag</div></div>
+              <div class="qb done">6</div>
+              <div class="plat" style="height: 220px; border-top-color: var(--green)"></div>
+            </li>
+          </ol>
+          <div class="ground"></div>
+          <div class="callout-row">
+            <p class="callout">Ni gör e-learningen före masterclassen. Efter fyra timmar har ni en första agent på plats.</p>
+            <p class="small">E-learning från 2 990 kr · Steg 1 + 2 paketpris 4 990 kr</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section alt" id="slutspelet">
+        <div class="wrap game-grid">
+          <div class="stack" style="gap: 24px">
+            <p class="eb gold">Steg 5 · Slutspelet</p>
+            <h2 class="h2">Ni klarar er själva</h2>
+            <p class="sub">
+              Vi gör oss umbärliga, med flit. Kunskapen och färdigheterna stannar hos er, och vi mäter
+              att det håller i sig när vi kliver tillbaka. Vill ni ha oss kvar finns vi där, men då
+              som stöd till ledningen, inte för att bygga förmågan.
+            </p>
+            <div class="btn-row"><a class="btn btn-o" href="om-oss/sa-tanker-vi/">Läs hur vi tänker →</a></div>
+          </div>
+          <ol class="steps-list">
+            <li><span class="qb sm">✓</span>Användningen av era AI-licenser ligger kvar när vi lämnat över.</li>
+            <li><span class="qb sm">✓</span>Nya agenter och automationer byggs utan oss.</li>
+            <li><span class="qb sm">✓</span>Ambassadörer hos er har tagit över teknikbyggandet.</li>
+          </ol>
         </div>
       </section>
 
@@ -564,6 +573,7 @@
           <div>
             <a href="https://akademi.superintelligent.se/">Akademin</a>
             <a href="intervju/">AI-intervjun</a>
+            <a href="ai-skuld/">AI-skuld</a>
             <a href="om-oss/">Om oss</a>
             <a href="https://akademi.superintelligent.se/users/sign_in">Logga in</a>
           </div>

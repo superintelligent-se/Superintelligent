@@ -87,7 +87,10 @@ src/avatars.js         Pixelfigurerna, 10x14 rutnät
 src/pixelart.js        Delad pixelritare, mynt och utrustning
 src/audio.js           Ljud syntetiserat med WebAudio, inga ljudfiler
 
-index.html             Sajtens startsida
+index.html             Sajtens startsida. Avsnitten följer kundresan i ordning: AI-resan,
+                       steg 1 Spelet, 2 AI-intervjun, 4A Rådgivning, 4B Träning, 5 Slutspelet.
+                       Menyn har samma ordning och stegets färg (--c), och markerar avsnittet
+                       man läser (site.js). Nytt avsnitt i resan: lägg till det i menyn på alla sidor
 spelet/index.html      Spelet
 ai-skuld/index.html    Kalkylatorn, modellen kommer från repot superintelligent-se/roi
 intervju/index.html    Röstagenten att testa. Widgeten laddas först vid klick
