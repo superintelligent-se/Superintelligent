@@ -279,10 +279,17 @@ h1, h2, h3 { margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
 .closing { display: grid; grid-template-columns: 1fr 520px; gap: 120px; align-items: start; padding-top: 64px; }
 .closing .copy { display: flex; flex-direction: column; gap: 44px; min-width: 0; }
 .person { display: flex; gap: 32px; align-items: center; }
-.person img { width: 132px; height: 132px; object-fit: cover; border: 4px solid var(--gold); box-shadow: 6px 6px 0 #000; display: block; }
+.person img { width: 116px; height: 116px; object-fit: cover; border: 4px solid var(--gold); box-shadow: 6px 6px 0 #000; display: block; }
 .person strong { display: block; font-size: 40px; font-weight: 700; }
 .person .small { color: var(--ink-2); margin-top: 6px; }
-.closing .btns { display: flex; gap: 28px; flex-wrap: wrap; }
+.closing .copy { gap: 32px; }
+.closing .copy .h1 { font-size: 104px; }
+/* Nästa steg efter presentationen, i kundresans ordning: spelet, intervjun, mötet */
+.next-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; border-top: 3px solid var(--line); }
+.next-steps li { border-bottom: 3px solid var(--line); }
+.next-steps a { display: grid; grid-template-columns: 64px auto 1fr; gap: 28px; align-items: center; padding: 10px 0; color: var(--ink); text-decoration: none; }
+.next-steps strong { font-size: 34px; font-weight: 700; }
+.next-steps a > span:last-child { font-family: var(--mono); font-size: 22px; color: var(--muted); }
 
 .qr-card { display: flex; flex-direction: column; gap: 28px; align-items: stretch; }
 .qr {
@@ -526,15 +533,16 @@ h1, h2, h3 { margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
     <div class="closing">
       <div class="copy">
         <p class="eb gold"><span class="pixel-dot"></span>Tack · Frågor?</p>
-        <h1 class="h1" style="font-size: 120px">Låt oss hålla kontakten.</h1>
+        <h1 class="h1">Låt oss hålla kontakten.</h1>
         <div class="person">
           <img src="" alt="Förnamn Efternamn" />
           <div><strong>Förnamn Efternamn</strong><p class="small">Roll, Superintelligent</p><p class="small">hello@superintelligent.se</p></div>
         </div>
-        <div class="btns">
-          <a class="btn btn-p" href="https://spela.superintelligent.se">Spela spelet <small>spela.superintelligent.se</small></a>
-          <a class="btn btn-o" href="https://boka.superintelligent.se">Boka möte <small>boka.superintelligent.se</small></a>
-        </div>
+        <ul class="next-steps">
+          <li><a href="https://spela.superintelligent.se"><span class="qb sm green">1</span><strong>Spela spelet</strong><span>spela.superintelligent.se</span></a></li>
+          <li><a href="https://intervjua.superintelligent.se"><span class="qb sm green">2</span><strong>Prova AI-intervjun</strong><span>intervjua.superintelligent.se</span></a></li>
+          <li><a href="https://boka.superintelligent.se"><span class="qb sm purple">&gt;</span><strong>Boka ett möte</strong><span>boka.superintelligent.se</span></a></li>
+        </ul>
       </div>
       <div class="qr-card">
         <div class="qr" data-qr="https://www.linkedin.com/in/ANVANDARNAMN/" role="img" aria-label="QR-kod till LinkedIn"></div>
@@ -555,10 +563,12 @@ h1, h2, h3 { margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
   <button type="button" id="prev" aria-label="Föregående bild">&lt;</button>
   <button type="button" id="next" aria-label="Nästa bild">&gt;</button>
   <button type="button" id="full" aria-label="Helskärm">[ ]</button>
+  <button type="button" id="talarvy" aria-label="Öppna talarvyn">P</button>
 </div>
 
 <script>
-/* ==== TEMA: deck.js. Pilar, mellanslag och PageUp/PageDown bläddrar, F ger helskärm, N visar anteckningar,
+/* ==== TEMA: deck.js. Pilar, mellanslag och PageUp/PageDown bläddrar, F ger helskärm,
+   P öppnar talarvyn i ett eget fönster, N visar anteckningarna i samma fönster,
    Home/End går till första och sista. Svep på mobil. Bildnumret står i adressens #. ==== */
 (() => {
   const slides = [...document.querySelectorAll('.slide')];
@@ -596,10 +606,11 @@ h1, h2, h3 { margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
     notesPanel.scrollTop = 0;
     progress.style.width = ((i + 1) / slides.length) * 100 + '%';
     try { history.replaceState(null, '', '#' + (i + 1)); } catch (e) {}
+    renderPresenter();
   }
 
-  addEventListener('keydown', (e) => {
-    if (e.target.closest('input, textarea')) return;
+  function onKey(e) {
+    if (e.target.closest && e.target.closest('input, textarea')) return;
     const k = e.key;
     if (['ArrowRight', 'ArrowDown', 'PageDown', ' ', 'Enter'].includes(k)) { e.preventDefault(); show(i + 1); }
     else if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(k)) { e.preventDefault(); show(i - 1); }
@@ -607,7 +618,116 @@ h1, h2, h3 { margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
     else if (k === 'End') show(slides.length - 1);
     else if (k === 'f' || k === 'F') toggleFull();
     else if (k === 'n' || k === 'N') notesPanel.hidden = !notesPanel.hidden;
-  });
+    else if (k === 'p' || k === 'P') openPresenter();
+  }
+  addEventListener('keydown', onKey);
+
+  /* Talarvyn: ett eget fönster med aktuell bild, nästa bild, anteckningar och tid.
+     Lägg presentationen på projektorn eller dela den i Teams, och ha talarvyn på
+     din egen skärm. Båda fönstren bläddrar, och de följs åt. */
+  let pv = null;
+  let started = null;
+  const pvCss = `
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--sans); height: 100vh; overflow: hidden; }
+    .pv { display: grid; grid-template-columns: 1fr minmax(320px, 34%); grid-template-rows: auto 1fr; gap: 16px; padding: 16px; height: 100vh; box-sizing: border-box; }
+    .pv-bar { grid-column: 1 / -1; display: flex; align-items: center; gap: 20px; font-family: var(--mono); font-size: 16px; color: var(--muted); }
+    .pv-bar strong { font-family: var(--pixel); font-weight: 400; color: var(--gold); font-size: 22px; letter-spacing: 0.06em; }
+    .pv-bar .time { font-size: 28px; color: var(--ink); }
+    .pv-bar .sp { flex: 1; }
+    .pv-bar button { background: var(--panel); color: var(--ink); border: 2px solid var(--line-strong); font: inherit; padding: 6px 14px; cursor: pointer; }
+    .pv-main, .pv-side { min-height: 0; display: flex; flex-direction: column; gap: 12px; }
+    .pv-label { font-family: var(--pixel); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faint); margin: 0; }
+    .frame { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; background: #000; border: 2px solid var(--line-strong); flex-shrink: 0; }
+    .frame .slide { display: flex; }
+    .frame.next { opacity: 0.85; }
+    .frame.end { display: grid; place-items: center; font-family: var(--mono); color: var(--faint); }
+    .notes-box { flex: 1; min-height: 0; overflow-y: auto; background: var(--bg-alt); border: 2px solid var(--line); padding: 16px 18px; font-size: 17px; line-height: 1.55; color: var(--ink-2); }
+    .notes-box h4 { font-family: var(--pixel); font-weight: 400; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold); margin: 20px 0 8px; }
+    .notes-box h4:first-child { margin-top: 0; }
+    .notes-box p { margin: 0 0 10px; }
+    .notes-box ol, .notes-box ul { margin: 0 0 10px; padding-left: 22px; }
+    .notes-box blockquote { position: relative; margin: 8px 0 14px; padding: 12px 14px 12px 14px; background: var(--panel); border: 1px solid var(--line-strong); font-family: var(--mono); font-size: 15px; color: var(--ink); white-space: pre-line; }
+    .notes-box blockquote button { display: block; margin-top: 10px; background: var(--purple); color: #fff; border: 0; font-family: var(--sans); font-weight: 700; font-size: 13px; padding: 6px 12px; cursor: pointer; }
+    .notes-box table { border-collapse: collapse; width: 100%; font-size: 15px; }
+    .notes-box td { padding: 6px 4px; border-bottom: 1px solid var(--line); }
+    .notes-box td:last-child { text-align: right; font-family: var(--mono); color: var(--faint); white-space: nowrap; }
+  `;
+
+  function openPresenter() {
+    if (pv && !pv.closed) { pv.focus(); return; }
+    pv = window.open('', 'talarvy', 'width=1280,height=800');
+    if (!pv) { alert('Webbläsaren stoppade fönstret. Tillåt popup-fönster för den här sidan och tryck P igen.'); return; }
+    const d = pv.document;
+    const head = [...document.querySelectorAll('link[rel="stylesheet"], style')].map((el) => el.outerHTML).join('');
+    const logo = document.querySelector('symbol#logo');
+    d.open();
+    d.write(`<!doctype html><html lang="sv"><head><meta charset="UTF-8"><base href="${location.href.split('#')[0]}"><title>Talarvy · ${document.title}</title>${head}<style>${pvCss}</style></head><body>
+      ${logo ? logo.closest('svg').outerHTML : ''}
+      <div class="pv">
+        <div class="pv-bar"><strong id="pv-num"></strong><span>Tid</span><span class="time" id="pv-tid">0:00</span><button type="button" id="pv-nollstall">Nollställ</button><span class="sp"></span><span id="pv-klocka"></span><button type="button" id="pv-prev">&lt; Föregående</button><button type="button" id="pv-next">Nästa &gt;</button></div>
+        <div class="pv-main"><p class="pv-label">Nu</p><div class="frame" id="pv-nu"></div></div>
+        <div class="pv-side"><p class="pv-label">Nästa</p><div class="frame next" id="pv-nasta"></div><p class="pv-label">Anteckningar</p><div class="notes-box" id="pv-notes"></div></div>
+      </div></body></html>`);
+    d.close();
+    pv.addEventListener('keydown', onKey);
+    pv.addEventListener('resize', renderPresenter);
+    d.getElementById('pv-prev').onclick = () => show(i - 1);
+    d.getElementById('pv-next').onclick = () => show(i + 1);
+    d.getElementById('pv-nollstall').onclick = () => { started = Date.now(); tick(); };
+    if (!started) started = Date.now();
+    renderPresenter();
+  }
+
+  function cloneInto(frame, slide) {
+    frame.innerHTML = '';
+    frame.classList.toggle('end', !slide);
+    if (!slide) { frame.textContent = 'Slut på presentationen'; return; }
+    const c = slide.cloneNode(true);
+    c.querySelectorAll('.notes').forEach((n) => n.remove());
+    c.classList.add('is-active');
+    frame.appendChild(c);
+    frame.style.setProperty('--scale', frame.clientWidth / 1920);
+  }
+
+  function renderPresenter() {
+    if (!pv || pv.closed) return;
+    const d = pv.document;
+    const nu = d.getElementById('pv-nu');
+    if (!nu) return;
+    cloneInto(nu, slides[i]);
+    cloneInto(d.getElementById('pv-nasta'), slides[i + 1]);
+    d.getElementById('pv-num').textContent = (i + 1) + ' / ' + slides.length;
+    const box = d.getElementById('pv-notes');
+    const notes = slides[i].querySelector('.notes');
+    box.innerHTML = notes ? notes.innerHTML : '<p>Inga anteckningar till den här bilden.</p>';
+    box.scrollTop = 0;
+    // Prompter går att kopiera direkt, till exempel till chatten i Teams
+    box.querySelectorAll('blockquote').forEach((q) => {
+      const text = q.textContent.trim();
+      const b = d.createElement('button');
+      b.type = 'button';
+      b.textContent = 'Kopiera';
+      b.onclick = () => {
+        const done = () => { b.textContent = 'Kopierad'; setTimeout(() => (b.textContent = 'Kopiera'), 1500); };
+        pv.navigator.clipboard.writeText(text).then(done, () => {
+          const r = d.createRange(); r.selectNodeContents(q); const s = pv.getSelection(); s.removeAllRanges(); s.addRange(r);
+        });
+      };
+      q.appendChild(b);
+    });
+    tick();
+  }
+
+  function tick() {
+    if (!pv || pv.closed) return;
+    const d = pv.document;
+    const s = Math.floor((Date.now() - (started || Date.now())) / 1000);
+    const t = d.getElementById('pv-tid');
+    if (t) t.textContent = Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+    const k = d.getElementById('pv-klocka');
+    if (k) k.textContent = new Date().toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
+  }
+  setInterval(tick, 1000);
 
   function toggleFull() {
     try {
@@ -619,6 +739,7 @@ h1, h2, h3 { margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
   document.getElementById('prev').onclick = () => show(i - 1);
   document.getElementById('next').onclick = () => show(i + 1);
   document.getElementById('full').onclick = toggleFull;
+  document.getElementById('talarvy').onclick = openPresenter;
 
   let hideTimer;
   addEventListener('pointermove', () => {

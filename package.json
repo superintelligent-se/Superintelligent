@@ -9,7 +9,8 @@
     "prebuild": "node scripts/build-mail-data.mjs",
     "build": "vite build",
     "preview": "vite preview",
-    "policies": "scripts/build-policies.sh"
+    "policies": "scripts/build-policies.sh",
+    "presentation": "node scripts/bundle-presentation.mjs"
   },
   "dependencies": {
     "@fontsource/hanken-grotesk": "^5.3.0",

@@ -51,7 +51,7 @@ Fler bildtyper (siffra, jämförelse, citat, bild) läggs till i `mall.html` nä
 
 ## Talaranteckningar
 
-Lägg `<aside class="notes">` sist i en bild. Den syns aldrig för publiken. Tryck N under presentationen för att visa anteckningarna i en panel till höger. Där får körschema, instruktioner och prompter plats, med `<h4>`, `<ol>` och `<blockquote>` för prompter.
+Anteckningarna skrivs i HTML-filen, sist i varje bild, i `<aside class="notes">`. De syns aldrig för publiken. Använd `<p>` för text, `<h4>` för rubriker, `<ol>` för steg och `<blockquote>` för prompter. En prompt i `<blockquote>` får en Kopiera-knapp i talarvyn, så att den kan klistras in i chatten direkt.
 
 ## Logotyper och bilder som kräver vit botten
 
@@ -90,6 +90,9 @@ LinkedIn för laget: Thomas `dalebring`, Christofer `chrisnassil`, Tomas `tomas-
 
 ## Visa och dela
 
-- Bläddra med piltangenterna, mellanslag eller en klickare. F ger helskärm, N visar talaranteckningarna. Adressen slutar på bildens nummer, till exempel `#3`.
-- PDF: öppna i Chrome, skriv ut, välj Spara som PDF. Varje bild blir en sida i 16:9.
-- Typsnitten hämtas från Google Fonts. Utan internet visas systemtypsnitt, så öppna presentationen en gång före föreläsningen.
+- **Talarvyn**: tryck P. Ett eget fönster öppnas med aktuell bild, nästa bild, anteckningarna, tid sedan start och klockan. Båda fönstren bläddrar och följs åt. Tillåt popup-fönster första gången.
+- **På plats med projektor**: koppla in projektorn som utökad skärm, inte spegling. Öppna presentationen, tryck P, dra presentationsfönstret till projektorn och tryck F där. Talarvyn stannar på datorns skärm.
+- **I Teams**: dela presentationsfönstret, inte hela skärmen. Talarvyn syns då bara för dig.
+- Bläddra med piltangenterna, mellanslag eller en klickare, i vilket fönster som helst. N visar anteckningarna i presentationsfönstret, om du bara har en skärm.
+- **En fil att ta med**: `npm run presentation -- <presentationens mapp>` packar presentationen till en enda fil med bilder och typsnitt inbäddade, till exempel `2026-10-modul-4-copilot-premium.html` i samma mapp. Den fungerar utan internet och kan mejlas eller laddas ner. Kör kommandot igen efter varje ändring. Utan Node: lägg bilderna som `data:`-adresser direkt i `src`.
+- **PDF**: öppna i Chrome, skriv ut, välj Spara som PDF. Varje bild blir en sida i 16:9. Bra som reserv och att skicka efteråt.
