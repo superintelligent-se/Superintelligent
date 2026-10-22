@@ -39,23 +39,28 @@ if (toggle && nav) {
 }
 
 // Menyn följer avsnittet man läser. Länkar som pekar på ett avsnitt på samma
-// sida får klassen is-current när avsnittet passerar mitten av skärmen. På
-// mobil, där menyn är fälld, visas samma sak som en remsa under sidhuvudet.
+// sida, eller anger det med data-spy, får klassen is-current när avsnittet
+// passerar mitten av skärmen. På mobil, där menyn är fälld, visas samma sak
+// som en remsa under sidhuvudet, och där syns också stegen som inte har
+// någon menylänk (Er plan och Slutspelet), med färgen från data-c.
 // Andra sidor har menylänkar till startsidan och markerar sig med
 // aria-current i stället.
 const NOW = {
   'ai-resan': 'Er AI-resa · Fem steg',
   spelet: 'Steg 1 · Spelet',
   intervju: 'Steg 2 · AI-intervjun',
+  plan: 'Steg 3 · Er plan',
   radgivning: 'Steg 4A · Rådgivning',
   traning: 'Steg 4B · Träning',
   slutspelet: 'Steg 5 · Slutspelet',
+  laget: 'Om oss · Laget',
 };
 
-const spyLinks = nav ? [...nav.querySelectorAll('a[href^="#"]')] : [];
-const spied = spyLinks
-  .map((link) => [link, document.getElementById(link.getAttribute('href').slice(1))])
-  .filter(([, section]) => section);
+const spied = nav
+  ? [...nav.querySelectorAll('a[href^="#"], a[data-spy]')]
+      .map((link) => [link, document.getElementById(link.dataset.spy ?? link.getAttribute('href').slice(1))])
+      .filter(([, section]) => section)
+  : [];
 
 if (spied.length) {
   const topbar = document.querySelector('.topbar');
@@ -66,34 +71,35 @@ if (spied.length) {
   now.innerHTML = '<i></i><span></span>';
   topbar?.appendChild(now);
 
-  const setCurrent = (id) => {
-    let shown = false;
-    for (const [link, section] of spied) {
-      const on = section.id === id;
+  const setCurrent = (section) => {
+    let color;
+    for (const [link, target] of spied) {
+      const on = target === section;
       link.classList.toggle('is-current', on);
-      if (on && NOW[id]) {
-        now.style.setProperty('--c', getComputedStyle(link).getPropertyValue('--c'));
-        now.querySelector('span').textContent = NOW[id];
-        shown = true;
-      }
+      if (on) color = getComputedStyle(link).getPropertyValue('--c');
     }
-    now.hidden = !shown;
+    color ||= section?.dataset.c;
+    const label = NOW[section?.id];
+    if (label && color) {
+      now.style.setProperty('--c', color);
+      now.querySelector('span').textContent = label;
+    }
+    now.hidden = !(label && color);
   };
 
   // Mittlinjen avgör: det avsnitt som korsar skärmens mitt är det man läser.
-  // Avsnitt utan menylänk, som kunderna och Varför nu, släcker markeringen.
+  // Avsnitt utan menylänk och utan steg, som kunderna, släcker markeringen.
   const sections = [...document.querySelectorAll('main > section')];
-  let currentId;
+  let current;
   const update = () => {
     const middle = innerHeight / 2;
     const hit = sections.find((section) => {
       const box = section.getBoundingClientRect();
       return box.top <= middle && box.bottom > middle;
     });
-    const id = hit?.id;
-    if (id === currentId) return;
-    currentId = id;
-    setCurrent(id);
+    if (hit === current) return;
+    current = hit;
+    setCurrent(hit);
   };
   addEventListener('scroll', update, { passive: true });
   addEventListener('resize', update);

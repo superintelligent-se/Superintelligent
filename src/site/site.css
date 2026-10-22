@@ -950,6 +950,220 @@ h3 {
   }
 }
 
+/* Principskissen: vårt engagemang ner, er förmåga upp. Står i steg 5 på
+   startsidan, där den länkar till Slutspelet, och på Slutspelet. */
+.handover {
+  margin: 0;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.handover svg {
+  width: 100%;
+  height: auto;
+  shape-rendering: crispEdges;
+}
+
+.handover figcaption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--faint);
+}
+
+.legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ink-2);
+}
+
+.legend i {
+  width: 14px;
+  height: 14px;
+  background: var(--c);
+}
+
+.handover-link {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  transition: transform 80ms, box-shadow 80ms;
+}
+
+.handover-link:hover {
+  text-decoration: none;
+  transform: translate(-2px, -2px);
+}
+
+.handover-link:hover .handover {
+  box-shadow: 6px 6px 0 #000;
+  border-color: var(--gold);
+}
+
+/* Steg 3: från svar till plan. Två källor, en sammanställning, två spår. */
+.plan-flow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 40px minmax(0, 1.15fr) 40px minmax(0, 1.25fr);
+  gap: 16px;
+  align-items: center;
+}
+
+.plan-in,
+.plan-out {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.plan-card {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 5px solid var(--c);
+}
+
+.plan-card .eb {
+  color: var(--c);
+  font-size: 11px;
+}
+
+.plan-card strong {
+  font-size: 19px;
+  line-height: 1.25;
+}
+
+.plan-card span {
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.plan-card ul,
+.plan-sum ul {
+  margin: 4px 0 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.plan-card li {
+  position: relative;
+  padding-left: 18px;
+  color: var(--ink-2);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.plan-card li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 8px;
+  height: 8px;
+  background: var(--c);
+}
+
+.plan-sum {
+  padding: 24px;
+  background: var(--panel);
+  border: 3px solid var(--gold);
+  box-shadow: 8px 8px 0 #000;
+}
+
+.plan-sum .eb {
+  color: var(--gold);
+  font-size: 12px;
+}
+
+.plan-sum li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-bottom: 10px;
+  border-bottom: 2px dashed var(--line);
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.plan-sum li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.plan-sum li strong {
+  color: var(--ink);
+  font-size: 17px;
+}
+
+/* Pixelpil: ett skaft och en trappstegad spets. */
+.plan-arrow {
+  height: 24px;
+  background:
+    linear-gradient(var(--gold), var(--gold)) left center / calc(100% - 12px) 6px no-repeat;
+  position: relative;
+}
+
+.plan-arrow::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 14px;
+  height: 24px;
+  background: var(--gold);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+@media (max-width: 1080px) {
+  .plan-flow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .plan-arrow {
+    justify-self: center;
+    width: 24px;
+    height: 36px;
+    background: linear-gradient(var(--gold), var(--gold)) center top / 6px calc(100% - 12px) no-repeat;
+  }
+
+  .plan-arrow::after {
+    top: auto;
+    bottom: 0;
+    width: 24px;
+    height: 14px;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+  }
+
+  .plan-in,
+  .plan-out {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .plan-in,
+  .plan-out {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .handover-link {
+    transition: none;
+  }
+}
+
 /* Spelet */
 
 .game-grid {

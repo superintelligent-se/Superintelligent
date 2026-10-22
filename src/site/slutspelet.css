@@ -65,43 +65,6 @@
   align-items: center;
 }
 
-/* Principskissen: vårt engagemang ner, er förmåga upp. */
-.handover {
-  margin: 0;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.handover svg {
-  width: 100%;
-  height: auto;
-  shape-rendering: crispEdges;
-}
-
-.handover figcaption {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 20px;
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--faint);
-}
-
-.legend {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: var(--ink-2);
-}
-
-.legend i {
-  width: 14px;
-  height: 14px;
-  background: var(--c);
-}
-
 /* Mätarna, som spelets HUD: en färg per spår. */
 .meters {
   display: grid;
