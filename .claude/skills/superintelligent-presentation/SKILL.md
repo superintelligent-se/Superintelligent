@@ -53,9 +53,14 @@ Fler bildtyper (siffra, jämförelse, citat, bild) läggs till i `mall.html` nä
 
 Lägg `<aside class="notes">` sist i en bild. Den syns aldrig för publiken. Tryck N under presentationen för att visa anteckningarna i en panel till höger. Där får körschema, instruktioner och prompter plats, med `<h4>`, `<ol>` och `<blockquote>` för prompter.
 
-## Partnerlogotyper
+## Logotyper och bilder som kräver vit botten
 
-När ett projekt kräver logotyper, till exempel EU-märkningen "Medfinansieras av Europeiska unionen", läggs de i sidfoten på varje bild: `<span class="end"><span class="partners"><img …></span><span class="num"></span></span>`. På försättsbladet visas hela raden med partner. Logotyperna ligger på vitt eftersom de är gjorda för ljus botten.
+Logotyper, EU-märkningar och skärmklipp är oftast gjorda för ljus botten. Två lösningar, inga andra:
+
+- **Ljus fot** för presentationer som måste bära logotyper på varje bild, till exempel EU-märkningen "Medfinansieras av Europeiska unionen" i ett ESF-projekt. Sätt `data-fot="ljus"` på `<main class="deck">`. Sidfoten blir en vit list i hela bredden där logotyperna står i sina egna färger, och marken och banan står på listen. Lägg logotyperna i sidfoten på varje bild: `<span class="end"><span class="partners"><img …></span><span class="num"></span></span>`. På försättsbladet står hela partnerraden där i stället (`<img class="wide">`).
+- **Vit ruta** (`.on-white`) runt en enskild bild inne på en bild, till exempel en badge eller ett skärmklipp.
+
+Utan logotypkrav är foten mörk som på sajten.
 
 ## Flytta in en gammal presentation
 
