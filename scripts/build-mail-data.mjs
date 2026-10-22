@@ -63,7 +63,7 @@ function overviewRowHtml(dimension, coins) {
 
 const overviewOpen =
   `<tr><td style="padding:4px 0 26px;">` +
-  `<div style="${FONT}font-size:12px;font-weight:bold;letter-spacing:1px;color:#888;text-transform:uppercase;margin-bottom:8px;">Din bana i överblick</div>` +
+  `<div style="${FONT}font-size:12px;font-weight:bold;letter-spacing:1px;color:#888;text-transform:uppercase;margin-bottom:8px;">Dina svar i överblick</div>` +
   `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #eef0f3;border-radius:8px;border-collapse:separate;padding:6px 10px;">` +
   `<tr><td></td><td style="padding:4px 12px;${FONT}font-size:11px;color:#999;">Zon</td>` +
   `<td style="padding:4px 12px 4px 0;${FONT}font-size:11px;color:#999;">Mynt</td>` +
@@ -105,12 +105,12 @@ const p = (text, extra = '') =>
 // det tvättade förnamnet.
 const top =
   p('Hej {{namn}},') +
-  p('Tack för att du spelade The Superintelligent Game. Här är din bana i efterhand — mynten du samlade, utrustningen du fick med dig och vad vi sa om varje svar längs vägen.') +
+  p('Tack för att du spelade The Superintelligent Game. Här är dina svar i efterhand — mynten du samlade, utrustningen du fick med dig och vad vi sa om varje svar längs vägen.') +
   '<table role="presentation" width="100%" cellpadding="0" cellspacing="0">';
 
 const bottom =
   '</table>' +
-  p('Det här är vad du såg på banan, svar för svar. Vad det betyder tillsammans — var ni står, vad som hänger ihop och vad som ger mest effekt först — är något vi går igenom med dig.', 'margin-top:28px;') +
+  p('Det här är vad du såg i spelet, svar för svar. Vad det betyder tillsammans — var ni står, vad som hänger ihop och vad som ger mest effekt först — är något vi går igenom med dig.', 'margin-top:28px;') +
   p('Har du redan bokat ett möte ses vi snart. Annars är nästa steg här:') +
   cta;
 
@@ -156,7 +156,7 @@ const rows = [...overview, ...details];
 const [before, after] = shell('§').split('§');
 
 const data = {
-  amne: 'Din bana i The Superintelligent Game',
+  amne: 'Dina svar i The Superintelligent Game',
   fore: before + top,
   rader: rows,
   efter: bottom + after,

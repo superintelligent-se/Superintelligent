@@ -748,7 +748,7 @@ export default class PlayScene extends Phaser.Scene {
     this.starfield();
     this.showMessage({
       title: 'GENVÄGEN TAGEN',
-      body: 'Du hoppade över hela banan och kom upp bakom flaggstången. Ingen såg något. Raketen väntar.',
+      body: 'Du hoppade över hela spelet och kom upp bakom flaggstången. Ingen såg något. Raketen väntar.',
       color: '#8ef0ad',
       duration: 4200,
     });

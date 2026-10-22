@@ -48,13 +48,15 @@ const VARIANTS = [
 // Möjligheterna leder till rådgivningen och Människorna till Akademin, som
 // sidan själv kopplar ihop dem: rådgivning gör språnget till Möjlighets-AI,
 // träningen bygger förmågan hos medarbetarna.
+// note är raden under knapparna. Innan något valts gäller den spelet, så den
+// byts med knappen och säger något om det knappen leder till.
 const CTAS = [
-  { href: '#ai-resan', text: 'Se hela AI-resan ↓' },
-  { href: 'ai-skuld/', text: 'Räkna på din AI-skuld →' },
-  { href: '#radgivning', text: 'Ta språnget med rådgivning ↓' },
-  { href: 'https://akademi.superintelligent.se/collections', text: 'Utforska AI-akademin →' },
-  { href: 'intervju/', text: 'Prova AI-intervjun →' },
-  { href: 'om-oss/sa-tanker-vi/', text: 'Läs hur vi tänker →' },
+  { href: '#ai-resan', text: 'Se hela AI-resan ↓', note: 'Fem steg från första samtalet till egen AI-förmåga' },
+  { href: 'ai-skuld/', text: 'Räkna på din AI-skuld →', note: 'Räknas i din webbläsare · Inget skickas till oss' },
+  { href: '#radgivning', text: 'Ta språnget med rådgivning ↓', note: 'Tre nivåer · Första samtalet är alltid kostnadsfritt' },
+  { href: 'https://akademi.superintelligent.se/collections', text: 'Utforska AI-akademin →', note: 'E-learning från 2 990 kr · Agent Masterclass på en halvdag' },
+  { href: 'intervju/', text: 'Prova AI-intervjun →', note: 'Cirka 15 minuter · I mobilen eller datorn · Ingen app' },
+  { href: 'om-oss/sa-tanker-vi/', text: 'Läs hur vi tänker →', note: 'Så mäter vi att ni klarar er utan oss' },
 ];
 
 const root = document.getElementById('headline');
@@ -64,6 +66,7 @@ const sub = root?.querySelector('[data-part="sub"]');
 const buttons = [...document.querySelectorAll('.picker .pick')];
 const cta = document.getElementById('hero-cta');
 const ctaLabel = cta?.querySelector('.cta-label');
+const ctaNote = document.getElementById('hero-note');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 let typing = 0;
@@ -120,25 +123,28 @@ let ctaRun = 0;
 
 async function setCta(index) {
   if (!cta || !ctaLabel) return;
-  const { href, text } = CTAS[index];
+  const { href, text, note } = CTAS[index];
   const run = ++ctaRun;
+  const parts = [[ctaLabel, text], [ctaNote, note]].filter(([el]) => el);
   cta.dataset.variant = String(index);
   cta.href = href;
   if (reducedMotion.matches) {
-    ctaLabel.textContent = text;
+    for (const [el, value] of parts) el.textContent = value;
     return;
   }
-  await ctaLabel.animate(
+  await Promise.all(parts.map(([el]) => el.animate(
     [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(-10px)' }],
     { duration: 160, easing: 'ease-in', fill: 'forwards' },
-  ).finished.catch(() => {});
+  ).finished.catch(() => {})));
   if (run !== ctaRun) return;
-  ctaLabel.textContent = text;
-  ctaLabel.getAnimations().forEach((a) => a.cancel());
-  ctaLabel.animate(
-    [{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }],
-    { duration: 220, easing: 'ease-out' },
-  );
+  for (const [el, value] of parts) {
+    el.textContent = value;
+    el.getAnimations().forEach((a) => a.cancel());
+    el.animate(
+      [{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }],
+      { duration: 220, easing: 'ease-out' },
+    );
+  }
 }
 
 async function show(index, button) {

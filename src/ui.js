@@ -208,7 +208,7 @@ export function showShortcutPrompt(onChoice) {
   const tag = el('question-dimension');
   tag.textContent = 'Genvägen';
   tag.style.color = '#2fbf57';
-  el('question-text').textContent = 'Vill du fuska till slutet av banan?';
+  el('question-text').textContent = 'Vill du fuska till slutet av spelet?';
 
   const note = el('shortcut-note');
   note.innerHTML = `
@@ -228,7 +228,7 @@ export function showShortcutPrompt(onChoice) {
   renderChoices({
     items: [
       'Ja. Vi vet redan att vi behöver hjälp — låt oss prata i stället.',
-      'Nej, jag spelar klart banan själv.',
+      'Nej, jag spelar klart själv.',
     ],
     onPick: (index) => {
       note.hidden = true;
@@ -613,7 +613,7 @@ export function showEnd(bonus) {
     // Honungsfällan: fältet är osynligt för människor, så den som fyllt i det
     // är en bot. Den får samma tack som alla andra och märker ingenting.
     if (webbplats) {
-      showStatus(status, 'success', 'Tack! Dina svar är skickade', 'Kolla din inkorg — en sammanfattning av din bana är på väg.');
+      showStatus(status, 'success', 'Tack! Dina svar är skickade', 'Kolla din inkorg — en återblick på dina svar är på väg.');
       showNextSteps(form);
       return;
     }
@@ -638,7 +638,7 @@ export function showEnd(bonus) {
       // fetch kastar bara vid nätverksfel. Ett 4xx/5xx från flödet betyder
       // att leadet inte kom fram — då får ingen tro att det gjorde det.
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      showStatus(status, 'success', 'Tack! Dina svar är skickade', 'Kolla din inkorg — en sammanfattning av din bana är på väg.');
+      showStatus(status, 'success', 'Tack! Dina svar är skickade', 'Kolla din inkorg — en återblick på dina svar är på väg.');
       showNextSteps(form);
     } catch (error) {
       console.error('Leadet kunde inte skickas:', error);
