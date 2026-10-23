@@ -2,9 +2,9 @@
 // lekfull AI-förändring som bygger på det medarbetarna redan gör. De fem
 // andra visar samma sak från andra håll. Varje rubrik har ett eget
 // frågetecken-block, en egen färg, en egen effekt och en egen pixelbild i
-// spelets stil. Knapparna under är desamma hela tiden: Se er AI-resa och
-// Boka gratis möte. Rubrik 1 står i HTML:en, så sökmotorer och den som inte
-// klickar ser alltid den.
+// spelets stil. Den stora knappen tar rubrikens färg och leder dit rubriken
+// handlar om, medan Boka gratis möte är densamma hela tiden. Rubrik 1 står i
+// HTML:en, så sökmotorer och den som inte klickar ser alltid den.
 import './headline.css';
 import { celebrate, vision } from './effects.js';
 // Bilderna ritas av scripts/build-hero-art.mjs (npm run hero-art).
@@ -64,12 +64,29 @@ const VARIANTS = [
   },
 ];
 
+// Vart den stora knappen leder för varje rubrik. Färgen sätts i headline.css.
+// Möjligheterna leder till rådgivningen och Människorna till Akademin, som
+// sidan själv kopplar ihop dem: rådgivning gör språnget till Möjlighets-AI,
+// träningen bygger förmågan hos medarbetarna. note är raden under knapparna
+// och säger något om det knappen leder till.
+const CTAS = [
+  { href: '#ai-resan', text: 'Se er AI-resa ↓', note: 'Fem steg från första samtalet till egen AI-förmåga' },
+  { href: 'ai-skuld/', text: 'Räkna på din AI-skuld →', note: 'Räknas i din webbläsare · Inget skickas till oss' },
+  { href: '#radgivning', text: 'Ta språnget med rådgivning ↓', note: 'Tre nivåer · Första samtalet är alltid kostnadsfritt' },
+  { href: 'https://akademi.superintelligent.se/collections', text: 'Utforska AI-akademin →', note: 'E-learning från 2 990 kr · Agent Masterclass på en halvdag' },
+  { href: 'intervju/', text: 'Prova AI-intervjun →', note: 'Cirka 15 minuter · I mobilen eller datorn · Ingen app' },
+  { href: 'om-oss/sa-tanker-vi/', text: 'Läs hur vi tänker →', note: 'Så mäter vi att ni klarar er utan oss' },
+];
+
 const root = document.getElementById('headline');
 const eb = root?.querySelector('[data-part="eb"] [data-text]');
 const h1 = root?.querySelector('[data-part="h1"]');
 const sub = root?.querySelector('[data-part="sub"]');
 const buttons = [...document.querySelectorAll('.picker .pick')];
 const art = document.querySelector('#hero-art img');
+const cta = document.getElementById('hero-cta');
+const ctaLabel = cta?.querySelector('.cta-label');
+const ctaNote = document.getElementById('hero-note');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 let typing = 0;
@@ -129,6 +146,36 @@ function typeOut(text, run) {
   });
 }
 
+// Knappen byter färg mjukt i CSS. Texten glider ut uppåt och den nya in
+// underifrån, så att man ser att knappen hör till valet.
+let ctaRun = 0;
+
+async function setCta(index) {
+  if (!cta || !ctaLabel) return;
+  const { href, text, note } = CTAS[index];
+  const run = ++ctaRun;
+  const parts = [[ctaLabel, text], [ctaNote, note]].filter(([el]) => el);
+  cta.dataset.variant = String(index);
+  cta.href = href;
+  if (reducedMotion.matches) {
+    for (const [el, value] of parts) el.textContent = value;
+    return;
+  }
+  await Promise.all(parts.map(([el]) => el.animate(
+    [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(-10px)' }],
+    { duration: 160, easing: 'ease-in', fill: 'forwards' },
+  ).finished.catch(() => {})));
+  if (run !== ctaRun) return;
+  for (const [el, value] of parts) {
+    el.textContent = value;
+    el.getAnimations().forEach((a) => a.cancel());
+    el.animate(
+      [{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }],
+      { duration: 220, easing: 'ease-out' },
+    );
+  }
+}
+
 // Bilden tonar över till nästa. Den nya laddas först, så att den inte
 // blinkar fram halvritad.
 let artRun = 0;
@@ -173,6 +220,7 @@ async function show(index, button) {
 
   eb.textContent = v.eb;
   setArt(index);
+  setCta(index);
   sub.classList.add('fade');
   sub.innerHTML = v.sub;
   holdHeight(v.h1);
@@ -180,14 +228,14 @@ async function show(index, button) {
   if (run === typing) sub.classList.remove('fade');
 }
 
-// Rubrikerna byts av sig själva var åttonde sekund, så att startsidan
+// Rubrikerna byts av sig själva var femtonde sekund, så att man hinner läsa, så att startsidan
 // också fungerar som öppningsbild i presentationer.
 //
 // Bytet stannar för gott när besökaren själv klickar ett block, och kan
 // pausas med knappen bredvid förloppsstapeln. Det hoppas över när toppen
 // av sidan inte syns eller fliken ligger i bakgrunden, och körs inte alls
 // för den som bett om mindre rörelse.
-const ROTATE_SECONDS = 8;
+const ROTATE_SECONDS = 15;
 const autoBox = document.getElementById('picker-auto');
 const autoBtn = autoBox?.querySelector('.picker-auto-btn');
 const autoFill = autoBox?.querySelector('.picker-auto-fill');

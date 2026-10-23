@@ -128,8 +128,8 @@
   transition: transform 0.2s linear;
 }
 
-/* Varje rubrik har sin färg ur spelets palett, och förloppsstapeln tar
-   färgen från rubriken som kommer härnäst. */
+/* Varje rubrik har sin färg ur spelets palett. Blocket och den stora
+   knappen bär den, och förloppsstapeln tar färgen från nästa rubrik. */
 [data-variant='0'] {
   --c: var(--gold);
   --c-edge: var(--gold-dark);
@@ -177,6 +177,26 @@
   transform: translateY(-4px);
   outline: 3px solid var(--ink);
   outline-offset: 3px;
+}
+
+/* Stora knappen tar färgen från rubriken som visas. */
+.btn-cta {
+  transition: transform 80ms, box-shadow 80ms, background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease;
+}
+
+.btn-cta[data-variant],
+.btn-cta[data-variant]:hover {
+  background: var(--c);
+  border-color: var(--c-edge);
+  color: var(--c-ink);
+}
+
+.btn-cta[data-variant]:hover {
+  filter: brightness(1.08);
+}
+
+.cta-label {
+  display: inline-block;
 }
 
 /* Bilden till höger byts med rubriken. Den är ritad i 8 px-rutor och ska
@@ -252,7 +272,8 @@
     animation: none;
   }
 
-  .headline .sub {
+  .headline .sub,
+  .btn-cta {
     transition: none;
   }
 }
