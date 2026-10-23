@@ -1,0 +1,144 @@
+// Countdown Timer
+// ======================================
+
+.countdown {
+  position: relative;
+
+  .section__headings {
+    @include screen-md-max {
+      margin: 0 0 $gutter-width;
+      text-align: center;
+    }
+    @include make-col(12);
+
+    margin: 0 0 $gutter-width;
+    text-align: center;
+  }
+
+  .section__heading {
+    margin: 0 0 $gutter-width / 4;
+  }
+
+  .section__button-group {
+    display: block;
+    width: 100%;
+    padding-top: $gutter-width;
+    text-align: center;
+  }
+
+  .section__content {
+    @include make-col(12);
+
+    text-align: center;
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-left: 0;
+  }
+}
+
+.countdown__container {
+  @include make-container;
+}
+
+.countdown__wrapper {
+  @include make-row(true);
+
+  padding-bottom: $gutter-width;
+}
+
+.countdown-clock {
+  @include screen-md-min {
+    width: auto;
+  }
+
+  display: inline-block;
+  width: 100%;
+  margin: 0;
+  font-size: 2rem;
+  list-style: none;
+  text-align: center;
+
+  li {
+    @include screen-sm-max {
+
+      &:nth-child(1),
+      &:nth-child(2) {
+        border-bottom: 1px solid $body__background-color;
+      }
+
+      &:nth-child(2) {
+
+        .countdown__chrono {
+          border-top-right-radius: 5px;
+          border-bottom-right-radius: 0;
+        }
+      }
+
+      &:nth-child(3) {
+
+        .countdown__chrono {
+          border-bottom-left-radius: 5px;
+        }
+      }
+    }
+    @include screen-md-min {
+      min-width: 120px;
+    }
+
+    display: inline-block;
+    min-width: 50%;
+    border-right: 1px solid transparent;
+
+    &:nth-child(1) {
+
+      .countdown__chrono {
+        @include screen-md-min {
+          border-bottom-left-radius: 5px;
+        }
+
+        border-top-left-radius: 5px;
+      }
+    }
+
+    &:nth-child(4) {
+      border-right: 0;
+
+      .countdown__chrono {
+        @include screen-md-min {
+          border-top-right-radius: 5px;
+        }
+
+        border-bottom-right-radius: 5px;
+      }
+    }
+  }
+}
+
+.countdown__chrono {
+  padding: $gutter-width / 2;
+  background: $interface__background-color;
+  line-height: 1;
+  text-align: center;
+  word-break: normal;
+
+  .countdown__count {
+    font-family: $secondary-heading__font-family;
+    font-weight: $secondary-heading__font-weight;
+  }
+
+  strong {
+    display: block;
+    padding: 5px 0 0;
+    font-family: $body__font-family;
+    font-size: $body__font-size * 0.875;
+    font-weight: 600;
+  }
+
+  span {
+    opacity: .6;
+  }
+}

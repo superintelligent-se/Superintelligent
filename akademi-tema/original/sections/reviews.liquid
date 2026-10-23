@@ -1,0 +1,153 @@
+{% assign sectionLabel = section.settings.heading %}
+<section
+  aria-label="{{ sectionLabel | escape }}"
+  class="reviews section-height__medium {% include 'section_utility_heading_alignment' %}"
+  data-preview-item="reviews"
+>
+  <div class="reviews__container">
+    {% include 'section_headings' %}
+    <div class="section__content">
+      {% if section.blocks != empty %}
+        <div class="reviews__list section__body" role="list">
+          {% for block in section.blocks %}
+            {% assign review = block.settings.review %}
+            <div class="reviews__list-item" data-review-id="{{ forloop.index }}" role="listitem">
+              <header>
+                <span class="review__stars">
+                  {% for index in (1..review.rating) %}
+                    {% include 'star' %}
+                  {% endfor %}
+                </span>
+                <span class="sr-only">
+                  {{ review.rating }} {{ 'liquid.partials.course_review.star_rating' | translate }}
+                </span>
+                <h3 class="review__title section__heading--secondary">
+                  {{ review.title | truncate: 60 }}
+                </h3>
+                <h4 class="review__author">{{ review.user.full_name }}</h4>
+              </header>
+              <div class="review__body">
+                <div class="review__body--partial">
+                  <p>{{ review.review_text | truncate: 160 }}</p>
+                  {% if review.review_text.size >= 160 %}
+                    <a class="review__show-more" href="#" aria-label="{{ 'liquid.views.curriculum_course_landing_page.read_more_text' | translate }}: {{ review.title }}">
+                      {{ 'liquid.views.curriculum_course_landing_page.read_more_text' | translate }}
+                    </a>
+                  {% endif %}
+                </div>
+                <div class="review__body--complete">
+                  <p>{{ review.review_text }}</p>
+                  <a class="review__show-less" href="#" aria-label="{{ 'liquid.views.curriculum_course_landing_page.read_less_text' | translate }}: {{ review.title }}">
+                    {{ 'liquid.views.curriculum_course_landing_page.read_less_text' | translate }}
+                  </a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% style %}
+.reviews {
+  {% include 'section_style_heading_alignment' %}
+
+  {% if section.settings.section_padding_top %}
+    .reviews__container {
+      padding-top: 0;
+    }
+  {% endif %}
+
+  {% if section.settings.section_padding_bottom %}
+    .reviews__container {
+      padding-bottom: 0;
+    }
+  {% endif %}
+}
+{% endstyle %}
+
+{% schema %}
+{
+  "label":"Social proof: reviews",
+  "description":"",
+  "previewImageUrl":"https://cdn.thinkific.com/57/20210222/2f23d7b23a3538cb1fe9e14b3d9e111e.png",
+  "previewDescription":"Show off your happy customers",
+  "settings":[
+    {
+      "label":"Headings",
+      "settings":[
+        {
+          "type":"text",
+          "id":"heading",
+          "label":"Heading",
+          "default":"Social proof: reviews"
+        },
+        {
+          "type":"text",
+          "id":"subheading",
+          "label":"Subheading",
+          "default":""
+        },
+        {
+          "type":"radio",
+          "id":"heading_alignment",
+          "label":"Alignment",
+          "description":"",
+          "default":"center",
+          "options":[
+            {
+              "value":"left",
+              "label":"Left"
+            },
+            {
+              "value":"center",
+              "label":"Center"
+            },
+            {
+              "value":"right",
+              "label":"Right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label":"Layout",
+      "settings":[
+        {
+          "type":"checkbox",
+          "id":"section_padding_top",
+          "label":"Remove top section padding",
+          "default":false
+        },
+        {
+          "type":"checkbox",
+          "id":"section_padding_bottom",
+          "label":"Remove bottom section padding",
+          "default":false
+        }
+      ]
+    }
+  ],
+  "blocks":{
+    "label":"Add course review",
+    "limit":12,
+    "types":[
+      {
+        "type":"reviews",
+        "label":"Course review",
+        "settings":[
+          {
+            "type":"review_picker",
+            "id":"review",
+            "label":"Review"
+          }
+        ]
+      }
+    ],
+    "defaults":[]
+  }
+}
+{% endschema %}

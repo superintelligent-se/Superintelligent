@@ -1,0 +1,92 @@
+// Typography
+// ======================================
+
+body {
+  @include screen-md-min {
+    font-size: $body__font-size;
+  }
+  font-family: $body__font-family;
+  font-size: $body__font-size--mobile;
+  font-weight: $body__font-weight;
+  line-height: $body__line-height;
+  // Legibility enhancement
+  text-rendering: optimizeLegibility;
+  text-shadow: 0 0 1px transparent;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  word-break: break-word;
+}
+
+form,
+input,
+textarea,
+label,
+fieldset,
+legend,
+select,
+optgroup,
+option,
+datalist,
+keygen,
+output {
+  font-family: $body__font-family;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0 0 $gutter-width / 2;
+  font-family: $heading__font-family;
+  font-weight: $heading__font-weight;
+  line-height: $heading__line-height;
+}
+
+.page__heading {
+  @include page-heading;
+}
+
+.section__headings {
+  display: flex;
+  flex-direction: column;
+  @include screen-md-min {
+    margin: 0 0 $gutter-width;
+  }
+
+  margin: 0 0 $gutter-width / 2;
+
+  &--reverse {
+
+    .section__heading {
+      order: 2;
+    }
+
+    .section__subheading {
+      order: 1;
+    }
+  }
+}
+
+.section__heading {
+  @include heading;
+
+  color: $heading__color;
+
+  &--secondary {
+    @include screen-md-min {
+      font-size: $secondary-heading__font-size;
+    }
+
+    font-family: $secondary-heading__font-family;
+    font-size: $secondary-heading__font-size--mobile;
+    font-weight: $secondary-heading__font-weight;
+  }
+}
+
+.section__subheading {
+  @include subheading;
+
+  color: $heading__color;
+}

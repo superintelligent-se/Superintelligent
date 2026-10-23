@@ -1,0 +1,21 @@
+<script>
+  var honeypotField = document.querySelector('.honeypot-field #confirm-email');
+  function {{ submitName }}(token) {
+    if (honeypotField && honeypotField.value === '') {
+      document.querySelector('.checkout__form--{{ formSelector }} form').submit();
+    } else {
+      // Most likely a spam bot if the honeypot field has a value, don't submit form
+      return false;
+    }
+  }
+</script>
+<div class="form__button-group">
+  <button
+    type="submit"
+    class="button button-primary g-recaptcha"
+    data-sitekey="{{ site.invisible_recaptcha_key }}"
+    data-callback="{{ submitName }}"
+  >
+    {{ fields.submit.label }}
+  </button>
+</div>

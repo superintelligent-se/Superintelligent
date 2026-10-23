@@ -1,0 +1,89 @@
+{% comment %}
+  This is the featured style card for your product.
+{% endcomment %}
+
+{% if product %}
+  <div class="card card--{{ product.product_type_name | downcase }} {% if product.status %}card--{{ product.status }}{% endif %} card--featured">
+    <a tabindex="-1" class="card__img-container" href="{{ product.links.landing_page_url }}">
+      {% if product.is_presell %}
+        <div class="card__badge card__badge--presell">
+          {{ 'liquid.partials.course_card.presell_banner_text' | translate }}
+        </div>
+      {% endif %}
+      <img
+        src="{{ product.card_image_url }}"
+        alt="{{ product.name }}"
+        class="card__img"
+        loading="lazy"
+      />
+    </a>
+    <div class="card__body-container">
+      <a aria-labelledby="featured-card--title-{{ product.id }}" class="card__body" href="{{ product.links.landing_page_url }}">
+        {% if section.settings.show_category_name %}
+          <p class="card__category">
+            {% for collection in product.collections %}
+              {% if forloop.last == false %}
+                {{ collection.name | append: ", " }}
+              {% else %}
+                {{ collection.name }}
+              {% endif %}
+            {% endfor %}
+          </p>
+        {% endif %}
+        <h3 class="card__name" id="featured-card--title-{{ product.id }}">
+          {{ product.name }}
+        </h3>
+        <span class="card__product-info">
+          {% if product.product_type_icon %}
+            <i class="toga-icon {{ product.product_type_icon }}" aria-hidden="true"></i>
+          {% endif %}
+          {{ product.product_type_name }}
+          {% if section.settings.show_product_metadata %}
+            &bull; {{ product.product_metadata }}
+          {% endif %}
+        </span>
+        {% if product.reviews_enabled and product.reviews.approved_count > 0 %}
+          <div class="card__reviews">
+            {% include 'star' %}
+            <span>
+              <span class="card__reviews-average">
+                {{ product.reviews.average_rating }}
+              </span>
+              <span class="sr-only">{{ 'liquid.partials.course_review.average_rating' | translate }}</span>
+              ({{ 'liquid.partials.course_review.total_reviews' | translate: count: product.reviews.approved_count }})
+            </span>
+          </div>
+        {% endif %}
+        {% if product.description != blank %}
+          <p class="card__description">
+            {{ product.description }}
+          </p>
+        {% endif %}
+        {% if section.settings.show_pricing and product.is_public %}
+          <div class="card__price-container">
+            <p class="card__price">
+              {% if product.is_free %}
+                <span class="card__badge card__badge--free">
+                  {{ product.display_price }}
+                </span>
+              {% else %}
+                <span class="card__badge card__badge--price">
+                  {{ product.display_price | trim_cents }}
+                </span>
+              {% endif %}
+            </p>
+          </div>
+        {% endif %}
+      </a>
+      <a aria-describedby="featured-card--title-{{ product.id }}" href="{{ product.links.buy }}" class="button button-primary card__button" data-qa="purchase__btn">
+        {% if product.is_presell %}
+          {{ 'liquid.partials.course_landing_page_action_buttons.link_preorder_now' | translate }}
+        {% elsif product.is_free %}
+          {{ 'liquid.partials.course_landing_page_action_buttons.link_enroll_free' | translate }}
+        {% else %}
+          {{ 'liquid.partials.course_landing_page_action_buttons.buy_button_multiple_prices' | translate }}
+        {% endif %}
+      </a>
+    </div>
+  </div>
+{% endif %}

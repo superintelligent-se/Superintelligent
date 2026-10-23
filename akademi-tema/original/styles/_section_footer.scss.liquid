@@ -1,0 +1,144 @@
+// Footer
+// ======================================
+
+.footer {
+  margin-top: auto;
+  padding-top: $gutter-width;
+  padding-bottom: $gutter-width / 1.33333;
+  background-color: $footer__background-color;
+  color: $footer__text-color;
+
+  // TODO: BEM selectors for page_identifier
+  .home-landing-page &,
+  .course-landing-page &,
+  .bundle-landing-page & {
+    border-top: 0;
+  }
+
+  .section__content {
+    @include make-row(true);
+  }
+
+  .section__divide {
+    background-color: transparentize($footer__text-color, 0.7);
+  }
+}
+
+.footer__container {
+  @include make-container;
+}
+
+.footer__nav-site,
+.footer__nav-social {
+  text-align: center;
+
+  a {
+    display: inline-block;
+    color: $footer__link-color;
+    font-size: $body__font-size * 0.875;
+    font-weight: 600;
+    text-decoration: none;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+
+    &:active,
+    &:hover,
+    &:focus {
+      color: $footer__link-color--active;
+      text-decoration: underline;
+    }
+  }
+
+  li {
+    display: inline-block;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}
+
+.footer__nav-site {
+  @include screen-lg-min {
+    @include make-col(10);
+    margin-bottom: 0;
+    text-align: left;
+  }
+  @include make-col(12);
+  margin-bottom: $gutter-width;
+
+  .footer__nav-item {
+    @include screen-md-min {
+      margin-right: $gutter-width;
+      margin-left: 0;
+    }
+    margin: 0 $gutter-width / 2;
+  }
+}
+
+.footer__nav-social {
+  @include screen-lg-min {
+    @include make-col(2);
+    text-align: right;
+  }
+  @include make-col(12);
+
+  a {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+
+  .footer__nav-item {
+    @include screen-lg-min {
+      margin-right: $gutter-width / 2.5;
+    }
+    margin: 0 $gutter-width / 5;
+  }
+}
+
+.footer__copyright,
+.footer__white-label {
+  @include screen-md-min {
+    @include make-col(6);
+  }
+  @include make-col(12);
+
+  color: $footer__text-color;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  text-align: center;
+}
+
+.footer__copyright {
+  @include screen-md-min {
+    text-align: left;
+  }
+}
+
+.footer__white-label {
+  a {
+    @include screen-md-min {
+      margin-left: auto;
+      margin-right: 0;
+    }
+
+    display: flex;
+    align-items: center;
+    width: max-content;
+    margin-left: auto;
+    margin-right: auto;
+    text-decoration: none;
+    color: $footer__link-color;
+    gap: 8px;
+
+    svg {
+      width: 0.5rem;
+    }
+
+    &:active,
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+    }
+  }
+}

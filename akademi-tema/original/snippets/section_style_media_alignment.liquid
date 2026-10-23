@@ -1,0 +1,25 @@
+{% if section.settings.media_alignment == "left" %}
+  @include screen-lg-min {
+    .banner__wrapper {
+      padding-right: 0;
+      padding-left: $gutter-width * 1.5;
+    }
+  }
+{% endif %}
+
+{% if section.settings.media_alignment == "right" %}
+  .banner__container {
+    display: flex;
+  }
+  @include screen-md-max {
+    .banner__container {
+      flex-wrap: wrap-reverse;
+    }
+  }
+  @include screen-lg-min {
+    .banner__wrapper {
+      padding-right: $gutter-width * 1.5;
+      padding-left: 0;
+    }
+  }
+{% endif %}

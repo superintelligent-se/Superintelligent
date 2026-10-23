@@ -1,0 +1,77 @@
+<button class="header__mobile-button hidden-print" aria-expanded="false">
+  <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256" aria-hidden="true" class="c13-15-2_1g1okq60" focusable="false" style="vertical-align: middle; min-height: 24px; min-width: 24px; max-height: 24px; max-width: 24px;"><path d="M205.66,194.34a8,8,0,0,1-11.32,11.32L128,139.31,61.66,205.66a8,8,0,0,1-11.32-11.32L116.69,128,50.34,61.66A8,8,0,0,1,61.66,50.34L128,116.69l66.34-66.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path></svg>
+  <svg class="menu-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 256 256" aria-hidden="true" class="c13-15-2_1g1okq60" focusable="false" style="vertical-align: middle; min-height: 24px; min-width: 24px; max-height: 24px; max-width: 24px;"><path d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"></path></svg>
+  <span class="header__mobile-button__label {% if section.settings.show_menu_label == false %}sr-only{% endif %}">
+    {{ 'liquid.partials.header_with_links.button_menu' | translate }}
+  </span>
+</button>
+<nav aria-label="Main navigation" class="header__nav hidden-print
+{% if section.settings.menu_position == 'left' %}
+  header__nav--left
+{% endif %}
+{% if site.current_user.signed_in %}
+  user-signed-in
+{% endif %}
+{% if page.product_is_course or page.product_is_bundle or page.product_is_community %}
+  header__nav--has-cta
+{% endif %}
+">
+  <ul>
+    {% include 'header_links' %}
+    {% include 'header_default_links' %}
+    {% if site.current_user.signed_in %}
+      <li class="dropdown header__nav-item">
+        <span class="sr-only" id="header-user-menu-toggle">{{ 'liquid.accessibility.toggle_menu' | translate }}</span>
+        <button
+          class="dropdown__toggle-button"
+          data-toggle="dropdown"
+          aria-expanded="false"
+          aria-describedby="header-user-menu-toggle"
+        >
+          {{ site.current_user.first_name_last_initial }}
+          <img
+            src="{{ site.current_user.avatar }}"
+            srcset="{{ site.current_user.avatar }}?width=32&dpr=1 1x, {{ site.current_user.avatar }}?width=32&dpr=2 2x, {{ site.current_user.avatar }}?width=32&dpr=3 3x"
+            aria-hidden="true"
+            class="header__user-avatar"
+            loading="lazy"
+            alt=""
+          >
+          <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256"><path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,53.66,90.34L128,164.69l74.34-74.35a8,8,0,0,1,11.32,11.32Z"/></svg>
+        </button>
+        {% include 'header_user_menu' %}
+      </li>
+    {% else %}
+      <li class="header__nav-item header__nav-sign-in">
+        <a href='{{ site.sign_in_url }}'>
+          {{ 'liquid.partials.header_with_links.link_sign_in' | translate }}
+        </a>
+      </li>
+    {% endif %}
+    {% if page.product_is_course %}
+      {% assign course = page.course %}
+      {% unless course.is_draft %}
+        {% if course.is_public %}
+        {% if section.settings.hide_default_buttons == false %}
+        {% if course.user_can_purchase %}
+          <li class="header__nav-item header__nav-cta">
+            <a href="{{ course.links.buy }}" class="button button-secondary">{{ section.settings.button_text }}</a>
+          </li>
+        {% endif %}
+        {% endif %}
+        {% endif %}
+      {% endunless %}
+    {% elsif page.product_is_bundle %}
+      {% assign bundle = page.bundle %}
+      {% unless bundle.previously_purchased %}
+        {% unless bundle.is_free %}
+          {% if section.settings.hide_default_buttons == false %}
+            <li class="header__nav-item header__nav-cta">
+              <a href="{{ bundle.links.buy }}" class="button button-secondary">{{ section.settings.button_text }}</a>
+            </li>
+          {% endif %}
+        {% endunless %}
+      {% endunless %}
+    {% endif %}
+  </ul>
+</nav>

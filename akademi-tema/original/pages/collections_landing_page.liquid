@@ -1,0 +1,27 @@
+{% comment %}
+  This is the product catalog page that shows a list of all your products, and
+  lets you search and filter by category.
+{% endcomment %}
+
+<main class="collections" id="main-content">
+  <div class="collections__container">
+    {% section 'collections' %}
+  </div>
+  {{ content_for_page }}
+</main>
+
+{% schema %}
+{
+  "sections":{
+    "options":[
+      "course_cards",
+      "call_to_action",
+      "countdown",
+      "frequently_asked_questions",
+      "rich_text",
+      "video"
+    ],
+    "defaults":[]
+  }
+}
+{% endschema %}

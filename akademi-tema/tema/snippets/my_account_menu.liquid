@@ -1,0 +1,78 @@
+{% comment %}
+  This is the menu that appears on the My Account page.
+{% endcomment %}
+
+<nav class="my-account__menu hidden-print" aria-label="{{ 'liquid.partials.header_with_links.link_my_account' | translate }}">
+  <ul>
+    <li>
+      <a
+        {% if page.page_identifier == 'my_account_page' %}
+          aria-current="page"
+          class="active"
+        {% endif %}
+        href="{{ site.account_edit_url }}"
+      >
+        {{ 'liquid.partials.my_account_menu.custom_profile' | translate }}
+      </a>
+    </li>
+    <li>
+      <a
+        {% if page.page_identifier == 'my_account_password_page' %}
+          aria-current="page"
+          class="active"
+        {% endif %}
+        href="{{ site.account_edit_password_url }}"
+      >
+        {{ 'liquid.partials.my_account_menu.custom_password' | translate }}
+      </a>
+    </li>
+    {% if site.certificates_enabled %}
+      <li>
+        <a
+          {% if page.page_identifier == 'my_account_certificates_page' %}
+            aria-current="page"
+            class="active"
+          {% endif %}
+          href="{{ site.account_certificates_url }}"
+        >
+          {{ 'liquid.partials.my_account_menu.custom_certificates' | translate }}
+        </a>
+      </li>
+    {% endif %}
+    {% if site.current_user.can_change_notifications %}
+      <li>
+        <a
+          {% if page.page_identifier == 'my_account_notifications_page' %}
+            aria-current="page"
+            class="active"
+          {% endif %}
+          href="{{ site.account_notifications_edit_url }}"
+        >
+          {{ 'liquid.partials.my_account_menu.custom_notifications' | translate }}
+        </a>
+      </li>
+    {% endif %}
+    <li>
+      <a
+        {% if page.page_identifier == 'my_account_billings_page' %}
+          aria-current="page"
+          class="active"
+        {% endif %}
+        href="{{ site.account_billings_url }}"
+      >
+        {{ 'liquid.partials.my_account_menu.custom_billing' | translate }}
+      </a>
+    </li>
+    <li>
+      <a
+        {% if page.page_identifier == 'my_account_order_list_page' or page.page_identifier == 'my_account_order_page' %}
+          aria-current="page"
+          class="active"
+        {% endif %}
+        href="{{ site.account_orders_url }}"
+      >
+        {{ 'liquid.partials.my_account_menu.custom_order_history' | translate }}
+      </a>
+    </li>
+  </ul>
+</nav>

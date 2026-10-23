@@ -1,0 +1,108 @@
+{% if page.has_after_purchase_flow and page.after_purchase_flow.show_upsell_products %}
+<section class="checkout__thank-you-upsells" {% if page.after_purchase_flow.upsell_products_heading != blank %} aria-labelledby="checkout-thank-you-upsells-heading"{% endif %}>
+  <div class="checkout__thank-you-upsells__container">
+    {% if page.after_purchase_flow.upsell_products_heading != blank %}
+      <header class="section__headings checkout__thank-you-upsells__headings" id="checkout-thank-you-upsells-heading">
+        <h2 class="section__heading checkout__thank-you-upsells__heading">
+          {{ page.after_purchase_flow.upsell_products_heading }}
+        </h2>
+      </header>
+    {% endif %}
+
+    <div class="section__content">
+      <ul class="checkout__thank-you-upsells__list section__body">
+      {% for product in page.after_purchase_flow.upsell_products %}
+        <li class="checkout__thank-you-upsells__list-item">
+          {% include 'featured_card' product: product.productable %}
+        </li>
+      {% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
+{% endif%}
+
+{% style %}
+.checkout__thank-you-upsells {
+  {% include 'section_style_heading_alignment' %}
+
+  {% if section.settings.section_padding_top %}
+    .checkout__thank-you-upsells__container {
+      padding-top: 0;
+    }
+  {% endif %}
+
+  {% if section.settings.section_padding_bottom %}
+    .checkout__thank-you-upsells__container {
+      padding-bottom: 0;
+    }
+  {% endif %}
+}
+{% endstyle %}
+
+{% schema %}
+{
+  "label": "Upsells [smart section]",
+  "description": "This smart section automatically displays upsells configured in a product's after purchase settings. <a href='https://support.thinkific.com/hc/en-us/articles/360030722993-After-Purchase-Flow' target='_blank'>Learn more</a>.",
+  "previewImageUrl": "https://cdn.thinkific.com/57/20210222/3a6fd6b4a46fe2ac61fce74dfbf7cac7.png",
+  "previewDescription": "Offer additional products to your visitors",
+  "settings": [
+    {
+      "type":"checkbox",
+      "id":"show_pricing",
+      "label":"Show pricing",
+      "default":true
+    },
+    {
+      "type":"checkbox",
+      "id":"show_category_name",
+      "label":"Show category name",
+      "default":false
+    },
+    {
+      "type":"checkbox",
+      "id":"show_product_metadata",
+      "label":"Show product metadata",
+      "default":false
+    },
+    {
+      "label":"Layout",
+      "settings":[
+        {
+          "type":"checkbox",
+          "id":"section_padding_top",
+          "label":"Remove top section padding",
+          "default":false
+        },
+        {
+          "type":"checkbox",
+          "id":"section_padding_bottom",
+          "label":"Remove bottom section padding",
+          "default":false
+        },
+        {
+          "type":"radio",
+          "id":"heading_alignment",
+          "label":"Heading alignment",
+          "description":"",
+          "default":"left",
+          "options":[
+            {
+              "value":"left",
+              "label":"Left"
+            },
+            {
+              "value":"center",
+              "label":"Center"
+            },
+            {
+              "value":"right",
+              "label":"Right"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

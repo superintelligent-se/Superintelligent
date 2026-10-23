@@ -1,0 +1,52 @@
+<section aria-labelledby="checkout-thank-you-heading" class="checkout__thank-you">
+  {% if page.has_after_purchase_flow and page.after_purchase_flow.show_custom_messaging %}
+    <h1 class="checkout__heading section__heading" id="checkout-thank-you-heading">
+      {{ page.after_purchase_flow.custom_message_heading }}
+    </h1>
+  {% else %}
+    <h1 class="checkout__heading section__heading" id="checkout-thank-you-heading">
+      {{ 'liquid.partials.checkout_thankyou.header_thanks' | translate }} {{ site.current_user.first_name_last_initial }}
+    </h1>
+  {% endif %}
+  <p class="checkout__order-receipt">
+    {{ 'liquid.views.checkout_thankyou_page.text_info' | translate }}
+    <a href="{{ page.order_receipt_url }}">
+      {{ 'liquid.views.checkout_thankyou_page.link_order_receipt' | translate }}
+    </a>
+  </p>
+  {% if page.has_after_purchase_flow and page.after_purchase_flow.show_custom_messaging %}
+    <h2 class="checkout__subheading section__heading">
+      {{  page.after_purchase_flow.custom_message_subheading }}
+    </h2>
+  {% else %}
+    <h2 class="checkout__subheading section__heading">
+      {{ 'liquid.partials.checkout_thankyou.subheader_you_can_now_access_your_purchase' | translate }}
+    </h2>
+  {% endif %}
+
+  <div class="checkout__start-learning">
+    <ul class="checkout__bundle-list">
+      {% for product in page.products %}
+        <li class="checkout__bundle-list-item">
+          <div class="checkout__product-details">
+            <h3 class="section__heading--secondary" id="product-title-{{ product.id }}">{{ product.name }}</h3>
+            <a aria-describedby="product-title-{{ product.id }}" class="button button-primary" href="{{ product.button_link }}">{{ product.button_text }}</a>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+    {% if page.has_more_products %}
+      <div class="checkout__bundle-additional-courses">
+        {{ page.remaining_bundle_items_message }}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "label":"Default",
+  "description":"This is a default section — the foundation of your Thinkific site.  While this section is not editable, you can customize this page by adding new sections.",
+  "settings":[]
+}
+{% endschema %}

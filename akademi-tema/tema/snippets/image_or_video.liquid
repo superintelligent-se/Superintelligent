@@ -1,0 +1,20 @@
+{% if section.settings.video.frame != blank %}
+  <div class="section__video">
+    <div class="section__video__wrapper">
+      {{ section.settings.video.frame }}
+      {% if section.settings.video.popover != blank %}
+        <div class="section__video--trigger">
+          {{ section.settings.video.popover }}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% elsif section.settings.image != blank %}
+  <div
+    class="section__image {% include 'section_utility_height_preset' %}"
+    {% if section.settings.alt_text != blank %}
+      role="img"
+      aria-label="{{ section.settings.alt_text }}"
+    {% endif %}
+  />
+{% endif %}

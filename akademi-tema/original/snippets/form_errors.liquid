@@ -1,0 +1,13 @@
+{% comment %}
+  This is the wrapper for form errors
+{% endcomment %}
+
+<div id="notice" class="notice__form-error" aria-live="polite" role="alert">
+  <ul class="form-error__list">
+    {% for error in errors %}
+      <li class="form-error__list-item" data-qa="notification-error">
+        {{ error }}
+      </li>
+    {% endfor %}
+  </ul>
+</div>

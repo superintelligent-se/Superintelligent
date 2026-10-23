@@ -1,0 +1,58 @@
+// Lead Capture
+// ======================================
+
+.lead-capture {
+  @include screen-lg-min {
+    display: flex;
+    align-items: center;
+  }
+
+  .section__content {
+    @include screen-md-min {
+      @include make-col(8);
+    }
+    @include make-col(12);
+    margin: auto;
+  }
+
+  .form__group {
+    margin-top: $gutter-width / 2;
+  }
+
+  .button {
+    &:disabled,
+    &[aria-disabled="true"] {
+      border: 1px solid $gray-1;
+      background-color: $gray-1;
+      color: $gray-4;
+    }
+  }
+
+  .lead-capture__success {
+    pointer-events: none;
+
+    .form__group {
+      &:not(.form__button-group) {
+        opacity: 0.3;
+      }
+    }
+  }
+
+  .lead-capture__error-msg {
+    display: none;
+    padding: 0 1rem;
+    color: $alert--error;
+  }
+
+  .lead-capture__success-msg {
+    display: none;
+  }
+}
+
+.lead-capture__container {
+  @include make-container;
+}
+
+.lead-capture__wrapper {
+  @include make-row;
+}

@@ -1,0 +1,10 @@
+{% if page.product_is_course %}
+  {% assign product = page.course %}
+{% elsif page.product_is_bundle %}
+  {% assign product = page.bundle %}
+{% elsif page.product_is_community %}
+  {% assign product = page.community %}
+{% endif %}
+{% if product.additional_prices != empty %}
+  section--has-additional-prices
+{% endif %}

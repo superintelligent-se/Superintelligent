@@ -1,0 +1,65 @@
+{% comment %} two-column layout variant for an 8:4 column layout {% endcomment %}
+{% if section.settings.column_layout == "one-column" %}
+  [class*="__wrapper"] {
+    @include screen-xl-min {
+      flex-direction: column;
+    }
+    justify-content: center;
+    align-items: center;
+  }
+
+  .section__headings,
+  .section__content {
+    @include screen-md-min {
+      @include make-col(8, false);
+    }
+    @include make-col(12, false);
+  }
+
+  .section__button-group {
+    justify-content: center;
+  }
+{% endif %}
+
+{% if section.settings.column_layout == "two-column" %}
+  .section__headings {
+    @include screen-md-min {
+      @include make-col(8, false);
+    }
+    @include make-col(12, false);
+  }
+  .section__content {
+    @include screen-md-min {
+      @include make-col(4, false);
+    }
+    @include make-col(12, false);
+  }
+
+  .section__headings {
+    @include screen-lg-min {
+      margin: 0;
+      padding-right: $gutter-width * 2;
+    }
+  }
+{% endif %}
+
+{% if section.settings.column_layout == "one-column" and section.settings.heading_alignment == "left" %}
+  .section__body,
+  .section__button-group {
+    text-align: left;
+  }
+{% endif %}
+
+{% if section.settings.column_layout == "one-column" and section.settings.heading_alignment == "center" %}
+  .section__body,
+  .section__button-group {
+    text-align: center;
+  }
+{% endif %}
+
+{% if section.settings.column_layout == "one-column" and section.settings.heading_alignment == "right" %}
+  .section__body,
+  .section__button-group {
+    text-align: right;
+  }
+{% endif %}

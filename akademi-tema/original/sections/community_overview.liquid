@@ -1,0 +1,202 @@
+{% assign community = page.community %}
+
+<div
+  class="community-overview section-height__medium
+  {% include 'section_utility_heading_alignment' %}"
+  data-preview-item="community-overview"
+>
+  <div class="community-overview__container">
+    {% include 'section_headings' %}
+
+    <div class="community-overview__content">
+      {% if section.settings.show_community_default_description %}
+        <div class="community-overview__description">
+          {{ community.description }}
+        </div>
+      {% else %}
+        <div class="community-overview__description">
+          {{ section.settings.custom_community_description }}
+        </div>
+      {% endif %}
+      <div class="community-overview__card section__body">
+        {% include 'community_card' with community %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% style %}
+.community-overview {
+  {% include 'section_style_background_color' %}
+  {% include 'section_style_heading_alignment' %}
+
+  {% if section.settings.section_padding_top %}
+    .community-overview__container {
+      padding-top: 0;
+    }
+  {% endif %}
+
+  {% if section.settings.section_padding_bottom %}
+    .community-overview__container {
+      padding-bottom: 0;
+    }
+  {% endif %}
+}
+{% endstyle %}
+
+{% schema %}
+{
+  "label":"Community overview [smart section]",
+  "description":"Manage the information you want to share about your community.",
+  "previewImageUrl":"https://cdn.thinkific.com/57/20210222/d0ff89cc20c6c27ac89d4e4f44baf12d.png",
+  "previewDescription":"Share more about your community",
+  "settings":[
+    {
+      "label":"Heading and description",
+      "settings":[
+        {
+          "type":"checkbox",
+          "id":"show_community_default_description",
+          "label":"Automatically add the community description",
+          "default":true
+        },
+        {
+          "type":"text",
+          "id":"heading",
+          "label":"Heading",
+          "default":"About the community"
+        },
+        {
+          "type":"radio",
+          "id":"heading_alignment",
+          "label":"Heading alignment",
+          "description":"",
+          "default":"left",
+          "options":[
+            {
+              "value":"left",
+              "label":"Left"
+            },
+            {
+              "value":"center",
+              "label":"Center"
+            },
+            {
+              "value":"right",
+              "label":"Right"
+            }
+          ]
+        },
+        {
+          "type":"richtext",
+          "id":"custom_community_description",
+          "label":"Description",
+          "default":"Highlight the value of joining your community. Provide an overview of what members can expect and any opportunities exclusively available in your community."
+        }
+      ]
+    },
+    {
+      "label":"Community card",
+      "settings":[
+        {
+          "type":"checkbox",
+          "id":"show_community_default_name",
+          "label":"Automatically add the community name",
+          "default":true
+        },
+        {
+          "type":"text",
+          "id":"community_card_heading",
+          "label":"Heading",
+          "default":"Community at a glance"
+        },
+        {
+          "type":"checkbox",
+          "id":"hide_member_count",
+          "label":"Hide the member count of the community",
+          "default":false
+        },
+        {
+          "type":"checkbox",
+          "id":"hide_post_count",
+          "label":"Hide the post count of the community",
+          "default":false
+        },
+        {
+          "type":"checkbox",
+          "id":"hide_price",
+          "label":"Hide the price to join the community",
+          "default":false
+        },
+        {
+          "type":"icon",
+          "id":"community_detail_icon_1",
+          "label":"Icon",
+          "default":""
+        },
+        {
+          "type":"text",
+          "id":"community_detail_text_1",
+          "label":"Text field"
+        },
+        {
+          "type":"icon",
+          "id":"community_detail_icon_2",
+          "label":"Icon",
+          "default":""
+        },
+        {
+          "type":"text",
+          "id":"community_detail_text_2",
+          "label":"Text field"
+        },
+        {
+          "type":"icon",
+          "id":"community_detail_icon_3",
+          "label":"Icon",
+          "default":""
+        },
+        {
+          "type":"text",
+          "id":"community_detail_text_3",
+          "label":"Text field"
+        }
+      ]
+    },
+    {
+      "label":"Background & layout",
+      "settings":[
+        {
+          "type":"select",
+          "id":"background_color",
+          "label":"Color",
+          "description":"",
+          "default":"background_1",
+          "options":[
+            {
+              "value":"background_1",
+              "label":"Primary"
+            },
+            {
+              "value":"background_2",
+              "label":"Secondary"
+            }
+          ]
+        },
+        {
+          "type":"checkbox",
+          "id":"section_padding_top",
+          "label":"Remove top section padding",
+          "default":false
+        },
+        {
+          "type":"checkbox",
+          "id":"section_padding_bottom",
+          "label":"Remove bottom section padding",
+          "default":false
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

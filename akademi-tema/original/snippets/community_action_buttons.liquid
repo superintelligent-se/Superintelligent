@@ -1,0 +1,91 @@
+{% comment %}
+  These are the buttons that can appear on a community landing page
+  Free Trial, Buy, Join for Free, etc.
+{% endcomment %}
+
+{% assign community = page.community %}
+<div class="
+  product-action-buttons__purchase
+  {% if community.additional_prices != empty %}product-action-buttons--has-additional-prices{% endif %}
+">
+  {% if community.user_can_resume %}
+    <a
+      href="{{ community.url }}"
+      class="button{% if community.user_can_purchase %} button-secondary{% else %} button-primary{% endif %}"
+    >
+      {{ 'liquid.partials.community_landing_page_action_buttons.link_resume' | translate }}
+    </a>
+  {% endif %}
+
+  {% if community.is_public %}
+    {% if community.is_free and community.user_is_enrolled == false %}
+      {% if community.is_presell %}
+        <a href="{{ community.links.enroll_free }}" class="button button-primary">
+          {{ 'liquid.partials.course_landing_page_action_buttons.link_preorder_now' | translate }}
+        </a>
+      {% else %}
+        <a href="{{ community.links.enroll_free }}" class="button button-primary" data-qa="enroll-free__btn">
+          {{ 'liquid.partials.community_landing_page_action_buttons.link_enroll_free' | translate }}
+        </a>
+      {% endif %}
+    {% endif %}
+
+    {% if community.user_can_purchase %}
+      {% if community.additional_prices != empty %}
+        <div class="form__select-no-label">
+          <label for="{{ community.name | kebab_case }}" class="sr-only">
+            {{ 'liquid.accessibility.select_label_multiple_prices' | translate }}
+          </label>
+          <select
+            id="{{ community.name | kebab_case }}"
+            name="{{ community.display_price }}"
+            class="form__control product-action-buttons__additional-prices"
+          >
+            <option value="{{ community.links.buy }}" selected>
+              {{ community.display_price }}
+            </option>
+            {% for price in community.additional_prices %}
+              <option value="{{ price.links.add_to_cart }}">
+                {{ price.display_price }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+      {% endif %}
+
+      <a href="{{ community.links.buy }}" class="button button-primary button-purchase" data-qa="purchase__btn">
+        {% if community.is_presell %}
+          {{ 'liquid.partials.course_landing_page_action_buttons.link_preorder_now' | translate }}
+        {% else %}
+          {% if community.additional_prices != empty %}
+            {{ 'liquid.partials.course_landing_page_action_buttons.buy_button_multiple_prices' | translate }}
+          {% else %}
+            {{ community.buy_button_text }}
+          {% endif %}
+        {% endif %}
+      </a>
+    {% endif %}
+  {% else %}
+    {% if community.user_can_resume == false %}
+      <p class="product-action-button--private">
+        <i class="fa fa-lock" aria-hidden="true"></i>
+        <a aria-describedby="community-actions-new-window" href="mailto:{{ site.support_email }}" target="_blank">
+          {{ 'liquid.partials.community_landing_page_action_buttons.private_community_cta_text' | translate: site_support_email: site.support_email }}
+          <i class='fa fa-external-link' aria-hidden="true"></i>
+        </a>
+        <span class="sr-only" id="community-actions-new-window">{{ 'liquid.accessibility.new_window_warning' | translate }}</span>
+      </p>
+    {% endif %}
+  {% endif %}
+</div>
+
+<script>
+$(window).on('load', function() {
+  var $priceList = $('.product-action-buttons__additional-prices'),
+      $buttonPurchase = $('.product-action-buttons .button-purchase');
+  $buttonPurchase.attr('href', $priceList.val());
+  $priceList.on('change', function() {
+    $buttonPurchase.attr('href', $(this).val());
+  });
+});
+</script>

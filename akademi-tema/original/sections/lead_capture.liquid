@@ -1,0 +1,125 @@
+{% assign sectionLabel = section.settings.heading %}
+<section
+  aria-label="{{ sectionLabel | escape }}"
+  class="lead-capture section__content-alignment--left section-height__medium"
+  data-preview-item="lead_capture">
+  <div class="lead-capture__container">
+    <div class="lead-capture__wrapper">
+      <div class="section__content">
+        {% include 'section_headings' %}
+
+        {% form 'new_lead' remote: true %}
+          {% assign field = fields.email %}
+            <label for="{{ id }}-email" class="form__label">
+              {{field.label}}
+            </label>
+            <input id="{{ id }}-email" type="email" name="{{ field.name }}" value="{{ field.value }}" placeholder="{{ field.placeholder }}" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" {% if field.required %}required{% endif %} class="form__control" aria-describedby="{{id}}-error"/>
+            <p aria-live="polite" id="{{ id }}-error" class="form__error-msg hidden" role="alert">
+              {{ 'liquid.partials.form.please_enter_valid_email' | translate }}
+            </p>
+          {% unless section.settings.hide_checkbox %}
+            <div class="form__group">
+              <div>
+                <input id="{{ id }}-accept" class="form__group-checkbox" name="accept" type="checkbox" value="y" required aria-describedby="{{id}}-accept-error"/>
+                <label for="{{ id }}-accept" class="form__label--checkbox">{{ section.settings.checkbox_label }}</label>
+              </div>
+              <p aria-live="polite" id="{{ id }}-accept-error" class="form__error-msg hidden" role="alert">
+                {{ 'liquid.partials.form.please_check_this_box' | translate }}
+              </p>
+            </div>
+          {% endunless %}
+
+            <div class="form__group form__button-group">
+              <input id="{{ id }}-submit-lead" type="submit" value="{{ fields.submit.label }}" class="button button-primary" aria-label="{{ fields.submit.label }}" {% unless section.settings.hide_checkbox %} aria-disabled="true" {% endunless %}/>
+              <p class="lead-capture__success-msg sr-only">
+                {{ 'liquid.partials.lead_capture.success' | translate }}
+              </p>
+              <p aria-live="polite" class="lead-capture__error-msg" role="alert">
+                {{ 'liquid.partials.lead_capture.error' | translate }}
+              </p>
+            </div>
+
+          <script>
+            {% assign field = fields.page_url %}
+            $(function() {
+              $("#{{ id }} > input[name='{{ field.name }}']").val(window.location.href)
+            });
+            document.getElementById('{{ id }}').addEventListener('thinkific:success', function(event) {
+              $('#{{ id }}-submit-lead').val("{{ 'liquid.partials.lead_capture.success' | translate }}");
+              $('#{{ id }}').addClass('lead-capture__success')
+              $('#{{ id }} .lead-capture__error-msg').hide();
+              $('#{{ id }} .lead-capture__success-msg').show();
+              setTimeout(function(){
+                  $('#{{ id }}-submit-lead').val('{{ fields.submit.label }}');
+                  $('#{{ id }}').removeClass('lead-capture__success')
+                  $('#{{ id }}')[0].reset();
+                  $('#{{ id }}-submit-lead').attr('aria-disabled', 'true');
+              }, 6000);
+            })
+            document.getElementById('{{ id }}').addEventListener('thinkific:error', function(event) {
+              $('#{{ id }} .lead-capture__error-msg').show();
+              $('#{{ id }} .lead-capture__success-msg').hide();
+            })
+            $('#{{ id }}-accept').on('click', function() {
+              if ($('#{{ id }}-accept').is (':checked')) {
+                $('#{{ id }}-submit-lead').removeAttr('aria-disabled');
+              } else {
+                $('#{{ id }}-submit-lead').attr('aria-disabled', 'true');
+              }
+            });
+          </script>
+
+          {% include 'form_validation_script' %}
+
+        {% endform %}
+
+      </div>
+    </div>
+  </div>
+
+</section>
+
+{% schema %}
+{
+  "label":"Lead Capture",
+  "description":"",
+  "previewImageUrl":"https://cdn.thinkific.com/57/20210222/290f5e0132b680bee04a615fd45adb31.png",
+  "previewDescription":"Grow your email list (ideal for pre-launch)",
+  "settings":[
+    {
+      "label":"Headings",
+      "settings":[
+        {
+          "type":"text",
+          "id":"heading",
+          "label":"Heading",
+          "default":"Coming soon!"
+        },
+        {
+          "type":"text",
+          "id":"subheading",
+          "label":"Subheading",
+          "default":"Add your email to the mailing list to get the latest updates."
+        }
+      ]
+    },
+    {
+      "label":"Checkbox",
+      "settings":[
+        {
+          "type":"text",
+          "id":"checkbox_label",
+          "label":"Checkbox Text",
+          "default":"Yes please, save my details so you can send me educational content that is relevant and helpful (required)."
+        },
+        {
+          "type":"checkbox",
+          "id":"hide_checkbox",
+          "label":"Hide checkbox",
+          "default":false
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

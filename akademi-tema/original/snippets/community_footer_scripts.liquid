@@ -1,0 +1,17 @@
+{% comment %}
+  These are scripts that run in the footer of all community landing pages
+{% endcomment %}
+
+<script>
+$(document).ready(function() {
+  var buyButton = $('.button-purchase');
+
+  ThinkificAnalytics.track('Community Landing Page', { 'Community Name': '{{ page.community_name }}' });
+
+  buyButton.on('click', function(e){
+    ThinkificAnalytics.track('Buy Community Btn Clicked', { 'Community Name': '{{ page.community_name }}' });
+  });
+});
+</script>
+
+{{ page.landing_page_code }}

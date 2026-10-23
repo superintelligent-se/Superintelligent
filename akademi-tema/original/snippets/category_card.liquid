@@ -1,0 +1,23 @@
+{% comment %}
+  This is the card representation of your category.
+{% endcomment %}
+
+{% if product %}
+  <a aria-label="{{ product.name }}" class="card card--category" href="{{ product.url }}">
+    <div class="card__img-container">
+      <img
+        src="{{ product.card_image_url }}"
+        alt=""
+        class="card__img"
+        loading="lazy"
+      />
+    </div>
+    {% if section.settings.show_category_name or block.settings.show_category_name %}
+      <div class="card__body-container">
+        <h3 class="card__name">
+          {{ product.name }}
+        </h3>
+      </div>
+    {% endif %}
+  </a>
+{% endif %}

@@ -1,0 +1,62 @@
+{% comment %}
+  This is the card representation of a course in the curriculum section.
+{% endcomment %}
+
+<div class="course-curriculum-card">
+  <div class="course-curriculum-card__image">
+    <img src="{{ course.image.small }}" alt="" />
+  </div>
+  <div class="course-curriculum-card__details">
+    {% if section.settings.course_card_heading != blank %}
+      <h3 class="course-curriculum-card__details__title section__heading--secondary">
+        {{section.settings.course_card_heading}}
+      </h3>
+      <hr aria-hidden="true"/>
+    {% endif %}
+    <ul>
+      {% if section.settings.hide_course_price == false %}
+        <li class="course-curriculum-card__details-item">
+          <i aria-hidden="true" class="fa fa-tag"></i>
+          <span>{{ course.display_price }}</span>
+        </li>
+      {% endif %}
+      {% if section.settings.hide_number_of_lessons == false %}
+        <li class="course-curriculum-card__details-item">
+          <i aria-hidden="true" class="fa fa-file-text-o"></i>
+          <span>
+            {{ 'liquid.partials.course_curriculum_card.lessons' | translate: count: course.lesson_count }}
+          </span>
+        </li>
+      {% endif %}
+      {% if section.settings.hide_hours_of_video == false %}
+        <li class="course-curriculum-card__details-item">
+          <i aria-hidden="true" class="fa fa-play-circle-o"></i>
+          <span>
+            {% assign num_hours_of_video = course.total_video_content_time | plus: 0 %}
+            {{ 'liquid.partials.course_curriculum_card.hours_of_video_content' | translate: count: num_hours_of_video }}
+          </span>
+        </li>
+      {% endif %}
+      {% if section.settings.course_detail_text_1 and section.settings.course_detail_icon_1 %}
+        <li class="course-curriculum-card__details-item">
+          <i aria-hidden="true" class="fa {{ section.settings.course_detail_icon_1 }}"></i>
+          <span>{{ section.settings.course_detail_text_1 }}</span>
+        </li>
+      {% endif %}
+      {% if section.settings.course_detail_text_2 and section.settings.course_detail_icon_2 %}
+        <li class="course-curriculum-card__details-item">
+          <i aria-hidden="true" class="fa {{ section.settings.course_detail_icon_2 }}"></i>
+          <span>{{ section.settings.course_detail_text_2 }}</span>
+        </li>
+      {% endif %}
+      {% if section.settings.course_detail_text_3 and section.settings.course_detail_icon_3 %}
+        <li class="course-curriculum-card__details-item">
+          <i aria-hidden="true" class="fa {{ section.settings.course_detail_icon_3 }}"></i>
+          <span>
+            {{ section.settings.course_detail_text_3 }}
+          </span>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+</div>

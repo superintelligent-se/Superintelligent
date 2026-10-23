@@ -14,3 +14,7 @@ public/lead-mail.json
 
 # Intervjudata från röstagenten — personuppgifter, får aldrig committas
 rostagent/data/
+
+# Förhandsvisning av Akademins tema, renderas lokalt
+akademi-tema/forhandsvisning/
+akademi-tema/superintelligent-akademi.zip

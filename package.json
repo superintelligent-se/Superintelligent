@@ -10,7 +10,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "policies": "scripts/build-policies.sh",
-    "hero-art": "node scripts/build-hero-art.mjs"
+    "hero-art": "node scripts/build-hero-art.mjs",
+    "akademi-tema": "cd akademi-tema/tema && rm -f ../superintelligent-akademi.zip && zip -rqXD ../superintelligent-akademi.zip . -x '*.DS_Store'"
   },
   "dependencies": {
     "@fontsource/hanken-grotesk": "^5.3.0",

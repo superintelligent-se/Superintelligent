@@ -1,0 +1,185 @@
+{% assign sectionLabel = section.settings.heading %}
+<section
+  aria-label="{{ sectionLabel | escape }}"
+  class="cta-course section-height__large {% include 'section_utility_column_layout' %} {% include 'section_utility_heading_alignment' %}"
+  data-preview-item="cta-course"
+>
+  <div class="cta-course__container">
+    <div class="cta-course__wrapper">
+      {% include 'section_headings' %}
+      <div class="section__content">
+        {% if section.settings.button_text != empty %}
+          <div class="section__button-group">
+            {% assign product = page.course %}
+            {% if product.is_free %}
+              {% assign product_url = product.links.enroll_free %}
+            {% else %}
+              {% assign product_url = product.links.buy %}
+            {% endif %}
+            <a href="{{ product_url }}" class="button button-{{ section.settings.button_type }}">
+              {{ section.settings.button_text }}
+            </a>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% style %}
+
+.cta-course {
+  {% include 'section_style_cta_product' %}
+}
+
+{% endstyle %}
+
+{% schema %}
+{
+  "label":"Call to action (course)",
+  "description":"By default, the button is linked to your default price checkout.",
+  "previewImageUrl":"https://cdn.thinkific.com/57/20210222/52f32d825d404506e55b66f757053819.png",
+  "previewDescription":"Convert visitors into students",
+  "settings":[
+    {
+      "label":"Headings",
+      "settings":[
+        {
+          "type":"text",
+          "id":"heading",
+          "label":"Heading",
+          "default":"Börja träna i dag"
+        },
+        {
+          "type":"number",
+          "min":1,
+          "max":100,
+          "id":"heading_content_width",
+          "default":90,
+          "label":"Content width",
+          "description":""
+        },
+        {
+          "type":"text",
+          "id":"subheading",
+          "label":"Subheading",
+          "default":""
+        },
+        {
+          "type":"number",
+          "min":1,
+          "max":100,
+          "id":"subheading_content_width",
+          "default":90,
+          "label":"Content width",
+          "description":""
+        }
+      ]
+    },
+    {
+      "label":"Background & layout",
+      "settings":[
+        {
+          "type":"select",
+          "id":"background_color",
+          "label":"Color",
+          "description":"<small>Set your colors in Theme Settings</small>",
+          "default":"background_2",
+          "options":[
+            {
+              "value":"background_1",
+              "label":"Primary"
+            },
+            {
+              "value":"background_2",
+              "label":"Secondary"
+            }
+          ]
+        },
+        {
+          "type":"select",
+          "id":"column_layout",
+          "label":"Layout",
+          "description":"",
+          "default":"two-column",
+          "options":[
+            {
+              "value":"one-column",
+              "label":"One Column"
+            },
+            {
+              "value":"two-column",
+              "label":"Two Columns"
+            }
+          ]
+        },
+        {
+          "type":"radio",
+          "id":"heading_alignment",
+          "label":"Alignment",
+          "default":"left",
+          "options":[
+            {
+              "value":"left",
+              "label":"Left"
+            },
+            {
+              "value":"center",
+              "label":"Center"
+            },
+            {
+              "value":"right",
+              "label":"Right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label":"Button",
+      "settings":[
+        {
+          "type":"text",
+          "id":"button_text",
+          "label":"Button text",
+          "default":"Starta träningen"
+        },
+        {
+          "type":"radio",
+          "id":"button_type",
+          "label":"Button style",
+          "description":"",
+          "default":"primary",
+          "options":[
+            {
+              "value":"primary",
+              "label":"Primary"
+            },
+            {
+              "value":"secondary",
+              "label":"Secondary"
+            }
+          ]
+        },
+        {
+          "type":"select",
+          "id":"mobile_width",
+          "label":"Width on mobile",
+          "description":"",
+          "default":"full",
+          "options":[
+            {
+              "value":"standard",
+              "label":"Standard"
+            },
+            {
+              "value":"full",
+              "label":"Full"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,43 @@
+{% comment %}
+  This is the search box and categories that appears on your course catalog pages.
+{% endcomment %}
+
+
+<div class="products__search">
+  <h1 class="collections__heading">
+    {{ 'liquid.views.collections_landing_page.header_products' | translate }}
+  </h1>
+  <form action="{{ site.collections_url }}" method="get" id="search-form" class="products__search-form" role="search">
+    <div class="products__search-box">
+      <div class="form__search">
+        <label for="q" class="sr-only">
+          {{ 'liquid.partials.product_search.search_placeholder' | translate }}
+        </label>
+        <input type="search" id="q" name="q" placeholder="{{ 'liquid.partials.product_search.search_placeholder' | translate }}" value="{{ page.search_query }}" class="form__control form__control-search"/>
+        <button type="submit" class="form__search-button">
+          <span class="sr-only">
+            {{ 'liquid.partials.product_search.search_placeholder' | translate }}
+          </span>
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" viewBox="0 0 256 256"><path d="M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z"/></svg>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+<nav aria-label="{{ 'liquid.views.collections_landing_page.navigation_categories' | translate }}">
+  <ul class="products__collections-list">
+    {% for collection in site.collections %}
+      <li class="products__collections-list-item">
+        <a
+          href="{{ collection.url }}"
+          {% if page.collection.id != nil and page.collection.id == collection.id %}
+            class="active"
+            aria-current="page"
+          {% endif %}
+        >
+          {{ collection.name }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</nav>

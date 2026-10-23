@@ -1,0 +1,56 @@
+{% comment %}
+  If a user enters a coupon URL ( yoursite.com?coupon=100) they
+  will see a small section that displays details about the coupon.
+{% endcomment %}
+
+{% if page.course.coupon_supported and page.coupon_code_provided %}
+  {% include 'product_landing_page_coupon_block' %}
+{% endif %}
+
+<main class="course" id="main-content">
+  {{ content_for_page }}
+  {% comment %} Superintelligent: tegelmarken under banan {% endcomment %}
+  <div class="si-ground" aria-hidden="true"></div>
+</main>
+
+{% schema %}
+{
+  "sections":{
+    "options":[
+      "course_cards",
+      "banner",
+      "banner_course",
+      "bonus",
+      "call_to_action",
+      "call_to_action_course",
+      "checklist",
+      "course_categories_all",
+      "course_categories",
+      "course_curriculum",
+      "countdown",
+      "frequently_asked_questions",
+      "gallery",
+      "image_and_text",
+      "instructor",
+      "lead_capture",
+      "pricing_options",
+      "pricing_table",
+      "reviews",
+      "showcase",
+      "testimonials",
+      "icon_and_text",
+      "description",
+      "rich_text",
+      "upsells",
+      "video"
+    ],
+    "defaults":[
+      "banner_course",
+      "course_curriculum",
+      "call_to_action_course"
+    ]
+  }
+}
+{% endschema %}
+
+{% include 'course_footer_scripts' %}

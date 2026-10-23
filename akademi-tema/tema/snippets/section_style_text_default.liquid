@@ -1,0 +1,11 @@
+{% if section.settings.text_color != blank %}
+  .section__body {
+    color: {{ theme.settings.text_color }};
+  }
+
+  .section__heading,
+  .section__subheading {
+    color: {{ theme.settings.heading_color }};
+  }
+
+{% endif %}

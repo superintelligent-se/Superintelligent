@@ -1,0 +1,9 @@
+<div class="product-action-buttons section__button-group">
+  {% if page.product_is_course %}
+    {% include 'course_action_buttons' %}
+  {% elsif page.product_is_bundle %}
+    {% include 'bundle_action_buttons' %}
+  {% elsif page.product_is_community %}
+    {% include 'community_action_buttons' %}
+  {% endif %}
+</div>

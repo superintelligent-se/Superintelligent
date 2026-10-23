@@ -1,0 +1,104 @@
+// Community Overview / Community Card
+// ======================================
+
+.community-overview {
+  &__container {
+    @include make-container;
+    @include screen-md-max {
+      & header {
+        margin-bottom: $margin-3;
+      }
+    }
+  }
+
+  &__content {
+    @include screen-md-max {
+      flex-direction: column;
+    }
+
+    display: flex;
+    gap: 0 $margin-5;
+  }
+
+  &__description {
+    @include flex-grow(1);
+    margin-bottom: $margin-5;
+  }
+
+  &__card {
+    margin-bottom: $margin-2;
+  }
+}
+
+.community-card {
+  @include screen-md-min {
+    width: 418px;
+  }
+
+  border-radius: 4px;
+  background-color: $interface__background-color;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+
+  &__image {
+    display: flex;
+    position: relative;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  &__details {
+    @include screen-md-min {
+      padding: $padding-3 38px 0;
+    }
+
+    padding: $padding-3 $padding-3 0;
+
+    &__title {
+      position: relative;
+      margin-bottom: $margin-2;
+      line-height: 30px;
+    }
+
+    hr {
+      max-width: 46px;
+      height: 1px;
+      margin: 0 0 $margin-3;
+      border: 0;
+      background-color: $body__text-color;
+    }
+
+    ul {
+      margin-left: 0;
+      list-style: none;
+    }
+
+    &-item {
+      display: flex;
+      margin-bottom: $margin-2;
+
+      &:last-child {
+        margin-bottom: $margin-3;
+      }
+
+      i {
+        flex: 0 0 26px;
+        color: $accent__color;
+        font-size: 24px;
+      }
+
+      span {
+        margin-left: $margin-2;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: normal;
+        line-height: 25px;
+      }
+    }
+  }
+}

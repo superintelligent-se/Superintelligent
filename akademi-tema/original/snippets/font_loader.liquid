@@ -1,0 +1,17 @@
+{% capture theme_fonts_str %}
+  {{ theme.settings.banner_font }},
+  {{ theme.settings.heading_font }},
+  {{ theme.settings.subheading_font }},
+  {{ theme.settings.secondary_heading_font }},
+  {{ theme.settings.body_font }},
+  {{ theme.settings.button_font }}
+{% endcapture %}
+
+{% assign theme_fonts = theme_fonts_str | strip_newlines | split: ',' | compact | uniq %}
+
+{% for font in theme_fonts %}
+{% assign font_name = font | strip | replace: ' ', '+' %}
+  <link href="https://fonts.googleapis.com/css?family={{ font_name }}:100,200,300,400,400i,500,600,700,800,900&display=swap" rel="stylesheet">
+{% endfor %}
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">

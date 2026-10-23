@@ -1,0 +1,77 @@
+{% comment %}
+  This is the student dashboard course card.
+{% endcomment %}
+
+<div class="card card--dashboard">
+  <div class="card__header">
+    {% unless card.is_presell %}
+      <a href="{{ card.resume_course_url }}">
+    {% endunless %}
+    <h3 class="card__name section__heading--secondary">{{ card.name }}</h3>
+    {% unless card.is_presell %}
+      </a>
+    {% endunless %}
+  </div>
+  <div class="card__body">
+    {% if card.has_enrollment %}
+      <div class="card__progress--bar">
+        <span class="progress__bar" style="width:{{ card.progress_percentage }}%;"></span>
+        <p class="progress__percentage">
+          <span class="sr-only">
+            {{ 'liquid.partials.dashboard_course_card.your_progress' | translate }}:
+          </span>
+          <span class="progress__percentage-value" style="left: {{ card.progress_percentage }}%;">
+            {{ card.progress_percentage }}%
+          </span>
+        </p>
+      </div>
+    {% endif %}
+
+    <div class="card__details">
+      {% if card.progress_percentage == 100 %}
+        {% if card.course_reviews_enabled %}
+          <a href="{{ card.course_review_url }}" class="card__rate" aria-label="{{ card.name }}: {{ 'liquid.partials.dashboard_course_card.link_rate_course' | translate }}">
+            {{ 'liquid.partials.dashboard_course_card.link_rate_course' | translate }}
+          </a>
+        {% else %}
+          <a href="{{ card.landing_page_url }}" class="card__overview" aria-label="{{ card.name }}: {{ 'liquid.partials.dashboard_course_card.link_see_overview' | translate }}">
+            {{ 'liquid.partials.dashboard_course_card.link_see_overview' | translate }}
+          </a>
+        {% endif %}
+      {% else %}
+        <a href="{{ card.landing_page_url }}" class="card__overview" aria-label="{{ card.name }}: {{ 'liquid.partials.dashboard_course_card.link_see_overview' | translate }}">
+          {{ 'liquid.partials.dashboard_course_card.link_see_overview' | translate }}
+        </a>
+      {% endif %}
+      {% if card.is_presell %}
+        <span class="card__coming-soon">
+          {{ 'liquid.partials.dashboard_course_card.coming_soon' | translate }}
+        </span>
+      {% else %}
+        <a href="{{ card.resume_course_url }}" class="card__resume" aria-label="{{ card.name }}: {{ 'liquid.partials.dashboard_course_card.link_resume_course' | translate }}">
+          {% if card.progress_percentage == 0 %}
+            {{ 'liquid.partials.dashboard_course_card.link_start_course' | translate }}
+          {% elsif card.progress_percentage > 0 and card.progress_percentage < 100 %}
+            {{ 'liquid.partials.dashboard_course_card.link_resume_course' | translate }}
+          {% else %}
+            {{ 'liquid.partials.dashboard_course_card.link_replay_course' | translate }}
+          {% endif %}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="course-card__img-container">
+    {% unless card.is_presell %}
+      <a class href="{{ card.resume_course_url }}" tabindex="-1" aria-hidden="true">
+    {% endunless %}
+      <img
+        src="{{ card.image_url }}"
+        alt=""
+        class="card__img"
+        loading="lazy"
+      />
+    {% unless card.is_presell %}
+      </a>
+    {% endunless %}
+  </div>
+</div>

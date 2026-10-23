@@ -1,0 +1,32 @@
+// Dashboard
+// ======================================
+
+.student-dashboard__container {
+  @include make-container;
+  @include page-padding($gutter-width * 2, $gutter-width);
+}
+
+.student-dashboard__welcome {
+  margin: 0;
+  text-align: center;
+}
+
+.student-dashboard__form {
+
+  .form__group {
+    justify-content: space-between;
+
+    margin-right: 0;
+    margin-left: 0;
+  }
+
+  .form__select-no-label {
+    @include flex-grow(0);
+
+    .form__control {
+      border: 0;
+      background-color: transparent;
+      direction: rtl;
+    }
+  }
+}

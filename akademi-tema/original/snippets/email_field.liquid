@@ -1,0 +1,29 @@
+{% assign field = fields.email %}
+<div class="form__group">
+  <label for="{{ field.name }}" class="form__label">
+    {{ field.label }}
+  </label>
+  <input
+    type="email"
+    id="{{ field.name }}"
+    name="{{ field.name }}"
+    value="{{ field.value }}"
+    placeholder="{{ field.placeholder }}"
+    autocapitalize="off"
+    autocomplete="off"
+    autocorrect="off"
+    spellcheck="false"
+    {% if field.required %}required aria-describedby="{{ field.name }}-error"{% endif %}
+    class="form__control"
+  />
+  {% if field.required %}
+    <p
+      aria-live="polite"
+      id="{{ field.name }}-error"
+      class="form__error-msg hidden"
+      role="alert"
+    >
+      {{ 'liquid.partials.form.please_enter_valid_email' | translate }}
+    </p>
+  {% endif %}
+</div>

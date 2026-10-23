@@ -1,0 +1,52 @@
+{% comment %}
+  This is the student dashboard community card.
+{% endcomment %}
+
+<div class="card card--dashboard">
+  <div class="card__header">
+    {% unless community.is_presell %}
+      <a href="{{ community.url }}">
+    {% endunless %}
+    <h3 class="card__name card__name--community section__heading--secondary">
+      {{ community.name }}
+    </h3>
+    {% unless community.is_presell %}
+      </a>
+    {% endunless %}
+  </div>
+  <div class="card__body">
+    <p class="card__posts">
+      {{ 'liquid.partials.student_dashboard.text_community_posts' | translate: count: community.post_count }}
+    </p>
+    {% if site.community_landing_pages_enabled %}
+      <div class="card__details">
+        <a href="{{ community.links.landing_page_url }}" class="card__overview" aria-label="{{ community.name }}: {{ 'liquid.partials.dashboard_course_card.link_see_overview' | translate }}" data-qa="card__overview">
+          {{ 'liquid.partials.dashboard_course_card.link_see_overview' | translate }}
+        </a>
+        {% if community.is_presell %}
+          <span class="card__coming-soon">
+            {{ 'liquid.partials.dashboard_course_card.coming_soon' | translate }}
+          </span>
+        {% else %}
+          <a href="{{ community.url }}" class="card__resume" aria-label="{{ community.name }}: {{ 'liquid.partials.community_landing_page_action_buttons.link_resume' | translate }}" data-qa="card__resume">
+            {{ 'liquid.partials.community_landing_page_action_buttons.link_resume' | translate }}
+          </a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+  <div class="course-card__img-container">
+    {% unless community.is_presell %}
+      <a class href="{{ community.url }}" tabindex="-1" aria-hidden="true">
+    {% endunless %}
+      <img
+        src="{{ community.card_image_url }}"
+        alt=""
+        class="card__img"
+        loading="lazy"
+      />
+    {% unless community.is_presell %}
+      </a>
+    {% endunless %}
+  </div>
+</div>

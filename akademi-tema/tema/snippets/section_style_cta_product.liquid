@@ -1,0 +1,29 @@
+{% include 'section_style_column_layout_8_4' %}
+{% include 'section_style_heading_alignment' %}
+{% include 'section_style_background_color' %}
+
+{% if section.settings.mobile_width == "full" %}
+  @include screen-sm-max {
+    .button {
+      width: 100%;
+    }
+  }
+{% endif %}
+
+.section__button-group {
+  @include screen-md-max {
+    text-align: {{ section.settings.heading_alignment }};
+  }
+}
+
+.section__heading {
+  @include screen-md-min {
+    width: {{ section.settings.heading_content_width }}%;
+  }
+}
+
+@include screen-md-min {
+  .section__subheading {
+    width: {{ section.settings.subheading_content_width }}%;
+  }
+}

@@ -1,0 +1,200 @@
+{% assign sectionLabel = section.settings.heading %}
+<section
+  aria-label="{{ sectionLabel | escape }}"
+  class="showcase section-height__medium {% include 'section_utility_background_decoration' %} {% include 'section_utility_heading_alignment' %}"
+  data-preview-item="showcase">
+  <div class="showcase__container">
+    {% include 'section_headings' %}
+    <div class="section__content">
+      {% if section.blocks != empty %}
+        <div class="showcase__list section__body" role="list">
+          {% for block in section.blocks %}
+            <div class="showcase__list-item" role="listitem">
+              <img
+                src="{{ block.settings.showcase_image }}"
+                srcset="{{ block.settings.showcase_image }}?width=200&dpr=1 1x, {{ block.settings.showcase_image }}?width=200&dpr=2 2x, {{ block.settings.showcase_image }}?width=200&dpr=3 3x"
+                alt="{{ block.settings.showcase_name }}"
+                class="img-responsive"
+                loading="lazy"
+                width="200"
+              />
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% style %}
+.showcase {
+  {% if section.settings.section_background_decoration == true %}
+    {% include 'section_style_background_decoration' %}
+  {% else %}
+    {% include 'section_style_background_color' %}
+  {% endif %}
+  {% include 'section_style_heading_alignment' %}
+
+  {% if section.settings.section_padding_top %}
+    .showcase__container {
+      padding-top: 0;
+    }
+  {% endif %}
+
+  {% if section.settings.section_padding_bottom %}
+    .showcase__container {
+      padding-bottom: 0;
+    }
+  {% endif %}
+}
+{% endstyle %}
+
+{% schema %}
+{
+  "label":"Social proof: logos",
+  "description":"",
+  "previewImageUrl":"https://cdn.thinkific.com/57/20210222/08aecc2ccaaa978743c662936cded654.png",
+  "previewDescription":"Show off companies you've worked with",
+  "settings":[
+    {
+      "label":"Headings",
+      "settings":[
+        {
+          "type":"text",
+          "id":"heading",
+          "label":"Heading",
+          "default":"Social proof: logos"
+        },
+        {
+          "type":"text",
+          "id":"subheading",
+          "label":"Subheading",
+          "default":""
+        },
+        {
+          "type":"radio",
+          "id":"heading_alignment",
+          "label":"Alignment",
+          "description":"",
+          "default":"center",
+          "options":[
+            {
+              "value":"left",
+              "label":"Left"
+            },
+            {
+              "value":"center",
+              "label":"Center"
+            },
+            {
+              "value":"right",
+              "label":"Right"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label":"Background & layout",
+      "settings":[
+        {
+          "type":"select",
+          "id":"background_color",
+          "label":"Color",
+          "description":"<small>Set your colors in Theme Settings</small>",
+          "default":"background_2",
+          "options":[
+            {
+              "value":"background_1",
+              "label":"Primary"
+            },
+            {
+              "value":"background_2",
+              "label":"Secondary"
+            }
+          ]
+        },
+        {
+          "type":"checkbox",
+          "id":"section_background_decoration",
+          "label":"Show styled background",
+          "default":false
+        },
+        {
+          "type":"checkbox",
+          "id":"section_padding_top",
+          "label":"Remove top section padding",
+          "default":false
+        },
+        {
+          "type":"checkbox",
+          "id":"section_padding_bottom",
+          "label":"Remove bottom section padding",
+          "default":false
+        }
+      ]
+    }
+  ],
+  "blocks":{
+    "label":"Add logo",
+    "limit":9,
+    "types":[
+      {
+        "type":"showcase_item",
+        "label":"Logo",
+        "settings":[
+          {
+            "type":"image",
+            "id":"showcase_image",
+            "label":"Image",
+            "default":"https://cdn.thinkific.com/13/20180205/2fe50a485eaf445b855d83b153605d08.png"
+          },
+          {
+            "type":"text",
+            "id":"showcase_name",
+            "label":"Image alt text",
+            "description":"<small>Describe your image for the visually impaired.</small>"
+          }
+        ]
+      }
+    ],
+    "defaults":[
+      {
+        "type":"showcase_item",
+        "values":{
+          "showcase_name":"",
+          "showcase_image":"https://cdn.thinkific.com/13/20180222/76575d5ed8aa1a62a60f35f63ddc57dc.png"
+        }
+      },
+      {
+        "type":"showcase_item",
+        "values":{
+          "showcase_name":"",
+          "showcase_image":"https://cdn.thinkific.com/13/20180222/a7584df8f4c6901a11dce18e844384bf.png"
+        }
+      },
+      {
+        "type":"showcase_item",
+        "values":{
+          "showcase_name":"",
+          "showcase_image":"https://cdn.thinkific.com/13/20180222/c62d863f467a79a61807c82e03037867.png"
+        }
+      },
+      {
+        "type":"showcase_item",
+        "values":{
+          "showcase_name":"",
+          "showcase_image":"https://cdn.thinkific.com/13/20180222/1a9a587f61667dd50d0ad1b7c5a3bc39.png"
+        }
+      },
+      {
+        "type":"showcase_item",
+        "values":{
+          "showcase_name":"",
+          "showcase_image":"https://cdn.thinkific.com/13/20180222/76575d5ed8aa1a62a60f35f63ddc57dc.png"
+        }
+      }
+    ]
+  }
+}
+{% endschema %}

@@ -1,0 +1,53 @@
+{% comment %}
+  If a user enters a coupon URL ( yoursite.com?coupon=100) they
+  will see a small section that displays details about the coupon.
+{% endcomment %}
+
+{% if page.community.coupon_supported and page.coupon_code_provided %}
+  {% include 'product_landing_page_coupon_block' %}
+{% endif %}
+
+<main class="community" id="main-content">
+  {{ content_for_page }}
+</main>
+
+{% schema %}
+{
+  "sections":{
+    "options":[
+      "course_cards",
+      "banner_community",
+      "bonus",
+      "call_to_action",
+      "call_to_action_community",
+      "checklist",
+      "community_overview",
+      "course_categories_all",
+      "course_categories",
+      "countdown",
+      "frequently_asked_questions",
+      "gallery",
+      "image_and_text",
+      "instructor",
+      "lead_capture",
+      "pricing_options",
+      "pricing_table",
+      "reviews",
+      "showcase",
+      "testimonials",
+      "icon_and_text",
+      "description",
+      "rich_text",
+      "upsells",
+      "video"
+    ],
+    "defaults":[
+      "banner_community",
+      "community_overview",
+      "call_to_action_community"
+    ]
+  }
+}
+{% endschema %}
+
+{% include 'community_footer_scripts' %}

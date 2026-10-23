@@ -1,0 +1,72 @@
+<div class="collections__header">
+  {% include 'products_search' %}
+</div>
+{% if page.has_search_query %}
+  {% include 'products_search_query' %}
+{% endif %}
+{% if page.has_products %}
+  {% unless page.has_search_query %}<h2 class="products__title">{{ page.name }}</h2>{% endunless %}
+  <section aria-label="{{ 'liquid.views.collections_landing_page.header_products' | translate }}" class="collections__product-cards">
+    {% include 'products_card_list' %}
+  </section>
+{% else %}
+  <p class="products__list-no-results">
+    {{ 'liquid.views.collections_index.text_no_results' | translate }}
+  </p>
+{% endif %}
+
+{% style %}
+
+.collections__product-cards {
+  {% include 'section_style_card_alignment' %}
+}
+
+{% endstyle %}
+
+{% schema %}
+{
+  "label":"Default",
+  "description":"This is a default section — the foundation of your Thinkific site.  While this section has limited customization, you can build out this page by adding new sections.",
+  "settings":[
+    {
+      "type":"checkbox",
+      "id":"show_pricing",
+      "label":"Show pricing",
+      "default":true
+    },
+    {
+      "type":"checkbox",
+      "id":"show_category_name",
+      "label":"Show category name",
+      "default":false
+    },
+    {
+      "type":"checkbox",
+      "id":"show_product_metadata",
+      "label":"Show product metadata",
+      "default":false
+    },
+    {
+      "type":"radio",
+      "id":"card_alignment",
+      "label":"Card alignment",
+      "description":"",
+      "default":"left",
+      "options":[
+        {
+          "value":"left",
+          "label":"Left"
+        },
+        {
+          "value":"center",
+          "label":"Center"
+        },
+        {
+          "value":"right",
+          "label":"Right"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,15 @@
+{% comment %}
+  This is a paginated list of all the products in your site
+{% endcomment %}
+
+{% paginate page.products by 6 %}
+  <ul class="products__list">
+    {% for product in paginate.collection %}
+      <li class="products__list-item">
+        {% include 'card' product: product.productable %}
+      </li>
+      {% assign product_count = forloop.length %}
+    {% endfor %}
+  </ul>
+  {% include 'pagination' with paginate, ariaLabel: "Products pagination" %}
+{% endpaginate %}

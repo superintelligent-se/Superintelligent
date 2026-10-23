@@ -1,0 +1,64 @@
+// Image & Text
+// ======================================
+
+.text-image {
+
+  .section__content {
+    @include make-row(true);
+  }
+
+  .section__heading,
+  .section__subheading {
+    color: $heading__color;
+  }
+
+  .section__button-group {
+    padding-top: $gutter-width * 1.5;
+  }
+}
+
+.text-image__container {
+  @include make-container;
+}
+
+.text-image__body {
+  @include screen-md-max {
+    @include make-col(12);
+    order: 2;
+  }
+  @include screen-lg-min {
+    padding-top: $gutter-width * 2;
+    padding-bottom: $gutter-width * 2;
+  }
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  @include make-col(6);
+}
+
+.text-image__image {
+  @include make-col(12);
+  display: flex;
+
+  border-radius: $base__border-radius;
+
+  img {
+    align-self: center;
+  }
+
+  .text-image__body + & {
+    @include screen-md-max {
+      @include make-col(12);
+      order: 1;
+
+      margin-bottom: $gutter-width;
+    }
+    @include make-col(6);
+  }
+
+  img {
+    align-self: center;
+
+    border-radius: $base__border-radius;
+  }
+}

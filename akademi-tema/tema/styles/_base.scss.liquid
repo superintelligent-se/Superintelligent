@@ -1,0 +1,50 @@
+// Base
+// ======================================
+
+html {
+  @include screen-md-min {
+    font-size: $body__font-size;
+  }
+  font-size: $body__font-size--mobile;
+  -ms-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+* {
+
+  &,
+  &:before,
+  &:after {
+    box-sizing: inherit;
+  }
+}
+
+a {
+  @include transition(color);
+  color: $link__color;
+
+  &:focus-visible {
+    outline: 1px solid #fff;
+    box-shadow: $shadow-chalk-focus !important;
+  }
+
+  .open & {
+    @include transition(background-color 200ms ease, color 200ms ease);
+  }
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+
+  position: relative;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  background-color: $body__background-color;
+  color: $body__text-color;
+  overflow-x: hidden;
+}

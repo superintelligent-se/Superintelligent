@@ -1,0 +1,673 @@
+// Mixins
+// ======================================
+
+// Accessibility
+@mixin sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+}
+
+@mixin sr-only-focusable {
+  &:active,
+  &:focus {
+    position: static;
+    width: auto;
+    height: auto;
+    white-space: normal;
+    overflow: visible;
+    clip: auto;
+    clip-path: none;
+  }
+}
+
+// Background
+@mixin section-background-decoration($top: 10%, $background: $body__background-color, $gradient: $background-decoration__color) {
+  position: relative;
+  z-index: 1;
+
+  &:before,
+  &:after {
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    content: "";
+  }
+
+  &:before {
+    @include screen-md-min {
+      -webkit-clip-path: ellipse(60% 75% at 50% 120%);
+      clip-path: ellipse(60% 75% at 50% 120%);
+    }
+
+    height: 4rem;
+    background-color: $background;
+    -webkit-clip-path: ellipse(60% 60% at 50% 100%);
+    clip-path: ellipse(60% 60% at 50% 100%);
+  }
+
+  &:after {
+    height: 100%;
+    background: -webkit-linear-gradient(180deg, rgba(255, 255, 255, 0) $top, transparentize($gradient, 0.9) 90%, transparentize($gradient, 0.8) 110%);
+    background: -o-linear-gradient(180deg, rgba(255, 255, 255, 0) $top, transparentize($gradient, 0.9) 90%, transparentize($gradient, 0.8) 110%);
+    background: -moz-linear-gradient(180deg, rgba(255, 255, 255, 0) $top, transparentize($gradient, 0.9) 90%, transparentize($gradient, 0.8) 110%);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) $top, transparentize($gradient, 0.9) 90%, transparentize($gradient, 0.8) 110%);
+    content: "";
+    z-index: -1;
+  }
+}
+
+// Breakpoints
+@mixin screen-legacy-max {
+  @media all and (max-width: $screen-legacy-max) {
+    @content;
+  }
+}
+
+@mixin screen-xs-max {
+  @media all and (max-width: $screen-xs-max) {
+    @content;
+  }
+}
+
+@mixin screen-sm-min {
+  @media all and (min-width: $screen-sm) {
+    @content;
+  }
+}
+
+@mixin screen-sm-max {
+  @media all and (max-width: $screen-sm-max) {
+    @content;
+  }
+}
+
+@mixin screen-md-min {
+  @media all and (min-width: $screen-md) {
+    @content;
+  }
+}
+
+@mixin screen-md-max {
+  @media all and (max-width: $screen-md-max) {
+    @content;
+  }
+}
+
+@mixin screen-lg-min {
+  @media all and (min-width: $screen-lg) {
+    @content;
+  }
+}
+
+@mixin screen-lg-max {
+  @media all and (max-width: $screen-lg-max) {
+    @content;
+  }
+}
+
+@mixin screen-xl-min {
+  @media all and (min-width: $screen-xl) {
+    @content;
+  }
+}
+
+@mixin screen-xl-max {
+  @media all and (min-width: $screen-xl) {
+    @content;
+  }
+}
+
+@mixin screen-xxl-min {
+  @media all and (min-width: $screen-xxl) {
+    @content;
+  }
+}
+
+@mixin screen-tablet-only {
+  @media all and (min-width: $screen-md) and (max-width: $screen-lg) {
+    @content;
+  }
+}
+
+// Buttons
+@mixin button {
+  @include screen-md-min {
+    font-size: $button__font-size;
+  }
+
+  display: inline-block;
+  padding: $button__padding;
+  border: $button__border-width $button__border-style transparent;
+  border-radius: $button__primary-border-radius;
+  font-family: $button__font-family;
+  font-size: $button__font-size--mobile;
+  font-weight: $button__font-weight;
+  line-height: normal;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: $shadow-chalk-focus !important;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    @include transition(all 200ms ease, font-size 200ms ease);
+
+    &:active,
+    &:hover,
+    &:focus {
+      @include transition(all 300ms ease, box-shadow 0s ease);
+    }
+  }
+}
+
+@mixin button-primary {
+  border: $button__border-width $button__border-style $button__primary-border;
+  border-radius: $button__primary-border-radius;
+  background-color: $button__primary-background;
+  color: $button__primary-color;
+
+  &:active,
+  &:hover,
+  &:focus {
+    border-color: $button__primary-border--active;
+    background: $button__primary-background--active;
+    color: $button__primary-color--active;
+  }
+
+  &:focus-visible {
+    box-shadow: $shadow-chalk-focus !important;
+  }
+}
+
+@mixin button-secondary {
+  border: $button__border-width $button__border-style $button__secondary-border;
+  border-radius: $button__secondary-border-radius;
+  background-color: $button__secondary-background;
+  color: $button__secondary-color;
+
+  &:active,
+  &:hover,
+  &:focus {
+    border-color: $button__secondary-border--active;
+    background: $button__secondary-background--active;
+    color: $button__secondary-color--active;
+  }
+
+  &:focus-visible {
+    box-shadow: $shadow-chalk-focus !important;
+  }
+}
+
+@mixin button-group {
+  @include screen-sm-max {
+    flex-direction: column;
+  }
+  @include make-row(false);
+  align-items: flex-start;
+
+  .button {
+    display: flex;
+    align-self: center;
+
+    flex-basis: auto;
+    justify-content: center;
+    @include screen-sm-max {
+      width: 100%;
+    }
+    @include screen-md-min {
+      margin-right: $gutter-width / 2;
+    }
+  }
+}
+
+// Background
+@mixin section-background-image {
+  position: relative;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
+// Cards
+@mixin card {
+  display: flex;
+  flex-direction: column;
+  @include transition(transform 200ms ease, background-color 200ms ease, box-shadow 200ms ease);
+
+  position: relative;
+  height: 100%;
+  border: 1px solid $card__border-color;
+  border-radius: $card__border-radius;
+  background-color: $card__background-color;
+  color: $body__text-color;
+  text-decoration: none;
+
+  &:active,
+  &:focus,
+  &:hover {
+    @include transition(transform 200ms ease, background-color 200ms ease, box-shadow 200ms ease);
+
+    background-color: $card__background-color--active;
+    color: $body__text-color;
+    box-shadow: $shadow-floating;
+  }
+
+  h2,
+  h3 {
+    color: $heading__color;
+  }
+}
+
+// Container
+@mixin make-container($add-padding: true) {
+  @include screen-md-min {
+    max-width: $screen-md;
+  }
+  @include screen-lg-min {
+    max-width: $screen-lg;
+  }
+  @include screen-xl-min {
+    max-width: $screen-xl;
+  }
+
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  @if $add-padding == true {
+    padding-right: $gutter-width / 2;
+    padding-left: $gutter-width / 2;
+  }
+}
+
+// Rows
+@mixin make-row($negative-margins: true) {
+  display: flex;
+  flex-wrap: wrap;
+
+  &:after,
+  &:before {
+    flex-basis: 0;
+    order: 1;
+  }
+
+  @if $negative-margins == true {
+    margin-right: $gutter-width / -2;
+    margin-left: $gutter-width / -2;
+    padding-right: 0;
+    padding-left: 0;
+  }
+}
+
+// Columns
+@mixin column($add-gutter: true) {
+  position: relative;
+  width: 100%;
+  @if $add-gutter == true {
+    padding-right: $gutter-width / 2;
+    padding-left: $gutter-width / 2;
+  }
+}
+
+@mixin make-col($size, $add-gutter: true, $columns: $grid-columns) {
+  @include column($add-gutter);
+
+  flex: 0 0 percentage($size / $columns);
+  max-width: percentage($size / $columns);
+}
+
+@mixin make-col-offset($size, $columns: $grid-columns) {
+  margin-left: percentage($size / $columns);
+}
+
+@mixin make-col-push($size, $columns: $grid-columns) {
+  left: if($size > 0, percentage($size / $columns), auto);
+}
+
+@mixin make-col-pull($size, $columns: $grid-columns) {
+  right: if($size > 0, percentage($size / $columns), auto);
+}
+
+// Dropdown
+@mixin dropdown($trigger) {
+  position: absolute;
+  top: 100%;
+  right: -0.5rem;
+  left: -0.5rem;
+  box-shadow: $shadow-menu;
+  opacity: 0;
+  visibility: hidden;
+  z-index: z-index(page-background);
+
+  // Parent 'state' classname to modify the targets properties
+  #{$trigger} & {
+    @include transition(all 0.3s ease-in-out 0s, visibility 0s linear 400ms, z-index 0s linear 0.01s);
+    @include transform(translateY(-1em));
+    @include transform(translateY(0%));
+    @include transition-delay(0s);
+
+    opacity: 1;
+    visibility: visible;
+    z-index: z-index(navigation--foreground);
+  }
+}
+
+// Floats
+@mixin clearfix {
+  &:before,
+  &:after {
+    display: table;
+    content: "";
+  }
+
+  &:after {
+    clear: both;
+  }
+}
+
+// Forms
+@mixin form-group {
+  @include make-row(false);
+  align-items: center;
+
+  margin: 0 0 $gutter-width / 2;
+
+  .input__group {
+    @include screen-md-min {
+      width: unset;
+      margin-right: $gutter-width / 2;
+    }
+    @include flex-grow(1);
+    width: 100%;
+
+    &:last-child {
+      @include screen-md-min {
+        margin-top: 0;
+        margin-right: 0;
+      }  
+      margin-top: $gutter-width / 2;
+    }
+  }
+
+  .button {
+    @include screen-sm-max {
+      display: block;
+      width: 100%;
+    }
+  }
+
+  .form__notice {
+    margin: 0;
+  }
+}
+
+@mixin form-label {
+  color: $body__text-color;
+  font-size: $body__font-size * 0.875;
+  font-weight: bold;
+  line-height: 2;
+
+  input,
+  textarea {
+    display: block;
+  }
+
+  input {
+    &[type="checkbox"] {
+      display: inline-block;
+      width: auto;
+      margin-right: 5px;
+      font-size: 1rem;
+    }
+  }
+}
+
+@mixin form-select-label {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+
+  &:after {
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    font-family: $icon__font-family;
+    font-size: 1.2rem;
+    content: "\f0d7";
+    z-index: z-index(element--middleground);
+    pointer-events: none;
+  }
+}
+
+@mixin form-select-no-label {
+  display: inline-block;
+  position: relative;
+
+  &:after {
+    @include transform(translatey(-50%));
+
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    font-family: $icon__font-family;
+    font-size: 1rem;
+    content: "\f0d7";
+    z-index: z-index(element--background);
+    pointer-events: none;
+  }
+}
+
+@mixin form-control {
+  @include transition(border-color 200ms ease, outline 200ms ease);
+
+  display: block;
+  width: 100%;
+  padding: $form__control-padding;
+  border: $form__control-border;
+  border-radius: $form__control-border-radius !important; // sass-lint:disable-line no-important
+  background-color: $form__input-background-color;
+
+  &[readonly] {
+    background-color: $form__input-disabled;
+  }
+
+  &:active,
+  &:hover {
+    @include transition(border-color 200ms ease, outline 200ms ease);
+  }
+}
+
+// Page Padding
+@mixin page-padding($padding-top: $gutter-width * 2, $padding-bottom: $gutter-width * 2) {
+  @include screen-md-min {
+    padding-top: $padding-top;
+    padding-bottom: $padding-bottom;
+  }
+
+  padding-top: $padding-top / 2;
+  padding-bottom: $padding-bottom / 2;
+}
+
+// Section Height
+@mixin section-height($padding-top: $section-height__large, $padding-bottom: $padding-top) {
+
+  & > [class*="__container"] {
+    padding-top: $padding-top;
+    padding-bottom: $padding-bottom;
+  }
+}
+
+// Transition Prefixer
+@mixin trans-prefix($value, $prefix: "") {
+  $slice: str-slice(inspect($value), 0, 9);
+  @if $slice == "transform" {
+    #{$prefix}transition: #{$prefix}#{$value};
+  } @else {
+    #{$prefix}transition: $value;
+  }
+}
+
+// Override transition mixin due to libsass issues
+// Details: https://github.com/thoughtbot/bourbon/issues/794
+@mixin transition($properties...) {
+  @if length($properties) > 1 {
+    $spec: ();
+    @for $i from 1 through length($properties) {
+      $spec: append($spec, nth($properties, $i), comma);
+    }
+  } @else {
+    $spec: $properties;
+  }
+  @include trans-prefix($spec, -webkit-);
+  @include trans-prefix($spec, -moz-);
+  @include trans-prefix($spec);
+}
+
+// Typography
+@mixin heading {
+  @include screen-md-min {
+    font-size: $heading__font-size;
+  }
+  margin: 0;
+  font-family: $heading__font-family;
+  font-size: $heading__font-size--mobile;
+  font-weight: $heading__font-weight;
+  line-height: $heading__line-height;
+}
+
+@mixin subheading {
+  @include screen-sm-min {
+    margin-top: $margin-3;
+  }
+  @include screen-md-min {
+    font-size: $subheading__font-size;
+  }
+
+  margin-top: $margin-2;
+  margin-bottom: 0;
+  font-family: $subheading__font-family;
+  font-size: $subheading__font-size--mobile;
+  font-weight: $subheading__font-weight;
+  line-height: $heading__line-height;
+}
+
+@mixin page-heading {
+  @include h1;
+}
+
+@mixin heading-ornament {
+  position: relative;
+
+  &:before {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: $gutter-width / -2;
+    width: 4px;
+    height: 100%;
+    background-color: $accent__color;
+    content: "";
+  }
+}
+
+@mixin h1 {
+  @include screen-md-min {
+    font-size: $heading__font-size * 1.25;
+  }
+  margin: 0 0 $gutter-width / 2;
+  font-family: $heading__font-family;
+  font-size: $heading__font-size--mobile * 1.125;
+  font-weight: $heading__font-weight;
+  line-height: $heading__line-height;
+}
+
+@mixin h2 {
+  @include screen-md-min {
+    font-size: $heading__font-size;
+  }
+  margin: 0 0 $gutter-width / 2;
+  font-family: $heading__font-family;
+  font-size: $heading__font-size--mobile;
+  font-weight: $heading__font-weight;
+  line-height: $heading__line-height;
+}
+
+@mixin h3 {
+  @include screen-md-min {
+    font-size: $secondary-heading__font-size;
+  }
+  margin: 0 0 $gutter-width / 2;
+  font-family: $secondary-heading__font-family;
+  font-size: $secondary-heading__font-size--mobile;
+  font-weight: $secondary-heading__font-weight;
+  line-height: $heading__line-height;
+}
+
+@mixin line-clamp {
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+@mixin card-name {
+  @include line-clamp;
+  margin: 0 0 $gutter-width / 2;
+  font-family: $secondary-heading__font-family;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+@mixin cta-product {
+  &__container {
+    @include make-container;
+  }
+
+  &__wrapper {
+    @include make-row(false);
+  }
+
+  .section__content {
+    align-self: center;
+    text-align: center;
+  }
+
+  .section__heading {
+    @include screen-md-min {
+      font-size: $banner__font-size;
+    }
+
+    font-family: $banner__font-family;
+    font-size: $banner__font-size--mobile;
+    font-weight: $banner__font-weight;
+    line-height: $banner__line-height;
+  }
+
+  &.section__heading-alignment--right {
+    .section__headings {
+      align-items: flex-end;
+    }
+  }
+
+  &.section__heading-alignment--center {
+    .section__headings {
+      align-items: center;
+    }
+  }
+}

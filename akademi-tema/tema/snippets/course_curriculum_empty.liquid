@@ -1,0 +1,18 @@
+<div class="course-curriculum__chapter-list course-curriculum__chapter-list--empty section__body">
+  <h3 class="section__heading--secondary">
+    Course curriculum in progress
+  </h3>
+  <ol>
+    {% for i in (1..3) %}
+      <li class="course-curriculum__chapter course-curriculum__chapter--collapsed">
+        <div class="course-curriculum__chapter-content-wrapper disabled">
+          <div class="course-curriculum__chapter-header">
+          <h4 class="course-curriculum__chapter-title">
+            Chapter name
+          </h4>
+          <i class="toga-icon toga-icon-lock" aria-hidden="true"></i>
+        </div>
+      </li>
+    {% endfor %}
+  </ol>
+</div>

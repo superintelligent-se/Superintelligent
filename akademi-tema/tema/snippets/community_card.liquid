@@ -1,0 +1,74 @@
+{% comment %}
+  This is the card representation of a Community for the Community Overview section.
+{% endcomment %}
+
+{% if section.settings.show_community_default_name %}
+  {% assign card_title = community.name %}
+{% else %}
+  {% assign card_title = section.settings.community_card_heading %}
+{% endif %}
+
+<div class="community-card">
+  <div class="community-card__image">
+    <img src="{{ community.card_image_url }}" alt="" />
+  </div>
+  <section
+    class="community-card__details"
+    {% if card_title != blank %}
+      aria-labelledby="community-card__details__title"
+    {% else %}
+      aria-label="{{ community.name }}"
+    {% endif %}
+  >
+    {% if card_title != blank %}
+      <div id="community-card__details__title" class="community-card__details__title section__heading--secondary">
+        {{ card_title }}
+      </div>
+      <hr aria-hidden="true"/>
+    {% endif %}
+    <ul>
+      {% if section.settings.hide_member_count == false %}
+        <li class="community-card__details-item">
+          <i aria-hidden="true" class="fa fa-group"></i>
+          <span>{{ 'liquid.partials.community_card.members' | translate: count: community.member_count }}</span>
+        </li>
+      {% endif %}
+      {% if section.settings.hide_post_count == false %}
+        <li class="community-card__details-item">
+          <i aria-hidden="true" class="fa fa-comment"></i>
+          <span>
+            {{ 'liquid.partials.community_card.posts' | translate: count: community.post_count }}
+          </span>
+        </li>
+      {% endif %}
+      {% if section.settings.hide_price == false %}
+        <li class="community-card__details-item">
+          <i aria-hidden="true" class="fa fa-tag"></i>
+          <span>
+            {{ community.display_price }}
+          </span>
+        </li>
+      {% endif %}
+      {% if section.settings.community_detail_text_1 and section.settings.community_detail_icon_1 %}
+        <li class="community-card__details-item">
+          <i aria-hidden="true" class="fa {{ section.settings.community_detail_icon_1 }}"></i>
+          <span>{{ section.settings.community_detail_text_1 }}</span>
+        </li>
+      {% endif %}
+      {% if section.settings.community_detail_text_2 and section.settings.community_detail_icon_2 %}
+        <li class="community-card__details-item">
+          <i aria-hidden="true" class="fa {{ section.settings.community_detail_icon_2 }}"></i>
+          <span>{{ section.settings.community_detail_text_2 }}</span>
+        </li>
+      {% endif %}
+      {% if section.settings.community_detail_text_3 and section.settings.community_detail_icon_3 %}
+        <li class="community-card__details-item">
+          <i aria-hidden="true" class="fa {{ section.settings.community_detail_icon_3 }}"></i>
+          <span>
+            {{ section.settings.community_detail_text_3 }}
+          </span>
+        </li>
+      {% endif %}
+    </ul>
+  </section>
+</div>

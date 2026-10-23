@@ -1,0 +1,319 @@
+{% assign chapters_to_show = 6 %}
+{% assign sectionLabel = section.settings.heading %}
+<section
+  aria-label="{{ sectionLabel | escape }}"
+  class="course-curriculum section-height__medium {% include 'section_utility_heading_alignment' %}"
+  data-preview-item="course-curriculum"
+>
+  <div class="course-curriculum__container">
+    {% include 'section_headings' %}
+    {% assign course = page.course %}
+    {% assign chapter_size = course.chapters.size %}
+    <div class="course-curriculum__content section__content">
+      <div class="course-curriculum__chapter-container
+        {% if chapter_size == 0 %}course-curriculum__chapter-container--empty{% endif %}"
+      >
+        {% if chapter_size == 0 %}
+          {% include 'course_curriculum_empty' %}
+        {% else %}
+          <ol class="course-curriculum__chapter-list section__body">
+            {% for chapter in course.chapters %}
+              {% assign index = forloop.index + 1 %}
+              <li class="course-curriculum__chapter
+                {% if section.settings.show_collapsed %}course-curriculum__chapter--collapsed{% endif %}
+                {% if index > chapters_to_show %}hidden{% endif %}
+              ">
+                <div class="course-curriculum__chapter-content-wrapper {% if section.settings.hide_all_lessons == true %}disabled{% endif %}">
+                {% if section.settings.hide_all_lessons == true %}
+                  <div class="course-curriculum__chapter-header">
+                {% else %}
+                  <button
+                    aria-expanded="{% if section.settings.show_collapsed %}false{% else %}true{% endif %}"
+                    aria-controls="chapter-{{ index + 1 }}"
+                    class="
+                      course-curriculum__chapter-header
+                      {% if section.settings.show_collapsed %}collapse{% endif %}"
+                  >
+                {% endif %}
+                  <h3 class="course-curriculum__chapter-title">
+                    {{ chapter.name }}
+                    {% if section.settings.hide_all_lessons != true %}
+                      <i class="course-curriculum__chapter-collapse" aria-hidden="true"></i>
+                    {% endif %}
+                  </h3>
+                {% if section.settings.hide_all_lessons == true %}
+                  </div>
+                {% else %}
+                    <i class="toga-icon toga-icon-caret-stroke-up" aria-hidden="true"></i>
+                  </button>
+                {% endif %}
+                {% if section.settings.hide_all_lessons != true %}
+                  <ol
+                    class="
+                      course-curriculum__chapter-content
+                      {% if section.settings.hide_all_lessons == true or section.settings.show_collapsed %}course-curriculum__chapter-content--collapsed{% endif %}"
+                    id="chapter-{{ index + 1 }}"
+                    type="a"
+                  >
+                    {% for content in chapter.contents %}
+                      <li>
+                        {% if course.has_free_trial and content.free %}
+                          <a href="{{ course.links.enroll_free_trial }}" class="course-curriculum__chapter-lesson">
+                        {% else %}
+                          <span class="course-curriculum__chapter-lesson">
+                        {% endif %}
+                        <i class="{{ content.icon_css_class }}" aria-hidden="true"></i>
+                        <div class="course-curriculum__lesson-title">
+                          <p>{{ content.name }}</p>
+                          {% if course.has_free_trial and content.free %}
+                            <span class="course-curriculum__chapter-lesson--free">
+                              {{ 'liquid.partials.course_landing_page_curriculum.label_free' | translate }}
+                            </span>
+                          {% endif %}
+                        </div>
+                        {% if course.has_free_trial and content.free %}
+                          </a>
+                        {% else %}
+                          </span>
+                        {% endif %}
+                      </li>
+                    {% endfor %}
+                  </ol>
+                {% endif %}
+                </div>
+              </li>
+            {% endfor %}
+          </ol>
+          {% if chapter_size > chapters_to_show %}
+            <div class="course-curriculum__chapter-toggle">
+              <button
+                class="button--link"
+                type="button"
+                data-toggle-value="true"
+              >
+                {{ 'liquid.partials.course_landing_page_curriculum.text_show_more' | translate }}
+              </button>
+            </div>
+          {% endif %}
+        {% endif %}
+      </div>
+      <div class="course-curriculum__card section__body">
+        {% include 'course_curriculum_card' with course %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% style %}
+.course-curriculum {
+  {% include 'section_style_background_color' %}
+  {% include 'section_style_heading_alignment' %}
+
+  {% if section.settings.section_padding_top %}
+    .course-curriculum__container {
+      padding-top: 0;
+    }
+  {% endif %}
+
+  {% if section.settings.section_padding_bottom %}
+    .course-curriculum__container {
+      padding-bottom: 0;
+    }
+  {% endif %}
+}
+{% endstyle %}
+
+<script type="text/javascript">
+// Handle the Curriculum [smart section] "Show more/less" toggle
+if (!courseCurriculumShowMoreToggleBound) {
+  $(document).on('click', '.course-curriculum__chapter-toggle button', function (e) {
+    var $self = $(this);
+    var $parentSection = $self.parents('section.course-curriculum').first();
+
+    var numChaptersToShow = {{ chapters_to_show }};
+    var show = $self.data('toggle-value');
+
+    $self.data('toggle-value', !show);
+    $self.text(show
+      ? '{{ 'liquid.partials.course_landing_page_curriculum.text_show_less' | translate }}'
+      : '{{ 'liquid.partials.course_landing_page_curriculum.text_show_more' | translate }}'
+    );
+
+    if (show) {
+      // Show additional chapters (ones that are hidden)
+      $parentSection.find('.course-curriculum__chapter.hidden').removeClass('hidden');
+
+      // Focus for screen reader
+      $parentSection
+        .find(`.course-curriculum__chapter:nth-of-type(${numChaptersToShow + 1}) button.course-curriculum__chapter-header`)
+        .focus();
+    } else {
+      // Hide the additional chapters
+      $parentSection.find('.course-curriculum__chapter').each(function(index) {
+        if (index >=  numChaptersToShow) {
+          $(this).addClass('hidden');
+        }
+      });
+    }
+  });
+
+  var courseCurriculumShowMoreToggleBound = true;
+}
+</script>
+
+{% schema %}
+{
+  "label":"Curriculum [smart section]",
+  "description":"Select a course image that will appear in your course card. <a href='/manage/courses/' target='_blank'>Edit your course image &raquo;</a>",
+  "previewImageUrl":"https://cdn.thinkific.com/57/20210222/3c442edbe91b46bc0cec559591299804.png",
+  "previewDescription":"Show what's included for your students",
+  "settings":[
+    {
+      "label":"Headings",
+      "settings":[
+        {
+          "type":"text",
+          "id":"heading",
+          "label":"Heading",
+          "default":"Kursplan"
+        },
+        {
+          "type":"text",
+          "id":"subheading",
+          "label":"Subheading",
+          "default":""
+        },
+        {
+          "type":"radio",
+          "id":"heading_alignment",
+          "label":"Heading alignment",
+          "description":"",
+          "default":"left",
+          "options":[
+            {
+              "value":"left",
+              "label":"Left"
+            },
+            {
+              "value":"center",
+              "label":"Center"
+            },
+            {
+              "value":"right",
+              "label":"Right"
+            }
+          ]
+        },
+        {
+          "type":"text",
+          "id":"course_card_heading",
+          "label":"Course card heading",
+          "default":"Det här ingår"
+        }
+      ]
+    },
+    {
+      "label":"Course details",
+      "settings":[
+        {
+          "type":"checkbox",
+          "id":"hide_course_price",
+          "label":"Hide course price",
+          "default":false
+        },
+        {
+          "type":"checkbox",
+          "id":"hide_number_of_lessons",
+          "label":"Hide total number of lessons",
+          "default":false
+        },
+        {
+          "type":"checkbox",
+          "id":"hide_hours_of_video",
+          "label":"Hide hours of video content",
+          "default":false
+        },
+        {
+          "type":"icon",
+          "id":"course_detail_icon_1",
+          "label":"Icon",
+          "default":""
+        },
+        {
+          "type":"text",
+          "id":"course_detail_text_1",
+          "label":"Text field"
+        },
+        {
+          "type":"icon",
+          "id":"course_detail_icon_2",
+          "label":"Icon",
+          "default":""
+        },
+        {
+          "type":"text",
+          "id":"course_detail_text_2",
+          "label":"Text field"
+        },
+        {
+          "type":"icon",
+          "id":"course_detail_icon_3",
+          "label":"Icon",
+          "default":""
+        },
+        {
+          "type":"text",
+          "id":"course_detail_text_3",
+          "label":"Text field"
+        }
+      ]
+    },
+    {
+      "label":"Background & layout",
+      "settings":[
+        {
+          "type":"select",
+          "id":"background_color",
+          "label":"Color",
+          "description":"",
+          "default":"background_1",
+          "options":[
+            {
+              "value":"background_1",
+              "label":"Primary"
+            },
+            {
+              "value":"background_2",
+              "label":"Secondary"
+            }
+          ]
+        },
+        {
+          "type":"checkbox",
+          "id":"hide_all_lessons",
+          "label":"Hide all lessons",
+          "default":false
+        },
+        {
+          "type":"checkbox",
+          "id":"show_collapsed",
+          "label":"Collapse all chapters by default",
+          "default":true
+        },
+        {
+          "type":"checkbox",
+          "id":"section_padding_top",
+          "label":"Remove top section padding",
+          "default":false
+        },
+        {
+          "type":"checkbox",
+          "id":"section_padding_bottom",
+          "label":"Remove bottom section padding",
+          "default":false
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

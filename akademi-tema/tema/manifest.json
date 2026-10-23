@@ -1,0 +1,2538 @@
+{
+  "info": {
+    "name": "Superintelligent (Empire@2026-10-19)",
+    "author": "Thinkific",
+    "version": "1.34.1",
+    "documentation_url": "https://help.thinkific.com/",
+    "support_url": "https://support.thinkific.com/"
+  },
+  "settings": [
+    {
+      "label": "Colors",
+      "settings": [
+        {
+          "type": "header",
+          "label": "Header & footer"
+        },
+        {
+          "type": "color",
+          "id": "menu_background_color",
+          "label": "Background",
+          "default": "#0A0E17"
+        },
+        {
+          "type": "color",
+          "id": "menu_link_color",
+          "label": "Link",
+          "default": "#F2F5FA"
+        },
+        {
+          "type": "color",
+          "id": "menu_floating_link_color",
+          "label": "Transparent header menu link",
+          "default": "#F2F5FA"
+        },
+        {
+          "type": "header",
+          "label": "Background"
+        },
+        {
+          "type": "color",
+          "id": "background_color",
+          "label": "Page",
+          "default": "#0A0E17"
+        },
+        {
+          "type": "color",
+          "id": "background_color_2",
+          "label": "Page (secondary)",
+          "default": "#0D1220"
+        },
+        {
+          "type": "color",
+          "id": "card_background_color",
+          "label": "Box",
+          "default": "#131A28"
+        },
+        {
+          "type": "color",
+          "id": "card_background_hover_color",
+          "label": "Box (Hover)",
+          "default": "#182033"
+        },
+        {
+          "type": "header",
+          "label": "Text & links"
+        },
+        {
+          "type": "color",
+          "id": "heading_color",
+          "label": "Headings",
+          "default": "#F2F5FA"
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Body",
+          "default": "#CDD3E3"
+        },
+        {
+          "type": "color",
+          "id": "link_color",
+          "label": "Link",
+          "default": "#3FBF7F"
+        },
+        {
+          "type": "header",
+          "label": "Primary button"
+        },
+        {
+          "type": "color",
+          "id": "primary_button_background_color",
+          "label": "Background",
+          "default": "#2E9E63"
+        },
+        {
+          "type": "color",
+          "id": "primary_button_outline_color",
+          "label": "Outline color",
+          "default": "#1C7A49"
+        },
+        {
+          "type": "color",
+          "id": "primary_button_text_color",
+          "label": "Text",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "radio",
+          "id": "primary_button_style",
+          "label": "Style",
+          "default": "solid",
+          "options": [
+            {
+              "value": "solid",
+              "label": "Solid"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            },
+            {
+              "value": "outline_with_fill",
+              "label": "Transparent (fill on hover)"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "primary_button_shape",
+          "label": "Button shape",
+          "default": "square",
+          "options": [
+            {
+              "value": "square",
+              "label": "Square"
+            },
+            {
+              "value": "rounded",
+              "label": "Rounded"
+            },
+            {
+              "value": "pill",
+              "label": "Pill"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "label": "Secondary button"
+        },
+        {
+          "type": "color",
+          "id": "secondary_button_background_color",
+          "label": "Secondary background",
+          "default": "#0A0E17"
+        },
+        {
+          "type": "color",
+          "id": "secondary_button_outline_color",
+          "label": "Outline color",
+          "default": "#F2F5FA"
+        },
+        {
+          "type": "color",
+          "id": "secondary_button_text_color",
+          "label": "Secondary text",
+          "default": "#F2F5FA"
+        },
+        {
+          "type": "radio",
+          "id": "secondary_button_style",
+          "label": "Style",
+          "default": "outline",
+          "options": [
+            {
+              "value": "solid",
+              "label": "Solid"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            },
+            {
+              "value": "outline_with_fill",
+              "label": "Transparent (fill on hover)"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "secondary_button_shape",
+          "label": "Button shape",
+          "default": "square",
+          "options": [
+            {
+              "value": "square",
+              "label": "Square"
+            },
+            {
+              "value": "rounded",
+              "label": "Rounded"
+            },
+            {
+              "value": "pill",
+              "label": "Pill"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "label": "Accent"
+        },
+        {
+          "type": "color",
+          "id": "accent_color",
+          "label": "Primary",
+          "default": "#2E9E63"
+        },
+        {
+          "type": "color",
+          "id": "background_decoration",
+          "label": "Styled background",
+          "default": "#131A28"
+        }
+      ]
+    },
+    {
+      "label": "Desktop typography",
+      "settings": [
+        {
+          "type": "header",
+          "label": "Banner"
+        },
+        {
+          "type": "font_select",
+          "id": "banner_font",
+          "label": "Font",
+          "default": "Inter",
+          "options": [
+            {
+              "value": "Abel",
+              "label": "Abel",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Atkinson Hyperlegible",
+              "label": "Atkinson Hyperlegible",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Barlow Condensed",
+              "label": "Barlow Condensed",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Cardo",
+              "label": "Cardo",
+              "group": "Serif"
+            },
+            {
+              "value": "Cormorant",
+              "label": "Cormorant",
+              "group": "Serif"
+            },
+            {
+              "value": "DM Sans",
+              "label": "DM Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Fira Sans",
+              "label": "Fira Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Inter",
+              "label": "Inter",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Jost",
+              "label": "Jost",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Lato",
+              "label": "Lato",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Lexend",
+              "label": "Lexend",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Libre Baskerville",
+              "label": "Libre Baskerville",
+              "group": "Serif"
+            },
+            {
+              "value": "Libre Caslon Display",
+              "label": "Libre Caslon Display",
+              "group": "Serif"
+            },
+            {
+              "value": "Lora",
+              "label": "Lora",
+              "group": "Serif"
+            },
+            {
+              "value": "Marcellus",
+              "label": "Marcellus",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Montserrat",
+              "label": "Montserrat",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Muli",
+              "label": "Muli",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Open Sans",
+              "label": "Open Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Oswald",
+              "label": "Oswald",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Playfair",
+              "label": "Playfair",
+              "group": "Serif"
+            },
+            {
+              "value": "Playfair Display",
+              "label": "Playfair Display",
+              "group": "Serif"
+            },
+            {
+              "value": "PT Sans",
+              "label": "PT Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "PT Serif",
+              "label": "PT Serif",
+              "group": "Serif"
+            },
+            {
+              "value": "Quicksand",
+              "label": "Quicksand",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Rajdhani",
+              "label": "Rajdhani",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Raleway",
+              "label": "Raleway",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Readex Pro",
+              "label": "Readex Pro",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Roboto",
+              "label": "Roboto",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Roboto Slab",
+              "label": "Roboto Slab",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Rubik",
+              "label": "Rubik",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Sen",
+              "label": "Sen",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Source Sans Pro",
+              "label": "Source Sans Pro",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Teachers",
+              "label": "Teachers",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Teko",
+              "label": "Teko",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Tilt Warp",
+              "label": "Tilt Warp",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Work Sans",
+              "label": "Work Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Yellowtail",
+              "label": "Yellowtail",
+              "group": "Cursive"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "banner_size_desktop",
+          "label": "Size",
+          "default": "3.75rem",
+          "options": [
+            {
+              "value": "0.875rem",
+              "label": "0.875rem"
+            },
+            {
+              "value": "1rem",
+              "label": "1rem"
+            },
+            {
+              "value": "1.125rem",
+              "label": "1.125rem"
+            },
+            {
+              "value": "1.25rem",
+              "label": "1.25rem"
+            },
+            {
+              "value": "1.375rem",
+              "label": "1.375rem"
+            },
+            {
+              "value": "1.5rem",
+              "label": "1.5rem"
+            },
+            {
+              "value": "1.75rem",
+              "label": "1.75rem"
+            },
+            {
+              "value": "2rem",
+              "label": "2rem"
+            },
+            {
+              "value": "2.25rem",
+              "label": "2.25rem"
+            },
+            {
+              "value": "2.75rem",
+              "label": "2.75rem"
+            },
+            {
+              "value": "3.25rem",
+              "label": "3.25rem"
+            },
+            {
+              "value": "3.75rem",
+              "label": "3.75rem"
+            },
+            {
+              "value": "4rem",
+              "label": "4rem"
+            },
+            {
+              "value": "4.25rem",
+              "label": "4.25rem"
+            },
+            {
+              "value": "4.5rem",
+              "label": "4.5rem"
+            },
+            {
+              "value": "5rem",
+              "label": "5rem"
+            },
+            {
+              "value": "6rem",
+              "label": "6rem"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "banner_weight",
+          "label": "Weight",
+          "default": "700",
+          "options": [
+            {
+              "value": "100",
+              "label": "Thin"
+            },
+            {
+              "value": "300",
+              "label": "Light"
+            },
+            {
+              "value": "400",
+              "label": "Regular"
+            },
+            {
+              "value": "500",
+              "label": "Medium"
+            },
+            {
+              "value": "600",
+              "label": "Semi-bold"
+            },
+            {
+              "value": "700",
+              "label": "Bold"
+            },
+            {
+              "value": "900",
+              "label": "Black"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "label": "Heading"
+        },
+        {
+          "type": "font_select",
+          "id": "heading_font",
+          "label": "Font",
+          "default": "Inter",
+          "options": [
+            {
+              "value": "Abel",
+              "label": "Abel",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Atkinson Hyperlegible",
+              "label": "Atkinson Hyperlegible",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Barlow Condensed",
+              "label": "Barlow Condensed",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Cardo",
+              "label": "Cardo",
+              "group": "Serif"
+            },
+            {
+              "value": "Cormorant",
+              "label": "Cormorant",
+              "group": "Serif"
+            },
+            {
+              "value": "DM Sans",
+              "label": "DM Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Fira Sans",
+              "label": "Fira Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Inter",
+              "label": "Inter",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Jost",
+              "label": "Jost",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Lato",
+              "label": "Lato",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Lexend",
+              "label": "Lexend",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Libre Baskerville",
+              "label": "Libre Baskerville",
+              "group": "Serif"
+            },
+            {
+              "value": "Libre Caslon Display",
+              "label": "Libre Caslon Display",
+              "group": "Serif"
+            },
+            {
+              "value": "Lora",
+              "label": "Lora",
+              "group": "Serif"
+            },
+            {
+              "value": "Marcellus",
+              "label": "Marcellus",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Montserrat",
+              "label": "Montserrat",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Muli",
+              "label": "Muli",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Open Sans",
+              "label": "Open Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Oswald",
+              "label": "Oswald",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Playfair",
+              "label": "Playfair",
+              "group": "Serif"
+            },
+            {
+              "value": "Playfair Display",
+              "label": "Playfair Display",
+              "group": "Serif"
+            },
+            {
+              "value": "PT Sans",
+              "label": "PT Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "PT Serif",
+              "label": "PT Serif",
+              "group": "Serif"
+            },
+            {
+              "value": "Quicksand",
+              "label": "Quicksand",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Rajdhani",
+              "label": "Rajdhani",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Raleway",
+              "label": "Raleway",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Readex Pro",
+              "label": "Readex Pro",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Roboto",
+              "label": "Roboto",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Roboto Slab",
+              "label": "Roboto Slab",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Rubik",
+              "label": "Rubik",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Sen",
+              "label": "Sen",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Source Sans Pro",
+              "label": "Source Sans Pro",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Teachers",
+              "label": "Teachers",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Teko",
+              "label": "Teko",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Tilt Warp",
+              "label": "Tilt Warp",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Work Sans",
+              "label": "Work Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Yellowtail",
+              "label": "Yellowtail",
+              "group": "Cursive"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "heading_size_desktop",
+          "label": "Size",
+          "default": "2.75rem",
+          "options": [
+            {
+              "value": "0.875rem",
+              "label": "0.875rem"
+            },
+            {
+              "value": "1rem",
+              "label": "1rem"
+            },
+            {
+              "value": "1.125rem",
+              "label": "1.125rem"
+            },
+            {
+              "value": "1.25rem",
+              "label": "1.25rem"
+            },
+            {
+              "value": "1.375rem",
+              "label": "1.375rem"
+            },
+            {
+              "value": "1.5rem",
+              "label": "1.5rem"
+            },
+            {
+              "value": "1.75rem",
+              "label": "1.75rem"
+            },
+            {
+              "value": "2rem",
+              "label": "2rem"
+            },
+            {
+              "value": "2.25rem",
+              "label": "2.25rem"
+            },
+            {
+              "value": "2.75rem",
+              "label": "2.75rem"
+            },
+            {
+              "value": "3.25rem",
+              "label": "3.25rem"
+            },
+            {
+              "value": "3.75rem",
+              "label": "3.75rem"
+            },
+            {
+              "value": "4rem",
+              "label": "4rem"
+            },
+            {
+              "value": "4.25rem",
+              "label": "4.25rem"
+            },
+            {
+              "value": "4.5rem",
+              "label": "4.5rem"
+            },
+            {
+              "value": "5rem",
+              "label": "5rem"
+            },
+            {
+              "value": "6rem",
+              "label": "6rem"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "heading_weight",
+          "label": "Weight",
+          "default": "700",
+          "options": [
+            {
+              "value": "100",
+              "label": "Thin"
+            },
+            {
+              "value": "300",
+              "label": "Light"
+            },
+            {
+              "value": "400",
+              "label": "Regular"
+            },
+            {
+              "value": "500",
+              "label": "Medium"
+            },
+            {
+              "value": "600",
+              "label": "Semi-bold"
+            },
+            {
+              "value": "700",
+              "label": "Bold"
+            },
+            {
+              "value": "900",
+              "label": "Black"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "label": "Subheading"
+        },
+        {
+          "type": "font_select",
+          "id": "subheading_font",
+          "label": "Subheading font",
+          "default": "Inter",
+          "options": [
+            {
+              "value": "Abel",
+              "label": "Abel",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Atkinson Hyperlegible",
+              "label": "Atkinson Hyperlegible",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Barlow Condensed",
+              "label": "Barlow Condensed",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Cardo",
+              "label": "Cardo",
+              "group": "Serif"
+            },
+            {
+              "value": "Cormorant",
+              "label": "Cormorant",
+              "group": "Serif"
+            },
+            {
+              "value": "DM Sans",
+              "label": "DM Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Fira Sans",
+              "label": "Fira Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Inter",
+              "label": "Inter",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Jost",
+              "label": "Jost",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Lato",
+              "label": "Lato",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Lexend",
+              "label": "Lexend",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Libre Baskerville",
+              "label": "Libre Baskerville",
+              "group": "Serif"
+            },
+            {
+              "value": "Libre Caslon Display",
+              "label": "Libre Caslon Display",
+              "group": "Serif"
+            },
+            {
+              "value": "Lora",
+              "label": "Lora",
+              "group": "Serif"
+            },
+            {
+              "value": "Marcellus",
+              "label": "Marcellus",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Montserrat",
+              "label": "Montserrat",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Muli",
+              "label": "Muli",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Open Sans",
+              "label": "Open Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Oswald",
+              "label": "Oswald",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Playfair",
+              "label": "Playfair",
+              "group": "Serif"
+            },
+            {
+              "value": "Playfair Display",
+              "label": "Playfair Display",
+              "group": "Serif"
+            },
+            {
+              "value": "PT Sans",
+              "label": "PT Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "PT Serif",
+              "label": "PT Serif",
+              "group": "Serif"
+            },
+            {
+              "value": "Quicksand",
+              "label": "Quicksand",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Rajdhani",
+              "label": "Rajdhani",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Raleway",
+              "label": "Raleway",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Readex Pro",
+              "label": "Readex Pro",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Roboto",
+              "label": "Roboto",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Roboto Slab",
+              "label": "Roboto Slab",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Rubik",
+              "label": "Rubik",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Sen",
+              "label": "Sen",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Source Sans Pro",
+              "label": "Source Sans Pro",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Teachers",
+              "label": "Teachers",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Teko",
+              "label": "Teko",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Tilt Warp",
+              "label": "Tilt Warp",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Work Sans",
+              "label": "Work Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Yellowtail",
+              "label": "Yellowtail",
+              "group": "Cursive"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "subheading_size_desktop",
+          "label": "Size",
+          "default": "1.25rem",
+          "options": [
+            {
+              "value": "0.875rem",
+              "label": "0.875rem"
+            },
+            {
+              "value": "1rem",
+              "label": "1rem"
+            },
+            {
+              "value": "1.125rem",
+              "label": "1.125rem"
+            },
+            {
+              "value": "1.25rem",
+              "label": "1.25rem"
+            },
+            {
+              "value": "1.375rem",
+              "label": "1.375rem"
+            },
+            {
+              "value": "1.5rem",
+              "label": "1.5rem"
+            },
+            {
+              "value": "1.75rem",
+              "label": "1.75rem"
+            },
+            {
+              "value": "2rem",
+              "label": "2rem"
+            },
+            {
+              "value": "2.25rem",
+              "label": "2.25rem"
+            },
+            {
+              "value": "2.75rem",
+              "label": "2.75rem"
+            },
+            {
+              "value": "3.25rem",
+              "label": "3.25rem"
+            },
+            {
+              "value": "3.75rem",
+              "label": "3.75rem"
+            },
+            {
+              "value": "4rem",
+              "label": "4rem"
+            },
+            {
+              "value": "4.25rem",
+              "label": "4.25rem"
+            },
+            {
+              "value": "4.5rem",
+              "label": "4.5rem"
+            },
+            {
+              "value": "5rem",
+              "label": "5rem"
+            },
+            {
+              "value": "6rem",
+              "label": "6rem"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "subheading_weight",
+          "label": "Weight",
+          "default": "400",
+          "options": [
+            {
+              "value": "100",
+              "label": "Thin"
+            },
+            {
+              "value": "300",
+              "label": "Light"
+            },
+            {
+              "value": "400",
+              "label": "Regular"
+            },
+            {
+              "value": "500",
+              "label": "Medium"
+            },
+            {
+              "value": "600",
+              "label": "Semi-bold"
+            },
+            {
+              "value": "700",
+              "label": "Bold"
+            },
+            {
+              "value": "900",
+              "label": "Black"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "label": "Secondary heading"
+        },
+        {
+          "type": "font_select",
+          "id": "secondary_heading_font",
+          "label": "Font",
+          "default": "Inter",
+          "options": [
+            {
+              "value": "Abel",
+              "label": "Abel",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Atkinson Hyperlegible",
+              "label": "Atkinson Hyperlegible",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Barlow Condensed",
+              "label": "Barlow Condensed",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Cardo",
+              "label": "Cardo",
+              "group": "Serif"
+            },
+            {
+              "value": "Cormorant",
+              "label": "Cormorant",
+              "group": "Serif"
+            },
+            {
+              "value": "DM Sans",
+              "label": "DM Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Fira Sans",
+              "label": "Fira Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Inter",
+              "label": "Inter",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Jost",
+              "label": "Jost",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Lato",
+              "label": "Lato",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Lexend",
+              "label": "Lexend",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Libre Baskerville",
+              "label": "Libre Baskerville",
+              "group": "Serif"
+            },
+            {
+              "value": "Libre Caslon Display",
+              "label": "Libre Caslon Display",
+              "group": "Serif"
+            },
+            {
+              "value": "Lora",
+              "label": "Lora",
+              "group": "Serif"
+            },
+            {
+              "value": "Marcellus",
+              "label": "Marcellus",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Montserrat",
+              "label": "Montserrat",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Muli",
+              "label": "Muli",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Open Sans",
+              "label": "Open Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Oswald",
+              "label": "Oswald",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Playfair",
+              "label": "Playfair",
+              "group": "Serif"
+            },
+            {
+              "value": "Playfair Display",
+              "label": "Playfair Display",
+              "group": "Serif"
+            },
+            {
+              "value": "PT Sans",
+              "label": "PT Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "PT Serif",
+              "label": "PT Serif",
+              "group": "Serif"
+            },
+            {
+              "value": "Quicksand",
+              "label": "Quicksand",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Rajdhani",
+              "label": "Rajdhani",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Raleway",
+              "label": "Raleway",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Readex Pro",
+              "label": "Readex Pro",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Roboto",
+              "label": "Roboto",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Roboto Slab",
+              "label": "Roboto Slab",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Rubik",
+              "label": "Rubik",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Sen",
+              "label": "Sen",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Source Sans Pro",
+              "label": "Source Sans Pro",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Teachers",
+              "label": "Teachers",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Teko",
+              "label": "Teko",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Tilt Warp",
+              "label": "Tilt Warp",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Work Sans",
+              "label": "Work Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Yellowtail",
+              "label": "Yellowtail",
+              "group": "Cursive"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "secondary_heading_size_desktop",
+          "label": "Size",
+          "default": "1.375rem",
+          "options": [
+            {
+              "value": "0.875rem",
+              "label": "0.875rem"
+            },
+            {
+              "value": "1rem",
+              "label": "1rem"
+            },
+            {
+              "value": "1.125rem",
+              "label": "1.125rem"
+            },
+            {
+              "value": "1.25rem",
+              "label": "1.25rem"
+            },
+            {
+              "value": "1.375rem",
+              "label": "1.375rem"
+            },
+            {
+              "value": "1.5rem",
+              "label": "1.5rem"
+            },
+            {
+              "value": "1.75rem",
+              "label": "1.75rem"
+            },
+            {
+              "value": "2rem",
+              "label": "2rem"
+            },
+            {
+              "value": "2.25rem",
+              "label": "2.25rem"
+            },
+            {
+              "value": "2.75rem",
+              "label": "2.75rem"
+            },
+            {
+              "value": "3.25rem",
+              "label": "3.25rem"
+            },
+            {
+              "value": "3.75rem",
+              "label": "3.75rem"
+            },
+            {
+              "value": "4rem",
+              "label": "4rem"
+            },
+            {
+              "value": "4.25rem",
+              "label": "4.25rem"
+            },
+            {
+              "value": "4.5rem",
+              "label": "4.5rem"
+            },
+            {
+              "value": "5rem",
+              "label": "5rem"
+            },
+            {
+              "value": "6rem",
+              "label": "6rem"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "secondary_heading_weight",
+          "label": "Weight",
+          "default": "700",
+          "options": [
+            {
+              "value": "100",
+              "label": "Thin"
+            },
+            {
+              "value": "300",
+              "label": "Light"
+            },
+            {
+              "value": "400",
+              "label": "Regular"
+            },
+            {
+              "value": "500",
+              "label": "Medium"
+            },
+            {
+              "value": "600",
+              "label": "Semi-bold"
+            },
+            {
+              "value": "700",
+              "label": "Bold"
+            },
+            {
+              "value": "900",
+              "label": "Black"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "label": "Body copy"
+        },
+        {
+          "type": "font_select",
+          "id": "body_font",
+          "label": "Font",
+          "default": "Inter",
+          "options": [
+            {
+              "value": "Abel",
+              "label": "Abel",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Atkinson Hyperlegible",
+              "label": "Atkinson Hyperlegible",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Barlow Condensed",
+              "label": "Barlow Condensed",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Cardo",
+              "label": "Cardo",
+              "group": "Serif"
+            },
+            {
+              "value": "Cormorant",
+              "label": "Cormorant",
+              "group": "Serif"
+            },
+            {
+              "value": "DM Sans",
+              "label": "DM Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Fira Sans",
+              "label": "Fira Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Inter",
+              "label": "Inter",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Jost",
+              "label": "Jost",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Lato",
+              "label": "Lato",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Lexend",
+              "label": "Lexend",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Libre Baskerville",
+              "label": "Libre Baskerville",
+              "group": "Serif"
+            },
+            {
+              "value": "Libre Caslon Display",
+              "label": "Libre Caslon Display",
+              "group": "Serif"
+            },
+            {
+              "value": "Lora",
+              "label": "Lora",
+              "group": "Serif"
+            },
+            {
+              "value": "Marcellus",
+              "label": "Marcellus",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Montserrat",
+              "label": "Montserrat",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Muli",
+              "label": "Muli",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Open Sans",
+              "label": "Open Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Oswald",
+              "label": "Oswald",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Playfair",
+              "label": "Playfair",
+              "group": "Serif"
+            },
+            {
+              "value": "Playfair Display",
+              "label": "Playfair Display",
+              "group": "Serif"
+            },
+            {
+              "value": "PT Sans",
+              "label": "PT Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "PT Serif",
+              "label": "PT Serif",
+              "group": "Serif"
+            },
+            {
+              "value": "Quicksand",
+              "label": "Quicksand",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Rajdhani",
+              "label": "Rajdhani",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Raleway",
+              "label": "Raleway",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Readex Pro",
+              "label": "Readex Pro",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Roboto",
+              "label": "Roboto",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Roboto Slab",
+              "label": "Roboto Slab",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Rubik",
+              "label": "Rubik",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Sen",
+              "label": "Sen",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Source Sans Pro",
+              "label": "Source Sans Pro",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Teachers",
+              "label": "Teachers",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Teko",
+              "label": "Teko",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Tilt Warp",
+              "label": "Tilt Warp",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Work Sans",
+              "label": "Work Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Yellowtail",
+              "label": "Yellowtail",
+              "group": "Cursive"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "body_size_desktop",
+          "label": "Size",
+          "default": "1.125rem",
+          "options": [
+            {
+              "value": "0.875rem",
+              "label": "0.875rem"
+            },
+            {
+              "value": "1rem",
+              "label": "1rem"
+            },
+            {
+              "value": "1.125rem",
+              "label": "1.125rem"
+            },
+            {
+              "value": "1.25rem",
+              "label": "1.25rem"
+            },
+            {
+              "value": "1.375rem",
+              "label": "1.375rem"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "body_weight",
+          "label": "Weight",
+          "default": "400",
+          "options": [
+            {
+              "value": "100",
+              "label": "Thin"
+            },
+            {
+              "value": "300",
+              "label": "Light"
+            },
+            {
+              "value": "400",
+              "label": "Regular"
+            },
+            {
+              "value": "500",
+              "label": "Medium"
+            },
+            {
+              "value": "600",
+              "label": "Semi-bold"
+            },
+            {
+              "value": "700",
+              "label": "Bold"
+            },
+            {
+              "value": "900",
+              "label": "Black"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "label": "Button text"
+        },
+        {
+          "type": "font_select",
+          "id": "button_font",
+          "label": "Font",
+          "default": "Inter",
+          "options": [
+            {
+              "value": "Abel",
+              "label": "Abel",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Atkinson Hyperlegible",
+              "label": "Atkinson Hyperlegible",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Barlow Condensed",
+              "label": "Barlow Condensed",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Cardo",
+              "label": "Cardo",
+              "group": "Serif"
+            },
+            {
+              "value": "Cormorant",
+              "label": "Cormorant",
+              "group": "Serif"
+            },
+            {
+              "value": "DM Sans",
+              "label": "DM Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Fira Sans",
+              "label": "Fira Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Inter",
+              "label": "Inter",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Jost",
+              "label": "Jost",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Lato",
+              "label": "Lato",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Lexend",
+              "label": "Lexend",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Libre Baskerville",
+              "label": "Libre Baskerville",
+              "group": "Serif"
+            },
+            {
+              "value": "Libre Caslon Display",
+              "label": "Libre Caslon Display",
+              "group": "Serif"
+            },
+            {
+              "value": "Lora",
+              "label": "Lora",
+              "group": "Serif"
+            },
+            {
+              "value": "Marcellus",
+              "label": "Marcellus",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Montserrat",
+              "label": "Montserrat",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Muli",
+              "label": "Muli",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Open Sans",
+              "label": "Open Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Oswald",
+              "label": "Oswald",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Playfair",
+              "label": "Playfair",
+              "group": "Serif"
+            },
+            {
+              "value": "Playfair Display",
+              "label": "Playfair Display",
+              "group": "Serif"
+            },
+            {
+              "value": "PT Sans",
+              "label": "PT Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "PT Serif",
+              "label": "PT Serif",
+              "group": "Serif"
+            },
+            {
+              "value": "Quicksand",
+              "label": "Quicksand",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Rajdhani",
+              "label": "Rajdhani",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Raleway",
+              "label": "Raleway",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Readex Pro",
+              "label": "Readex Pro",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Roboto",
+              "label": "Roboto",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Roboto Slab",
+              "label": "Roboto Slab",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Rubik",
+              "label": "Rubik",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Sen",
+              "label": "Sen",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Source Sans Pro",
+              "label": "Source Sans Pro",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Teachers",
+              "label": "Teachers",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Teko",
+              "label": "Teko",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Tilt Warp",
+              "label": "Tilt Warp",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Work Sans",
+              "label": "Work Sans",
+              "group": "Sans-serif"
+            },
+            {
+              "value": "Yellowtail",
+              "label": "Yellowtail",
+              "group": "Cursive"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_size_desktop",
+          "label": "Size",
+          "default": "1.125rem",
+          "options": [
+            {
+              "value": "0.875rem",
+              "label": "0.875rem"
+            },
+            {
+              "value": "1rem",
+              "label": "1rem"
+            },
+            {
+              "value": "1.125rem",
+              "label": "1.125rem"
+            },
+            {
+              "value": "1.25rem",
+              "label": "1.25rem"
+            },
+            {
+              "value": "1.375rem",
+              "label": "1.375rem"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_weight",
+          "label": "Weight",
+          "default": "700",
+          "options": [
+            {
+              "value": "100",
+              "label": "Thin"
+            },
+            {
+              "value": "300",
+              "label": "Light"
+            },
+            {
+              "value": "400",
+              "label": "Regular"
+            },
+            {
+              "value": "500",
+              "label": "Medium"
+            },
+            {
+              "value": "600",
+              "label": "Semi-bold"
+            },
+            {
+              "value": "700",
+              "label": "Bold"
+            },
+            {
+              "value": "900",
+              "label": "Black"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Mobile typography",
+      "settings": [
+        {
+          "type": "select",
+          "id": "banner_size_mobile",
+          "label": "Banner size",
+          "default": "2.75rem",
+          "options": [
+            {
+              "value": "0.875rem",
+              "label": "0.875rem"
+            },
+            {
+              "value": "1rem",
+              "label": "1rem"
+            },
+            {
+              "value": "1.125rem",
+              "label": "1.125rem"
+            },
+            {
+              "value": "1.25rem",
+              "label": "1.25rem"
+            },
+            {
+              "value": "1.375rem",
+              "label": "1.375rem"
+            },
+            {
+              "value": "1.5rem",
+              "label": "1.5rem"
+            },
+            {
+              "value": "1.75rem",
+              "label": "1.75rem"
+            },
+            {
+              "value": "2rem",
+              "label": "2rem"
+            },
+            {
+              "value": "2.25rem",
+              "label": "2.25rem"
+            },
+            {
+              "value": "2.75rem",
+              "label": "2.75rem"
+            },
+            {
+              "value": "3.25rem",
+              "label": "3.25rem"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "heading_size_mobile",
+          "label": "Heading size",
+          "default": "2rem",
+          "options": [
+            {
+              "value": "0.875rem",
+              "label": "0.875rem"
+            },
+            {
+              "value": "1rem",
+              "label": "1rem"
+            },
+            {
+              "value": "1.125rem",
+              "label": "1.125rem"
+            },
+            {
+              "value": "1.25rem",
+              "label": "1.25rem"
+            },
+            {
+              "value": "1.375rem",
+              "label": "1.375rem"
+            },
+            {
+              "value": "1.5rem",
+              "label": "1.5rem"
+            },
+            {
+              "value": "1.75rem",
+              "label": "1.75rem"
+            },
+            {
+              "value": "2rem",
+              "label": "2rem"
+            },
+            {
+              "value": "2.25rem",
+              "label": "2.25rem"
+            },
+            {
+              "value": "2.75rem",
+              "label": "2.75rem"
+            },
+            {
+              "value": "3.25rem",
+              "label": "3.25rem"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "subheading_size_mobile",
+          "label": "Subheading size",
+          "default": "1.125rem",
+          "options": [
+            {
+              "value": "0.875rem",
+              "label": "0.875rem"
+            },
+            {
+              "value": "1rem",
+              "label": "1rem"
+            },
+            {
+              "value": "1.125rem",
+              "label": "1.125rem"
+            },
+            {
+              "value": "1.25rem",
+              "label": "1.25rem"
+            },
+            {
+              "value": "1.375rem",
+              "label": "1.375rem"
+            },
+            {
+              "value": "1.5rem",
+              "label": "1.5rem"
+            },
+            {
+              "value": "1.75rem",
+              "label": "1.75rem"
+            },
+            {
+              "value": "2rem",
+              "label": "2rem"
+            },
+            {
+              "value": "2.25rem",
+              "label": "2.25rem"
+            },
+            {
+              "value": "2.75rem",
+              "label": "2.75rem"
+            },
+            {
+              "value": "3.25rem",
+              "label": "3.25rem"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "secondary_heading_size_mobile",
+          "label": "Secondary heading size",
+          "default": "1.25rem",
+          "options": [
+            {
+              "value": "0.875rem",
+              "label": "0.875rem"
+            },
+            {
+              "value": "1rem",
+              "label": "1rem"
+            },
+            {
+              "value": "1.125rem",
+              "label": "1.125rem"
+            },
+            {
+              "value": "1.25rem",
+              "label": "1.25rem"
+            },
+            {
+              "value": "1.375rem",
+              "label": "1.375rem"
+            },
+            {
+              "value": "1.5rem",
+              "label": "1.5rem"
+            },
+            {
+              "value": "1.75rem",
+              "label": "1.75rem"
+            },
+            {
+              "value": "2rem",
+              "label": "2rem"
+            },
+            {
+              "value": "2.25rem",
+              "label": "2.25rem"
+            },
+            {
+              "value": "2.75rem",
+              "label": "2.75rem"
+            },
+            {
+              "value": "3.25rem",
+              "label": "3.25rem"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "body_size_mobile",
+          "label": "Body size",
+          "default": "1rem",
+          "options": [
+            {
+              "value": "0.875rem",
+              "label": "0.875rem"
+            },
+            {
+              "value": "1rem",
+              "label": "1rem"
+            },
+            {
+              "value": "1.125rem",
+              "label": "1.125rem"
+            },
+            {
+              "value": "1.25rem",
+              "label": "1.25rem"
+            },
+            {
+              "value": "1.375rem",
+              "label": "1.375rem"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "button_size_mobile",
+          "label": "Button size",
+          "default": "1rem",
+          "options": [
+            {
+              "value": "0.875rem",
+              "label": "0.875rem"
+            },
+            {
+              "value": "1rem",
+              "label": "1rem"
+            },
+            {
+              "value": "1.125rem",
+              "label": "1.125rem"
+            },
+            {
+              "value": "1.25rem",
+              "label": "1.25rem"
+            },
+            {
+              "value": "1.375rem",
+              "label": "1.375rem"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Favicon",
+      "settings": [
+        {
+          "type": "image",
+          "id": "favicon",
+          "label": "Image",
+          "default": "https://cdn.thinkific.com/51/20180809/f1a1de9d3260c96d3a81ee781bc9808e.ico"
+        }
+      ]
+    }
+  ],
+  "presets": {
+    "superintelligent": {
+      "title": "Superintelligent",
+      "description": "Sajtens designspråk: mörk bana, grönt för träning",
+      "settings": {
+        "menu_background_color": "#0A0E17",
+        "menu_link_color": "#F2F5FA",
+        "menu_floating_link_color": "#F2F5FA",
+        "background_color": "#0A0E17",
+        "background_color_2": "#0D1220",
+        "card_background_color": "#131A28",
+        "card_background_hover_color": "#182033",
+        "heading_color": "#F2F5FA",
+        "text_color": "#CDD3E3",
+        "link_color": "#3FBF7F",
+        "primary_button_background_color": "#2E9E63",
+        "primary_button_outline_color": "#1C7A49",
+        "primary_button_text_color": "#FFFFFF",
+        "primary_button_style": "solid",
+        "primary_button_shape": "square",
+        "secondary_button_background_color": "#0A0E17",
+        "secondary_button_outline_color": "#F2F5FA",
+        "secondary_button_text_color": "#F2F5FA",
+        "secondary_button_style": "outline",
+        "secondary_button_shape": "square",
+        "accent_color": "#2E9E63",
+        "background_decoration": "#131A28",
+        "banner_font": "Inter",
+        "banner_size_desktop": "3.75rem",
+        "banner_weight": "700",
+        "heading_font": "Inter",
+        "heading_size_desktop": "2.75rem",
+        "heading_weight": "700",
+        "subheading_font": "Inter",
+        "subheading_size_desktop": "1.25rem",
+        "subheading_weight": "400",
+        "secondary_heading_font": "Inter",
+        "secondary_heading_size_desktop": "1.375rem",
+        "secondary_heading_weight": "700",
+        "body_font": "Inter",
+        "body_size_desktop": "1.125rem",
+        "body_weight": "400",
+        "button_font": "Inter",
+        "button_size_desktop": "1.125rem",
+        "button_weight": "700",
+        "banner_size_mobile": "2.75rem",
+        "heading_size_mobile": "2rem",
+        "subheading_size_mobile": "1.125rem",
+        "secondary_heading_size_mobile": "1.25rem",
+        "body_size_mobile": "1rem",
+        "button_size_mobile": "1rem",
+        "favicon": "https://cdn.thinkific.com/51/20180809/f1a1de9d3260c96d3a81ee781bc9808e.ico"
+      }
+    },
+    "halo": {
+      "title": "Halo",
+      "description": "",
+      "settings": {
+        "menu_background_color": "#FAF9F9",
+        "menu_link_color": "#28659C",
+        "menu_floating_link_color": "#28659C",
+        "background_color": "#FAF9F9",
+        "background_color_2": "#EBF2FA",
+        "card_background_color": "#FFFFFF",
+        "card_background_hover_color": "#FFFFFF",
+        "heading_color": "#28659C",
+        "text_color": "#28659C",
+        "link_color": "#28659C",
+        "primary_button_background_color": "#28659C",
+        "primary_button_outline_color": "#28659C",
+        "primary_button_text_color": "#FAF9F9",
+        "primary_button_style": "solid",
+        "primary_button_shape": "rounded",
+        "secondary_button_background_color": "#FFFFFF",
+        "secondary_button_outline_color": "#28659C",
+        "secondary_button_text_color": "#28659C",
+        "secondary_button_style": "outline",
+        "secondary_button_shape": "rounded",
+        "accent_color": "#28659C",
+        "background_decoration": "#28659C",
+        "banner_font": "Playfair Display",
+        "banner_size_desktop": "3.25rem",
+        "banner_weight": "500",
+        "heading_font": "Playfair Display",
+        "heading_size_desktop": "2.25rem",
+        "heading_weight": "500",
+        "subheading_font": "Roboto",
+        "subheading_size_desktop": "1.375rem",
+        "subheading_weight": "400",
+        "secondary_heading_font": "Playfair Display",
+        "secondary_heading_size_desktop": "1.5rem",
+        "secondary_heading_weight": "500",
+        "body_font": "Roboto",
+        "body_size_desktop": "1rem",
+        "body_weight": "400",
+        "button_font": "Roboto",
+        "button_size_desktop": "1rem",
+        "button_weight": "600",
+        "banner_size_mobile": "2.25rem",
+        "heading_size_mobile": "1.5rem",
+        "subheading_size_mobile": "1.25rem",
+        "secondary_heading_size_mobile": "1.125rem",
+        "body_size_mobile": "1rem",
+        "button_size_mobile": "1rem",
+        "favicon": "https://cdn.thinkific.com/51/20180809/f1a1de9d3260c96d3a81ee781bc9808e.ico"
+      }
+    },
+    "jet": {
+      "title": "Jet",
+      "description": "",
+      "settings": {
+        "menu_background_color": "#FFFFFF",
+        "menu_link_color": "#070722",
+        "menu_floating_link_color": "#070722",
+        "background_color": "#FFFFFF",
+        "background_color_2": "#E1E1E1",
+        "card_background_color": "#F8F8F8",
+        "card_background_hover_color": "#F8F8F8",
+        "heading_color": "#070722",
+        "text_color": "#070722",
+        "link_color": "#070722",
+        "primary_button_background_color": "#070722",
+        "primary_button_outline_color": "#070722",
+        "primary_button_text_color": "#FFFFFF",
+        "primary_button_style": "solid",
+        "primary_button_shape": "square",
+        "secondary_button_background_color": "#FFFFFF",
+        "secondary_button_outline_color": "#070722",
+        "secondary_button_text_color": "#070722",
+        "secondary_button_style": "outline",
+        "secondary_button_shape": "square",
+        "accent_color": "#070722",
+        "background_decoration": "#F8F8F8",
+        "banner_font": "Inter",
+        "banner_size_desktop": "3.25rem",
+        "banner_weight": "700",
+        "heading_font": "Inter",
+        "heading_size_desktop": "2rem",
+        "heading_weight": "700",
+        "subheading_font": "Roboto",
+        "subheading_size_desktop": "1.5rem",
+        "subheading_weight": "400",
+        "secondary_heading_font": "Inter",
+        "secondary_heading_size_desktop": "1.375rem",
+        "secondary_heading_weight": "700",
+        "body_font": "Roboto",
+        "body_size_desktop": "1.125rem",
+        "body_weight": "400",
+        "button_font": "Roboto",
+        "button_size_desktop": "1.125rem",
+        "button_weight": "600",
+        "banner_size_mobile": "2.25rem",
+        "heading_size_mobile": "1.5rem",
+        "subheading_size_mobile": "1.25rem",
+        "secondary_heading_size_mobile": "1.125rem",
+        "body_size_mobile": "1rem",
+        "button_size_mobile": "1rem",
+        "favicon": "https://cdn.thinkific.com/51/20180809/f1a1de9d3260c96d3a81ee781bc9808e.ico"
+      }
+    },
+    "spark": {
+      "title": "Spark",
+      "description": "",
+      "settings": {
+        "menu_background_color": "#F7F7F7",
+        "menu_link_color": "#625050",
+        "menu_floating_link_color": "#625050",
+        "background_color": "#F7F7F7",
+        "background_color_2": "#FFFFFF",
+        "card_background_color": "#FFFFFF",
+        "card_background_hover_color": "#FFFFFF",
+        "heading_color": "#625050",
+        "text_color": "#625050",
+        "link_color": "#625050",
+        "primary_button_background_color": "#FF9983",
+        "primary_button_outline_color": "#FF9983",
+        "primary_button_text_color": "#F7F7F7",
+        "primary_button_style": "solid",
+        "primary_button_shape": "pill",
+        "secondary_button_background_color": "#625050",
+        "secondary_button_outline_color": "#625050",
+        "secondary_button_text_color": "#F7F7F7",
+        "secondary_button_style": "solid",
+        "secondary_button_shape": "pill",
+        "accent_color": "#FF9983",
+        "background_decoration": "#625050",
+        "banner_font": "Montserrat",
+        "banner_size_desktop": "3.25rem",
+        "banner_weight": "700",
+        "heading_font": "Montserrat",
+        "heading_size_desktop": "2.25rem",
+        "heading_weight": "700",
+        "subheading_font": "Montserrat",
+        "subheading_size_desktop": "1.375rem",
+        "subheading_weight": "500",
+        "secondary_heading_font": "Montserrat",
+        "secondary_heading_size_desktop": "1.375rem",
+        "secondary_heading_weight": "700",
+        "body_font": "Montserrat",
+        "body_size_desktop": "1rem",
+        "body_weight": "400",
+        "button_font": "Montserrat",
+        "button_size_desktop": "1rem",
+        "button_weight": "600",
+        "banner_size_mobile": "2.25rem",
+        "heading_size_mobile": "1.5rem",
+        "subheading_size_mobile": "1.25rem",
+        "secondary_heading_size_mobile": "1.125rem",
+        "body_size_mobile": "1rem",
+        "button_size_mobile": "1rem",
+        "favicon": "https://cdn.thinkific.com/51/20180809/f1a1de9d3260c96d3a81ee781bc9808e.ico"
+      }
+    },
+    "edge": {
+      "title": "Edge",
+      "description": "",
+      "settings": {
+        "menu_background_color": "#21283B",
+        "menu_link_color": "#FAF9F9",
+        "menu_floating_link_color": "#FAF9F9",
+        "background_color": "#21283B",
+        "background_color_2": "#267766",
+        "card_background_color": "#3D455F",
+        "card_background_hover_color": "#3D455F",
+        "heading_color": "#FAF9F9",
+        "text_color": "#FAF9F9",
+        "link_color": "#FAF9F9",
+        "primary_button_background_color": "#FAF9F9",
+        "primary_button_outline_color": "#FAF9F9",
+        "primary_button_text_color": "#21283B",
+        "primary_button_style": "solid",
+        "primary_button_shape": "rounded",
+        "secondary_button_background_color": "#3D455F",
+        "secondary_button_outline_color": "#3D455F",
+        "secondary_button_text_color": "#FAF9F9",
+        "secondary_button_style": "solid",
+        "secondary_button_shape": "rounded",
+        "accent_color": "#96C0B7",
+        "background_decoration": "#FAF9F9",
+        "banner_font": "Fira Sans",
+        "banner_size_desktop": "3.25rem",
+        "banner_weight": "500",
+        "heading_font": "Fira Sans",
+        "heading_size_desktop": "2.25rem",
+        "heading_weight": "500",
+        "subheading_font": "Open Sans",
+        "subheading_size_desktop": "1.375rem",
+        "subheading_weight": "400",
+        "secondary_heading_font": "Open Sans",
+        "secondary_heading_size_desktop": "1.5rem",
+        "secondary_heading_weight": "400",
+        "body_font": "Open Sans",
+        "body_size_desktop": "1rem",
+        "body_weight": "400",
+        "button_font": "Fira Sans",
+        "button_size_desktop": "1.125rem",
+        "button_weight": "600",
+        "banner_size_mobile": "2.25rem",
+        "heading_size_mobile": "1.5rem",
+        "subheading_size_mobile": "1.25rem",
+        "secondary_heading_size_mobile": "1.125rem",
+        "body_size_mobile": "1rem",
+        "button_size_mobile": "1rem",
+        "favicon": "https://cdn.thinkific.com/51/20180809/f1a1de9d3260c96d3a81ee781bc9808e.ico"
+      }
+    }
+  }
+}

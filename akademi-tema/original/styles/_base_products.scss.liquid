@@ -1,0 +1,722 @@
+// Products
+// ======================================
+.card {
+  @include card;
+  overflow: hidden;
+
+  a {
+    text-decoration: none;
+  }
+
+  &__img-container {
+    display: flex;
+    position: relative;
+  }
+
+  &__img {
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    object-fit: cover;
+  }
+
+  &__body-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+
+  &__body {
+    width: 100%;
+    height: 100%;
+    padding: $padding-2;
+  }
+
+  &__category {
+    margin-bottom: $margin-base;
+    color: $body__text-color;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+  }
+
+  &__name {
+    @include card-name;
+    margin-bottom: $margin-base;
+  }
+
+  &__product-info {
+    display: flex;
+    align-items: center;
+    color: $body__text-color;
+    font-size: 0.875rem;
+
+    .toga-icon {
+      margin-right: $margin-base;
+    }
+  }
+
+  &__description {
+    @include line-clamp;
+    margin-top: $margin-base;
+    margin-bottom: 0;
+    color: $body__text-color;
+    font-weight: 400;
+  }
+
+  &__price {
+    display: flex;
+    margin-bottom: 0;
+    color: $body__text-color;
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  &__price-container {
+    padding: 0 $padding-2 $padding-2;
+
+    .card__price {
+      flex-shrink: 0;
+      margin-right: $margin-base;
+      color: $body__text-color;
+    }
+  }
+
+  &__badge {
+    display: inline-block;
+    padding: $padding-base / 2 12px;
+    border-radius: $card__border-radius;
+    box-shadow: $shadow-raised;
+
+    &--presell {
+      display: block;
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background-color: $accent__color;
+      color: dynamic-contrast-color($accent__color);
+      z-index: z-index(element--foreground);
+    }
+
+    &--free {
+      background-color: $light-green;
+      color: $dark-green;
+    }
+
+    &--price {
+      padding: 0;
+      box-shadow: none;
+      font-size: 1rem;
+      font-weight: 600;
+      line-height: 1.25rem;
+    }
+  }
+
+  &__reviews {
+    display: flex;
+    align-items: center;
+    margin-top: $margin-base;
+    color: $body__text-color;
+    font-size: 0.875rem;
+
+    .review__star {
+      color: $review-star__filled-color;
+    }
+  }
+
+  &__reviews-average {
+    margin-left: $margin-base;
+    color: $heading__color;
+    font-weight: bold;
+  }
+
+  &--community {
+    .toga-icon-people {
+      font-size: 18px;
+    }
+  }
+}
+
+// Category cards
+.card--category {
+  .card__body-container {
+    padding: $padding-2;
+  }
+}
+
+// Featured cards
+.card--featured {
+  flex-direction: column;
+  @include screen-lg-min {
+    flex-direction: row;
+  }
+
+  .card {
+    @include screen-lg-min {
+      &__name {
+        -webkit-line-clamp: 2;
+      }
+
+      &__img {
+        width: 368px;
+      }
+
+      &__body-container {
+        flex-direction: row;
+        flex-basis: 100%;
+      }
+
+      &__body {
+        display: flex;
+        flex-direction: column;
+        color: unset;
+
+        &:focus {
+          outline-offset: -2px;
+        }
+      }
+
+      &__price-container {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin-top: auto;
+        padding: $padding-2 0 0;
+      }
+
+      &__price {
+        padding-right: $padding-2;
+      }
+
+      &__button {
+        flex-shrink: 0;
+        align-self: flex-end;
+        margin-left: 0;
+      }
+    }
+
+    &__price-container {
+      padding-left: 0;
+    }
+
+    &__button {
+      margin: $margin-2;
+    }
+  }
+}
+
+// Dashboard cards
+// -------------------------------------------------
+.card--dashboard {
+  .card {
+    &__header {
+      display: flex;
+      flex-direction: column;
+      @include flex(1 1 auto);
+      position: relative;
+      z-index: $z-index__element--foreground;
+
+      a {
+        display: flex;
+        flex-direction: column;
+        @include flex(1 1 auto);
+        justify-content: space-between;
+        width: 100%;
+        height: 100%;
+        text-decoration: none;
+      }
+    }
+
+    &__name {
+      height: 100%;
+      margin: 0 $margin-3 $margin-3;
+      padding-top: 2rem;
+      text-align: center;
+
+      &--community {
+        margin-bottom: $margin-2;
+      }
+    }
+
+    &__body {
+      height: auto;
+      margin: 0;
+      text-align: center;
+    }
+
+    &__img {
+      aspect-ratio: 16 / 9;
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    &__details {
+      display: flex;
+      flex: 1;
+      height: 3rem;
+
+      a,
+      span {
+        display: flex;
+        flex: 1;
+        align-items: center;
+        justify-content: center;
+        height: 3rem;
+        font-weight: 400;
+
+        &,
+        &:active,
+        &:hover,
+        &:focus {
+          background-color: transparent;
+          color: dynamic-contrast-color($interface__background-color);
+        }
+
+        &:first-child {
+          border: 0;
+        }
+      }
+
+      a {
+        &:active,
+        &:hover,
+        &:focus {
+          box-shadow: $shadow-floating;
+        }
+      }
+    }
+
+    &__percentage {
+      position: absolute;
+      width: $progress__inset-size;
+      height: $progress__inset-size;
+      margin-top: ($progress__circle-size - $progress__inset-size)/2;
+      margin-left: ($progress__circle-size - $progress__inset-size)/2;
+      border-radius: 50%;
+      background-color: $interface__background-color;
+      color: $accent__color;
+      line-height: $progress__inset-size;
+      text-align: center;
+
+      &:before {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: $progress__inset-size;
+        height: $progress__inset-size;
+        border: $interface__border;
+        border-radius: 50%;
+        content: "";
+      }
+    }
+
+    $i: 0;
+    $increment: 180deg / 100;
+    @for $i from 1 through 100 {
+
+      &[data-progress="#{$i}"] {
+
+        .circle {
+
+          .fill,
+          .mask.full {
+            @include transition-delay(1s);
+            @include transform(rotate($increment * $i));
+          }
+
+          .fill.fix {
+            @include transform(rotate($increment * $i * 2));
+          }
+        }
+      }
+    }
+
+    &__progress--bar {
+      @include make-col(12);
+      margin: 0 0 $margin-3;
+
+      .progress__percentage {
+        position: relative;
+        margin: 0;
+
+        .progress__percentage-value {
+          @include transform(translatex(-1.5rem));
+
+          display: inline-block;
+          position: absolute;
+          top: -0.5em;
+          width: 3rem;
+          color: $body__text-color;
+          font-size: $body__font-size * 0.875;
+          content: attr(data-percentage);
+        }
+
+        &:after {
+          display: block;
+          position: absolute;
+          top: -0.95rem;
+          left: 0;
+          width: 100%;
+          height: 3px;
+          background-color: $white;
+          content: "";
+          z-index: z-index(default);
+        }
+      }
+
+      .progress__bar {
+        display: block;
+        position: relative;
+        top: -0.75rem;
+        height: 3px;
+        background-color: $accent__color;
+        z-index: z-index(element--background);
+      }
+    }
+
+    &__progress--circle {
+      @include transform(translatex(-50%));
+
+      position: absolute;
+      top: -($progress__circle-size/2);
+      left: 50%;
+      width: $progress__circle-size;
+      height: $progress__circle-size;
+      margin: 0 auto;
+      text-align: left;
+      z-index: z-index(element--foreground);
+
+      .circle {
+        .fill,
+        .mask {
+          @include backface-visibility(hidden);
+          @include transition($progress__transition);
+
+          position: absolute;
+          width: $progress__circle-size;
+          height: $progress__circle-size;
+          border-radius: 50%;
+        }
+
+        .mask {
+          clip: rect(0, $progress__circle-size, $progress__circle-size, $progress__circle-size/2);
+
+          .fill {
+            background-color: $progress__circle-color;
+            clip: rect(0, $progress__circle-size/2, $progress__circle-size, 0);
+          }
+        }
+      }
+    }
+
+    &__posts {
+      margin-top: auto;
+      color: $body__text-color;
+      font-size: $body__font-size * 0.875;
+      font-weight: $body__font-weight;
+      line-height: 1;
+    }
+
+    &__coming-soon {
+      font-weight: normal;
+      opacity: 0.75;
+    }
+  }
+}
+
+.products__list {
+  @include make-row(true);
+  justify-content: center;
+}
+
+.products__list-item {
+  @media all and (min-width: $custom-breakpoint-sm) {
+    @include make-col(6);
+  }
+  @include screen-lg-min {
+    flex: 0 0 33.33%;
+    max-width: 33.33%;
+  }
+  @include make-col(12);
+  padding-bottom: $padding-3;
+}
+
+.products__collections-list {
+  @include make-row(false);
+  align-items: center;
+
+  margin: 0 0 $gutter-width / 2;
+}
+
+.products__collections-list-item {
+  @include screen-md-min {
+    display: inline-block;
+    width: auto;
+    margin: 0 $gutter-width / 2 0 0;
+
+    &:last-child {
+      margin: 0;
+    }
+  }
+
+  display: block;
+  width: 100%;
+  padding: $gutter-width / 4 0;
+  line-height: 1;
+
+  a {
+    @include screen-md-min {
+      padding-left: 0;
+    }
+
+    position: relative;
+    padding-left: $gutter-width / 2.5;
+    line-height: 1;
+    text-decoration: none;
+
+    &:after {
+      @include screen-md-min {
+        bottom: -5px;
+        width: 100%;
+        height: 1px;
+      }
+
+      display: inline-block;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 3px;
+      height: 100%;
+      background-color: $link__color;
+      content: none;
+    }
+
+    &.active,
+    &:active,
+    &:focus,
+    &:hover {
+      &:after {
+        content: "";
+      }
+    }
+  }
+}
+
+.product-action-button--private {
+  a {
+    text-decoration: none;
+  }
+
+  .fa {
+    margin-right: $gutter-width / 8;
+  }
+}
+
+.products-coupon {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  width: calc(100% - 2rem);
+  padding: 1rem;
+  border-radius: $base__border-radius;
+  color: $white;
+  font-weight: bold;
+  line-height: normal;
+  text-align: center;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+  z-index: z-index(modal);
+
+  &.products-coupon--valid {
+    background-color: $alert--success;
+  }
+
+  &.products-coupon--invalid {
+    background-color: $alert--error;
+  }
+}
+
+.products-coupon__container {
+  @include make-container;
+}
+
+.products-coupon__close {
+  @include screen-sm-min {
+    @include transform(translatey(-50%));
+
+    top: 50%;
+    right: 1rem;
+  }
+
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  color: $white;
+  font-size: $body__font-size * 2;
+  font-weight: bold;
+  line-height: 0.5;
+  text-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+
+  &,
+  &:active,
+  &:hover,
+  &:focus {
+    color: $white;
+  }
+}
+
+.products__title {
+  margin-bottom: $margin-4;
+}
+
+.products__search {
+  @include screen-lg-min {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  display: flex;
+  flex-direction: column;
+  gap: $margin-2;
+}
+
+.products__search-form {
+  @include make-row(false);
+  justify-content: space-between;
+}
+
+.products__search-box {
+  @include screen-md-min {
+    min-width: 20rem;
+  }
+
+  min-width: 100%;
+  margin: 0 0 $gutter-width / 2 auto;
+}
+
+// Review Stars
+.review__stars {
+  align-self: center;
+
+  display: inline-block;
+  position: relative;
+  width: auto;
+  line-height: 1;
+  white-space: nowrap;
+  overflow: hidden;
+
+  .review__star {
+    width: $review-star__size;
+    height: $review-star__size;
+    color: $review-star__filled-color;
+    font-size: $review-star__size;
+    line-height: normal;
+    opacity: 1;
+    z-index: z-index(element--background);
+  }
+
+  input {
+    @include appearance(none);
+
+    display: inline-block;
+    position: relative;
+    width: $review-star__size;
+    height: $review-star__size;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    z-index: z-index(element--middleground);
+
+    &:hover,
+    &:active {
+      outline: none;
+      background-color: transparent;
+      -webkit-tap-highlight-color: transparent;
+    }
+  }
+
+  label {
+    display: inline-block;
+    position: relative;
+    width: $review-star__size;
+    height: $review-star__size;
+  }
+
+  .review__star ~ .review__star {
+    left: $review-star__size * 1.25;
+  }
+
+  .review__star ~ .review__star ~ .review__star {
+    left: $review-star__size * 2.5;
+  }
+
+  .review__star ~ .review__star ~ .review__star ~ .review__star {
+    left: $review-star__size * 3.75;
+  }
+
+  .review__star
+    ~ .review__star
+    ~ .review__star
+    ~ .review__star
+    ~ .review__star {
+    left: $review-star__size * 5;
+  }
+}
+
+.review__stars-input {
+  cursor: pointer;
+
+  &:before {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: $review-star__empty-color;
+    font-family: $icon__font-family;
+    font-size: $review-star__size;
+    letter-spacing: 0.21rem;
+    line-height: 1;
+    content: "\f006 \f006 \f006 \f006 \f006";
+  }
+
+  .review__star {
+    cursor: pointer;
+    opacity: 1;
+  }
+
+  input {
+    position: relative;
+    cursor: pointer;
+
+    &:checked + .review__star ~ .review__star {
+      opacity: 0;
+    }
+  }
+
+  &:hover,
+  &:focus {
+    .review__star {
+      opacity: 1 !important;
+    }
+
+    input {
+      &:hover + .review__star ~ .review__star,
+      &:focus + .review__star ~ .review__star {
+        opacity: 0 !important;
+      }
+    }
+  }
+}
+
+.review__stars-count {
+  position: relative;
+  top: 1px;
+  left: 7px;
+  margin-bottom: 0;
+  font-size: 0.875rem;
+  letter-spacing: 1px;
+  line-height: 1;
+  opacity: 0.5;
+}

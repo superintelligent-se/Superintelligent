@@ -1,0 +1,20 @@
+// Collections
+// ======================================
+
+.collections__container {
+  @include make-container;
+  @include page-padding($gutter-width * 2, $gutter-width);
+}
+
+.collections__header {
+  display: flex;
+  flex-direction: column;
+  gap: $margin-2;
+  margin-bottom: $margin-4;
+}
+
+.collections__heading {
+  @include page-heading;
+
+  width: 100%;
+}

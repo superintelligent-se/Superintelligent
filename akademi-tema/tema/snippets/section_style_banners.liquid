@@ -1,0 +1,54 @@
+.banner {
+  {% include 'section_style_background_color' %}
+  {% include 'section_style_content_alignment' %}
+  {% if section.settings.background_image == blank %}
+    {% include 'section_style_text_default' %}
+  {% else %}
+    {% include 'section_style_background' %}
+  {% endif %}
+  {% if section.settings.video.frame != blank or section.settings.image != blank %}
+    {% include 'section_style_media_alignment' %}
+  {% endif %}
+
+  {% if section.settings.image != blank %}
+    .section__image {
+      background: url({{ section.settings.image }});
+      background-repeat: no-repeat;
+      background-position: {{ section.settings.media_image_origin }};
+      background-size: cover;
+    }
+  {% endif %}
+
+  @include screen-md-min {
+    .section__heading {
+      width: {{ section.settings.heading_content_width }}%;
+    }
+
+    .section__subheading {
+      width: {{ section.settings.subheading_content_width }}%;
+    }
+  }
+
+  {% if section.settings.hide_subheading_on_mobile == true %}
+    @include screen-md-max {
+      .section__subheading {
+        display: none;
+      }
+    }
+  {% endif %}
+
+  {% if section.settings.video.frame != blank or section.settings.image != blank %}
+    @include screen-lg-min {
+      .section__video,
+      .section__image {
+        width: {{ section.settings.media_content_width }}%;
+      }
+    }
+
+    @include screen-lg-min {
+      .banner__wrapper {
+        width: calc(100% - {{ section.settings.media_content_width }}%);
+      }
+    }
+  {% endif %}
+}

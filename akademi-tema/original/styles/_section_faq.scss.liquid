@@ -1,0 +1,161 @@
+// Frequently Asked Questions
+// ======================================
+
+.faq {
+  &.section__heading-alignment--right {
+    details {
+      padding-right: $gutter-width;
+      padding-left: 0;
+    }
+
+    .faq__list-item {
+      i {
+        right: -40px;
+        left: initial;
+      }
+    }
+
+    .section__body {
+      text-align: right;
+    }
+  }
+
+  &.section__heading-alignment--center {
+    details {
+      padding-right: $gutter-width;
+    }
+
+    .section__body {
+      text-align: center;
+    }
+  }
+
+  .section__headings {
+    padding: 0;
+  }
+
+  .section__content {
+    @include screen-md-min {
+      padding-right: 0;
+      padding-left: 0;
+    }
+    text-align: left;
+  }
+
+  .section__headings,
+  .section__content {
+    width: 100%;
+  }
+}
+
+.faq__container {
+  display: flex;
+  justify-content: center;
+  @include make-container(false);
+}
+
+.faq__wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  @include screen-md-min {
+    @include make-col(8);
+  }
+  @include screen-lg-min {
+    @include make-col(6);
+  }
+  @include make-col(12);
+}
+
+.faq__list {
+  @include make-row(false);
+}
+
+.faq__list-item {
+  display: block;
+  position: relative;
+  width: 100%;
+  margin: 0 0 $gutter-width;
+
+  &:nth-of-type(1) {
+    @include animation-delay(0.5s);
+  }
+
+  &:nth-of-type(2) {
+    @include animation-delay(0.75s);
+  }
+
+  &:nth-of-type(3) {
+    @include animation-delay(1s);
+  }
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+
+  details {
+    padding-left: $gutter-width;
+    cursor: pointer;
+
+    summary {
+      list-style: none;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+    }
+
+    &[open] {
+      & ~ p {
+        @include transition(
+          max-height 200ms ease,
+          padding 200ms ease,
+          opacity 200ms ease
+        );
+
+        max-height: 0;
+        padding: 0;
+        opacity: 0;
+      }
+
+      i {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  strong {
+    @include user-select(none);
+
+    display: block;
+    position: relative;
+    width: 100%;
+    margin: 0;
+    font-weight: 600;
+    line-height: 1.5;
+
+    i {
+      @include transition(all 0.25s ease);
+      position: absolute;
+      top: 0;
+      left: -40px;
+      color: $accent__color;
+      font-size: 1.5rem;
+    }
+  }
+
+  p {
+    @include transition(
+      max-height 200ms ease,
+      padding 200ms ease,
+      opacity 200ms ease
+    );
+
+    position: relative;
+    max-height: 1000px;
+    margin: 0;
+    padding: 1rem 0;
+    opacity: 1;
+    overflow: hidden;
+    z-index: z-index(element--middleground);
+  }
+}

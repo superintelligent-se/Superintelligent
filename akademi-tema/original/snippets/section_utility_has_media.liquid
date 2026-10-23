@@ -1,0 +1,4 @@
+{% if section.settings.video.frame != blank or section.settings.image != blank %}
+  section--has-media
+  {% include 'section_utility_media_alignment' %}
+{% endif %}

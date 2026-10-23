@@ -1,0 +1,235 @@
+// Forms
+// ======================================
+
+form,
+input,
+textarea,
+label,
+fieldset,
+legend,
+select,
+optgroup,
+option,
+datalist,
+keygen,
+output {
+  color: $form__input-color;
+
+  &:focus {
+    outline: $form__control-border-width $form__control-border-style $accent__color;
+    outline-offset: $form__control-border-width * -1;
+    outline-style: solid;
+    box-shadow: $shadow-chalk-focus !important;
+  }
+}
+
+fieldset {
+  padding: 0;
+  border: 0;
+}
+
+input {
+  &[type="text"],
+  &[type="email"],
+  &[type="password"],
+  &[type="search"] {
+    @include appearance(none);
+
+    &,
+    &:active,
+    &:hover {
+      border-radius: 0;
+      -webkit-border-radius: 0;
+    }
+
+    &:active,
+    &:hover {
+      border-color: $accent__color;
+    }
+  }
+
+  &[type="checkbox"] {
+    display: inline-block;
+    width: auto;
+    margin-right: $gutter-width / 4;
+  }
+}
+
+select {
+
+  &:active,
+  &:hover {
+    border-color: $accent__color;
+  }
+
+  &.form__control {
+    @include appearance(none);
+
+    padding-right: 32px;
+  }
+}
+
+.form__group {
+  @include form-group;
+}
+
+.form__error-msg {
+  display: inline-block;
+  margin: 0;
+  color: $alert--error;
+  font-size: $body__font-size * 0.875;
+  font-weight: 400;
+}
+
+.form__button-group {
+  .form__label + & {
+    @include screen-sm-min {
+      width: 25%;
+      margin-left: 1rem;
+      padding-top: 0;
+    }
+    align-self: flex-end;
+
+    width: 100%;
+    padding-top: $gutter-width / 2;
+  }
+
+  .button {
+    @include screen-xs-max {
+      width: 100%;
+    }
+  }
+}
+
+.form__label {
+  @include form-label;
+
+  &--checkbox {
+    font-weight: normal;
+  }
+}
+
+.form__remember-me,
+.form__forgot-password {
+  & {
+    font-size: 0.875rem;
+    line-height: 2;
+  }
+}
+
+.form__forgot-password {
+  margin-right: 0;
+  margin-left: auto;
+  text-align: right;
+
+  &:hover,
+  &:active,
+  &:focus {
+    text-decoration: none;
+  }
+}
+
+.form__select-label {
+  @include form-select-label;
+}
+
+.form__select-no-label {
+  @include form-select-no-label;
+}
+
+.form__search {
+  display: block;
+  position: relative;
+}
+
+.form__search-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  padding: $padding-base $padding-2;
+  border: 1px solid transparent;
+  background-color: transparent;
+  cursor: pointer;
+  color: $form__input-color-placeholder;
+}
+
+.form__control {
+  @include form-control;
+
+  &.form__control-search {
+    padding-right: 48px;
+  }
+
+  &.input--error {
+    border: 1px solid $alert--error;
+
+    &:hover,
+    &:focus,
+    &:active {
+      border-color: $alert--error;
+      outline-color: $alert--error;
+    }
+
+    &:focus,
+    &:focus-visible {
+      box-shadow: $shadow-chalk-focus;
+    }
+  }
+
+  &.input--success {
+    border: 1px solid $alert--success;
+
+    &:hover,
+    &:focus,
+    &:active {
+      border-color: $alert--success;
+      outline-color: $alert--success;
+    }
+  }
+}
+
+.form__notice,
+.form-error__list {
+  width: 100%;
+  font-size: $body__font-size * 0.875;
+}
+
+.form__notice {
+  font-style: italic;
+}
+
+.form-error__list {
+  color: $alert--error;
+}
+
+// Can't use display: none; as some spam bots can parse CSS
+// Multiple CSS properties make it difficult to parse and identify honeypot fields
+.honeypot-field {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+::-webkit-input-placeholder {
+  color: $form__input-color-placeholder;
+}
+
+::-moz-placeholder {
+  color: $form__input-color-placeholder;
+}
+
+:-ms-input-placeholder {
+  color: $form__input-color-placeholder;
+}
+
+:-moz-placeholder {
+  color: $form__input-color-placeholder;
+}
+
+::placeholder {
+  color: $form__input-color-placeholder;
+}

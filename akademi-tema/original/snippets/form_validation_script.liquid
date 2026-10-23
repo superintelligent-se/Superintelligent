@@ -1,0 +1,153 @@
+{% comment %}
+  These are scripts that run on forms with required fields.
+{% endcomment %}
+
+<script>
+  function addErrorMsg(fieldId, errorId) {
+    fieldId.addClass('input--error');
+    fieldId.attr("aria-invalid", "true");
+    errorId.removeClass('hidden');
+  }
+  function removeErrorMsg(fieldId, errorId) {
+    fieldId.removeClass('input--error');
+    fieldId.attr("aria-invalid", "false");
+    errorId.addClass('hidden');
+  }
+
+  var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  var $email = $('#user\\[email\\]');
+  if ($email.prop('required')) {
+    var $emailError = $('#user\\[email\\]-error');
+    $email.on('focusout', function() {
+      if (!regex.test($email.val())) {
+        addErrorMsg($email, $emailError);
+      } else {
+        removeErrorMsg($email, $emailError);
+      }
+    });
+  }
+  var $leadCapture = $('#{{ id }}-email')
+  var $leadCaptureError = $('#{{ id }}-error')
+  $leadCapture.on('focusout', function() {
+    if (!regex.test($leadCapture.val())) {
+      addErrorMsg($leadCapture, $leadCaptureError);
+    } else {
+      removeErrorMsg($leadCapture, $leadCaptureError);
+    }
+  });
+  var $leadCaptureCheckbox = $('#{{ id }}-accept');
+  var $leadCaptureCheckboxError = $('#{{ id }}-accept-error');
+  $leadCaptureCheckbox.on('focusout', function() {
+    if (!$leadCaptureCheckbox.is(':checked')) {
+      addErrorMsg($leadCaptureCheckbox, $leadCaptureCheckboxError);
+    } else {
+      removeErrorMsg($leadCaptureCheckbox, $leadCaptureCheckboxError);
+    }
+  });
+
+  var $password = $('#user\\[password\\]');
+  if ($password.prop('required')) {
+    var $passwordError = $('#user\\[password\\]-error');
+    $password.on('focusout', function() {
+      if ($password.val().length < 1) {
+        addErrorMsg($password, $passwordError);
+      } else {
+        removeErrorMsg($password, $passwordError);
+      }
+    });
+  }
+
+  var $passwordConfirm = $('#user\\[password_confirmation\\]');
+  if ($passwordConfirm.prop('required')) {
+    var $passwordConfirmError = $('#user\\[password_confirmation\\]-error');
+    $passwordConfirm.on('focusout', function() {
+      if ($passwordConfirm.val().length < 1) {
+        addErrorMsg($passwordConfirm, $passwordConfirmError);
+      } else {
+        removeErrorMsg($passwordConfirm, $passwordConfirmError);
+      }
+    });
+  }
+
+  var $firstName = $('#user\\[first_name\\]');
+  if ($firstName.prop('required')) {
+    var $firstNameError = $('#user\\[first_name\\]-error');
+    $firstName.on('focusout', function() {
+      if ($firstName.val() === '') {
+        addErrorMsg($firstName, $firstNameError);
+      } else {
+        removeErrorMsg($firstName, $firstNameError);
+      }
+    });
+  }
+
+  var $lastName = $('#user\\[last_name\\]');
+  if ($lastName.prop('required')) {
+    var $lastNameError = $('#user\\[last_name\\]-error');
+    $lastName.on('focusout', function() {
+      if ($lastName.val() === '') {
+        addErrorMsg($lastName, $lastNameError);
+      } else {
+        removeErrorMsg($lastName, $lastNameError);
+      }
+    });
+  }
+
+  var $checkbox = $('#user\\[terms\\]');
+  if ($checkbox.prop('required')) {
+    var $checkboxError = $('#user\\[terms\\]-error');
+    $checkbox.on('focusout', function() {
+      if (!$checkbox.is(':checked')) {
+        addErrorMsg($checkbox, $checkboxError);
+      } else {
+        removeErrorMsg($checkbox, $checkboxError);
+      }
+    });
+  }
+
+  var $file = $('.my-account__avatar-label');
+  $file.on('change', function() {
+    $('#my-account__avatar-error').text("{{ 'liquid.partials.form.file_changed' }}");
+  });
+
+  $('.custom-select').on('focusout', function() {
+    var $field = $(this);
+    if (!$field.prop('required')) return;
+    var $error = $field.siblings('.form__error-msg');
+    if (!$field.val()) {
+      addErrorMsg($field, $error);
+    } else {
+      removeErrorMsg($field, $error);
+    }
+  });
+
+  $('.custom-field').on('focusout', function() {
+    var $field = $(this);
+    if (!$field.prop('required')) return;
+    var $error = $field.siblings('.form__error-msg');
+    if ($field.val() === '') {
+      addErrorMsg($field, $error);
+    } else {
+      removeErrorMsg($field, $error);
+    }
+  });
+
+
+  $('form[novalidate][id*="password_reset_request"]').on('submit', function(e) {
+    var hasError = false;
+  
+    if ($email.length && $email.prop('required')) {
+      if (!regex.test($email.val())) {
+        addErrorMsg($email, $emailError);
+        hasError = true;
+      } else {
+        removeErrorMsg($email, $emailError);
+      }
+    }
+
+    if (hasError) {
+      e.preventDefault();
+      $('.input--error').first().focus();
+    }
+  });
+</script>
