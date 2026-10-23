@@ -1,7 +1,7 @@
-// Effekterna i rubrikvalet. Varje rubrik har sin egen: ljusfart för den
-// första, en mur som rasar när agenten blir klar på fyra timmar, en publik
-// som gör vågen för förändringen underifrån, myntregn och kassaapparat för
-// pengarna och en kedja som brister för möjligheterna ni inte såg.
+// Effekterna i rubrikvalet. Varje rubrik har sin egen: ljusfart för den första,
+// myntregn och kassaapparat för pengarna, en mur som rasar för möjligheterna,
+// en publik som gör vågen för människorna, pratbubblor för intervjun och en
+// kedja som brister för skillnaden.
 // Mynt och figurer ritas med spelets egna pixelritare, så det är samma värld.
 
 import './effects.css';
@@ -542,11 +542,64 @@ function crowd() {
   }
 }
 
+// Det medarbetarna faktiskt säger när de får prata om AI.
+const QUOTES = [
+  'Jag sparar en timme om dagen',
+  'Får jag använda ChatGPT?',
+  'Vi gör samma sak för hand varje vecka',
+  'Jag vill lära mig mer',
+  'Vem bestämmer om AI här?',
+  'Kunderna skulle märka skillnad',
+  'Jag är lite orolig, ärligt talat',
+  'Ge mig en kväll så bygger jag det',
+];
+
+// Pratbubblor dyker upp runt om, skrivs ut bokstav för bokstav och svävar
+// iväg. Så låter organisationen när någon frågar.
+function chatter() {
+  const layer = makeLayer(4400);
+  const quotes = [...QUOTES].sort(() => Math.random() - 0.5).slice(0, innerWidth < 600 ? 5 : 7);
+  const width = Math.min(240, innerWidth - 32);
+  const bandTop = 90;
+  const bandHeight = innerHeight - 220;
+
+  quotes.forEach((text, i) => {
+    const bubble = document.createElement('div');
+    bubble.className = `fx-bubble${i % 2 ? ' right' : ''}`;
+    bubble.style.maxWidth = `${width}px`;
+    const lane = (i + 0.5) / quotes.length;
+    const left = 16 + Math.random() * Math.max(0, innerWidth - width - 32);
+    bubble.style.left = `${left}px`;
+    bubble.style.top = `${bandTop + lane * bandHeight}px`;
+    layer.appendChild(bubble);
+
+    const delay = i * 320;
+    bubble.animate(
+      [
+        { transform: 'scale(0)', opacity: 0 },
+        { transform: 'scale(1.15)', opacity: 1, offset: 0.06 },
+        { transform: 'scale(1) rotate(-2deg)', opacity: 1, offset: 0.1 },
+        { transform: 'translateY(-10px) rotate(2deg)', opacity: 1, offset: 0.5 },
+        { transform: 'translateY(-20px) rotate(-1deg)', opacity: 1, offset: 0.85 },
+        { transform: 'translateY(-40px)', opacity: 0 },
+      ],
+      { duration: 3000, delay, easing: 'steps(30, end)', fill: 'both' },
+    );
+
+    let n = 0;
+    setTimeout(function type() {
+      bubble.textContent = text.slice(0, ++n);
+      if (n < text.length) setTimeout(type, 28);
+    }, delay + 150);
+  });
+}
+
 const EFFECTS = [
   () => vision(document.querySelector('#headline .h1')),
+  coins,
   breakthrough,
   crowd,
-  coins,
+  chatter,
   freedom,
 ];
 

@@ -26,8 +26,8 @@
           <a href="#ai-resan" style="--c: var(--gold)">Er AI-resa</a>
           <a href="#spelet" style="--c: var(--green-text)">Spelet</a>
           <a href="#intervju" style="--c: var(--green-text)">AI-intervjun</a>
-          <a href="#radgivning" style="--c: var(--purple-nav)">Rådgivning</a>
           <a href="#traning" style="--c: var(--green-text)">Träning</a>
+          <a href="#radgivning" style="--c: var(--purple-nav)">Rådgivning</a>
           <a href="om-oss/" style="--c: var(--ink)" data-spy="laget">Om oss</a>
         </nav>
         <div class="nav-end">
@@ -45,7 +45,7 @@
         <div class="wrap">
           <div class="hero-copy">
             <div class="headline" id="headline" aria-live="polite">
-              <p class="eb gold" data-part="eb"><span class="pixel-dot"></span><span data-text>Lekfullt</span></p>
+              <p class="eb gold" data-part="eb"><span class="pixel-dot"></span><span data-text>Rubrik 1 · Lekfullt</span></p>
               <h1 class="h1" data-part="h1">Lekfull AI. Seriösa resultat.</h1>
               <p class="sub" data-part="sub">AI-förändring behöver inte vara tung och tråkig. Vi bygger på det era medarbetare redan gör och tycker om, så att nyfikenheten driver förändringen och resultaten kommer snabbt.</p>
             </div>
@@ -55,13 +55,14 @@
             </div>
             <p class="small">Fem steg från första samtalet till egen AI-förmåga</p>
             <div class="picker" role="group" aria-labelledby="picker-label">
-              <p class="picker-label" id="picker-label">Fem sätt att se det</p>
+              <p class="picker-label" id="picker-label">Vilken AI-rubrik är bäst?</p>
               <div class="picker-blocks">
                 <button type="button" class="qb pick" data-variant="0" aria-pressed="false" aria-label="Rubrik 1, Lekfullt">1</button>
-                <button type="button" class="qb pick" data-variant="1" aria-pressed="false" aria-label="Rubrik 2, Snabbt">2</button>
-                <button type="button" class="qb pick" data-variant="2" aria-pressed="false" aria-label="Rubrik 3, Underifrån">3</button>
-                <button type="button" class="qb pick" data-variant="3" aria-pressed="false" aria-label="Rubrik 4, Pengarna">4</button>
-                <button type="button" class="qb pick" data-variant="4" aria-pressed="false" aria-label="Rubrik 5, Möjligheterna">5</button>
+                <button type="button" class="qb pick" data-variant="1" aria-pressed="false" aria-label="Rubrik 2, Pengarna">2</button>
+                <button type="button" class="qb pick" data-variant="2" aria-pressed="false" aria-label="Rubrik 3, Möjligheterna">3</button>
+                <button type="button" class="qb pick" data-variant="3" aria-pressed="false" aria-label="Rubrik 4, Människorna">4</button>
+                <button type="button" class="qb pick" data-variant="4" aria-pressed="false" aria-label="Rubrik 5, Intervjun">5</button>
+                <button type="button" class="qb pick" data-variant="5" aria-pressed="false" aria-label="Rubrik 6, Skillnaden">6</button>
               </div>
               <div class="picker-auto" id="picker-auto" hidden>
                 <button type="button" class="picker-auto-btn" aria-pressed="false" aria-label="Pausa bytet av rubriker">
@@ -126,14 +127,14 @@
             </li>
             <li class="col wide">
               <div>
-                <div class="txt"><div class="eb purple">Top-down</div><div class="t"><a class="step-link" href="#radgivning">Stöd till ledningen</a></div></div>
-                <div class="qb purple" style="font-size: 18px">4A</div>
-                <div class="plat" style="height: 150px; border-top-color: var(--purple)"></div>
+                <div class="txt"><div class="eb green">Bottom-up</div><div class="t"><a class="step-link" href="#traning">Träning för medarbetarna</a></div></div>
+                <div class="qb green" style="font-size: 18px">4A</div>
+                <div class="plat" style="height: 150px; border-top-color: var(--green)"></div>
               </div>
               <div>
-                <div class="txt"><div class="eb green">Bottom-up</div><div class="t"><a class="step-link" href="#traning">Träning för medarbetarna</a></div></div>
-                <div class="qb green" style="font-size: 18px">4B</div>
-                <div class="plat" style="height: 150px; border-top-color: var(--green)"></div>
+                <div class="txt"><div class="eb purple">Top-down</div><div class="t"><a class="step-link" href="#radgivning">Stöd till ledningen</a></div></div>
+                <div class="qb purple" style="font-size: 18px">4B</div>
+                <div class="plat" style="height: 150px; border-top-color: var(--purple)"></div>
               </div>
             </li>
             <li class="col reward reward-end" style="--rc: var(--gold)">
@@ -186,11 +187,6 @@
             <div class="btn-row"><a class="btn btn-p" href="spelet/">Spela nu</a></div>
           </div>
           <div class="stack" style="gap: 24px">
-            <div class="screen-head">
-              <p class="eb gold">Spelet · Fem minuter</p>
-              <h2 class="screen-title">Se hur spelet funkar</h2>
-              <p class="screen-sub">Fem områden och femton frågor om hur ni arbetar med AI i dag. Redan frågorna får er att se organisationen med nya ögon, och era svar blir grunden för ett första samtal med oss.</p>
-            </div>
             <div class="screen">
               <iframe
                 src="https://player.vimeo.com/video/1231751829?background=1&amp;autoplay=1&amp;muted=1&amp;loop=1&amp;dnt=1"
@@ -208,16 +204,6 @@
               <div class="hud-row" style="--c: #4f7fd6"><i></i><strong>Vad har ni att jobba med?</strong><span>Datakub</span></div>
               <div class="hud-row" style="--c: #f97316"><i></i><strong>Vad får ni göra?</strong><span>Sköld</span></div>
               <div class="hud-row" style="--c: #7c3aed"><i></i><strong>Vad skulle ni kunna göra?</strong><span>Jetpack</span></div>
-            </div>
-            <div class="pipe">
-              <div class="pipe-icon" aria-hidden="true"></div>
-              <div>
-                <strong>Vet ni redan att ni behöver hjälp?</strong>
-                <p>
-                  Ta röret. Det hoppar över hela spelet, rakt till bokningen.
-                  <a data-booking href="https://bookings.cloud.microsoft/book/Superintelligent@superintelligent.se/s/B2QIYRV4KUupO4i1Rd8Pow2?ismsaljsauthenabled">Boka direkt →</a>
-                </p>
-              </div>
             </div>
           </div>
         </div>
@@ -279,22 +265,22 @@
             </div>
             <div class="plan-arrow" aria-hidden="true"></div>
             <div class="plan-out">
-              <div class="card plan-card" style="--c: var(--purple-nav)">
-                <p class="eb">4A · Top-down</p>
-                <strong>Rådgivning för ledningen</strong>
-                <ul>
-                  <li>Upplägget som passar er: AI Advisor, AI Accelerator eller Executive AI Partner</li>
-                  <li>Möjligheterna värderade efter affärsvärde, genomförbarhet, risk, ägarskap och tid</li>
-                  <li>En gemensam AI Action Plan och uppföljning</li>
-                </ul>
-              </div>
               <div class="card plan-card" style="--c: var(--green-text)">
-                <p class="eb">4B · Bottom-up</p>
+                <p class="eb">4A · Bottom-up</p>
                 <strong>Träning för medarbetarna</strong>
                 <ul>
                   <li>E-learning för de roller och verktyg ni har</li>
                   <li>Agent Masterclass, en halvdag med högst tio deltagare</li>
                   <li>Agenter och automationer för de arbetsflöden som tar mest tid</li>
+                </ul>
+              </div>
+              <div class="card plan-card" style="--c: var(--purple-nav)">
+                <p class="eb">4B · Top-down</p>
+                <strong>Rådgivning för ledningen</strong>
+                <ul>
+                  <li>Upplägget som passar er: AI Advisor, AI Accelerator eller Executive AI Partner</li>
+                  <li>Möjligheterna värderade efter affärsvärde, genomförbarhet, risk, ägarskap och tid</li>
+                  <li>En gemensam AI Action Plan och uppföljning</li>
                 </ul>
               </div>
             </div>
@@ -332,10 +318,63 @@
         </div>
       </section>
 
-      <section class="section alt" id="radgivning">
+      <section class="section alt" id="traning">
+        <div class="wrap">
+          <div class="head-row">
+            <div class="head">
+              <p class="eb green">Steg 4A · Träning för medarbetarna</p>
+              <h2 class="h2">Era medarbetare går från nyfikna till att bygga egna agenter</h2>
+              <p class="sub">
+                Bottom-up betyder att förmågan byggs underifrån, hos dem som gör jobbet. Sex steg,
+                från inspiration till en agent som löser ett verkligt arbetsflöde.
+              </p>
+            </div>
+            <a class="btn btn-o" href="https://akademi.superintelligent.se/collections">Kurser &amp; priser</a>
+          </div>
+          <ol class="level" style="list-style: none; padding: 0; margin: 0">
+            <li class="col">
+              <div class="txt"><div class="t">Se vad som är möjligt</div><div class="d">Inspirationsföreläsning för ledningsgrupp eller hela organisationen</div></div>
+              <div class="qb green">1</div>
+              <div class="plat" style="height: 20px; border-top-color: var(--green)"></div>
+            </li>
+            <li class="col">
+              <div class="txt"><div class="t">Spara tid i vardagen</div><div class="d">E-learning 1 · ChatGPT gratisversion</div></div>
+              <div class="qb green">2</div>
+              <div class="plat" style="height: 60px; border-top-color: var(--green)"></div>
+            </li>
+            <li class="col">
+              <div class="txt"><div class="t">Jobba smartare i Microsoft 365</div><div class="d">E-learning 2 · Copilot Premium</div></div>
+              <div class="qb green">3</div>
+              <div class="plat" style="height: 100px; border-top-color: var(--green)"></div>
+            </li>
+            <li class="col">
+              <div class="txt"><div class="t">Låt AI göra jobb i flera steg</div><div class="d">E-learning 3 · ChatGPT betalversion</div></div>
+              <div class="qb green">4</div>
+              <div class="plat" style="height: 140px; border-top-color: var(--green)"></div>
+            </li>
+            <li class="col">
+              <div class="txt"><div class="t">Bygg er första agent</div><div class="d">Agent Masterclass · halvdag, max 10 deltagare</div></div>
+              <div class="qb green">5</div>
+              <div class="plat" style="height: 180px; border-top-color: var(--green)"></div>
+            </li>
+            <li class="col">
+              <div class="txt"><div class="t">En agent i drift</div><div class="d">För ett arbetsflöde som tar mycket av er tid i dag</div></div>
+              <div class="qb done">6</div>
+              <div class="plat" style="height: 220px; border-top-color: var(--green)"></div>
+            </li>
+          </ol>
+          <div class="ground"></div>
+          <div class="callout-row">
+            <p class="callout">Ni gör e-learningen före masterclassen. Efter fyra timmar har ni en första agent på plats.</p>
+            <p class="small">E-learning från 2 990 kr · Steg 1 + 2 paketpris 4 990 kr</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="radgivning">
         <div class="wrap">
           <div class="head">
-            <p class="eb purple">Steg 4A · Rådgivning för ledningen</p>
+            <p class="eb purple">Steg 4B · Rådgivning för ledningen</p>
             <h2 class="h2">Stöd till er som ska leda AI-arbetet</h2>
             <p class="sub">
               Top-down betyder att ledningen sätter riktning och prioriterar. Tre nivåer, efter hur
@@ -387,59 +426,6 @@
               år, ingen avgift under sommaruppehållet.
             </p>
             <a class="btn btn-p" data-booking href="https://bookings.cloud.microsoft/book/Superintelligent@superintelligent.se/s/B2QIYRV4KUupO4i1Rd8Pow2?ismsaljsauthenabled">Boka gratis första samtal</a>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="traning">
-        <div class="wrap">
-          <div class="head-row">
-            <div class="head">
-              <p class="eb green">Steg 4B · Träning för medarbetarna</p>
-              <h2 class="h2">Era medarbetare går från nyfikna till att bygga egna agenter</h2>
-              <p class="sub">
-                Bottom-up betyder att förmågan byggs underifrån, hos dem som gör jobbet. Sex steg,
-                från inspiration till en agent som löser ett verkligt arbetsflöde.
-              </p>
-            </div>
-            <a class="btn btn-o" href="https://akademi.superintelligent.se/collections">Kurser &amp; priser</a>
-          </div>
-          <ol class="level" style="list-style: none; padding: 0; margin: 0">
-            <li class="col">
-              <div class="txt"><div class="t">Se vad som är möjligt</div><div class="d">Inspirationsföreläsning för ledningsgrupp eller hela organisationen</div></div>
-              <div class="qb green">1</div>
-              <div class="plat" style="height: 20px; border-top-color: var(--green)"></div>
-            </li>
-            <li class="col">
-              <div class="txt"><div class="t">Spara tid i vardagen</div><div class="d">E-learning 1 · ChatGPT gratisversion</div></div>
-              <div class="qb green">2</div>
-              <div class="plat" style="height: 60px; border-top-color: var(--green)"></div>
-            </li>
-            <li class="col">
-              <div class="txt"><div class="t">Jobba smartare i Microsoft 365</div><div class="d">E-learning 2 · Copilot Premium</div></div>
-              <div class="qb green">3</div>
-              <div class="plat" style="height: 100px; border-top-color: var(--green)"></div>
-            </li>
-            <li class="col">
-              <div class="txt"><div class="t">Låt AI göra jobb i flera steg</div><div class="d">E-learning 3 · ChatGPT betalversion</div></div>
-              <div class="qb green">4</div>
-              <div class="plat" style="height: 140px; border-top-color: var(--green)"></div>
-            </li>
-            <li class="col">
-              <div class="txt"><div class="t">Bygg er första agent</div><div class="d">Agent Masterclass · halvdag, max 10 deltagare</div></div>
-              <div class="qb green">5</div>
-              <div class="plat" style="height: 180px; border-top-color: var(--green)"></div>
-            </li>
-            <li class="col">
-              <div class="txt"><div class="t">En agent i drift</div><div class="d">För ett arbetsflöde som tar mycket av er tid i dag</div></div>
-              <div class="qb done">6</div>
-              <div class="plat" style="height: 220px; border-top-color: var(--green)"></div>
-            </li>
-          </ol>
-          <div class="ground"></div>
-          <div class="callout-row">
-            <p class="callout">Ni gör e-learningen före masterclassen. Efter fyra timmar har ni en första agent på plats.</p>
-            <p class="small">E-learning från 2 990 kr · Steg 1 + 2 paketpris 4 990 kr</p>
           </div>
         </div>
       </section>

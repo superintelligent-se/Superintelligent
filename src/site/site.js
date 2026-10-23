@@ -50,8 +50,8 @@ const NOW = {
   spelet: 'Steg 1 · Spelet',
   intervju: 'Steg 2 · AI-intervjun',
   plan: 'Steg 3 · Er plan',
-  radgivning: 'Steg 4A · Rådgivning',
-  traning: 'Steg 4B · Träning',
+  traning: 'Steg 4A · Träning',
+  radgivning: 'Steg 4B · Rådgivning',
   slutspelet: 'Steg 5 · Slutspelet',
   laget: 'Om oss · Laget',
 };

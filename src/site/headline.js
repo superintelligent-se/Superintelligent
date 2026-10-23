@@ -1,9 +1,10 @@
-// Rubrikvalet överst på startsidan. Fem lekfulla rubriker som säger vad vi
-// gör: AI-förändring som bygger på det medarbetarna redan gör och tycker om.
-// Varje rubrik har ett eget frågetecken-block, en egen färg och en egen
-// pixelbild i spelets stil. Knapparna under är desamma hela tiden: Se er
-// AI-resa och Boka gratis möte. Rubrik 1 står i HTML:en, så sökmotorer och
-// den som inte klickar ser alltid den.
+// Rubrikvalet överst på startsidan. Den första rubriken säger vad vi gör:
+// lekfull AI-förändring som bygger på det medarbetarna redan gör. De fem
+// andra visar samma sak från andra håll. Varje rubrik har ett eget
+// frågetecken-block, en egen färg, en egen effekt och en egen pixelbild i
+// spelets stil. Knapparna under är desamma hela tiden: Se er AI-resa och
+// Boka gratis möte. Rubrik 1 står i HTML:en, så sökmotorer och den som inte
+// klickar ser alltid den.
 import './headline.css';
 import { celebrate, vision } from './effects.js';
 // Bilderna ritas av scripts/build-hero-art.mjs (npm run hero-art).
@@ -12,47 +13,54 @@ import art2 from './hero-art/scen-2.png';
 import art3 from './hero-art/scen-3.png';
 import art4 from './hero-art/scen-4.png';
 import art5 from './hero-art/scen-5.png';
+import art6 from './hero-art/scen-6.png';
 
-// Rubrikerna innehåller alla ordet lekfull. Brödtexten under bär
+// Rubrikerna är korta och säger vad kunden vinner. Brödtexten under bär
 // resonemanget, och siffrorna kommer från samma källor som resten av sidan.
 const VARIANTS = [
   {
-    eb: 'Lekfullt',
+    eb: 'Rubrik 1 · Lekfullt',
     h1: 'Lekfull AI. Seriösa resultat.',
     sub: 'AI-förändring behöver inte vara tung och tråkig. Vi bygger på det era medarbetare redan gör och tycker om, så att nyfikenheten driver förändringen och resultaten kommer snabbt.',
     art: art1,
     alt: 'Ett kontor som en spelbana: medarbetare hoppar mellan skrivbord och plattformar och slår upp frågetecken som ger mynt.',
   },
   {
-    eb: 'Snabbt',
-    // Samma löfte som träningstrappan: e-learning och en halvdags masterclass.
-    h1: 'Lekfull träning. En\u00a0egen agent på fyra\u00a0timmar.',
-    sub: 'Medarbetarna lär sig genom att göra, i sina egna arbetsuppgifter. Efter e-learning och en halvdags masterclass har de en första egen agent på plats.',
-    art: art2,
-    alt: 'En medarbetare vid sin laptop bredvid ett timglas. Ur ett frågetecken har en liten robot hoppat ut och springer iväg med en hög dokument.',
-  },
-  {
-    eb: 'Underifrån',
-    h1: 'Lekfull förändring som växer underifrån.',
-    sub: 'När alla får verktygen och modet att testa tar medarbetarna ägarskap, och idéerna kommer från dem som står närmast arbetet. Ledningen sätter riktningen, golvet driver farten.',
-    art: art3,
-    alt: 'En blandad grupp medarbetare hoppar uppför en trappa av plattformar mot en flagga, medan ledningen pekar ut riktningen nerifrån.',
-  },
-  {
-    eb: 'Pengarna',
-    // Samma nivåer som AI-skuldkalkylatorn. Hårda mellanslag så att
+    eb: 'Rubrik 2 · Pengarna',
+    // Samma tre nivåer som AI-skuldkalkylatorn. Hårda mellanslag så att
     // beloppet inte bryts isär.
-    h1: 'Lekfullt på ytan. Pengar på sista\u00a0raden.',
-    sub: 'Det lekfulla är vägen dit. Målet är tid och pengar: AI som inte används systematiskt kostar 75–125\u00a0000\u00a0kr per tjänsteman och år.',
-    art: art4,
+    h1: '75–125\u00a0000\u00a0kr per tjänsteman. Varje\u00a0år.',
+    sub: 'Så mycket kostar det när AI inte används systematiskt i det dagliga arbetet, beroende på hur mycket av jobbet som är rutin. Räkna på er egen siffra.',
+    art: art2,
     alt: 'Mynt sprutar ur frågetecken i en båge ner i en skattkista, bredvid ett stapeldiagram som stiger.',
   },
   {
-    eb: 'Möjligheterna',
-    h1: 'Lekfull nyfikenhet. Möjligheter ni inte såg.',
-    sub: 'Alla börjar med att spara tid. Det stora värdet kommer när nyfikenheten leder till sådant ni tidigare saknade tid, kompetens eller resurser för. Vi kallar det Möjlighets-AI.',
-    art: art5,
+    eb: 'Rubrik 3 · Möjligheterna',
+    h1: 'Gör det som var omöjligt. Nu.',
+    sub: 'Alla börjar med att effektivisera, och det betalar sig snabbt. Det stora värdet kommer när ni gör sådant ni tidigare saknade tid, kompetens eller resurser för. Vi kallar det Möjlighets-AI, och vår rådgivning hjälper er att hitta det.',
+    art: art3,
     alt: 'En figur med jetpack lyfter från sitt skrivbord mot en flytande ö med en stjärna och en öppen, lysande dörr.',
+  },
+  {
+    eb: 'Rubrik 4 · Människorna',
+    h1: 'Alla medarbetare. AI-kompetenta. På\u00a0riktigt.',
+    sub: 'Inte bara IT och några eldsjälar. Varje medarbetare lär sig använda AI i sitt eget jobb, från första frågan till en egen agent. Kunskapen stannar hos er.',
+    art: art4,
+    alt: 'En blandad grupp medarbetare hoppar uppför en trappa av plattformar mot en flagga, medan ledningen pekar ut riktningen nerifrån.',
+  },
+  {
+    eb: 'Rubrik 5 · Intervjun',
+    h1: 'Vad tänker er organisation om AI?',
+    sub: 'Vår AI-intervjuare pratar med medarbetarna när det passar dem. Ledningen får en inblick i vad alla tänker, hoppas och oroar sig för som inget möte eller enkät kan ge.',
+    art: art5,
+    alt: 'Fyra medarbetare pratar med en AI-intervjuare i en mobil, och pratbubblor fyller luften runt dem.',
+  },
+  {
+    eb: 'Rubrik 6 · Skillnaden',
+    h1: 'Vi gör oss umbärliga. Med\u00a0flit.',
+    sub: 'Vi har inget intresse av att ni ska behöva oss för alltid. Vår uppgift är att bygga er egen AI-förmåga, så att ni klarar er utan oss. Det är så vi förtjänar ert förtroende.',
+    art: art6,
+    alt: 'Laget springer uppför plattformarna mot flaggan med egen utrustning, medan vi vinkar från marken bredvid en kedja som brustit.',
   },
 ];
 
@@ -66,24 +74,33 @@ const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 let typing = 0;
 
-// Höjden sätts efter den längsta varianten, så att knapparna under rubriken
-// står still när den byts. Mäts om när bredden ändras.
+// Hela rubrikblocket får höjden från den längsta varianten, så att knapparna
+// under står still när rubriken byts. Rubriken och brödtexten ligger tätt
+// ihop oavsett hur många rader rubriken tar, och det som blir över hamnar
+// under brödtexten. Mäts om när bredden ändras.
 function reserveHeight() {
   const keep = { h1: h1.textContent, sub: sub.innerHTML };
-  let maxH1 = 0;
-  let maxSub = 0;
+  let max = 0;
+  root.style.minHeight = '';
   h1.style.minHeight = '';
-  sub.style.minHeight = '';
   for (const v of VARIANTS) {
     h1.textContent = v.h1;
     sub.innerHTML = v.sub;
-    maxH1 = Math.max(maxH1, h1.offsetHeight);
-    maxSub = Math.max(maxSub, sub.offsetHeight);
+    max = Math.max(max, root.offsetHeight);
   }
   h1.textContent = keep.h1;
   sub.innerHTML = keep.sub;
-  h1.style.minHeight = `${maxH1}px`;
-  sub.style.minHeight = `${maxSub}px`;
+  root.style.minHeight = `${max}px`;
+}
+
+// Medan rubriken skrivs ut håller den sin färdiga höjd, så att brödtexten
+// inte hoppar nedåt rad för rad.
+function holdHeight(text) {
+  h1.style.minHeight = '';
+  const keep = h1.textContent;
+  h1.textContent = text;
+  h1.style.minHeight = `${h1.offsetHeight}px`;
+  h1.textContent = keep;
 }
 
 // Rubriken skrivs ut tecken för tecken, som text i ett 8-bitsspel.
@@ -158,6 +175,7 @@ async function show(index, button) {
   setArt(index);
   sub.classList.add('fade');
   sub.innerHTML = v.sub;
+  holdHeight(v.h1);
   await typeOut(v.h1, run);
   if (run === typing) sub.classList.remove('fade');
 }

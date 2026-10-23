@@ -550,26 +550,6 @@ h3 {
   vertical-align: -1px;
 }
 
-/* Rubriken över spelvideon i toppen. */
-.screen-head {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.screen-title {
-  font-size: clamp(24px, 2.2vw, 30px);
-  line-height: 1.15;
-  font-weight: 800;
-}
-
-.screen-sub {
-  margin: 0;
-  font-size: 16px;
-  color: var(--muted);
-}
-
 .screen {
   position: relative;
   aspect-ratio: 16 / 9;
@@ -1226,45 +1206,6 @@ h3 {
   font-family: var(--mono);
   font-size: 13px;
   color: var(--muted);
-}
-
-.pipe {
-  display: flex;
-  gap: 20px;
-  align-items: center;
-  padding: 20px 24px;
-  border: 2px solid #2fbf57;
-  margin-top: 16px;
-}
-
-.pipe-icon {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-.pipe-icon::before {
-  content: '';
-  width: 52px;
-  height: 14px;
-  background: #2fbf57;
-  border: 2px solid #0d4f21;
-}
-
-.pipe-icon::after {
-  content: '';
-  width: 38px;
-  height: 34px;
-  background: #1f8b3d;
-  border: 2px solid #0d4f21;
-  border-top: 0;
-}
-
-.pipe p {
-  margin: 4px 0 0;
-  color: var(--muted);
-  font-size: 15px;
 }
 
 /* Träning */

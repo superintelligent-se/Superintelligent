@@ -1,5 +1,5 @@
 <!doctype html>
-<!-- Ritar en av de fem bilderna i startsidans topp, vald med ?scene=0..4.
+<!-- Ritar en av de sex bilderna i startsidans topp, vald med ?scene=0..5.
      Körs av scripts/build-hero-art.mjs i Chrome, som tar en skärmdump.
      Figurer, mynt och utrustning kommer från spelets egna ritare. -->
 <html lang="sv">
@@ -186,81 +186,7 @@
           sparkle(98, 22);
           sparkle(90, 10, GOLD);
         },
-        // 2. Lekfull träning. En egen agent på fyra timmar.
-        () => {
-          sky('#0a0e17', '#13231f');
-          hills('#122522');
-          ground();
-          avatar('chef', 18, 78, 1.2);
-          desk(14, 88, 34);
-          laptop(30, 81);
-          // Timglaset: fyra timmar.
-          sprite([
-            'WWWWWWW',
-            '.GSSSG.',
-            '.G.SSG.',
-            '..G.G..',
-            '...G...',
-            '..GSG..',
-            '.GSSSG.',
-            '.GSSSG.',
-            'WWWWWWW',
-          ], { W: '#a16207', G: '#e5e7eb', S: GOLD }, 6, 79);
-          // Från laptopen hoppar en agent ut ur ett block.
-          qblock(64, 48, GREEN);
-          motion(48, 62, 12, '#4ade80');
-          sprite([
-            '...A....',
-            '...A....',
-            '.RRRRRR.',
-            'RREERREE',
-            'RREERREE',
-            '.RRRRRR.',
-            '..RRRR..',
-            '.RR..RR.',
-            'RR....RR',
-          ], { A: '#4ade80', R: '#94a3b8', E: '#4ade80' }, 92, 86, 2);
-          // Agenten bär en hög dokument.
-          [0, 1, 2, 3].forEach((i) => {
-            rect(93 + (i % 2), 83 - i * 3, 14, 2, '#f8fafc');
-            rect(93 + (i % 2), 85 - i * 3, 14, 1, '#cbd5e1');
-          });
-          rect(96, 74, 7, 1, '#94a3b8');
-          motion(112, 88, 10, '#4ade80');
-          motion(118, 96, 8, '#4ade80');
-          sparkle(76, 44, '#86efac');
-          sparkle(84, 54, '#86efac');
-          sparkle(70, 40);
-        },
-        // 3. Lekfull förändring som växer underifrån.
-        () => {
-          sky('#0a0e17', '#1d1730');
-          hills('#191630');
-          ground();
-          platform(28, 92, 22);
-          platform(52, 80, 22);
-          platform(76, 68, 22);
-          platform(100, 56, 22);
-          platform(124, 44, 24);
-          flag(140, 24, PURPLE);
-          coin(62, 48);
-          coin(86, 36);
-          coin(110, 24);
-          avatar('medarbetare', 108, 41, 1.2);
-          avatar('reception', 84, 53, 1.2);
-          avatar('maklare', 60, 65, 1.2);
-          motion(96, 46, 6);
-          motion(72, 58, 6);
-          avatar('hr', 34, 77, 1.2);
-          avatar('dataai', 14, 89, 1.2);
-          // Ledningen står kvar och pekar ut riktningen.
-          avatar('vd', 2, 89, 1.2, true);
-          sprite(['..A.', 'AAAA', '..A.'], { A: GOLD }, 15, 82, 1.2);
-          sparkle(132, 30);
-          sparkle(152, 34);
-          sparkle(120, 34, '#c4b5fd');
-        },
-        // 4. Lekfullt på ytan. Pengar på sista raden.
+        // 2. Pengarna: mynten hamnar i kistan och staplarna stiger.
         () => {
           sky('#0a0e17', '#241c10');
           hills('#22190e');
@@ -287,7 +213,7 @@
           coin(140, 70, GOLD, 1.2);
           sparkle(150, 60);
         },
-        // 5. Lekfull nyfikenhet. Möjligheter ni inte såg.
+        // 3. Möjligheterna: upp mot det som var utom räckhåll.
         () => {
           sky('#0a0e17', '#1b1236');
           for (let i = 0; i < 24; i++) sparkle(Math.floor(rand() * W), Math.floor(rand() * 60), '#a78bfa');
@@ -327,6 +253,113 @@
           coin(80, 34, PURPLE);
           coin(88, 26, PURPLE);
           sparkle(96, 20);
+        },
+        // 4. Människorna: alla medarbetare tar sig upp, inte bara några.
+        () => {
+          sky('#0a0e17', '#1d1730');
+          hills('#191630');
+          ground();
+          platform(28, 92, 22);
+          platform(52, 80, 22);
+          platform(76, 68, 22);
+          platform(100, 56, 22);
+          platform(124, 44, 24);
+          flag(140, 24, PURPLE);
+          coin(62, 48);
+          coin(86, 36);
+          coin(110, 24);
+          avatar('medarbetare', 108, 41, 1.2);
+          avatar('reception', 84, 53, 1.2);
+          avatar('maklare', 60, 65, 1.2);
+          motion(96, 46, 6);
+          motion(72, 58, 6);
+          avatar('hr', 34, 77, 1.2);
+          avatar('dataai', 14, 89, 1.2);
+          // Ledningen står kvar och pekar ut riktningen.
+          avatar('vd', 2, 89, 1.2, true);
+          sprite(['..A.', 'AAAA', '..A.'], { A: GOLD }, 15, 82, 1.2);
+          sparkle(132, 30);
+          sparkle(152, 34);
+          sparkle(120, 34, '#c4b5fd');
+        },
+        // 5. Intervjun: medarbetarna pratar med AI-intervjuaren i mobilen.
+        () => {
+          sky('#0a0e17', '#111f36');
+          hills('#111c30');
+          ground();
+          // Mobilen i mitten, med en ljudvåg och AI-rösten.
+          rect(66, 40, 28, 48, '#1f2937');
+          rect(68, 44, 24, 38, '#0b1220');
+          rect(76, 41, 8, 1, '#4b5563');
+          rect(77, 84, 6, 2, '#4b5563');
+          [3, 6, 10, 14, 9, 12, 7, 4, 8, 5].forEach((h, i) => rect(70 + i * 2, 66 - Math.floor(h / 2), 1, h, '#4ade80'));
+          rect(76, 48, 8, 8, PURPLE);
+          rect(78, 50, 1, 2, '#e9d5ff');
+          rect(81, 50, 1, 2, '#e9d5ff');
+          rect(78, 53, 4, 1, '#e9d5ff');
+          rect(72, 74, 16, 2, '#334155');
+          rect(72, 78, 10, 2, '#334155');
+          // Pratbubblor med det de säger, utan ord.
+          function bubble(x, y, w, h, tailRight, lines, color = '#f8fafc') {
+            rect(x, y, w, h, '#0b0f1a');
+            rect(x + 1, y + 1, w - 2, h - 2, color);
+            const tx = tailRight ? x + w - 6 : x + 3;
+            rect(tx, y + h - 1, 3, 2, color);
+            rect(tx + (tailRight ? 2 : 0), y + h + 1, 1, 2, color);
+            lines.forEach((len, i) => rect(x + 3, y + 3 + i * 3, len, 1, '#64748b'));
+          }
+          avatar('chef', 10, 87, 1.2);
+          bubble(4, 58, 26, 13, true, [18, 14, 20]);
+          avatar('medarbetare', 34, 87, 1.2);
+          bubble(30, 38, 22, 10, true, [14, 10]);
+          avatar('reception', 112, 87, 1.2, true);
+          bubble(104, 56, 26, 13, false, [20, 12, 16]);
+          avatar('hr', 138, 87, 1.2, true);
+          bubble(124, 30, 30, 10, false, [22, 14]);
+          // Ett utropstecken och ett frågetecken som flyger upp.
+          sprite(['KK', 'KK', 'KK', '..', 'KK'], { K: GOLD }, 58, 30);
+          qblock(96, 22, BLUE);
+          sparkle(62, 22);
+          sparkle(102, 16, '#bfdbfe');
+          motion(56, 60, 6, '#4ade80');
+          motion(98, 60, 6, '#4ade80');
+        },
+        // 6. Skillnaden: laget springer vidare på egen hand, och vi vinkar av.
+        () => {
+          sky('#0a0e17', '#2a1220');
+          hills('#22101b');
+          ground();
+          platform(62, 82, 24);
+          platform(88, 66, 24);
+          platform(114, 50, 36);
+          flag(144, 30, GREEN);
+          // Laget har egen utrustning och springer mot flaggan.
+          gear('shield', 130, 39, 0.8);
+          avatar('cio', 120, 35, 1.2);
+          avatar('medarbetare', 96, 51, 1.2);
+          avatar('hotellchef', 70, 67, 1.2);
+          motion(110, 40, 7);
+          motion(86, 56, 7);
+          motion(60, 72, 7);
+          gear('datacube', 108, 50, 1);
+          // Vi står kvar på marken och vinkar.
+          avatar('entreprenor', 14, 87, 1.2);
+          rect(26, 89, 1, 6, '#8d5a3b');
+          rect(26, 87, 2, 2, '#8d5a3b');
+          // Kedjan som höll ihop oss ligger avbruten på marken.
+          const link = (x, y) => sprite(['.CC.', 'C..C', 'C..C', '.CC.'], { C: '#94a3b8' }, x, y);
+          link(30, 100);
+          link(33, 100);
+          link(41, 99);
+          link(46, 100);
+          // Fåglar flyger upp, fria.
+          const bird = (x, y) => sprite(['B...B', '.B.B.', '..B..'], { B: '#fde68a' }, x, y);
+          bird(36, 60);
+          bird(46, 48);
+          bird(40, 36);
+          bird(56, 28);
+          sparkle(150, 22);
+          sparkle(136, 18, '#86efac');
         },
       ];
 

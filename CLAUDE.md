@@ -88,7 +88,7 @@ src/pixelart.js        Delad pixelritare, mynt och utrustning
 src/audio.js           Ljud syntetiserat med WebAudio, inga ljudfiler
 
 index.html             Sajtens startsida. Avsnitten följer kundresan i ordning: AI-resan,
-                       steg 1 Spelet, 2 AI-intervjun, 3 Er plan, 4A Rådgivning, 4B Träning,
+                       steg 1 Spelet, 2 AI-intervjun, 3 Er plan, 4A Träning, 4B Rådgivning,
                        5 Slutspelet, sist laget. Menyn har samma ordning och stegets färg (--c)
                        och markerar avsnittet man läser (site.js); Om oss markeras vid laget.
                        Steg 3 och 5 har ingen menylänk men syns i mobilens remsa (data-c).
@@ -96,9 +96,9 @@ index.html             Sajtens startsida. Avsnitten följer kundresan i ordning:
                        AI-resan är sidans innehållsförteckning: varje steg leder ner till sitt
                        avsnitt, och avsnittets knapp leder vidare till undersidan. Steg 3 och 5
                        sprutar konfetti först (rewards.js)
-                       Toppen har fem lekfulla rubriker (headline.js), var och en med en
-                       pixelbild som ritas om med npm run hero-art (scripts/hero-art/) och
-                       committas. De byts var åttonde sekund. Spelvideon ligger i avsnittet Spelet
+                       Toppen har sex rubriker (headline.js), där Lekfull AI står först, var och
+                       en med en pixelbild som ritas om med npm run hero-art (scripts/hero-art/)
+                       och committas. De byts var åttonde sekund. Spelvideon ligger i Spelet
 spelet/index.html      Spelet
 ai-skuld/index.html    Kalkylatorn, modellen kommer från repot superintelligent-se/roi
 intervju/index.html    Röstagenten att testa. Widgeten laddas först vid klick

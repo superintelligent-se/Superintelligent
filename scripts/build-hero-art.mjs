@@ -1,4 +1,4 @@
-// Ritar om de fem bilderna i startsidans topp. Varje scen ritas av
+// Ritar om de sex bilderna i startsidans topp. Varje scen ritas av
 // scripts/hero-art/scenes.html, och Chrome tar en skärmdump av den.
 // Kör npm run hero-art efter en ändring och committa PNG:erna.
 import { execFileSync } from 'node:child_process';
@@ -10,7 +10,7 @@ const page = resolve('scripts/hero-art/scenes.html');
 const out = resolve('src/site/hero-art');
 mkdirSync(out, { recursive: true });
 
-for (let scene = 0; scene < 5; scene++) {
+for (let scene = 0; scene < 6; scene++) {
   const file = `${out}/scen-${scene + 1}.png`;
   execFileSync(chrome, [
     '--headless=new',

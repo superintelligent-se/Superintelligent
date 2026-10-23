@@ -1,9 +1,9 @@
-/* Rubrikvalet: fem frågetecken-block under knapparna i toppen. */
+/* Rubrikvalet: sex frågetecken-block under knapparna i toppen. */
 
 .headline {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 20px;
 }
 
 .headline .h1 {
@@ -51,11 +51,11 @@
   color: var(--muted);
 }
 
-/* Fem block på en rad. På smala skärmar krymper de i stället för att
+/* Sex block på en rad. På smala skärmar krymper de i stället för att
    sticka ut, men blir aldrig större än 48 px. */
 .picker-blocks {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 48px));
+  grid-template-columns: repeat(6, minmax(0, 48px));
   gap: 10px;
 }
 
@@ -160,6 +160,12 @@
   --c-ink: #3d1a00;
 }
 
+[data-variant='5'] {
+  --c: #e11d48;
+  --c-edge: #9f1239;
+  --c-ink: #fff;
+}
+
 .qb.pick {
   background: var(--c);
   border-color: var(--c-edge);
@@ -174,9 +180,14 @@
 }
 
 /* Bilden till höger byts med rubriken. Den är ritad i 8 px-rutor och ska
-   skalas utan utsmetning. */
+   skalas utan utsmetning. Överkanten linjerar med rubriken, under den lilla
+   gula raden och avståndet ner till rubriken. */
+.hero .wrap {
+  align-items: start;
+}
+
 .hero-art {
-  margin: 0;
+  margin: calc(13px * 1.4 + 20px) 0 0;
   border: 3px solid var(--line);
   box-shadow: 8px 8px 0 #000;
   background: #0a0e17;
@@ -206,6 +217,12 @@
   100% { transform: translateY(0); }
 }
 
+@media (max-width: 1080px) {
+  .hero-art {
+    margin-top: 0;
+  }
+}
+
 @media (max-width: 900px) {
   /* Blocken direkt under rubriken, så den syns medan man klickar. Knapparna
      hamnar under. */
@@ -219,7 +236,7 @@
   }
 
   .picker-blocks {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 8px;
   }
 
