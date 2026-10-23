@@ -2,7 +2,8 @@
 // lekfull AI-förändring som bygger på det medarbetarna redan gör. De fem
 // andra visar samma sak från andra håll. Varje rubrik har ett eget
 // frågetecken-block, en egen färg, en egen effekt och en egen pixelbild i
-// spelets stil. Den stora knappen tar rubrikens färg och leder dit rubriken
+// spelets stil. På datorn ligger blocken som flikar med namn direkt under
+// menyn, på mobilen som en smal rad ovanför rubriken. Den stora knappen tar rubrikens färg och leder dit rubriken
 // handlar om, medan Boka gratis möte är densamma hela tiden. Rubrik 1 står i
 // HTML:en, så sökmotorer och den som inte klickar ser alltid den.
 import './headline.css';
@@ -19,14 +20,14 @@ import art6 from './hero-art/scen-6.png';
 // resonemanget, och siffrorna kommer från samma källor som resten av sidan.
 const VARIANTS = [
   {
-    eb: 'Rubrik 1 · Lekfullt',
+    name: 'Lekfullt',
     h1: 'Lekfull AI. Seriösa resultat.',
     sub: 'AI-förändring behöver inte vara tung och tråkig. Vi bygger på det era medarbetare redan gör och tycker om, så att nyfikenheten driver förändringen och resultaten kommer snabbt.',
     art: art1,
     alt: 'Ett kontor som en spelbana: medarbetare hoppar mellan skrivbord och plattformar och slår upp frågetecken som ger mynt.',
   },
   {
-    eb: 'Rubrik 2 · Pengarna',
+    name: 'Pengarna',
     // Samma tre nivåer som AI-skuldkalkylatorn. Hårda mellanslag så att
     // beloppet inte bryts isär.
     h1: '75–125\u00a0000\u00a0kr per medarbetare. Varje\u00a0år.',
@@ -35,28 +36,28 @@ const VARIANTS = [
     alt: 'Mynt sprutar ur frågetecken i en båge ner i en skattkista, bredvid ett stapeldiagram som stiger.',
   },
   {
-    eb: 'Rubrik 3 · Möjligheterna',
+    name: 'Möjligheterna',
     h1: 'Gör det som var omöjligt. Nu.',
     sub: 'Alla börjar med att effektivisera, och det betalar sig snabbt. Det stora värdet kommer när ni gör sådant ni tidigare saknade tid, kompetens eller resurser för. Vi kallar det Möjlighets-AI, och vår rådgivning hjälper er att hitta det.',
     art: art3,
     alt: 'En figur med jetpack lyfter från sitt skrivbord mot en flytande ö med en stjärna och en öppen, lysande dörr.',
   },
   {
-    eb: 'Rubrik 4 · Människorna',
+    name: 'Människorna',
     h1: 'Alla medarbetare. AI-kompetenta. På\u00a0riktigt.',
     sub: 'Inte bara IT och några eldsjälar. Varje medarbetare lär sig använda AI i sitt eget jobb, från första frågan till en egen agent. Kunskapen stannar hos er.',
     art: art4,
     alt: 'En blandad grupp medarbetare hoppar uppför en trappa av plattformar mot en flagga, medan ledningen pekar ut riktningen nerifrån.',
   },
   {
-    eb: 'Rubrik 5 · Intervjun',
+    name: 'Intervjun',
     h1: 'Vad tänker er organisation om AI?',
     sub: 'Vår AI-intervjuare pratar med medarbetarna när det passar dem. Ledningen får en inblick i vad alla tänker, hoppas och oroar sig för som inget möte eller enkät kan ge.',
     art: art5,
     alt: 'Fyra medarbetare pratar med en AI-intervjuare i en mobil, och pratbubblor fyller luften runt dem.',
   },
   {
-    eb: 'Rubrik 6 · Skillnaden',
+    name: 'Skillnaden',
     h1: 'Vi gör oss umbärliga. Med\u00a0flit.',
     sub: 'Vi har inget intresse av att ni ska behöva oss för alltid. Vår uppgift är att bygga er egen AI-förmåga, så att ni klarar er utan oss. Det är så vi förtjänar ert förtroende.',
     art: art6,
@@ -79,10 +80,11 @@ const CTAS = [
 ];
 
 const root = document.getElementById('headline');
-const eb = root?.querySelector('[data-part="eb"] [data-text]');
 const h1 = root?.querySelector('[data-part="h1"]');
 const sub = root?.querySelector('[data-part="sub"]');
+const picker = document.querySelector('.picker');
 const buttons = [...document.querySelectorAll('.picker .pick')];
+const nowLabel = picker?.querySelector('.picker-now');
 const art = document.querySelector('#hero-art img');
 const cta = document.getElementById('hero-cta');
 const ctaLabel = cta?.querySelector('.cta-label');
@@ -218,7 +220,8 @@ async function show(index, button) {
   button.classList.add('bump');
   celebrate(index, button);
 
-  eb.textContent = v.eb;
+  picker.dataset.variant = String(index);
+  if (nowLabel) nowLabel.textContent = v.name;
   setArt(index);
   setCta(index);
   sub.classList.add('fade');
@@ -236,18 +239,16 @@ async function show(index, button) {
 // av sidan inte syns eller fliken ligger i bakgrunden, och körs inte alls
 // för den som bett om mindre rörelse.
 const ROTATE_SECONDS = 15;
-const autoBox = document.getElementById('picker-auto');
-const autoBtn = autoBox?.querySelector('.picker-auto-btn');
-const autoFill = autoBox?.querySelector('.picker-auto-fill');
+const autoBtn = document.getElementById('picker-pause');
 
 let autoOn = false;
 let heroVisible = true;
 let elapsed = 0;
 
+// Stapeln under fliken som visas fylls fram till nästa byte. På mobilen,
+// där flikarna är små block, fylls en gemensam stapel bredvid namnet.
 function setProgress(fraction) {
-  if (!autoFill) return;
-  autoFill.style.transform = `scaleX(${autoOn ? Math.min(1, Math.max(0, fraction)) : 0})`;
-  autoFill.dataset.variant = String(upNext());
+  picker.style.setProperty('--progress', autoOn ? Math.min(1, Math.max(0, fraction)) : 0);
 }
 
 // Rubrik 1 står på sidan från början, så första bytet går till rubrik 2.
@@ -268,8 +269,9 @@ function stopAuto() {
 }
 
 function startAuto() {
-  if (!autoBox || reducedMotion.matches) return;
-  autoBox.hidden = false;
+  if (!autoBtn || reducedMotion.matches) return;
+  autoBtn.hidden = false;
+  picker.classList.add('is-auto');
   setAuto(true);
   autoBtn.addEventListener('click', () => setAuto(!autoOn));
 

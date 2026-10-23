@@ -98,7 +98,9 @@ index.html             Sajtens startsida. Avsnitten följer kundresan i ordning:
                        sprutar konfetti först (rewards.js)
                        Toppen har sex rubriker (headline.js), där Lekfull AI står först, var och
                        en med en pixelbild som ritas om med npm run hero-art (scripts/hero-art/)
-                       och committas. De byts var femtonde sekund. Spelvideon ligger i Spelet
+                       och committas. De byts var femtonde sekund. Rubrikvalet är flikar under
+                       menyn på datorn och en smal rad ovanför rubriken på mobil, där bilden inte
+                       visas. Spelvideon ligger i Spelet
 spelet/index.html      Spelet
 ai-skuld/index.html    Kalkylatorn, modellen kommer från repot superintelligent-se/roi
 intervju/index.html    Röstagenten att testa. Widgeten laddas först vid klick

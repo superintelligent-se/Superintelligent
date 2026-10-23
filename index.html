@@ -42,10 +42,29 @@
 
     <main id="main">
       <section class="hero">
-        <div class="wrap">
+        <div class="picker-wrap">
+          <div class="wrap picker" role="group" aria-label="Välj rubrik" data-variant="0">
+            <button type="button" class="picker-auto-btn" id="picker-pause" aria-pressed="false" aria-label="Pausa bytet av rubriker" hidden>
+              <svg class="pause" width="10" height="12" viewBox="0 0 10 12" aria-hidden="true"><path d="M0 0h3v12H0zM7 0h3v12H7z" fill="currentColor" /></svg>
+              <svg class="play" width="10" height="12" viewBox="0 0 10 12" aria-hidden="true"><path d="M0 0h2v2h2v2h2v2h2v2H6v2H4v2H2v-2H0z" fill="currentColor" /></svg>
+            </button>
+            <div class="picker-tabs">
+            <button type="button" class="pick" data-variant="0" aria-pressed="true" aria-label="Rubrik 1, Lekfullt"><span class="pick-head"><span class="qb">1</span><span class="pick-name">Lekfullt</span></span><span class="pick-bar" aria-hidden="true"><i></i></span></button>
+            <button type="button" class="pick" data-variant="1" aria-pressed="false" aria-label="Rubrik 2, Pengarna"><span class="pick-head"><span class="qb">2</span><span class="pick-name">Pengarna</span></span><span class="pick-bar" aria-hidden="true"><i></i></span></button>
+            <button type="button" class="pick" data-variant="2" aria-pressed="false" aria-label="Rubrik 3, Möjligheterna"><span class="pick-head"><span class="qb">3</span><span class="pick-name">Möjligheterna</span></span><span class="pick-bar" aria-hidden="true"><i></i></span></button>
+            <button type="button" class="pick" data-variant="3" aria-pressed="false" aria-label="Rubrik 4, Människorna"><span class="pick-head"><span class="qb">4</span><span class="pick-name">Människorna</span></span><span class="pick-bar" aria-hidden="true"><i></i></span></button>
+            <button type="button" class="pick" data-variant="4" aria-pressed="false" aria-label="Rubrik 5, Intervjun"><span class="pick-head"><span class="qb">5</span><span class="pick-name">Intervjun</span></span><span class="pick-bar" aria-hidden="true"><i></i></span></button>
+            <button type="button" class="pick" data-variant="5" aria-pressed="false" aria-label="Rubrik 6, Skillnaden"><span class="pick-head"><span class="qb">6</span><span class="pick-name">Skillnaden</span></span><span class="pick-bar" aria-hidden="true"><i></i></span></button>
+            </div>
+            <span class="picker-status" aria-hidden="true">
+              <span class="picker-now">Lekfullt</span>
+              <span class="picker-auto-bar"><span class="picker-auto-fill"></span></span>
+            </span>
+          </div>
+        </div>
+        <div class="wrap hero-main">
           <div class="hero-copy">
             <div class="headline" id="headline" aria-live="polite">
-              <p class="eb gold" data-part="eb"><span class="pixel-dot"></span><span data-text>Rubrik 1 · Lekfullt</span></p>
               <h1 class="h1" data-part="h1">Lekfull AI. Seriösa resultat.</h1>
               <p class="sub" data-part="sub">AI-förändring behöver inte vara tung och tråkig. Vi bygger på det era medarbetare redan gör och tycker om, så att nyfikenheten driver förändringen och resultaten kommer snabbt.</p>
             </div>
@@ -54,24 +73,6 @@
               <a class="btn btn-o" data-booking href="https://bookings.cloud.microsoft/book/Superintelligent@superintelligent.se/s/B2QIYRV4KUupO4i1Rd8Pow2?ismsaljsauthenabled">Boka gratis möte</a>
             </div>
             <p class="small" id="hero-note">Fem steg från första samtalet till egen AI-förmåga</p>
-            <div class="picker" role="group" aria-labelledby="picker-label">
-              <p class="picker-label" id="picker-label">Vilken AI-rubrik är bäst?</p>
-              <div class="picker-blocks">
-                <button type="button" class="qb pick" data-variant="0" aria-pressed="false" aria-label="Rubrik 1, Lekfullt">1</button>
-                <button type="button" class="qb pick" data-variant="1" aria-pressed="false" aria-label="Rubrik 2, Pengarna">2</button>
-                <button type="button" class="qb pick" data-variant="2" aria-pressed="false" aria-label="Rubrik 3, Möjligheterna">3</button>
-                <button type="button" class="qb pick" data-variant="3" aria-pressed="false" aria-label="Rubrik 4, Människorna">4</button>
-                <button type="button" class="qb pick" data-variant="4" aria-pressed="false" aria-label="Rubrik 5, Intervjun">5</button>
-                <button type="button" class="qb pick" data-variant="5" aria-pressed="false" aria-label="Rubrik 6, Skillnaden">6</button>
-              </div>
-              <div class="picker-auto" id="picker-auto" hidden>
-                <button type="button" class="picker-auto-btn" aria-pressed="false" aria-label="Pausa bytet av rubriker">
-                  <svg class="pause" width="10" height="12" viewBox="0 0 10 12" aria-hidden="true"><path d="M0 0h3v12H0zM7 0h3v12H7z" fill="currentColor" /></svg>
-                  <svg class="play" width="10" height="12" viewBox="0 0 10 12" aria-hidden="true"><path d="M0 0h2v2h2v2h2v2h2v2H6v2H4v2H2v-2H0z" fill="currentColor" /></svg>
-                </button>
-                <span class="picker-auto-bar" aria-hidden="true"><span class="picker-auto-fill"></span></span>
-              </div>
-            </div>
           </div>
           <figure class="hero-art" id="hero-art">
             <img src="/src/site/hero-art/scen-1.png" width="1280" height="960" alt="Ett kontor som en spelbana: medarbetare hoppar mellan skrivbord och plattformar och slår upp frågetecken som ger mynt." />
@@ -325,7 +326,7 @@
               <p class="eb green">Steg 4A · Träning för medarbetarna</p>
               <h2 class="h2">Era medarbetare går från nyfikna till att bygga egna agenter</h2>
               <p class="sub">
-                Bottom-up betyder att förmågan byggs underifrån, hos dem som gör jobbet. Sex steg,
+                Bottom-up betyder att förmågan byggs underifrån, hos dem som gör jobbet. Fyra steg,
                 från inspiration till en agent som löser ett verkligt arbetsflöde.
               </p>
             </div>
@@ -340,33 +341,23 @@
             <li class="col">
               <div class="txt"><div class="t">Spara tid i vardagen</div><div class="d">E-learning 1 · ChatGPT gratisversion</div></div>
               <div class="qb green">2</div>
-              <div class="plat" style="height: 60px; border-top-color: var(--green)"></div>
+              <div class="plat" style="height: 70px; border-top-color: var(--green)"></div>
             </li>
             <li class="col">
               <div class="txt"><div class="t">Jobba smartare i Microsoft 365</div><div class="d">E-learning 2 · Copilot Premium</div></div>
               <div class="qb green">3</div>
-              <div class="plat" style="height: 100px; border-top-color: var(--green)"></div>
+              <div class="plat" style="height: 120px; border-top-color: var(--green)"></div>
             </li>
             <li class="col">
-              <div class="txt"><div class="t">Låt AI göra jobb i flera steg</div><div class="d">E-learning 3 · ChatGPT betalversion</div></div>
-              <div class="qb green">4</div>
-              <div class="plat" style="height: 140px; border-top-color: var(--green)"></div>
-            </li>
-            <li class="col">
-              <div class="txt"><div class="t">Bygg er första agent</div><div class="d">Agent Masterclass · halvdag, max 10 deltagare</div></div>
-              <div class="qb green">5</div>
-              <div class="plat" style="height: 180px; border-top-color: var(--green)"></div>
-            </li>
-            <li class="col">
-              <div class="txt"><div class="t">En agent i drift</div><div class="d">För ett arbetsflöde som tar mycket av er tid i dag</div></div>
-              <div class="qb done">6</div>
-              <div class="plat" style="height: 220px; border-top-color: var(--green)"></div>
+              <div class="txt"><div class="t">Bygg er första agent</div><div class="d">Agent Masterclass · halvdag, max 10 deltagare. Agenten går i drift i ett arbetsflöde som tar mycket av er tid i dag</div></div>
+              <div class="qb done">4</div>
+              <div class="plat" style="height: 170px; border-top-color: var(--green)"></div>
             </li>
           </ol>
           <div class="ground"></div>
           <div class="callout-row">
-            <p class="callout">Ni gör e-learningen före masterclassen. Efter fyra timmar har ni en första agent på plats.</p>
-            <p class="small">E-learning från 2 990 kr · Steg 1 + 2 paketpris 4 990 kr</p>
+            <p class="callout">Ni gör e-learningen före masterclassen. Efter ungefär en arbetsdag har varje person en första egen agent på plats.</p>
+            <p class="small">E-learning från 2 990 kr</p>
           </div>
         </div>
       </section>
@@ -386,7 +377,6 @@
               <p class="eb purple">01 · Riktning</p>
               <h3>För en ledare eller chef</h3>
               <p class="prod">AI Advisor</p>
-              <p class="small">Er rådgivare: Christofer Nässil</p>
               <hr />
               <ul>
                 <li>Månadsvis rådgivning</li>
@@ -398,7 +388,6 @@
               <p class="eb purple">02 · Genomförande</p>
               <h3>För avdelningschef och team</h3>
               <p class="prod">AI Accelerator</p>
-              <p class="small">Er rådgivare: Christofer Nässil</p>
               <hr />
               <ul>
                 <li>Gemensam AI Action Plan</li>
@@ -410,7 +399,6 @@
               <p class="eb purple">03 · Långsiktigt värde</p>
               <h3>För VD, ledning eller styrelse</h3>
               <p class="prod">Executive AI Partner</p>
-              <p class="small">Er rådgivare: Thomas Dalebring</p>
               <hr />
               <ul>
                 <li>Strategisk AI-ledning</li>
@@ -421,9 +409,9 @@
           </div>
           <div class="tier-price">
             <p>
-              <strong>Priset beror på upplägg och hur mycket stöd ni vill ha.</strong> Vi tar fram det
-              tillsammans, och det första samtalet är alltid kostnadsfritt. Ni betalar tio månader per
-              år, ingen avgift under sommaruppehållet.
+              <strong>En kostnadseffektiv månadsavgift.</strong> Nivån och hur mycket stöd ni vill ha
+              avgör priset, och vi tar fram det tillsammans. Det första samtalet är alltid kostnadsfritt.
+              Ni betalar tio månader per år, ingen avgift under sommaruppehållet.
             </p>
             <a class="btn btn-p" data-booking href="https://bookings.cloud.microsoft/book/Superintelligent@superintelligent.se/s/B2QIYRV4KUupO4i1Rd8Pow2?ismsaljsauthenabled">Boka gratis första samtal</a>
           </div>
