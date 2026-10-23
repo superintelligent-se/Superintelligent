@@ -29,7 +29,7 @@ const VARIANTS = [
     eb: 'Rubrik 2 · Pengarna',
     // Samma tre nivåer som AI-skuldkalkylatorn. Hårda mellanslag så att
     // beloppet inte bryts isär.
-    h1: '75–125\u00a0000\u00a0kr per tjänsteman. Varje\u00a0år.',
+    h1: '75–125\u00a0000\u00a0kr per medarbetare. Varje\u00a0år.',
     sub: 'Så mycket kostar det när AI inte används systematiskt i det dagliga arbetet, beroende på hur mycket av jobbet som är rutin. Räkna på er egen siffra.',
     art: art2,
     alt: 'Mynt sprutar ur frågetecken i en båge ner i en skattkista, bredvid ett stapeldiagram som stiger.',

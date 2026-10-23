@@ -237,9 +237,11 @@
   100% { transform: translateY(0); }
 }
 
+/* När sidan blir en spalt skulle bilden hamna under knapparna, långt ner
+   på en telefon. Där tillför den inget, så den visas inte alls. */
 @media (max-width: 1080px) {
   .hero-art {
-    margin-top: 0;
+    display: none;
   }
 }
 
