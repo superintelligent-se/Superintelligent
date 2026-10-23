@@ -81,7 +81,7 @@ src/state.js           Svar, poäng, mynt, lead-payload
 src/scenes/PlayScene.js Banan, zoner, utrustning, röret, masten, raketen
 src/ui.js              Alla DOM-dialoger, HUD, lead-formulär, mobilinit
 src/config.js          Boknings- och träningslänkar, delas med mejlet
-scripts/               lead-mail.json och policy-PDF:er
+scripts/               lead-mail.json, policy-PDF:er och toppens pixelbilder
 src/touch.js           Touch matas in i samma ställen som tangentbordet
 src/avatars.js         Pixelfigurerna, 10x14 rutnät
 src/pixelart.js        Delad pixelritare, mynt och utrustning
@@ -96,6 +96,9 @@ index.html             Sajtens startsida. Avsnitten följer kundresan i ordning:
                        AI-resan är sidans innehållsförteckning: varje steg leder ner till sitt
                        avsnitt, och avsnittets knapp leder vidare till undersidan. Steg 3 och 5
                        sprutar konfetti först (rewards.js)
+                       Toppen har fem lekfulla rubriker (headline.js), var och en med en
+                       pixelbild som ritas om med npm run hero-art (scripts/hero-art/) och
+                       committas. De byts var åttonde sekund. Spelvideon ligger i avsnittet Spelet
 spelet/index.html      Spelet
 ai-skuld/index.html    Kalkylatorn, modellen kommer från repot superintelligent-se/roi
 intervju/index.html    Röstagenten att testa. Widgeten laddas först vid klick

@@ -1,0 +1,338 @@
+<!doctype html>
+<!-- Ritar en av de fem bilderna i startsidans topp, vald med ?scene=0..4.
+     Körs av scripts/build-hero-art.mjs i Chrome, som tar en skärmdump.
+     Figurer, mynt och utrustning kommer från spelets egna ritare. -->
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      html, body { margin: 0; background: #0a0e17; }
+      canvas { display: block; }
+    </style>
+  </head>
+  <body>
+    <canvas id="c" width="1280" height="960"></canvas>
+    <script type="module">
+      import { renderAvatarCanvas } from '../../src/avatars.js';
+      import { renderPixelCanvas, renderCoinCanvas, renderGearCanvas, shade } from '../../src/pixelart.js';
+
+      // Allt ritas i rutor om 8 px, så bilden är 160 x 120 rutor.
+      const P = 8;
+      const W = 160;
+      const H = 120;
+      const GROUND = 104;
+      const canvas = document.getElementById('c');
+      const ctx = canvas.getContext('2d');
+      ctx.imageSmoothingEnabled = false;
+
+      const GOLD = '#e0b23c';
+      const GREEN = '#2e9e63';
+      const PURPLE = '#7c3aed';
+      const BLUE = '#4f7fd6';
+      const ORANGE = '#f97316';
+
+      // Slumptal som blir lika varje gång, så bilderna går att bygga om.
+      let seed = 7;
+      const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+
+      const rect = (x, y, w, h, color) => {
+        ctx.fillStyle = color;
+        ctx.fillRect(x * P, y * P, w * P, h * P);
+      };
+      const sprite = (rows, palette, x, y, size = 1) =>
+        ctx.drawImage(renderPixelCanvas(rows, palette, Math.round(P * size)), x * P, y * P);
+      const avatar = (role, x, y, size = 1, flip = false) => {
+        const img = renderAvatarCanvas(role, Math.round(P * size));
+        if (!flip) return ctx.drawImage(img, x * P, y * P);
+        ctx.save();
+        ctx.translate(x * P + img.width, y * P);
+        ctx.scale(-1, 1);
+        ctx.drawImage(img, 0, 0);
+        ctx.restore();
+      };
+      const coin = (x, y, color = GOLD, size = 1) => ctx.drawImage(renderCoinCanvas(color, Math.round(P * size)), x * P, y * P);
+      const gear = (name, x, y, size = 1) => ctx.drawImage(renderGearCanvas(name, Math.round(P * size)), x * P, y * P);
+
+      function sky(top, bottom) {
+        const g = ctx.createLinearGradient(0, 0, 0, GROUND * P);
+        g.addColorStop(0, top);
+        g.addColorStop(1, bottom);
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, W * P, H * P);
+        for (let i = 0; i < 70; i++) {
+          const x = Math.floor(rand() * W);
+          const y = Math.floor(rand() * 70);
+          rect(x, y, 1, 1, rand() > 0.8 ? '#fde68a' : '#334155');
+        }
+      }
+
+      // Kullar långt bort, i trappsteg som i spelet.
+      function hills(color) {
+        let y = 86;
+        for (let x = 0; x < W; x += 4) {
+          y = Math.max(76, Math.min(96, y + Math.floor(rand() * 7) - 3));
+          rect(x, y, 4, GROUND - y, color);
+        }
+      }
+
+      function bricks(x, y, w, h, base = '#8a4b2a') {
+        rect(x, y, w, h, base);
+        rect(x, y, w, 1, shade(base, 1.35));
+        for (let row = 0; row < h; row += 4) {
+          rect(x, y + row + 3, w, 1, shade(base, 0.6));
+          const offset = (row / 4) % 2 ? 0 : 4;
+          for (let col = offset; col < w; col += 8) rect(x + col, y + row, 1, 3, shade(base, 0.6));
+        }
+      }
+
+      function ground() {
+        bricks(0, GROUND, W, H - GROUND);
+        rect(0, GROUND, W, 2, '#3f8f4f');
+        rect(0, GROUND, W, 1, '#6bc47a');
+      }
+
+      const platform = (x, y, w) => bricks(x, y, w, 4, '#a0522d');
+
+      const QB = [
+        'EEEEEEEE',
+        'EFFKKKFE',
+        'EFKFFFKE',
+        'EFFFFKFE',
+        'EFFFKFFE',
+        'EFFFFFFE',
+        'EFFFKFFE',
+        'EEEEEEEE',
+      ];
+      const qblock = (x, y, color = GOLD, size = 1) =>
+        sprite(QB, { E: shade(color, 0.5), F: color, K: '#3d2a00' }, x, y, size);
+      function usedBlock(x, y) {
+        rect(x, y, 8, 8, '#6b4a2f');
+        rect(x + 1, y + 1, 6, 6, '#8a6440');
+        rect(x + 1, y + 1, 1, 1, '#6b4a2f');
+        rect(x + 6, y + 1, 1, 1, '#6b4a2f');
+        rect(x + 1, y + 6, 1, 1, '#6b4a2f');
+        rect(x + 6, y + 6, 1, 1, '#6b4a2f');
+      }
+
+      // Rörelselinjer bakom någon som hoppar eller flyger.
+      function motion(x, y, len, color = '#94a3b8') {
+        rect(x, y, len, 1, color);
+        rect(x + 2, y + 3, len - 2, 1, color);
+        rect(x + 1, y + 6, len - 1, 1, color);
+      }
+
+      function sparkle(x, y, color = '#fde68a') {
+        rect(x, y - 1, 1, 3, color);
+        rect(x - 1, y, 3, 1, color);
+      }
+
+      function desk(x, y, w = 18) {
+        rect(x, y, w, 2, '#a16207');
+        rect(x, y + 2, w, 1, '#713f12');
+        rect(x + 1, y + 3, 2, GROUND - y - 3, '#713f12');
+        rect(x + w - 3, y + 3, 2, GROUND - y - 3, '#713f12');
+      }
+
+      function laptop(x, y) {
+        rect(x + 1, y, 8, 6, '#9ca3af');
+        rect(x + 2, y + 1, 6, 4, '#1e293b');
+        rect(x + 3, y + 2, 3, 1, '#4ade80');
+        rect(x + 3, y + 3, 2, 1, '#4ade80');
+        rect(x, y + 6, 10, 1, '#d1d5db');
+      }
+
+      function chartBars(x, y, values, color) {
+        values.forEach((v, i) => {
+          rect(x + i * 4, y - v, 3, v, i === values.length - 1 ? color : shade(color, 0.7));
+          rect(x + i * 4, y - v, 3, 1, shade(color, 1.4));
+        });
+        rect(x - 1, y, values.length * 4 + 1, 1, '#e5e7eb');
+        rect(x - 1, y - 18, 1, 18, '#e5e7eb');
+      }
+
+      function flag(x, y, color) {
+        rect(x, y, 1, 20, '#d1d5db');
+        rect(x - 1, y - 1, 3, 1, GOLD);
+        sprite(['FFFFFF..', 'FFFFFFF.', 'FFFFFFFF', 'FFFFFFF.', 'FFFFFF..'], { F: color }, x + 1, y + 1);
+      }
+
+      const SCENES = [
+        // 1. Lekfull AI. Seriösa resultat: kontoret som spelbana.
+        () => {
+          sky('#0a0e17', '#18213a');
+          hills('#141c30');
+          ground();
+          desk(8, 90, 22);
+          laptop(14, 83);
+          desk(124, 90, 26);
+          laptop(134, 83);
+          platform(42, 70, 24);
+          platform(96, 62, 24);
+          [[50, 46, GREEN], [104, 38, BLUE]].forEach(([x, y, c]) => qblock(x, y, c));
+          usedBlock(76, 34);
+          // Ur blocken kommer mynt och ett litet diagram.
+          coin(52, 36, GREEN);
+          coin(106, 27, BLUE);
+          coin(78, 22);
+          coin(84, 14);
+          coin(70, 16);
+          avatar('medarbetare', 48, 54, 1.2);
+          avatar('cio', 101, 45, 1.2, true);
+          avatar('entreprenor', 72, 46, 1.2);
+          motion(64, 52, 6);
+          avatar('hr', 34, 87, 1.2);
+          avatar('reception', 110, 87, 1.2, true);
+          sparkle(60, 40);
+          sparkle(98, 22);
+          sparkle(90, 10, GOLD);
+        },
+        // 2. Lekfull träning. En egen agent på fyra timmar.
+        () => {
+          sky('#0a0e17', '#13231f');
+          hills('#122522');
+          ground();
+          avatar('chef', 18, 78, 1.2);
+          desk(14, 88, 34);
+          laptop(30, 81);
+          // Timglaset: fyra timmar.
+          sprite([
+            'WWWWWWW',
+            '.GSSSG.',
+            '.G.SSG.',
+            '..G.G..',
+            '...G...',
+            '..GSG..',
+            '.GSSSG.',
+            '.GSSSG.',
+            'WWWWWWW',
+          ], { W: '#a16207', G: '#e5e7eb', S: GOLD }, 6, 79);
+          // Från laptopen hoppar en agent ut ur ett block.
+          qblock(64, 48, GREEN);
+          motion(48, 62, 12, '#4ade80');
+          sprite([
+            '...A....',
+            '...A....',
+            '.RRRRRR.',
+            'RREERREE',
+            'RREERREE',
+            '.RRRRRR.',
+            '..RRRR..',
+            '.RR..RR.',
+            'RR....RR',
+          ], { A: '#4ade80', R: '#94a3b8', E: '#4ade80' }, 92, 86, 2);
+          // Agenten bär en hög dokument.
+          [0, 1, 2, 3].forEach((i) => {
+            rect(93 + (i % 2), 83 - i * 3, 14, 2, '#f8fafc');
+            rect(93 + (i % 2), 85 - i * 3, 14, 1, '#cbd5e1');
+          });
+          rect(96, 74, 7, 1, '#94a3b8');
+          motion(112, 88, 10, '#4ade80');
+          motion(118, 96, 8, '#4ade80');
+          sparkle(76, 44, '#86efac');
+          sparkle(84, 54, '#86efac');
+          sparkle(70, 40);
+        },
+        // 3. Lekfull förändring som växer underifrån.
+        () => {
+          sky('#0a0e17', '#1d1730');
+          hills('#191630');
+          ground();
+          platform(28, 92, 22);
+          platform(52, 80, 22);
+          platform(76, 68, 22);
+          platform(100, 56, 22);
+          platform(124, 44, 24);
+          flag(140, 24, PURPLE);
+          coin(62, 48);
+          coin(86, 36);
+          coin(110, 24);
+          avatar('medarbetare', 108, 41, 1.2);
+          avatar('reception', 84, 53, 1.2);
+          avatar('maklare', 60, 65, 1.2);
+          motion(96, 46, 6);
+          motion(72, 58, 6);
+          avatar('hr', 34, 77, 1.2);
+          avatar('dataai', 14, 89, 1.2);
+          // Ledningen står kvar och pekar ut riktningen.
+          avatar('vd', 2, 89, 1.2, true);
+          sprite(['..A.', 'AAAA', '..A.'], { A: GOLD }, 15, 82, 1.2);
+          sparkle(132, 30);
+          sparkle(152, 34);
+          sparkle(120, 34, '#c4b5fd');
+        },
+        // 4. Lekfullt på ytan. Pengar på sista raden.
+        () => {
+          sky('#0a0e17', '#241c10');
+          hills('#22190e');
+          ground();
+          [14, 26, 38].forEach((x, i) => qblock(x, 44 + i * 2, GOLD));
+          avatar('entreprenor', 24, 62, 1.2);
+          motion(18, 72, 5);
+          // Mynten flyger i en båge ner i kistan.
+          [[20, 34], [32, 30], [44, 28], [54, 30], [62, 36], [68, 44], [72, 54], [74, 64]].forEach(([x, y], i) =>
+            coin(x, y, i % 3 === 2 ? '#fde047' : GOLD));
+          // Kistan.
+          rect(66, 82, 22, 22, '#7c4a1e');
+          rect(66, 76, 22, 6, '#9a5d27');
+          rect(66, 82, 22, 1, '#3d2410');
+          rect(66, 76, 22, 1, '#c07a34');
+          rect(75, 84, 4, 5, GOLD);
+          rect(76, 86, 2, 2, '#3d2a00');
+          [68, 72, 78, 82].forEach((x) => coin(x, 72, GOLD, 0.6));
+          sparkle(70, 70);
+          sparkle(86, 68);
+          // Stapeldiagrammet stiger.
+          chartBars(106, 98, [4, 7, 9, 13, 16], GREEN);
+          sprite(['....AA', '...AAA', '..AA.A', '.AA...', 'AA....'], { A: '#4ade80' }, 126, 74);
+          coin(140, 70, GOLD, 1.2);
+          sparkle(150, 60);
+        },
+        // 5. Lekfull nyfikenhet. Möjligheter ni inte såg.
+        () => {
+          sky('#0a0e17', '#1b1236');
+          for (let i = 0; i < 24; i++) sparkle(Math.floor(rand() * W), Math.floor(rand() * 60), '#a78bfa');
+          hills('#17122c');
+          ground();
+          // Den flytande ön med en öppen dörr.
+          rect(100, 40, 44, 4, '#3f8f4f');
+          rect(100, 40, 44, 1, '#6bc47a');
+          bricks(102, 44, 40, 4, '#8a4b2a');
+          bricks(108, 48, 28, 4, '#8a4b2a');
+          bricks(116, 52, 12, 3, '#8a4b2a');
+          rect(124, 20, 12, 20, '#4c1d95');
+          rect(125, 21, 10, 19, '#fde68a');
+          rect(126, 22, 8, 18, '#fef3c7');
+          rect(122, 19, 16, 1, '#a78bfa');
+          // Ljuset från dörren.
+          ctx.fillStyle = 'rgba(253, 230, 138, 0.10)';
+          ctx.beginPath();
+          ctx.moveTo(125 * P, 40 * P);
+          ctx.lineTo(135 * P, 40 * P);
+          ctx.lineTo(150 * P, 104 * P);
+          ctx.lineTo(96 * P, 104 * P);
+          ctx.fill();
+          // Stjärnan ovanför.
+          sprite(['...S...', '..SSS..', 'SSSSSSS', '.SSSSS.', '..SSS..', '.SS.SS.', 'S.....S'], { S: '#fde047' }, 106, 24, 1.3);
+          // Figuren lyfter med jetpack.
+          gear('jetpack', 52, 50, 1.5);
+          avatar('hotelldirektor', 57, 42, 1.3);
+          gear('thrust', 52, 61, 1.5);
+          gear('thrust', 52, 66, 1);
+          rect(52, 74, 2, 2, '#fb923c');
+          rect(54, 80, 1, 1, '#fde047');
+          motion(40, 54, 8, '#a78bfa');
+          // Där de började: ett vanligt skrivbord.
+          desk(10, 90, 20);
+          laptop(14, 83);
+          coin(80, 34, PURPLE);
+          coin(88, 26, PURPLE);
+          sparkle(96, 20);
+        },
+      ];
+
+      const scene = Number(new URLSearchParams(location.search).get('scene') ?? 0);
+      SCENES[scene]();
+      document.title = 'done';
+    </script>
+  </body>
+</html>

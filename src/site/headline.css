@@ -1,4 +1,4 @@
-/* Rubrikvalet: sex frågetecken-block under knapparna i toppen. */
+/* Rubrikvalet: fem frågetecken-block under knapparna i toppen. */
 
 .headline {
   display: flex;
@@ -51,11 +51,11 @@
   color: var(--muted);
 }
 
-/* Sex block på en rad. På smala skärmar krymper de i stället för att
+/* Fem block på en rad. På smala skärmar krymper de i stället för att
    sticka ut, men blir aldrig större än 48 px. */
 .picker-blocks {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 48px));
+  grid-template-columns: repeat(5, minmax(0, 48px));
   gap: 10px;
 }
 
@@ -128,8 +128,8 @@
   transition: transform 0.2s linear;
 }
 
-/* Varje rubrik har sin färg ur spelets palett. Blocket bär den alltid, och
-   den stora knappen tar den när rubriken väljs. */
+/* Varje rubrik har sin färg ur spelets palett, och förloppsstapeln tar
+   färgen från rubriken som kommer härnäst. */
 [data-variant='0'] {
   --c: var(--gold);
   --c-edge: var(--gold-dark);
@@ -160,12 +160,6 @@
   --c-ink: #3d1a00;
 }
 
-[data-variant='5'] {
-  --c: #e11d48;
-  --c-edge: #9f1239;
-  --c-ink: #fff;
-}
-
 .qb.pick {
   background: var(--c);
   border-color: var(--c-edge);
@@ -179,28 +173,21 @@
   outline-offset: 3px;
 }
 
-/* Stora knappen. Lila och Spela spelet tills en rubrik väljs. */
-.btn-cta {
-  transition: transform 80ms, box-shadow 80ms, background-color 0.35s ease, border-color 0.35s ease, color 0.35s ease;
+/* Bilden till höger byts med rubriken. Den är ritad i 8 px-rutor och ska
+   skalas utan utsmetning. */
+.hero-art {
+  margin: 0;
+  border: 3px solid var(--line);
+  box-shadow: 8px 8px 0 #000;
+  background: #0a0e17;
+  overflow: hidden;
 }
 
-.btn-cta[data-variant],
-.btn-cta[data-variant]:hover {
-  background: var(--c);
-  border-color: var(--c-edge);
-  color: var(--c-ink);
-}
-
-.btn-cta[data-variant]:hover {
-  filter: brightness(1.08);
-}
-
-.btn-cta[data-variant] svg {
-  display: none;
-}
-
-.cta-label {
-  display: inline-block;
+.hero-art img {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
 }
 
 .qb.pick:focus-visible {
@@ -232,7 +219,7 @@
   }
 
   .picker-blocks {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 8px;
   }
 
@@ -248,8 +235,7 @@
     animation: none;
   }
 
-  .headline .sub,
-  .btn-cta {
+  .headline .sub {
     transition: none;
   }
 }

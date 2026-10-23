@@ -1,62 +1,59 @@
-// Rubrikvalet överst på startsidan. Vi tog fram sex rubriker med AI, och
-// besökaren får slå upp blocken och se dem alla. Varje block har sin färg,
-// och den stora knappen tar blockets färg och leder dit rubriken handlar om.
-// Innan något valts är den lila och startar spelet. Boka gratis möte är
-// densamma hela tiden. Rubrik 1 står i HTML:en, så sökmotorer och den som
-// inte klickar ser alltid den.
+// Rubrikvalet överst på startsidan. Fem lekfulla rubriker som säger vad vi
+// gör: AI-förändring som bygger på det medarbetarna redan gör och tycker om.
+// Varje rubrik har ett eget frågetecken-block, en egen färg och en egen
+// pixelbild i spelets stil. Knapparna under är desamma hela tiden: Se er
+// AI-resa och Boka gratis möte. Rubrik 1 står i HTML:en, så sökmotorer och
+// den som inte klickar ser alltid den.
 import './headline.css';
 import { celebrate, vision } from './effects.js';
+// Bilderna ritas av scripts/build-hero-art.mjs (npm run hero-art).
+import art1 from './hero-art/scen-1.png';
+import art2 from './hero-art/scen-2.png';
+import art3 from './hero-art/scen-3.png';
+import art4 from './hero-art/scen-4.png';
+import art5 from './hero-art/scen-5.png';
 
-// Rubrikerna är korta och säger vad kunden vinner. Brödtexten under bär
+// Rubrikerna innehåller alla ordet lekfull. Brödtexten under bär
 // resonemanget, och siffrorna kommer från samma källor som resten av sidan.
 const VARIANTS = [
   {
-    eb: 'Rubrik 1 · Visionen',
-    h1: 'Hela organisationen. AI-driven.',
-    sub: 'Från manuellt arbete och personberoende kunskap till en organisation som lär sig och blir bättre varje dag. Fem steg tar er dit, och det första tar fem minuter: spela spelet.',
+    eb: 'Lekfullt',
+    h1: 'Lekfull AI. Seriösa resultat.',
+    sub: 'AI-förändring behöver inte vara tung och tråkig. Vi bygger på det era medarbetare redan gör och tycker om, så att nyfikenheten driver förändringen och resultaten kommer snabbt.',
+    art: art1,
+    alt: 'Ett kontor som en spelbana: medarbetare hoppar mellan skrivbord och plattformar och slår upp frågetecken som ger mynt.',
   },
   {
-    eb: 'Rubrik 2 · Pengarna',
-    // Samma tre nivåer som AI-skuldkalkylatorn. Hårda mellanslag så att
+    eb: 'Snabbt',
+    // Samma löfte som träningstrappan: e-learning och en halvdags masterclass.
+    h1: 'Lekfull träning. En\u00a0egen agent på fyra\u00a0timmar.',
+    sub: 'Medarbetarna lär sig genom att göra, i sina egna arbetsuppgifter. Efter e-learning och en halvdags masterclass har de en första egen agent på plats.',
+    art: art2,
+    alt: 'En medarbetare vid sin laptop bredvid ett timglas. Ur ett frågetecken har en liten robot hoppat ut och springer iväg med en hög dokument.',
+  },
+  {
+    eb: 'Underifrån',
+    h1: 'Lekfull förändring som växer underifrån.',
+    sub: 'När alla får verktygen och modet att testa tar medarbetarna ägarskap, och idéerna kommer från dem som står närmast arbetet. Ledningen sätter riktningen, golvet driver farten.',
+    art: art3,
+    alt: 'En blandad grupp medarbetare hoppar uppför en trappa av plattformar mot en flagga, medan ledningen pekar ut riktningen nerifrån.',
+  },
+  {
+    eb: 'Pengarna',
+    // Samma nivåer som AI-skuldkalkylatorn. Hårda mellanslag så att
     // beloppet inte bryts isär.
-    h1: '75–125\u00a0000\u00a0kr per tjänsteman. Varje\u00a0år.',
-    sub: 'Så mycket kostar det när AI inte används systematiskt i det dagliga arbetet, beroende på hur mycket av jobbet som är rutin. Räkna på er egen siffra.',
+    h1: 'Lekfullt på ytan. Pengar på sista\u00a0raden.',
+    sub: 'Det lekfulla är vägen dit. Målet är tid och pengar: AI som inte används systematiskt kostar 75–125\u00a0000\u00a0kr per tjänsteman och år.',
+    art: art4,
+    alt: 'Mynt sprutar ur frågetecken i en båge ner i en skattkista, bredvid ett stapeldiagram som stiger.',
   },
   {
-    eb: 'Rubrik 3 · Möjligheterna',
-    h1: 'Gör det som var omöjligt. Nu.',
-    sub: 'Alla börjar med att effektivisera, och det betalar sig snabbt. Det stora värdet kommer när ni gör sådant ni tidigare saknade tid, kompetens eller resurser för. Vi kallar det Möjlighets-AI, och vår rådgivning hjälper er att hitta det.',
+    eb: 'Möjligheterna',
+    h1: 'Lekfull nyfikenhet. Möjligheter ni inte såg.',
+    sub: 'Alla börjar med att spara tid. Det stora värdet kommer när nyfikenheten leder till sådant ni tidigare saknade tid, kompetens eller resurser för. Vi kallar det Möjlighets-AI.',
+    art: art5,
+    alt: 'En figur med jetpack lyfter från sitt skrivbord mot en flytande ö med en stjärna och en öppen, lysande dörr.',
   },
-  {
-    eb: 'Rubrik 4 · Människorna',
-    h1: 'Alla medarbetare. AI-kompetenta. På\u00a0riktigt.',
-    sub: 'Inte bara IT och några eldsjälar. Varje medarbetare lär sig använda AI i sitt eget jobb, från första frågan till en egen agent. Kunskapen stannar hos er.',
-  },
-  {
-    eb: 'Rubrik 5 · Intervjun',
-    h1: 'Vad tänker er organisation om AI?',
-    sub: 'Vår AI-intervjuare pratar med medarbetarna när det passar dem. Ledningen får en inblick i vad alla tänker, hoppas och oroar sig för som inget möte eller enkät kan ge.',
-  },
-  {
-    eb: 'Rubrik 6 · Skillnaden',
-    h1: 'Vi gör oss umbärliga. Med\u00a0flit.',
-    sub: 'Vi har inget intresse av att ni ska behöva oss för alltid. Vår uppgift är att bygga er egen AI-förmåga, så att ni klarar er utan oss. Det är så vi förtjänar ert förtroende.',
-  },
-];
-
-// Vart den stora knappen leder för varje rubrik. Färgen sätts i headline.css.
-// Möjligheterna leder till rådgivningen och Människorna till Akademin, som
-// sidan själv kopplar ihop dem: rådgivning gör språnget till Möjlighets-AI,
-// träningen bygger förmågan hos medarbetarna.
-// note är raden under knapparna. Innan något valts gäller den spelet, så den
-// byts med knappen och säger något om det knappen leder till.
-const CTAS = [
-  { href: '#ai-resan', text: 'Se hela AI-resan ↓', note: 'Fem steg från första samtalet till egen AI-förmåga' },
-  { href: 'ai-skuld/', text: 'Räkna på din AI-skuld →', note: 'Räknas i din webbläsare · Inget skickas till oss' },
-  { href: '#radgivning', text: 'Ta språnget med rådgivning ↓', note: 'Tre nivåer · Första samtalet är alltid kostnadsfritt' },
-  { href: 'https://akademi.superintelligent.se/collections', text: 'Utforska AI-akademin →', note: 'E-learning från 2 990 kr · Agent Masterclass på en halvdag' },
-  { href: 'intervju/', text: 'Prova AI-intervjun →', note: 'Cirka 15 minuter · I mobilen eller datorn · Ingen app' },
-  { href: 'om-oss/sa-tanker-vi/', text: 'Läs hur vi tänker →', note: 'Så mäter vi att ni klarar er utan oss' },
 ];
 
 const root = document.getElementById('headline');
@@ -64,9 +61,7 @@ const eb = root?.querySelector('[data-part="eb"] [data-text]');
 const h1 = root?.querySelector('[data-part="h1"]');
 const sub = root?.querySelector('[data-part="sub"]');
 const buttons = [...document.querySelectorAll('.picker .pick')];
-const cta = document.getElementById('hero-cta');
-const ctaLabel = cta?.querySelector('.cta-label');
-const ctaNote = document.getElementById('hero-note');
+const art = document.querySelector('#hero-art img');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 let typing = 0;
@@ -117,34 +112,33 @@ function typeOut(text, run) {
   });
 }
 
-// Knappen byter färg mjukt i CSS. Texten glider ut uppåt och den nya in
-// underifrån, så att man ser att knappen hör till valet.
-let ctaRun = 0;
+// Bilden tonar över till nästa. Den nya laddas först, så att den inte
+// blinkar fram halvritad.
+let artRun = 0;
 
-async function setCta(index) {
-  if (!cta || !ctaLabel) return;
-  const { href, text, note } = CTAS[index];
-  const run = ++ctaRun;
-  const parts = [[ctaLabel, text], [ctaNote, note]].filter(([el]) => el);
-  cta.dataset.variant = String(index);
-  cta.href = href;
+async function setArt(index) {
+  if (!art) return;
+  const { art: src, alt } = VARIANTS[index];
+  const run = ++artRun;
+  const next = new Image();
+  next.src = src;
+  await next.decode().catch(() => {});
+  if (run !== artRun) return;
   if (reducedMotion.matches) {
-    for (const [el, value] of parts) el.textContent = value;
+    art.src = src;
+    art.alt = alt;
     return;
   }
-  await Promise.all(parts.map(([el]) => el.animate(
-    [{ opacity: 1, transform: 'translateY(0)' }, { opacity: 0, transform: 'translateY(-10px)' }],
-    { duration: 160, easing: 'ease-in', fill: 'forwards' },
-  ).finished.catch(() => {})));
-  if (run !== ctaRun) return;
-  for (const [el, value] of parts) {
-    el.textContent = value;
-    el.getAnimations().forEach((a) => a.cancel());
-    el.animate(
-      [{ opacity: 0, transform: 'translateY(10px)' }, { opacity: 1, transform: 'translateY(0)' }],
-      { duration: 220, easing: 'ease-out' },
-    );
-  }
+  await art.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, easing: 'ease-in', fill: 'forwards' })
+    .finished.catch(() => {});
+  if (run !== artRun) return;
+  art.src = src;
+  art.alt = alt;
+  art.getAnimations().forEach((a) => a.cancel());
+  art.animate(
+    [{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'translateY(0)' }],
+    { duration: 260, easing: 'ease-out' },
+  );
 }
 
 let current = -1;
@@ -161,33 +155,28 @@ async function show(index, button) {
   celebrate(index, button);
 
   eb.textContent = v.eb;
-  setCta(index);
+  setArt(index);
   sub.classList.add('fade');
   sub.innerHTML = v.sub;
   await typeOut(v.h1, run);
   if (run === typing) sub.classList.remove('fade');
 }
 
-// Rubrikerna byts av sig själva, en gång varje gång spelvideon börjar om
-// (18 sekunder). Det gör startsidan till en öppningsbild i presentationer.
-// Takten kommer från Vimeospelaren via postMessage, så bytet sker samtidigt
-// som videon loopar. Svarar inte spelaren tar en egen klocka över.
+// Rubrikerna byts av sig själva var åttonde sekund, så att startsidan
+// också fungerar som öppningsbild i presentationer.
 //
 // Bytet stannar för gott när besökaren själv klickar ett block, och kan
 // pausas med knappen bredvid förloppsstapeln. Det hoppas över när toppen
 // av sidan inte syns eller fliken ligger i bakgrunden, och körs inte alls
 // för den som bett om mindre rörelse.
-const VIMEO = 'https://player.vimeo.com';
-const LOOP_SECONDS = 18;
-const video = document.getElementById('hero-video');
+const ROTATE_SECONDS = 8;
 const autoBox = document.getElementById('picker-auto');
 const autoBtn = autoBox?.querySelector('.picker-auto-btn');
 const autoFill = autoBox?.querySelector('.picker-auto-fill');
 
 let autoOn = false;
 let heroVisible = true;
-let synced = false;
-let lastSeconds = 0;
+let elapsed = 0;
 
 function setProgress(fraction) {
   if (!autoFill) return;
@@ -200,14 +189,9 @@ function upNext() {
   return (Math.max(current, 0) + 1) % buttons.length;
 }
 
-function nextVariant() {
-  if (!autoOn || document.hidden || !heroVisible) return;
-  const i = upNext();
-  show(i, buttons[i]);
-}
-
 function setAuto(on) {
   autoOn = on;
+  elapsed = 0;
   autoBtn?.setAttribute('aria-pressed', String(!on));
   autoBtn?.setAttribute('aria-label', on ? 'Pausa bytet av rubriker' : 'Starta bytet av rubriker');
   setProgress(0);
@@ -217,57 +201,28 @@ function stopAuto() {
   setAuto(false);
 }
 
-function onVimeoMessage(event) {
-  if (event.origin !== VIMEO || event.source !== video?.contentWindow) return;
-  let msg;
-  try {
-    msg = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-  } catch {
-    return;
-  }
-  if (msg?.event === 'ready') listenToVideo();
-  // Bakgrundsspelaren skickar playProgress av sig själv, andra spelare
-  // timeupdate när man bett om det. Båda bär sekunder och längd.
-  if ((msg?.event !== 'timeupdate' && msg?.event !== 'playProgress') || !msg.data) return;
-  synced = true;
-  const { seconds, duration } = msg.data;
-  // Sekunderna hoppar tillbaka när videon börjar om.
-  if (seconds + 1 < lastSeconds) nextVariant();
-  lastSeconds = seconds;
-  setProgress(seconds / (duration || LOOP_SECONDS));
-}
-
-function listenToVideo() {
-  video?.contentWindow?.postMessage(JSON.stringify({ method: 'addEventListener', value: 'timeupdate' }), VIMEO);
-}
-
 function startAuto() {
   if (!autoBox || reducedMotion.matches) return;
   autoBox.hidden = false;
   setAuto(true);
   autoBtn.addEventListener('click', () => setAuto(!autoOn));
 
-  addEventListener('message', onVimeoMessage);
-  video?.addEventListener('load', listenToVideo);
-  listenToVideo();
-
   new IntersectionObserver(([entry]) => {
     heroVisible = entry.isIntersecting;
   }).observe(root);
 
-  // Egen klocka tills spelaren hörs av, eller om den aldrig gör det.
-  let start = performance.now();
-  let lap = 0;
+  // Klockan står still medan toppen inte syns, så man aldrig missar ett byte.
+  const STEP = 0.2;
   setInterval(() => {
-    if (synced) return;
-    const elapsed = (performance.now() - start) / 1000;
-    const thisLap = Math.floor(elapsed / LOOP_SECONDS);
-    if (thisLap > lap) {
-      lap = thisLap;
-      nextVariant();
+    if (!autoOn || document.hidden || !heroVisible) return;
+    elapsed += STEP;
+    if (elapsed >= ROTATE_SECONDS) {
+      elapsed = 0;
+      const i = upNext();
+      show(i, buttons[i]);
     }
-    setProgress((elapsed % LOOP_SECONDS) / LOOP_SECONDS);
-  }, 200);
+    setProgress(elapsed / ROTATE_SECONDS);
+  }, STEP * 1000);
 }
 
 if (root && buttons.length) {
